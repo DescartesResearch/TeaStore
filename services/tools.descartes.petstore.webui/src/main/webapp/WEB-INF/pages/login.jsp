@@ -5,9 +5,10 @@
 <div class="container" id="main">
 	<form action="loginAction" method="POST">
 		<div class="row">
+		<h4 class="advertismenttitle">Please enter your username and password.</h4>
 		<input type="hidden" name="referer" value="${referer}" }>
-			<div class="col-sm-6 col-md-6 col-lg-10">
-				<p>Please enter your username and password.</p>
+			<div class="col-sm-6 col-md-4 col-lg-3">
+				
 				<div class="form-group row">
 					<label for="username"
 						class="col-sm-3 col-form-label col-form-label-lg">Username</label>
