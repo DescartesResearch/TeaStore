@@ -6,7 +6,7 @@
 	<form action="loginAction" method="POST">
 		<div class="row">
 		<input type="hidden" name="referer" value="${referer}" }>
-			<div class="col-sm-6">
+			<div class="col-sm-6 col-md-6 col-lg-10">
 				<p>Please enter your username and password.</p>
 				<div class="form-group row">
 					<label for="username"

@@ -1,4 +1,4 @@
-<div class="col-sm-3 sidebar">
+<div class="col-sm-3 col-md-3 col-lg-2 sidebar">
 	<h3>Categories</h3>
 	<ul class="nav-sidebar">
 		<c:forEach items="${CategoryList}" var="category">

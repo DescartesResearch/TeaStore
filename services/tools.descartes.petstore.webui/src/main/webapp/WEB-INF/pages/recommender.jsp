@@ -1,5 +1,5 @@
 
-<div class="col-sm-3">
+<div class="col-sm-3 col-md-3 col-lg-2">
 	
 	<div class="row">
 	<h4 class="advertismenttitle">Are you interested in?</h4>
