@@ -48,6 +48,9 @@ public class ProductServlet extends AbstractUIServlet {
 			request.setAttribute("product", p);
 
 			List<Product> ad = LoadBalancedStoreOperations.getAdvertisements(blob, 3);
+			if (ad.size() > 3) {
+				ad.subList(3, ad.size()).clear();
+			}
 			request.setAttribute("Advertisment", ad);
 			
 			request.setAttribute("productImages", LoadBalancedImageOperations.getProductPreviewImages(ad));
