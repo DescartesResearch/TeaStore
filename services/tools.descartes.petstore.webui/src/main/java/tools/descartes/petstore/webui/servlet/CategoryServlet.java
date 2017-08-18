@@ -45,16 +45,22 @@ public class CategoryServlet extends AbstractUIServlet {
 
 		Category category = LoadBalancedStoreOperations.getCategory(categoryID);
 
-		int page = 1;
-		if (request.getParameter("page") != null) {
-			page = Integer.valueOf(request.getParameter("page"));
-		}
+		
 
 		int products = LoadBalancedStoreOperations.getNumberOfProducts(categoryID);
 
 		int numberProducts = INITIAL_PRODUCT_DISPLAY_COUNT;
 		if(request.getSession().getAttribute("numberProducts")!=null) {
 			numberProducts = Integer.valueOf(request.getSession().getAttribute("numberProducts").toString());
+		}
+		
+		int page = 1;
+		if (request.getParameter("page") != null) {
+			int pagenumber = Integer.valueOf(request.getParameter("page"));
+			int maxpages = (int) Math.ceil(((double) products) / numberProducts);
+			if(pagenumber <= maxpages) {
+				page = pagenumber;
+			}
 		}
 		
 		ArrayList<String> navigation = createNavigation(products, page, numberProducts);
