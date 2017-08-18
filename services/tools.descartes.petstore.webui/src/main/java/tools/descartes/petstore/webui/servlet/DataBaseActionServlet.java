@@ -18,7 +18,7 @@ import tools.descartes.petstore.registryclient.loadbalancers.ServiceLoadBalancer
 @WebServlet("/dataBaseAction")
 public class DataBaseActionServlet extends AbstractUIServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String[] parameters = new String[] { "categories", "products", "users",
+	private static final String[] PARAMETERS = new String[] { "categories", "products", "users",
 			"orders" };
 
 	/**
@@ -46,8 +46,8 @@ public class DataBaseActionServlet extends AbstractUIServlet {
 				Response resp = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "generatedb",
 						String.class,
 						client -> client.getService().path(client.getApplicationURI()).path(client.getEnpointURI())
-								.queryParam(parameters[0], infos[0]).queryParam(parameters[1], infos[1])
-								.queryParam(parameters[2], infos[2]).queryParam(parameters[3], infos[3])
+								.queryParam(PARAMETERS[0], infos[0]).queryParam(PARAMETERS[1], infos[1])
+								.queryParam(PARAMETERS[2], infos[2]).queryParam(PARAMETERS[3], infos[3])
 								.request(MediaType.TEXT_PLAIN).get());
 				if (resp.getStatus() == 200) {
 					System.out.println("here");
@@ -71,12 +71,12 @@ public class DataBaseActionServlet extends AbstractUIServlet {
 
 	private String[] extractOrderInformation(HttpServletRequest request) {
 
-		String[] infos = new String[parameters.length];
-		for (int i = 0; i < parameters.length; i++) {
-			if (request.getParameter(parameters[i]) == null) {
+		String[] infos = new String[PARAMETERS.length];
+		for (int i = 0; i < PARAMETERS.length; i++) {
+			if (request.getParameter(PARAMETERS[i]) == null) {
 				return new String[0];
 			} else {
-				infos[i] = request.getParameter(parameters[i]);
+				infos[i] = request.getParameter(PARAMETERS[i]);
 			}
 		}
 		return infos;

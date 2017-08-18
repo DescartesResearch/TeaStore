@@ -56,11 +56,9 @@
 					</ul>
 				</div>
 				<div class="col-sm-6">
-					<c:set var="numberlist">3,5,10,15,18</c:set>
-
 					<form id="formpages" method="post" action="">
 						<select name="number" onChange="this.form.submit()">
-							<c:forEach items="${numberlist}" var="number">
+							<c:forEach items="${productdisplaycountoptions}" var="number">
 								<c:choose>
 									<c:when test="${number == currentnumber}">
 										<option value="${number}" selected="selected">${number}</option>

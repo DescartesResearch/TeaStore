@@ -2,12 +2,10 @@ package tools.descartes.petstore.webui.servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,7 +23,8 @@ import tools.descartes.petstore.registryclient.rest.LoadBalancedStoreOperations;
 public class CategoryServlet extends AbstractUIServlet {
 	private static final long serialVersionUID = 1L;
 
-	private static final int number = 15;
+	private static final int INITIAL_PRODUCT_DISPLAY_COUNT = 20;
+	private static final List<Integer> PRODUCT_DISPLAY_COUNT_OPTIONS = Arrays.asList(5, 10, 20, 30, 50);
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -53,7 +52,7 @@ public class CategoryServlet extends AbstractUIServlet {
 
 		int products = LoadBalancedStoreOperations.getNumberOfProducts(categoryID);
 
-		int numberProducts = number;
+		int numberProducts = INITIAL_PRODUCT_DISPLAY_COUNT;
 		if(request.getSession().getAttribute("numberProducts")!=null) {
 			numberProducts = Integer.valueOf(request.getSession().getAttribute("numberProducts").toString());
 		}
@@ -74,6 +73,7 @@ public class CategoryServlet extends AbstractUIServlet {
 		request.setAttribute("currentnumber", numberProducts);
 		request.setAttribute("pagination", navigation);
 		request.setAttribute("pagenumber", page);
+		request.setAttribute("productdisplaycountoptions", PRODUCT_DISPLAY_COUNT_OPTIONS);
 		request.getRequestDispatcher("WEB-INF/pages/category.jsp").forward(request, response);
 	}
 
@@ -98,7 +98,7 @@ public class CategoryServlet extends AbstractUIServlet {
 
 		int numberpagination = 5;
 
-		int maxpages = (int) Math.ceil(((double) products) / number);
+		int maxpages = (int) Math.ceil(((double) products) / INITIAL_PRODUCT_DISPLAY_COUNT);
 
 		if (maxpages < page) {
 			return navigation;
