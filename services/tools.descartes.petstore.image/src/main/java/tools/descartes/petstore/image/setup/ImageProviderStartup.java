@@ -58,7 +58,7 @@ public class ImageProviderStartup implements ServletContextListener {
 			
 			@Override
 			public void callback() {
-				SetupController.getInstance().deleteAllCreatedData();
+				//SetupController.getInstance().deleteAllCreatedData();
 				SetupController.getInstance().detectPreExistingImages();
 				SetupController.getInstance().generateImages();
 				SetupController.getInstance().finalizeSetup();
