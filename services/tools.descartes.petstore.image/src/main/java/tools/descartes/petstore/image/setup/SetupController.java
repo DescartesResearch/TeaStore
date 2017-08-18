@@ -59,10 +59,7 @@ public class SetupController {
 	private Thread imgCreatorThread;
 	
 	private SetupController() {
-		if (!STD_WORKING_DIR.toFile().exists())
-			if (!STD_WORKING_DIR.toFile().mkdir())
-				throw new IllegalArgumentException("Standard working directory \"" 
-						+ STD_WORKING_DIR.toAbsolutePath() + "\" could not be created.");
+
 	}
 	
 	public void setWorkingDir(Path path) { 
@@ -104,6 +101,8 @@ public class SetupController {
 	public void generateImages(List<Long> productIDs, int nrOfImagesToGenerate) {
 		if (productIDs == null || nrOfImagesToGenerate <= 0)
 			return;
+		
+		System.out.println("Generating images: " + workingDir.toAbsolutePath().toString() + " with Thread " + Thread.currentThread().getName());
 
 		this.productIDs = productIDs;
 		this.nrOfImagesToGenerate = nrOfImagesToGenerate;
@@ -129,6 +128,11 @@ public class SetupController {
 			throw new NullPointerException("Image database is null.");
 		if (directory == null)
 			throw new NullPointerException("Working directory is null.");
+		
+		if (!directory.toFile().exists())
+			if (!directory.toFile().mkdir())
+				throw new IllegalArgumentException("Standard working directory \"" 
+						+ directory.toAbsolutePath() + "\" could not be created.");
 		
 		ImageIDFactory idFactory = ImageIDFactory.getInstance();
 		
@@ -253,6 +257,7 @@ public class SetupController {
 	private void deleteUnusedImages(List<Long> imagesToKeep) {
 		File currentDir = workingDir.toFile();
 		
+		System.out.println("Removing directory: " + currentDir.toPath().toAbsolutePath().toString() + " with Thread " + Thread.currentThread().getName());
 		if (currentDir.isDirectory()) {
 			for (File file : currentDir.listFiles()) {
 				if (file.isFile() && !imagesToKeep.contains(Long.parseLong(file.getName()))) {

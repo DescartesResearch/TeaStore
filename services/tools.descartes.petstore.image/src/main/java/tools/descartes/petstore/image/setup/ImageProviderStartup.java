@@ -30,10 +30,6 @@ import tools.descartes.petstore.registryclient.StartupCallback;
 public class ImageProviderStartup implements ServletContextListener {
 	
 	/**
-	 * Also set this accordingly in RegistryClientStartup.
-	 */
-	
-	/**
 	 * Empty constructor.
 	 */
     public ImageProviderStartup() {
