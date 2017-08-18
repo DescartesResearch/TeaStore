@@ -65,7 +65,7 @@ public final class LoadBalancedStoreOperations {
 	
 	/**
 	 * Gets ads.
-	 * @param order Order details
+	 * @param blob SessionBlob
 	 * @param number number of ads
 	 * @return product
 	 */

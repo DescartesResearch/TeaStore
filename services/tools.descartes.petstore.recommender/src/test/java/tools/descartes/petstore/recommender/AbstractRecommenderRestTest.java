@@ -16,9 +16,9 @@ import tools.descartes.petstore.persistence.rest.UserEndpoint;
 import tools.descartes.petstore.recommender.rest.RecommendEndpoint;
 import tools.descartes.petstore.recommender.rest.RecommendSingleEndpoint;
 import tools.descartes.petstore.recommender.rest.TrainEndpoint;
+import tools.descartes.petstore.recommender.servlet.RecommenderStartup;
 import tools.descartes.petstore.registry.rest.Registry;
 import tools.descartes.petstore.registry.rest.RegistryREST;
-import tools.descartes.petstore.registryclient.RegistryClientStartup;
 
 /**
  * Abstract base for testing of the stores rest functionality.
@@ -84,7 +84,6 @@ public abstract class AbstractRecommenderRestTest {
 		ServletContainer restServlet2 = new ServletContainer(restServletConfig2);
 		persistanceTomcat.addServlet("/tools.descartes.petstore.persistence", "restServlet", restServlet2);
 		context2.addServletMappingDecoded("/rest/*", "restServlet");
-		context2.addApplicationListener(RegistryClientStartup.class.getName());
 		context2.addApplicationListener(InitialDataGenerationDaemon.class.getName());
 		persistanceTomcat.start();
 
@@ -115,7 +114,7 @@ public abstract class AbstractRecommenderRestTest {
 		ServletContainer restServlet3 = new ServletContainer(restServletConfig3);
 		testTomcat.addServlet("/tools.descartes.petstore.recommender", "restServlet", restServlet3);
 		context3.addServletMappingDecoded("/rest/*", "restServlet");
-		context3.addApplicationListener(RegistryClientStartup.class.getName());
+		context3.addApplicationListener(RecommenderStartup.class.getName());
 		testTomcat.start();
 		
 		try {

@@ -43,7 +43,7 @@ public class StoreStartup implements ServletContextListener {
      * @param arg0 The servlet context event at destruction.
      */
     public void contextDestroyed(ServletContextEvent event)  { 
-    	RegistryClient.CLIENT.unregister(event.getServletContext().getContextPath());
+    	RegistryClient.getClient().unregister(event.getServletContext().getContextPath());
     }
 
 	/**
@@ -51,7 +51,7 @@ public class StoreStartup implements ServletContextListener {
      * @param arg0 The servlet context event at initialization.
      */
     public void contextInitialized(ServletContextEvent event)  {
-    	RegistryClient.CLIENT.register(event.getServletContext().getContextPath());
+    	RegistryClient.getClient().register(event.getServletContext().getContextPath());
     }
     
 }

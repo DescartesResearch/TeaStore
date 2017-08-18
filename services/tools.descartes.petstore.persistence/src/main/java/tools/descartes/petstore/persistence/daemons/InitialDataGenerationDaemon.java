@@ -37,10 +37,10 @@ public class InitialDataGenerationDaemon implements ServletContextListener {
 
 	/**
      * @see ServletContextListener#contextDestroyed(ServletContextEvent)
-     * @param arg0 The servlet context event at destruction.
+     * @param event The servlet context event at destruction.
      */
-    public void contextDestroyed(ServletContextEvent arg0)  { 
-    	
+    public void contextDestroyed(ServletContextEvent event)  { 
+    	RegistryClient.getClient().unregister(event.getServletContext().getContextPath());
     }
 
 	/**
@@ -53,6 +53,6 @@ public class InitialDataGenerationDaemon implements ServletContextListener {
     				DataGenerator.SMALL_DB_PRODUCTS_PER_CATEGORY, DataGenerator.SMALL_DB_USERS,
     				DataGenerator.SMALL_DB_MAX_ORDERS_PER_USER);
     	}
-    	RegistryClient.CLIENT.register(event.getServletContext().getContextPath());
+    	RegistryClient.getClient().register(event.getServletContext().getContextPath());
     }
 }

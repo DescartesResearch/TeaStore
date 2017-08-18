@@ -43,12 +43,12 @@ import tools.descartes.petstore.registryclient.loadbalancers.LoadBalancerUpdater
  * @author Simon Eismann
  *
  */
-public final class RegistryClient {
+public class RegistryClient {
 
 	/**
 	 * The registry client.
 	 */
-	public static final RegistryClient CLIENT = new RegistryClient();
+	private static RegistryClient client = new RegistryClient();
 	private String registryRESTURL;
 	
 	private Server myServiceInstanceServer = null;
@@ -60,7 +60,10 @@ public final class RegistryClient {
 	private ScheduledExecutorService loadBalancerUpdateScheduler;
 	private ScheduledExecutorService heartbeatScheduler;
 	
-	private RegistryClient() {
+	/**
+	 * Constructor.
+	 */
+	protected RegistryClient() {
 		try {
 			registryRESTURL = (String) new InitialContext().lookup("java:comp/env/registryURL");
 		} catch (NamingException e) {
@@ -69,6 +72,13 @@ public final class RegistryClient {
 		}
 	}
 	
+	/**
+	 * Getter.
+	 * @return registry client
+	 */
+	public static RegistryClient getClient() {
+		return client;
+	}
 	/**
 	 * Handles full registration.
 	 * @param contextPath contextPath
@@ -80,7 +90,7 @@ public final class RegistryClient {
     	Service service = getService(contextPath);
     	Server host = getServer();
     	System.out.println("Shutdown " + service.getServiceName() + "@" + host);
-    	RegistryClient.CLIENT.unregisterOnce(service, host);
+    	RegistryClient.client.unregisterOnce(service, host);
     	heartbeatScheduler.shutdown();
     	loadBalancerUpdateScheduler.shutdown();
     }

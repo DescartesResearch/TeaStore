@@ -11,57 +11,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petstore.image.setup;
+package tools.descartes.petstore.persistence;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import tools.descartes.petstore.registryclient.RegistryClient;
-import tools.descartes.petstore.registryclient.Service;
-import tools.descartes.petstore.registryclient.StartupCallback;
 
 /**
- * Application Lifecycle Listener implementation class Registry Client Startup.
- * @author Simon Eismann
+ * Application Lifecycle Listener implementation class for data generation.
+ * @author Joakim von Kistowski
  *
  */
 @WebListener
-public class ImageProviderStartup implements ServletContextListener {
-	
-	/**
-	 * Also set this accordingly in RegistryClientStartup.
-	 */
-	
-	/**
-	 * Empty constructor.
-	 */
-    public ImageProviderStartup() {
+public class TestRegistryClientStartup implements ServletContextListener {
+
+    /**
+     * Default constructor. 
+     */
+    public TestRegistryClientStartup() {
     	
     }
-    
+
 	/**
      * @see ServletContextListener#contextDestroyed(ServletContextEvent)
      * @param event The servlet context event at destruction.
      */
     public void contextDestroyed(ServletContextEvent event)  { 
-		RegistryClient.getClient().unregister(event.getServletContext().getContextPath());
-		SetupController.getInstance().deleteAllCreatedData();
+    	RegistryClient.getClient().unregister(event.getServletContext().getContextPath());
     }
 
 	/**
      * @see ServletContextListener#contextInitialized(ServletContextEvent)
      * @param event The servlet context event at initialization.
      */
-    public void contextInitialized(ServletContextEvent event)  {
-    	RegistryClient.getClient().runAfterServiceIsAvailable(Service.PERSISTENCE, new StartupCallback() {
-			
-			@Override
-			public void callback() {
-				SetupController.getInstance().generateImages();
-				RegistryClient.getClient().register(event.getServletContext().getContextPath());
-			}
-		});
+    public void contextInitialized(ServletContextEvent event)  { 
+    	RegistryClient.getClient().register(event.getServletContext().getContextPath());
     }
-    
 }
