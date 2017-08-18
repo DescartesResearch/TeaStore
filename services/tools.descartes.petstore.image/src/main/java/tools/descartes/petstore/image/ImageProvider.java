@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import tools.descartes.petstore.entities.ImageSize;
 import tools.descartes.petstore.image.setup.ImageCreatorRunner;
 import tools.descartes.petstore.image.setup.ImageIDFactory;
-import tools.descartes.petstore.image.setup.SetupController;
 import tools.descartes.petstore.image.storage.IDataStorage;
 
 public class ImageProvider {
@@ -58,8 +57,6 @@ public class ImageProvider {
 	}
 
 	private void waitForImageCreator() {
-		if (imgCreatorRunner == null)
-			SetupController.getInstance().finalizeSetup();
 		if (imgCreatorRunner.isRunning()) {
 			imgCreatorRunner.pause();
 			try {
