@@ -57,7 +57,7 @@ public class CategoryServlet extends AbstractUIServlet {
 			numberProducts = Integer.valueOf(request.getSession().getAttribute("numberProducts").toString());
 		}
 		
-		ArrayList<String> navigation = createNavigation(products, page);
+		ArrayList<String> navigation = createNavigation(products, page, numberProducts);
 
 		List<Product> productlist = LoadBalancedStoreOperations.getProducts(categoryID, page, numberProducts);
 		request.setAttribute("productImages", LoadBalancedImageOperations.getProductPreviewImages(productlist));
@@ -92,13 +92,13 @@ public class CategoryServlet extends AbstractUIServlet {
 		}
 	}
 
-	private ArrayList<String> createNavigation(int products, int page) {
+	private ArrayList<String> createNavigation(int products, int page, int numberProducts) {
 
 		ArrayList<String> navigation = new ArrayList<String>();
 
 		int numberpagination = 5;
 
-		int maxpages = (int) Math.ceil(((double) products) / INITIAL_PRODUCT_DISPLAY_COUNT);
+		int maxpages = (int) Math.ceil(((double) products) / numberProducts);
 
 		if (maxpages < page) {
 			return navigation;
