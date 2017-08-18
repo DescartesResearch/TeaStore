@@ -161,10 +161,21 @@ public class ImageDB {
 		return 0;
 	}
 	
+	/**
+	 * Returns the image size for a given image ID.
+	 * @param imageID The image ID to get the image size for
+	 * @return The image size or null if the ID could not be found
+	 */
 	public ImageSize getImageSize(long imageID) {
 		return sizes.getOrDefault(imageID, null);
 	}
 	
+	/**
+	 * 
+	 * @param imageKey
+	 * @param imageID
+	 * @param imageSize
+	 */
 	public void setImageMapping(ImageDBKey imageKey, long imageID, ImageSize imageSize) {
 		if (imageKey.isProductKey()) {
 			setImageMapping(imageKey.getProductID(), imageID, imageSize);

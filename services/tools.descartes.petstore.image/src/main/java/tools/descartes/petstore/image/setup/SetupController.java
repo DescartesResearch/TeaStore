@@ -72,7 +72,7 @@ public class SetupController {
 	private Thread imgCreatorThread;
 	
 	private SetupController() {
-
+		createWorkingDir(workingDir);
 	}
 	
 	public void setWorkingDir(Path path) { 
@@ -114,8 +114,6 @@ public class SetupController {
 	public void generateImages(List<Long> productIDs, int nrOfImagesToGenerate) {
 		if (productIDs == null || nrOfImagesToGenerate <= 0)
 			return;
-		
-		System.out.println("Generating images: " + workingDir.toAbsolutePath().toString() + " with Thread " + Thread.currentThread().getName());
 
 		this.productIDs = productIDs;
 		this.nrOfImagesToGenerate = nrOfImagesToGenerate;
@@ -126,6 +124,13 @@ public class SetupController {
 				nrOfImagesToGenerate);
 		imgCreatorThread = new Thread(imgCreatorRunner);
 		imgCreatorThread.start();
+	}
+	
+	private void createWorkingDir(Path directory) {
+		if (!directory.toFile().exists())
+			if (!directory.toFile().mkdir())
+				throw new IllegalArgumentException("Standard working directory \"" 
+						+ directory.toAbsolutePath() + "\" could not be created.");
 	}
 	
 	public void detectPreExistingImages() {
@@ -142,10 +147,7 @@ public class SetupController {
 		if (directory == null)
 			throw new NullPointerException("Working directory is null.");
 		
-		if (!directory.toFile().exists())
-			if (!directory.toFile().mkdir())
-				throw new IllegalArgumentException("Standard working directory \"" 
-						+ directory.toAbsolutePath() + "\" could not be created.");
+		createWorkingDir(directory);
 		
 		ImageIDFactory idFactory = ImageIDFactory.getInstance();
 		
