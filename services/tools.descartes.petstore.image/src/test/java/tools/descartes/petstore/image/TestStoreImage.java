@@ -56,9 +56,9 @@ public class TestStoreImage {
 		MockitoAnnotations.initMocks(this);
 		when(mockedImg0.getByteSize()).thenReturn((long)IMG_DATA.getBytes().length);
 		when(mockedImg0.getByteArray()).thenReturn(IMG_DATA.getBytes());
-		when(mockedImg0.getId()).thenReturn(IMG_ID1);
+		when(mockedImg0.getId()).thenReturn(IMG_ID0);
 		when(mockedImg0.getImage()).thenReturn(img);
-		when(mockedImg1.getId()).thenReturn(IMG_ID0);
+		when(mockedImg1.getId()).thenReturn(IMG_ID1);
 		
 		img = convertToImage(IMG_DATA.getBytes());
 		if (img == null)
@@ -147,10 +147,11 @@ public class TestStoreImage {
 	@Test
 	public void testEquals() {
 		StoreImage uut = new StoreImage(IMG_ID1, IMG_DATA.getBytes(), ImageSize.ICON);
+		StoreImage test = new StoreImage(uut);
 		assertTrue(uut.equals(uut));
 		assertFalse(uut.equals(null));
-		assertTrue(uut.equals(mockedImg0));
-		assertFalse(uut.equals(mockedImg1));
+		assertFalse(uut.equals(mockedImg0));
+		assertTrue(uut.equals(test));
 		assertFalse(uut.equals(img));
 	}
 	
