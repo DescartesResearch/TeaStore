@@ -13,8 +13,13 @@
  */
 package tools.descartes.petstore.registryclient;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -31,9 +36,11 @@ import org.glassfish.jersey.client.ClientProperties;
 
 import com.netflix.loadbalancer.Server;
 
+import tools.descartes.petstore.registryclient.loadbalancers.LoadBalancerUpdaterDaemon;
+
 /**
  * Client with common functionality for registering with the registry.
- * @author Joakim von Kistowski
+ * @author Simon Eismann
  *
  */
 public final class RegistryClient {
@@ -47,6 +54,12 @@ public final class RegistryClient {
 	private Server myServiceInstanceServer = null;
 	private Service myService = null;
 	
+	private static final int LOAD_BALANCER_REFRESH_INTERVAL_MS = 2500;
+	private static final int HEARTBEAT_INTERVAL_MS = 2500;
+	
+	private ScheduledExecutorService loadBalancerUpdateScheduler;
+	private ScheduledExecutorService heartbeatScheduler;
+	
 	private RegistryClient() {
 		try {
 			registryRESTURL = (String) new InitialContext().lookup("java:comp/env/registryURL");
@@ -56,6 +69,69 @@ public final class RegistryClient {
 		}
 	}
 	
+	/**
+	 * Handles full registration.
+	 * @param contextPath contextPath
+    		private String getContextPath(ServletContextEvent event) {
+    			return event.getServletContext().getContextPath();
+    		}
+	 */
+    public void unregister(String contextPath)  {
+    	Service service = getService(contextPath);
+    	Server host = getServer();
+    	System.out.println("Shutdown " + service.getServiceName() + "@" + host);
+    	RegistryClient.CLIENT.unregisterOnce(service, host);
+    	heartbeatScheduler.shutdown();
+    	loadBalancerUpdateScheduler.shutdown();
+    }
+	
+	/**
+	 * Handles full unregistration.
+	 * @param contextPath contextPath
+    		private String getContextPath(ServletContextEvent event) {
+    			return event.getServletContext().getContextPath();
+    		}
+	 */
+    public void register(String contextPath)  {
+    	Service service = getService(contextPath);
+    	Server host = getServer();
+		heartbeatScheduler = Executors.newSingleThreadScheduledExecutor();
+		heartbeatScheduler.scheduleAtFixedRate(
+				new RegistryClientHeartbeatDaemon(service, host), 0,
+				HEARTBEAT_INTERVAL_MS, TimeUnit.MILLISECONDS);
+		loadBalancerUpdateScheduler = Executors.newSingleThreadScheduledExecutor();
+		loadBalancerUpdateScheduler.scheduleAtFixedRate(new LoadBalancerUpdaterDaemon(), 1000,
+				LOAD_BALANCER_REFRESH_INTERVAL_MS, TimeUnit.MILLISECONDS);
+    }
+    
+    /**
+     * Calls the StartupCallback after the service is available.
+     * @param service service to check for
+     * @param callback StartupCallback to call
+     */
+    public void runAfterServiceIsAvailable(Service service, StartupCallback callback) {
+    	ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    	scheduler.schedule(new Runnable() {
+			
+			@Override
+			public void run() {
+		    	List<Server> servers;
+		    	do {
+		    		servers = getServersForService(service);
+		    		if (!servers.isEmpty()) {
+		    			try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+		    		}
+		    	} while (servers.isEmpty());
+		    	callback.callback();
+			}
+		}, 0, TimeUnit.NANOSECONDS);
+    	
+    }
+    
 	/**
 	 * Get all servers for a service in the {@link Service} enum from the registry.
 	 * @param targetService The service for which to get the servers.
@@ -81,41 +157,6 @@ public final class RegistryClient {
 			
 		return serverList;
 	}
-	
-	/**
-	 * Register a new server for a service in the registry.
-	 * @param service The service for which to register.
-	 * @param server The server address.
-	 * @return True, if registration succeeded.
-	 */
-	public boolean register(Service service, Server server) {
-		myService = service;
-		myServiceInstanceServer = server;
-		Response response = getRESTClient().target(registryRESTURL)
-				.path(service.getServiceName()).path(server.toString())
-				.request(MediaType.APPLICATION_JSON).put(Entity.text(""));
-		return (response.getStatus() == Response.Status.OK.getStatusCode());
-	}
-	
-	/**
-	 * Unregister a server for a service in the registry.
-	 * @param service The service for which to unregister.
-	 * @param server The server address to remove.
-	 * @return True, if unregistration succeeded.
-	 */
-	public boolean unregister(Service service, Server server) {
-		Response response = getRESTClient().target(registryRESTURL)
-				.path(service.getServiceName()).path(server.toString())
-				.request(MediaType.APPLICATION_JSON).delete();
-		return (response.getStatus() == Response.Status.OK.getStatusCode());
-	}
-	
-	private Client getRESTClient() {
-		ClientConfig configuration = new ClientConfig();
-		configuration.property(ClientProperties.CONNECT_TIMEOUT, 5000);
-		configuration.property(ClientProperties.READ_TIMEOUT, 5000);
-		return ClientBuilder.newClient(configuration);
-	}
 
 	/**
 	 * Get the server for this service.
@@ -134,4 +175,95 @@ public final class RegistryClient {
 	public Service getMyService() {
 		return myService;
 	}
+	
+	/**
+	 * Register a new server for a service in the registry.
+	 * @param service The service for which to register.
+	 * @param server The server address.
+	 * @return True, if registration succeeded.
+	 */
+	protected boolean registerOnce(Service service, Server server) {
+		myService = service;
+		myServiceInstanceServer = server;
+		Response response = getRESTClient().target(registryRESTURL)
+				.path(service.getServiceName()).path(server.toString())
+				.request(MediaType.APPLICATION_JSON).put(Entity.text(""));
+		return (response.getStatus() == Response.Status.OK.getStatusCode());
+	}
+	
+	/**
+	 * Unregister a server for a service in the registry.
+	 * @param service The service for which to unregister.
+	 * @param server The server address to remove.
+	 * @return True, if unregistration succeeded.
+	 */
+	private boolean unregisterOnce(Service service, Server server) {
+		Response response = getRESTClient().target(registryRESTURL)
+				.path(service.getServiceName()).path(server.toString())
+				.request(MediaType.APPLICATION_JSON).delete();
+		return (response.getStatus() == Response.Status.OK.getStatusCode());
+	}
+	
+	private Client getRESTClient() {
+		ClientConfig configuration = new ClientConfig();
+		configuration.property(ClientProperties.CONNECT_TIMEOUT, 5000);
+		configuration.property(ClientProperties.READ_TIMEOUT, 5000);
+		return ClientBuilder.newClient(configuration);
+	}
+    
+    private Service getService(String serviceName) {
+    	serviceName = cleanupServiceName(serviceName);
+    	for (Service service : Service.values()) {
+    		if (service.getServiceName().equals(serviceName)) {
+    			return service;
+    		}
+    	}
+    	throw new IllegalStateException("The service " + serviceName + " is not registered in the Services enum");
+    }
+    
+    private Server getServer() {
+    	return new Server(getHostName(), Integer.valueOf(getPort()));
+    }
+    
+    private String getHostName() {
+    	try {
+			return InetAddress.getLocalHost().getCanonicalHostName();
+		} catch (UnknownHostException e) {
+			throw new IllegalStateException("could not load hostname");
+		}
+    };
+    
+    
+    private String getPort() {
+		try {
+			return (String) new InitialContext().lookup("java:comp/env/servicePort");
+		} catch (NamingException e) {
+			throw new IllegalStateException("Could not read servicePort!");
+		}
+    }
+
+    /**
+     * Protected for testing.
+     * @param serviceName name of service
+     * @return cleaned service name
+     */
+    protected String cleanupServiceName(String serviceName) {
+    	return serviceName.replace("/", "");
+    }
+    
+    /**
+     * Protected for test.
+     * @return scheduler
+     */
+    protected ScheduledExecutorService getHeartbeatScheduler() {
+    	return heartbeatScheduler;
+    }
+    
+    /**
+     * Protected for test.
+     * @return scheduler
+     */
+    protected ScheduledExecutorService getLoadBalancerUpdateScheduler() {
+    	return loadBalancerUpdateScheduler;
+    }
 }

@@ -37,7 +37,7 @@ public class RegistryClientHeartbeatDaemon implements Runnable {
 	@Override
 	public void run() {
 		try {
-			RegistryClient.CLIENT.register(service, server);
+			RegistryClient.CLIENT.registerOnce(service, server);
 		} catch (javax.ws.rs.ProcessingException e) { }
 	}
 

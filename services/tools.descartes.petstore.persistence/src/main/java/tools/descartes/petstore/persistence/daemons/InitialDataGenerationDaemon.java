@@ -18,6 +18,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import tools.descartes.petstore.persistence.repository.DataGenerator;
+import tools.descartes.petstore.registryclient.RegistryClient;
 
 /**
  * Application Lifecycle Listener implementation class for data generation.
@@ -44,13 +45,14 @@ public class InitialDataGenerationDaemon implements ServletContextListener {
 
 	/**
      * @see ServletContextListener#contextInitialized(ServletContextEvent)
-     * @param arg0 The servlet context event at initialization.
+     * @param event The servlet context event at initialization.
      */
-    public void contextInitialized(ServletContextEvent arg0)  { 
+    public void contextInitialized(ServletContextEvent event)  { 
     	if (DataGenerator.GENERATOR.isDatabaseEmpty()) {
     		DataGenerator.GENERATOR.generateDatabaseContent(DataGenerator.SMALL_DB_CATEGORIES,
     				DataGenerator.SMALL_DB_PRODUCTS_PER_CATEGORY, DataGenerator.SMALL_DB_USERS,
     				DataGenerator.SMALL_DB_MAX_ORDERS_PER_USER);
     	}
+    	RegistryClient.CLIENT.register(event.getServletContext().getContextPath());
     }
 }

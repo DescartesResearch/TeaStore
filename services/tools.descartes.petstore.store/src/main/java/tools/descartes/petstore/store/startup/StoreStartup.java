@@ -11,18 +11,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petstore.recommender.servlet;
-
-import java.util.concurrent.ScheduledExecutorService;
+package tools.descartes.petstore.store.startup;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
-import tools.descartes.petstore.recommender.rest.TrainEndpoint;
 import tools.descartes.petstore.registryclient.RegistryClient;
-import tools.descartes.petstore.registryclient.Service;
-import tools.descartes.petstore.registryclient.StartupCallback;
 
 /**
  * Application Lifecycle Listener implementation class Registry Client Startup.
@@ -30,8 +25,7 @@ import tools.descartes.petstore.registryclient.StartupCallback;
  *
  */
 @WebListener
-public class RecommenderStartup implements ServletContextListener {
-	private static ScheduledExecutorService startupScheduler;
+public class StoreStartup implements ServletContextListener {
 	
 	/**
 	 * Also set this accordingly in RegistryClientStartup.
@@ -40,7 +34,7 @@ public class RecommenderStartup implements ServletContextListener {
 	/**
 	 * Empty constructor.
 	 */
-    public RecommenderStartup() {
+    public StoreStartup() {
     	
     }
 
@@ -48,23 +42,16 @@ public class RecommenderStartup implements ServletContextListener {
      * @see ServletContextListener#contextDestroyed(ServletContextEvent)
      * @param arg0 The servlet context event at destruction.
      */
-    public void contextDestroyed(ServletContextEvent arg0)  { 
-    	startupScheduler.shutdown();
+    public void contextDestroyed(ServletContextEvent event)  { 
+    	RegistryClient.CLIENT.unregister(event.getServletContext().getContextPath());
     }
 
 	/**
      * @see ServletContextListener#contextInitialized(ServletContextEvent)
-     * @param event The servlet context event at initialization.
+     * @param arg0 The servlet context event at initialization.
      */
     public void contextInitialized(ServletContextEvent event)  {
-    	RegistryClient.CLIENT.runAfterServiceIsAvailable(Service.PERSISTENCE, new StartupCallback() {
-			
-			@Override
-			public void callback() {
-				TrainEndpoint.retrieveDataAndRetrain();
-				RegistryClient.CLIENT.register(event.getServletContext().getContextPath());
-			}
-		});
+    	RegistryClient.CLIENT.register(event.getServletContext().getContextPath());
     }
     
 }
