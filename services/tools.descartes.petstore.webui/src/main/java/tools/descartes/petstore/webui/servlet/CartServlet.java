@@ -40,7 +40,7 @@ public class CartServlet extends AbstractUIServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		checkforCookie(request,response);
+		checkforCookie(request, response);
 		SessionBlob blob = getSessionBlob(request);
 
 		List<OrderItem> orderItems = blob.getOrderItems();
@@ -61,10 +61,13 @@ public class CartServlet extends AbstractUIServlet {
 		request.setAttribute("OrderItems", orderItems);
 		request.setAttribute("Products", products);
 		request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
-		
+
 		List<Product> ad = LoadBalancedStoreOperations.getAdvertisements(blob, 3);
+		if (ad.size() > 3) {
+			ad.subList(3, ad.size()).clear();
+		}
 		request.setAttribute("Advertisment", ad);
-		
+
 		request.setAttribute("productImages", LoadBalancedImageOperations.getProductPreviewImages(ad));
 
 		request.getRequestDispatcher("WEB-INF/pages/cart.jsp").forward(request, response);

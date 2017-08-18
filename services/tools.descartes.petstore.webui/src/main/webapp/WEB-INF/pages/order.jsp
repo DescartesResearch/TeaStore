@@ -5,7 +5,7 @@
 <div class="container" id="main">
 	<form action="cartAction" method="POST">
 		<div class="row">
-			<div class="col-sm-6">
+			<div class="col-md-6 col-sm-12">
 				<h4 class="category-title">Billing Address</h4>
 				<div class="form-group row">
 					<label for="firstname"
@@ -31,7 +31,7 @@
 						1</label>
 					<div class="col-sm-9">
 						<input type="text" class="form-control form-control-lg"
-							name="address1" id="address1" placeholder="901 San Antonio Road" value="Throne" required>
+							name="address1" id="address1" placeholder="901 San Antonio Road" value="Winterfell" required>
 					</div>
 				</div>
 				<div class="form-group row">
@@ -40,41 +40,11 @@
 						2</label>
 					<div class="col-sm-9">
 						<input type="text" class="form-control form-control-lg"
-							name="address2" id="address2" placeholder="MS UCUP02-206" value="Big Tower" required>
-					</div>
-				</div>
-				<div class="form-group row">
-					<label for="city" class="col-sm-3 col-form-label col-form-label-lg">City</label>
-					<div class="col-sm-9">
-						<input type="text" class="form-control form-control-lg"
-							name="city" id="city" placeholder="Palo Alto" value="Winterfell" required>
-					</div>
-				</div>
-				<div class="form-group row">
-					<label for="state"
-						class="col-sm-3 col-form-label col-form-label-lg">State</label>
-					<div class="col-sm-9">
-						<input type="text" class="form-control form-control-lg"
-							name="state" id="state" placeholder="CA" value="The North" required>
-					</div>
-				</div>
-				<div class="form-group row">
-					<label for="zip" class="col-sm-3 col-form-label col-form-label-lg">Zip</label>
-					<div class="col-sm-9">
-						<input type="number" min=0 class="form-control form-control-lg"
-							name="zip" id="zip" placeholder="94303" value="11111" required>
-					</div>
-				</div>
-				<div class="form-group row">
-					<label for="country"
-						class="col-sm-3 col-form-label col-form-label-lg">Country</label>
-					<div class="col-sm-9">
-						<input type="text" class="form-control form-control-lg"
-							name="country" id="country" placeholder="USA" value="Westeros" required>
+							name="address2" id="address2" placeholder="MS UCUP02-206" value="1111 The North, Westeros" required>
 					</div>
 				</div>
 			</div>
-			<div class="col-sm-6">
+			<div class="col-md-6 col-sm-12">
 				<h4 class="category-title">Payment Details</h4>
 				<div class="form-group row">
 					<label for="cardtype"
