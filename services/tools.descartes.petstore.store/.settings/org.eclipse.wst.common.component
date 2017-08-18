@@ -106,13 +106,7 @@
         <dependent-module archiveName="commons-lang-2.6.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petstore.devenvlibraries/ribbon/commons-lang-2.6.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="slf4j-api-1.7.12.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petstore.devenvlibraries/ribbon/slf4j-api-1.7.12.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <dependent-module archiveName="netflix-commons-util-0.1.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petstore.devenvlibraries/ribbon/netflix-commons-util-0.1.1.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="slf4j-api-1.6.4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petstore.devenvlibraries/ribbon/slf4j-api-1.6.4.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="servo-core-0.10.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petstore.devenvlibraries/ribbon/servo-core-0.10.1.jar">
@@ -146,6 +140,12 @@
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="jbcrypt-0.4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petstore.devenvlibraries/security/jbcrypt-0.4.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="slf4j-api-1.7.25.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petstore.devenvlibraries/logging/slf4j-api-1.7.25.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="slf4j-simple-1.7.25.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petstore.devenvlibraries/logging/slf4j-simple-1.7.25.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="context-root" value="tools.descartes.petstore.store"/>

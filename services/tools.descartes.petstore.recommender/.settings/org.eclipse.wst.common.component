@@ -102,9 +102,6 @@
         <dependent-module archiveName="guava-16.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petstore.devenvlibraries/ribbon/guava-16.0.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="slf4j-api-1.6.4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petstore.devenvlibraries/ribbon/slf4j-api-1.6.4.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <dependent-module archiveName="annotations-2.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petstore.devenvlibraries/ribbon/annotations-2.0.0.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
@@ -135,13 +132,16 @@
         <dependent-module archiveName="ribbon-loadbalancer-2.2.2.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petstore.devenvlibraries/ribbon/ribbon-loadbalancer-2.2.2.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="slf4j-api-1.7.12.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petstore.devenvlibraries/ribbon/slf4j-api-1.7.12.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <dependent-module archiveName="jsr305-3.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petstore.devenvlibraries/ribbon/jsr305-3.0.1.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="commons-configuration-1.8.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petstore.devenvlibraries/ribbon/commons-configuration-1.8.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="slf4j-api-1.7.25.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petstore.devenvlibraries/logging/slf4j-api-1.7.25.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="slf4j-simple-1.7.25.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petstore.devenvlibraries/logging/slf4j-simple-1.7.25.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="context-root" value="tools.descartes.petstore.recommender"/>

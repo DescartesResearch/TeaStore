@@ -15,8 +15,6 @@ package tools.descartes.petstore.recommender.algorithm.impl.cf;
 
 import java.util.List;
 
-import org.apache.commons.lang.NotImplementedException;
-
 import tools.descartes.petstore.recommender.algorithm.AbstractRecommender;
 
 /**
@@ -32,7 +30,7 @@ public class CollaborativeFilteringRecommender extends AbstractRecommender {
 	 */
 	@Override
 	protected List<Long> execute(List<Long> currentItems) {
-		throw new NotImplementedException();
+		return null;
 	}
 
 }

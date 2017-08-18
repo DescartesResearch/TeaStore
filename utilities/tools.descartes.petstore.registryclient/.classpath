@@ -49,8 +49,6 @@
 	<classpathentry kind="lib" path="/tools.descartes.petstore.devenvlibraries/ribbon/rxjava-1.0.9.jar"/>
 	<classpathentry kind="lib" path="/tools.descartes.petstore.devenvlibraries/ribbon/servo-core-0.10.1.jar"/>
 	<classpathentry kind="lib" path="/tools.descartes.petstore.devenvlibraries/ribbon/servo-internal-0.10.1.jar"/>
-	<classpathentry kind="lib" path="/tools.descartes.petstore.devenvlibraries/ribbon/slf4j-api-1.6.4.jar"/>
-	<classpathentry kind="lib" path="/tools.descartes.petstore.devenvlibraries/ribbon/slf4j-api-1.7.12.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/tools.descartes.petstore.rest"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/tools.descartes.petstore.entities"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
@@ -58,5 +56,7 @@
 	<classpathentry kind="lib" path="/tools.descartes.petstore.devenvlibraries/rest/server/jersey-container-servlet-2.25.1.jar"/>
 	<classpathentry kind="lib" path="/tools.descartes.petstore.devenvlibraries/rest/server/jersey-container-servlet-core-2.25.1.jar"/>
 	<classpathentry kind="lib" path="/tools.descartes.petstore.devenvlibraries/rest/server/jersey-server-2.25.1.jar"/>
+	<classpathentry kind="lib" path="/tools.descartes.petstore.devenvlibraries/logging/slf4j-api-1.7.25.jar"/>
+	<classpathentry kind="lib" path="/tools.descartes.petstore.devenvlibraries/logging/slf4j-simple-1.7.25.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
