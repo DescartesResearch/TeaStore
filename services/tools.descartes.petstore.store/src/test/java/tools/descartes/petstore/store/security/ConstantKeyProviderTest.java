@@ -17,7 +17,7 @@ public class ConstantKeyProviderTest {
 	 * checks the getKey() functionality.
 	 */
 	@Test
-	public void test() { 
+	public void test() {  
 		Assert.assertEquals("thebestsecretkey", new ConstantKeyProvider().getKey(null));
 		Assert.assertEquals("thebestsecretkey", new ConstantKeyProvider().getKey(new SessionBlob()));
 	}
