@@ -38,9 +38,7 @@ public class ImageProvider {
 	private ImageCreatorRunner imgCreatorRunner;
 	
 	private ImageProvider() {
-		SetupController setup = SetupController.getInstance();
-		setup.detectPreExistingImages();
-		setup.generateImages();
+		
 	}
 	
 	public static ImageProvider getInstance() {
