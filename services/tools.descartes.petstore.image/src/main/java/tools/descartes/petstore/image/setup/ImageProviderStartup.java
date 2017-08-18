@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petstore.recommender.servlet;
+package tools.descartes.petstore.image.setup;
 
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -19,7 +19,6 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
-import tools.descartes.petstore.recommender.rest.TrainEndpoint;
 import tools.descartes.petstore.registryclient.RegistryClient;
 import tools.descartes.petstore.registryclient.Service;
 import tools.descartes.petstore.registryclient.StartupCallback;
@@ -30,7 +29,7 @@ import tools.descartes.petstore.registryclient.StartupCallback;
  *
  */
 @WebListener
-public class RecommenderStartup implements ServletContextListener {
+public class ImageProviderStartup implements ServletContextListener {
 	
 	/**
 	 * Also set this accordingly in RegistryClientStartup.
@@ -39,16 +38,17 @@ public class RecommenderStartup implements ServletContextListener {
 	/**
 	 * Empty constructor.
 	 */
-    public RecommenderStartup() {
+    public ImageProviderStartup() {
     	
     }
-
+    
 	/**
      * @see ServletContextListener#contextDestroyed(ServletContextEvent)
      * @param event The servlet context event at destruction.
      */
     public void contextDestroyed(ServletContextEvent event)  { 
 		RegistryClient.CLIENT.unregister(event.getServletContext().getContextPath());
+		SetupController.getInstance().deleteAllCreatedData();
     }
 
 	/**
@@ -60,7 +60,7 @@ public class RecommenderStartup implements ServletContextListener {
 			
 			@Override
 			public void callback() {
-				TrainEndpoint.retrieveDataAndRetrain();
+				SetupController.getInstance().generateImages();
 				RegistryClient.CLIENT.register(event.getServletContext().getContextPath());
 			}
 		});
