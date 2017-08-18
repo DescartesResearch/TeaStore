@@ -58,6 +58,7 @@ public class ImageProviderStartup implements ServletContextListener {
 			
 			@Override
 			public void callback() {
+				SetupController.getInstance().detectPreExistingImages();
 				SetupController.getInstance().generateImages();
 				RegistryClient.CLIENT.register(event.getServletContext().getContextPath());
 			}
