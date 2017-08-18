@@ -4,9 +4,7 @@ import java.util.List;
 
 import org.junit.Assert;
 
-import tools.descartes.petstore.entities.Order;
 import tools.descartes.petstore.entities.Product;
-import tools.descartes.petstore.entities.message.SessionBlob;
 import tools.descartes.petstore.registryclient.rest.LoadBalancedStoreOperations;
 
 
@@ -50,11 +48,5 @@ public class ProductInformationTest extends AbstractStoreRestTest {
 		
 		int numberOfProducts = LoadBalancedStoreOperations.getNumberOfProducts(3);
 		Assert.assertEquals(100, numberOfProducts);
-		
-		List<Product> ads = LoadBalancedStoreOperations.getAdvertisements(new SessionBlob(), 3);
-		Assert.assertEquals(3, ads.size());
-		
-		List<Product> ads2 = LoadBalancedStoreOperations.getAdvertisements(new SessionBlob(), 1);
-		Assert.assertEquals(1, ads2.size());
 	}
 }

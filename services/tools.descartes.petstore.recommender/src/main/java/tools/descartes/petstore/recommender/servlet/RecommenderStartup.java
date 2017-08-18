@@ -13,8 +13,6 @@
  */
 package tools.descartes.petstore.recommender.servlet;
 
-import java.util.concurrent.ScheduledExecutorService;
-
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
@@ -48,7 +46,7 @@ public class RecommenderStartup implements ServletContextListener {
      * @param event The servlet context event at destruction.
      */
     public void contextDestroyed(ServletContextEvent event)  { 
-		RegistryClient.CLIENT.unregister(event.getServletContext().getContextPath());
+		RegistryClient.getClient().unregister(event.getServletContext().getContextPath());
     }
 
 	/**
@@ -56,12 +54,12 @@ public class RecommenderStartup implements ServletContextListener {
      * @param event The servlet context event at initialization.
      */
     public void contextInitialized(ServletContextEvent event)  {
-    	RegistryClient.CLIENT.runAfterServiceIsAvailable(Service.PERSISTENCE, new StartupCallback() {
+    	RegistryClient.getClient().runAfterServiceIsAvailable(Service.PERSISTENCE, new StartupCallback() {
 			
 			@Override
 			public void callback() {
 				TrainEndpoint.retrieveDataAndRetrain();
-				RegistryClient.CLIENT.register(event.getServletContext().getContextPath());
+				RegistryClient.getClient().register(event.getServletContext().getContextPath());
 			}
 		});
     }

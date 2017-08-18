@@ -39,7 +39,6 @@ import tools.descartes.petstore.persistence.rest.ProductEndpoint;
 import tools.descartes.petstore.registry.rest.Registry;
 import tools.descartes.petstore.registry.rest.RegistryREST;
 import tools.descartes.petstore.registry.rest.RegistryStartup;
-import tools.descartes.petstore.registryclient.RegistryClientStartup;
 import tools.descartes.petstore.registryclient.Service;
 import tools.descartes.petstore.rest.NonBalancedCRUDOperations;
 import tools.descartes.petstore.rest.RESTClient;
@@ -111,7 +110,7 @@ private static final String CONTEXT = "/test";
 		ServletContainer restServlet = new ServletContainer(restServletConfig);
 		tomcat.addServlet("/" + service.getServiceName(), "restServlet", restServlet);
 		context.addServletMappingDecoded("/rest/*", "restServlet");
-		context.addApplicationListener(RegistryClientStartup.class.getName());
+		context.addApplicationListener(TestRegistryClientStartup.class.getName());
 		tomcat.start();
 		return tomcat;
 	}

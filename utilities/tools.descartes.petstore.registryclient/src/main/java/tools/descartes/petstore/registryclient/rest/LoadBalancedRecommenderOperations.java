@@ -8,11 +8,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import tools.descartes.petstore.entities.Category;
-import tools.descartes.petstore.entities.Order;
 import tools.descartes.petstore.entities.OrderItem;
-import tools.descartes.petstore.entities.Product;
-import tools.descartes.petstore.entities.User;
-import tools.descartes.petstore.entities.message.SessionBlob;
 import tools.descartes.petstore.registryclient.Service;
 import tools.descartes.petstore.registryclient.loadbalancers.ServiceLoadBalancer;
 /**

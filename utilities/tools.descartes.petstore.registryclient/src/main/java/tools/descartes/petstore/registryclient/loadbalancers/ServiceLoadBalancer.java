@@ -110,7 +110,7 @@ public final class ServiceLoadBalancer {
 	 * @param targetService The service for which to update.
 	 */
     private static void updateLoadBalancersForServiceUsingRegistry(Service targetService) {
-    	List<Server> servers = RegistryClient.CLIENT.getServersForService(targetService);
+    	List<Server> servers = RegistryClient.getClient().getServersForService(targetService);
     	updateLoadBalancersForService(targetService, servers);
     }
 	
@@ -216,9 +216,9 @@ public final class ServiceLoadBalancer {
      */
     public static <T, R> List<R> multicastRESTToOtherServiceInstances(String endpointURI, Class<T> entityClass,
     		Function<RESTClient<T>, R> operation) {
-    	return getServiceLoadBalancer(RegistryClient.CLIENT.getMyService())
+    	return getServiceLoadBalancer(RegistryClient.getClient().getMyService())
     			.multicastRESTOperation(endpointURI, entityClass, operation,
-    					RegistryClient.CLIENT.getMyServiceInstanceServer());
+    					RegistryClient.getClient().getMyServiceInstanceServer());
     }
     
     //exception can be null

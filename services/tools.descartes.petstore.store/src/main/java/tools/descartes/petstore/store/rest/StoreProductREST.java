@@ -26,7 +26,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import tools.descartes.petstore.entities.Order;
 import tools.descartes.petstore.entities.OrderItem;
 import tools.descartes.petstore.entities.Product;
 import tools.descartes.petstore.registryclient.Service;
@@ -34,7 +33,6 @@ import tools.descartes.petstore.registryclient.loadbalancers.ServiceLoadBalancer
 import tools.descartes.petstore.registryclient.rest.LoadBalancedCRUDOperations;
 import tools.descartes.petstore.registryclient.rest.LoadBalancedRecommenderOperations;
 import tools.descartes.petstore.registryclient.rest.LoadBalancedStoreOperations;
-import tools.descartes.petstore.rest.NonBalancedCRUDOperations;
 
 /**
  * Rest endpoint for the store product.

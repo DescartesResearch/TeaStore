@@ -14,30 +14,44 @@
 package tools.descartes.petstore.registryclient;
 
 import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 
 /**
  * Application Lifecycle Listener implementation class Registry Client Startup.
  * @author Simon Eismann
  *
  */
-public class TestRegistryClientStartup2 extends RegistryClientStartup {
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-    public void contextDestroyed(ServletContextEvent arg0)  { 
-    	getLoadBalancerUpdateScheduler().shutdown();
-    	getHeartbeatScheduler().shutdown();
-    }
+@WebListener
+public class TestRegistryClientStartup2 implements ServletContextListener {
 	
 	/**
-	 * {@inheritDoc}
+	 * Also set this accordingly in RegistryClientStartup.
 	 */
-	@Override
-    protected String cleanupServiceName(String serviceName) {
-    	serviceName = serviceName.replace("/", "");
-    	serviceName = serviceName.replaceAll("\\d", "");
-    	return serviceName;
+	
+	/**
+	 * Empty constructor.
+	 */
+    public TestRegistryClientStartup2() {
+    	
     }
+
+	/**
+     * @see ServletContextListener#contextDestroyed(ServletContextEvent)
+     * @param event The servlet context event at destruction.
+     */
+    public void contextDestroyed(ServletContextEvent event)  { 
+    	TestRegistryClient.getClient().getHeartbeatScheduler().shutdown();
+    	TestRegistryClient.getClient().getLoadBalancerUpdateScheduler().shutdown();
+    	TestRegistryClient.getClient().unregister(event.getServletContext().getContextPath());
+    }
+
+	/**
+     * @see ServletContextListener#contextInitialized(ServletContextEvent)
+     * @param event The servlet context event at initialization.
+     */
+    public void contextInitialized(ServletContextEvent event)  {
+    	TestRegistryClient.getClient().register(event.getServletContext().getContextPath());
+    }
+    
 }

@@ -87,10 +87,6 @@ public class RegistryClientTest {
 		waitAndValidate(Service.STORE, new String[] {"40000", "40001"});
 		store2.stop();
 		waitAndValidate(Service.STORE, new String[] {"40000"});
-		Tomcat recommender = new Tomcat();
-		createClientTomcat(Service.RECOMMENDER, recommender);
-		waitAndValidate(Service.RECOMMENDER, new String[] {"40002"});
-		waitAndValidate(Service.STORE, new String[] {"40000"});
 	}
 	
 	private void waitAndValidate(Service service, String[] strings) throws InterruptedException {
