@@ -16,7 +16,7 @@ import tools.descartes.petstore.persistence.rest.ProductEndpoint;
 import tools.descartes.petstore.persistence.rest.UserEndpoint;
 import tools.descartes.petstore.registry.rest.Registry;
 import tools.descartes.petstore.registry.rest.RegistryREST;
-import tools.descartes.petstore.registryclient.RegistryClientStartup;
+import tools.descartes.petstore.store.startup.StoreStartup;
 
 
 
@@ -80,7 +80,6 @@ public abstract class AbstractStoreRestTest {
 		ServletContainer restServlet2 = new ServletContainer(restServletConfig2);
 		persistanceTomcat.addServlet("/tools.descartes.petstore.persistence", "restServlet", restServlet2);
 		context2.addServletMappingDecoded("/rest/*", "restServlet");
-		context2.addApplicationListener(RegistryClientStartup.class.getName());
 		context2.addApplicationListener(InitialDataGenerationDaemon.class.getName());
 		persistanceTomcat.start();
 		
@@ -113,7 +112,7 @@ public abstract class AbstractStoreRestTest {
 		ServletContainer restServlet3 = new ServletContainer(restServletConfig3);
 		storeTomcat.addServlet("/tools.descartes.petstore.store", "restServlet", restServlet3);
 		context3.addServletMappingDecoded("/rest/*", "restServlet");
-		context3.addApplicationListener(RegistryClientStartup.class.getName());
+		context3.addApplicationListener(StoreStartup.class.getName());
 		storeTomcat.start();
 	}
 

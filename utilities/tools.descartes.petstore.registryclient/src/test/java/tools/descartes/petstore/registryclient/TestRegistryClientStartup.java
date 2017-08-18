@@ -13,17 +13,43 @@
  */
 package tools.descartes.petstore.registryclient;
 
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
+
 /**
  * Application Lifecycle Listener implementation class Registry Client Startup.
  * @author Simon Eismann
  *
  */
-public class TestRegistryClientStartup extends RegistryClientStartup {
-    
-	@Override
-    protected String cleanupServiceName(String serviceName) {
-    	serviceName = serviceName.replace("/", "");
-    	serviceName = serviceName.replaceAll("\\d", "");
-    	return serviceName;
+@WebListener
+public class TestRegistryClientStartup implements ServletContextListener {
+	
+	/**
+	 * Also set this accordingly in RegistryClientStartup.
+	 */
+	
+	/**
+	 * Empty constructor.
+	 */
+    public TestRegistryClientStartup() {
+    	
     }
+
+	/**
+     * @see ServletContextListener#contextDestroyed(ServletContextEvent)
+     * @param event The servlet context event at destruction.
+     */
+    public void contextDestroyed(ServletContextEvent event)  { 
+    	TestRegistryClient.getClient().unregister(event.getServletContext().getContextPath());
+    }
+
+	/**
+     * @see ServletContextListener#contextInitialized(ServletContextEvent)
+     * @param event The servlet context event at initialization.
+     */
+    public void contextInitialized(ServletContextEvent event)  {
+    	TestRegistryClient.getClient().register(event.getServletContext().getContextPath());
+    }
+    
 }
