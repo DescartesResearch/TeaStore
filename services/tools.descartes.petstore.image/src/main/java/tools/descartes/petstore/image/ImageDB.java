@@ -14,7 +14,9 @@ import tools.descartes.petstore.entities.ImageSize;
  * @author Norbert Schmitt
  */
 public class ImageDB {
-	
+
+	// Internal storage container to allow mapping product IDs and image names (for non-generated images) to images 
+	// with different sizes
 	private HashMap<Long, Map<Long, ImageSize>> products = new HashMap<>();
 	private HashMap<String, Map<Long, ImageSize>> webui = new HashMap<>();
 	private HashMap<Long, ImageSize> sizes = new HashMap<>();
@@ -36,23 +38,46 @@ public class ImageDB {
 		this.sizes = new HashMap<>(copy.sizes);
 	}
 	
+	/**
+	 * Returns the mapping of image IDs to their size for a given image key.
+	 * @param imageKey The image key identifying a range of sizes for a image content
+	 * @return Mapping between image IDs and the corresponding size
+	 */
 	public Map<Long, ImageSize> getAllSizes(ImageDBKey imageKey) {
-		if (imageKey.isProductKey())
+		if (imageKey.isProductKey()) {
 			return getAllSizes(imageKey.getProductID());
+		}
 		return getAllSizes(imageKey.getWebUIName());
 	}
 	
+	/**
+	 * Returns the mapping of image IDs to their size for a given product ID.
+	 * @param productID The product ID identifying a range of sizes for a image content
+	 * @return Mapping between image IDs and the corresponding size
+	 */
 	public Map<Long, ImageSize> getAllSizes(long productID) {
 		return products.getOrDefault(productID, new HashMap<>());
 	}
 	
+	/**
+	 * Returns the mapping of image IDs to their size for a given image name.
+	 * @param name The image name identifying a range of sizes for a image content
+	 * @return Mapping between image IDs and the corresponding size
+	 */
 	public Map<Long, ImageSize> getAllSizes(String name) {
 		return webui.getOrDefault(name, new HashMap<>());
 	}
 	
+	/**
+	 * Checks whether a given image key (product ID or name) is available at the given size.
+	 * @param imageKey Image key to check for
+	 * @param imageSize Image size to check for
+	 * @return True if the image was found in the correct size, otherwise false
+	 */
 	public boolean hasImageID(ImageDBKey imageKey, ImageSize imageSize) {
-		if (imageKey.isProductKey())
+		if (imageKey.isProductKey()) {
 			return hasImageID(imageKey.getProductID(), imageSize);
+		}
 		return hasImageID(imageKey.getWebUIName(), imageSize);
 	}
 	
@@ -65,8 +90,9 @@ public class ImageDB {
 	}
 	
 	public long getImageID(ImageDBKey imageKey, ImageSize imageSize) {
-		if (imageKey.isProductKey())
+		if (imageKey.isProductKey()) {
 			return getImageID(imageKey.getProductID(), imageSize);
+		}
 		return getImageID(imageKey.getWebUIName(), imageSize);
 	}
 	
@@ -82,8 +108,9 @@ public class ImageDB {
 		Optional<Map.Entry<Long, ImageSize>> img = db.getOrDefault(key, new HashMap<>()).entrySet().stream()
 				.filter(t -> t.getValue().equals(imageSize))
 				.findFirst();
-		if (img.isPresent())
+		if (img.isPresent()) {
 			return img.get().getKey();
+		}
 		return 0;
 	}
 	
@@ -108,12 +135,14 @@ public class ImageDB {
 	}
 	
 	private <K> void map(K key, long imageID, ImageSize imageSize, HashMap<K, Map<Long, ImageSize>> db) {
-		if (imageSize == null)
+		if (imageSize == null) {
 			throw new NullPointerException("Image size is null.");
+		}
 		
 		Map<Long, ImageSize> images = new HashMap<>();
-		if (db.containsKey(key))
+		if (db.containsKey(key)) {
 			images = db.get(key);
+		}
 		
 		images.put(imageID, imageSize);
 		db.put(key, images);

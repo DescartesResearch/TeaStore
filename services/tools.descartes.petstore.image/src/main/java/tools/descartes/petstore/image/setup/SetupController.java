@@ -255,12 +255,12 @@ public class SetupController {
 		
 		if (currentDir.isDirectory()) {
 			for (File file : currentDir.listFiles()) {
-				if (file.isFile() && !imagesToKeep.contains(Long.parseLong(file.getName())))
+				if (file.isFile() && !imagesToKeep.contains(Long.parseLong(file.getName()))) {
 					file.delete();
+				}
 			}
+			currentDir.delete();
 		}
-		
-		currentDir.delete();
 	}
 	
 	public void reconfiguration() {

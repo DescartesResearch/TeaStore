@@ -10,7 +10,7 @@
 
 		<%@include file="categorylist.jsp"%>
 
-		<div class="col-sm-9">
+		<div class="col-sm-9 col-md-9 col-lg-10">
 
 			<div class="row">
 				<div class="col-sm-6">

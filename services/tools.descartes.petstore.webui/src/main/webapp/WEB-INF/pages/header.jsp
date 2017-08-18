@@ -10,9 +10,11 @@
 					class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="${pageContext.request.contextPath}"><img
-				height="64" src="${storeIcon}" alt="Pet Supply Store">Pet
-				Supply Store </a>
+			<a class="navbar-brand" href="${pageContext.request.contextPath}">
+    <img src="${storeIcon}" width="30" height="30" class="d-inline-block align-top" alt="">
+    Pet Supply Store
+  </a>
+			
 
 		</div>
 
