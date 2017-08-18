@@ -161,12 +161,13 @@ public final class ServiceLoadBalancer {
     private <T, R> R loadBalanceRESTOperation(String endpointURI,
     		Class<T> entityClass, Function<RESTClient<T>, R> operation) {
     	R r = null;
-    	loadBalancerModificationLock.readLock().lock();
     	if (loadBalancer == null) {
     		System.err.println("Load Balancer was not initialized for service: " + targetService.getServiceName());
     		System.err.println("\tIs Registry up?");
     		updateLoadBalancersForServiceUsingRegistry(targetService);
     	}
+    	
+    	loadBalancerModificationLock.readLock().lock();
     	if (loadBalancer == null || loadBalancer.getAllServers().isEmpty()) {
     		System.err.println("No Server registered for Service: " + targetService.getServiceName());
     	} else {
@@ -222,7 +223,7 @@ public final class ServiceLoadBalancer {
     }
     
     //exception can be null
-    private <T,R> List<R> multicastRESTOperation(String endpointURI, Class<T> entityClass,
+    private <T, R> List<R> multicastRESTOperation(String endpointURI, Class<T> entityClass,
     		Function<RESTClient<T>, R> operation, Server exception) {
     	loadBalancerModificationLock.readLock().lock();
     	List<Server> servers = new ArrayList<>(loadBalancer.getAllServers());

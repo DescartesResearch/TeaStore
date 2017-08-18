@@ -57,18 +57,12 @@ public class RecommenderStartup implements ServletContextListener {
      */
     public void contextInitialized(ServletContextEvent arg0)  {
 		startupScheduler = Executors.newSingleThreadScheduledExecutor();
-		startupScheduler.scheduleAtFixedRate(new Runnable() {
-
-			@Override
-			public void run() {
+		startupScheduler.scheduleWithFixedDelay(() -> {
 	    		long ret = TrainEndpoint.retrieveDataAndRetrain();
 	    		if (ret != -1) {
 	    			startupScheduler.shutdown();
 	    		}
-			}
-			
-		},
-				2500,  2500, TimeUnit.MILLISECONDS);
+		}, 1000,  2500, TimeUnit.MILLISECONDS);
     }
     
 }
