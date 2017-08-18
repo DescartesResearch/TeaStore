@@ -1,0 +1,289 @@
+:root { 
+	--color-font: #777777; 
+	--main-color: white;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	font-family: helvetica, tahoma, arial, verdana, sans-serif;
+	color: var(--color-font);
+	background-color: var(--main-color);
+}
+
+.table>tbody>tr>td {
+	vertical-align: middle;
+}
+
+.quantity {
+	width: 50%;
+	color: var(--color-font);
+	float: right;
+}
+
+.container {
+	background-color: var(--main-color);
+	position: relative;
+}
+
+#Main {
+	margin: 0;
+}
+
+#MainImage {
+	margin: auto;
+	text-align: center;
+}
+
+#Catalog {
+	padding: 1ex;
+	background: inherit;
+	text-align: center;
+}
+
+.navbar-brand {
+	padding: 0px;
+}
+
+.navbar-brand>img {
+	height: 100%;
+	padding: 15px;
+	width: auto;
+}
+
+.navbar-brand {
+	display: flex;
+	align-items: center;
+}
+
+#category-label{
+	margin-left: 0;
+    font-size: 24px;
+    padding-eft: 5px;
+	
+}
+
+.navbar-brand>img {
+	padding: 7px 14px;
+}
+
+.navbar-center {
+	position: absolute;
+	left: 50%;
+	display: flex;
+	top: 0;
+	justify-content: center;
+	font-size: 18px;
+	line-height: 20px;
+	color: var(--color-font);
+}
+
+.centered {
+	display: flex;
+	justify-content: center;
+	position: absolute;
+	width: 100%;
+	left: 0;
+	top: 0;
+	float: left;
+	height: 50px;
+	padding: 15px 15px;
+	font-size: 18px;
+	line-height: 20px;
+	color: var(--color-font);
+}
+
+.brand-centered {
+	display: flex;
+	align-items: center;
+}
+
+.caption {
+	padding: 0;
+	text-align: left;
+}
+
+.divider {
+	border-style: solid;
+	border-width: 1px;
+	margin-top: 4px;
+}
+
+.navbar {
+	margin: 0;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	background-color: var(--main-color);
+	border: none;
+	color: var(--color-font);
+	position: relative;
+	border-radius: 0;
+}
+
+.category-title {
+	margin: 10px 0;
+	padding: 0;
+}
+
+.advertismenttitle {
+	padding-left: 15px;
+}
+
+.glyphicon {
+	font-size: 1.3em;
+}
+
+.sidebar {
+	padding-left: 40px;
+}
+
+.nav-sidebar-button {
+	float: left;
+}
+
+.nav-sidebar {
+	float: left;
+	padding: 0;
+	list-style-type: none;
+}
+
+.nav-sidebar li {
+	border: 1px #CDCDCD solid;
+	border-right-style: none;
+	border-top-style: none;
+	border-left-style: none;
+}
+
+
+
+.nav-sidebar>li>a {
+	font-size: 18px;
+	color: var(--color-font);
+	padding: 10px 0px 10px 0px;
+}
+
+.nav-sidebar>li>a>span {
+	font-size: 14px;
+	color: var(--color-font);
+}
+
+.product-item {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	padding-right: 15px;
+	padding-left: 15px;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+
+
+.thumbnail {
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.thumbnail>form>span, .thumbnail>form>b {
+	white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 100%;
+}
+
+.thumbnail>form>a>img {
+	margin-right: auto;
+	margin-left: auto;
+	display: block;	
+	border-radius: 4px;
+	border: 1px solid black;
+}
+
+@media all and (min-width: 768px) {
+	.navbar-fixed-width, .container {
+		max-width: 1200px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.flex-group {
+		display: -webkit-flex;
+		display: flex;
+		-webkit-align-items: center;
+		align-items: center;
+	}
+	.form-horizontal .flex-group .control-label {
+		padding-top: 0;
+	}
+}
+
+@media all and (max-width: 768px) {
+	.sidebar {
+		display: none;
+	}
+}
+
+
+
+.img-rounded {
+	max-height: 240px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 5px;
+}
+
+.submit-with-icon {
+  	background: transparent;
+    border: 0px;
+    padding: 0;
+    outline: 0;
+}
+
+.recommender {
+	font-size: 36px;
+	height: 300px;
+	background-color: #f00f00;
+}
+
+.logout {
+    background:none!important;
+    color:inherit;
+    border:none; 
+    font: inherit;
+    cursor: pointer;
+    position: relative;
+	display: block;
+	padding: 15px 15px;     
+}
+
+blockquote{
+	margin-top: 20px;
+} 
+
+.productpicture{
+	max-width: 100%;
+}
+
+.alert-success {
+	margin: 0;
+}
+
+#formpages{
+	padding: 26px 0;
+}
+
+.headnavbarlist>.category-item:nth-child(odd) {
+	background-color: white;
+}
+
+.headnavbarlist>.category-item:nth-child(odd) {
+	background-color: var(--color-font);
+}
+
+.headnavbarlist>.category-item:nth-child(odd)>a {
+	color: white;
+}
+
+a:hover, .nav-sidebar>li>a:hover {
+	color: black;
+}
