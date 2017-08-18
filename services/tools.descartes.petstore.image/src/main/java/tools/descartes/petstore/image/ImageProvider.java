@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import tools.descartes.petstore.entities.ImageSize;
 import tools.descartes.petstore.image.setup.ImageCreatorRunner;
 import tools.descartes.petstore.image.setup.ImageIDFactory;
-import tools.descartes.petstore.image.setup.SetupController;
 import tools.descartes.petstore.image.storage.IDataStorage;
 
 public class ImageProvider {
@@ -58,8 +57,6 @@ public class ImageProvider {
 	}
 
 	private void waitForImageCreator() {
-		if (imgCreatorRunner == null)
-			SetupController.getInstance().finalizeSetup();
 		if (imgCreatorRunner.isRunning()) {
 			imgCreatorRunner.pause();
 			try {
@@ -129,44 +126,4 @@ public class ImageProvider {
 		return new Tupel(key, storedImg.toString());
 	}
 	
-//	public static void main(String[] args) {
-////		HashMap<String, ImageSize> imgs = new HashMap<>();
-////		imgs.put("front", ImageSize.MAIN_IMAGE);
-////		imgs.put("icon", ImageSize.ICON);
-////		
-//		ImageProvider p = ImageProvider.getInstance();
-////		long tb = System.currentTimeMillis();
-////		Map<String, String> base = p.getWebUIImages(imgs);
-////		long ta = System.currentTimeMillis();
-////		Map<String, String> base2 = p.getWebUIImages(imgs);
-////		long tc = System.currentTimeMillis();
-////		Map<String, String> base3 = p.getWebUIImages(imgs);
-////		long td = System.currentTimeMillis();
-//
-//		HashMap<Long, ImageSize> pImgs = new HashMap<>();
-//		for (int i = 0; i <= 30; i++) {
-//			pImgs.put((long)i, ImageSize.PREVIEW);
-//		}
-//		long tpb = System.currentTimeMillis();
-//		for (int i = 0; i < 100; i++) {
-//			Map<Long, String> base4 = p.getProductImages(pImgs);
-//		}
-//		long tpa = System.currentTimeMillis();	
-//		Map<Long, String> base5 = p.getProductImages(pImgs);
-//		long tpc = System.currentTimeMillis();	
-//		
-////		System.out.println("Time: " + (ta - tb));
-////		System.out.println("Time2: " + (tc - ta));
-////		System.out.println("Time3: " + (td - tc));
-//		System.out.println("TimeP: " + ((tpa - tpb) / 100));
-//		System.out.println("TimeP: " + (tpc - tpa));
-////		System.out.println(base.size());
-////		System.out.println(base2.size());
-////		System.out.println(base.keySet());
-////		System.out.println(base2.keySet());
-////		System.out.println(base4.size());
-////		System.out.println(base4.keySet());
-////		System.out.println(base5.size());
-////		System.out.println(base5.keySet());
-//	}
 }
