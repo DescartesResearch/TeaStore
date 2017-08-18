@@ -13,8 +13,6 @@
  */
 package tools.descartes.petstore.image.setup;
 
-import java.util.concurrent.ScheduledExecutorService;
-
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
