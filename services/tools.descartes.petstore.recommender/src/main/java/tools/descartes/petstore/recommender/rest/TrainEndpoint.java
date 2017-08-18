@@ -62,7 +62,7 @@ public class TrainEndpoint {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return Response.status(org.apache.catalina.connector.Response.SC_INTERNAL_SERVER_ERROR)
+		return Response.status(500)
 				.entity("The (re)trainprocess failed.").build();
 	}
 
@@ -79,12 +79,18 @@ public class TrainEndpoint {
 		List<Order> orders = null;
 		try {
 			items = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "orderitems", OrderItem.class, -1, -1);
+			if (items == null || items.isEmpty()) {
+				System.out.println("Could not train using empty item set. Are required services up?");
+				return -1;
+			}
 			long noItems = items.size();
-			items = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "orderitems", OrderItem.class, -1, -1);
 			System.out.println("Retrieved " + noItems + " orderItems, starting retrieving of orders now.");
 			orders = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "orders", Order.class, -1, -1);
+			if (orders == null || orders.isEmpty()) {
+				System.out.println("Could not train using empty order set. Are required services up?");
+				return -1;
+			}
 			long noOrders = orders.size();
-			items = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "orderitems", OrderItem.class, -1, -1);
 			System.out.println("Retrieved " + noOrders + " orders, starting training now.");
 		} catch (Exception e) {
 			e.printStackTrace();
