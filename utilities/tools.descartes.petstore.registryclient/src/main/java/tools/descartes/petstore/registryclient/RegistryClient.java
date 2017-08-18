@@ -18,6 +18,7 @@ import java.util.List;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -61,13 +62,21 @@ public final class RegistryClient {
 	 * @return List of servers.
 	 */
 	public List<Server> getServersForService(Service targetService) {
-		Response response = getRESTClient().target(registryRESTURL)
-				.path("/" + targetService.getServiceName() + "/")
-				.request(MediaType.APPLICATION_JSON).get();
-		List<String> list = response.readEntity(new GenericType<List<String>>() { }); 
+		List<String> list = null;
 		List<Server> serverList = new ArrayList<Server>();
-		for (String string: list) {
-			serverList.add(new Server(string));
+		try {
+			Response response = getRESTClient().target(registryRESTURL)
+					.path("/" + targetService.getServiceName() + "/")
+					.request(MediaType.APPLICATION_JSON).get();
+			list = response.readEntity(new GenericType<List<String>>() { }); 
+		} catch (ProcessingException e) {
+			System.err.println("Could not connect to Registry. Is it up?");
+		}
+		
+		if (list != null) {
+			for (String string: list) {
+				serverList.add(new Server(string));
+			}
 		}
 			
 		return serverList;

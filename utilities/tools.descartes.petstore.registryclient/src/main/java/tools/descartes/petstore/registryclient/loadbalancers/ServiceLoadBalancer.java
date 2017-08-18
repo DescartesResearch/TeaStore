@@ -110,7 +110,8 @@ public final class ServiceLoadBalancer {
 	 * @param targetService The service for which to update.
 	 */
     private static void updateLoadBalancersForServiceUsingRegistry(Service targetService) {
-    	updateLoadBalancersForService(targetService, RegistryClient.CLIENT.getServersForService(targetService));
+    	List<Server> servers = RegistryClient.CLIENT.getServersForService(targetService);
+    	updateLoadBalancersForService(targetService, servers);
     }
 	
 	/**
@@ -159,16 +160,26 @@ public final class ServiceLoadBalancer {
     
     private <T, R> R loadBalanceRESTOperation(String endpointURI,
     		Class<T> entityClass, Function<RESTClient<T>, R> operation) {
+    	R r = null;
     	loadBalancerModificationLock.readLock().lock();
-		R r = LoadBalancerCommand.<R>builder()
-                .withLoadBalancer(loadBalancer)
-                .withRetryHandler(retryHandler)
-                .build()
-                .submit(server -> Observable.just(
-                		operation.apply(
-                				(RESTClient<T>) getEndpointClientCollection(endpointURI, entityClass)
-                				.getRESTClient(server))))
-                .toBlocking().first();
+    	if (loadBalancer == null) {
+    		System.err.println("Load Balancer was not initialized for service: " + targetService.getServiceName());
+    		System.err.println("\tIs Registry up?");
+    		updateLoadBalancersForServiceUsingRegistry(targetService);
+    	}
+    	if (loadBalancer == null || loadBalancer.getAllServers().isEmpty()) {
+    		System.err.println("No Server registered for Service: " + targetService.getServiceName());
+    	} else {
+    		r = LoadBalancerCommand.<R>builder()
+                    .withLoadBalancer(loadBalancer)
+                    .withRetryHandler(retryHandler)
+                    .build()
+                    .submit(server -> Observable.just(
+                    		operation.apply(
+                    				(RESTClient<T>) getEndpointClientCollection(endpointURI, entityClass)
+                    				.getRESTClient(server))))
+                    .toBlocking().first();
+    	}
 		loadBalancerModificationLock.readLock().unlock();
 		return r;
 	}

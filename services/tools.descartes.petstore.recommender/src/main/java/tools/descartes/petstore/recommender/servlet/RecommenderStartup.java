@@ -22,7 +22,6 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import tools.descartes.petstore.recommender.rest.TrainEndpoint;
-import tools.descartes.petstore.registry.rest.RegistryHeartbeatDaemon;
 
 /**
  * Application Lifecycle Listener implementation class Registry Client Startup.
