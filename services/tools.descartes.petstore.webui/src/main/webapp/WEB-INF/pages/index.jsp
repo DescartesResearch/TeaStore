@@ -10,7 +10,7 @@
 
 		<%@include file="categorylist.jsp"%>		
 
-		<div id="MainImage" class="col-sm-6">
+		<div id="MainImage" class="col-sm-6 col-lg-8">
 
 
 			<img height="450"

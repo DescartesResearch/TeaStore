@@ -15,10 +15,11 @@
 		<module>./interfaces/tools.descartes.petstore.entities</module>
 		<module>./utilities/tools.descartes.petstore.rest</module>
 		<module>./utilities/tools.descartes.petstore.registryclient</module>
+		<module>./services/tools.descartes.petstore.registry</module>
 		<module>./services/tools.descartes.petstore.persistence</module>
 		<module>./services/tools.descartes.petstore.store</module>
 		<module>./services/tools.descartes.petstore.recommender</module>
 		<module>./services/tools.descartes.petstore.webui</module>
-		<module>./services/tools.descartes.petstore.registry</module>
+		<module>./services/tools.descartes.petstore.image</module>
 	</modules>
 </project>

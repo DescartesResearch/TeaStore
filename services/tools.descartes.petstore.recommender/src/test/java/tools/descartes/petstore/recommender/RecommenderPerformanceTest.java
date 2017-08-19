@@ -23,8 +23,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.junit.Assert;
-import org.junit.Test;
-
 import tools.descartes.petstore.entities.OrderItem;
 import tools.descartes.petstore.entities.Product;
 import tools.descartes.petstore.registryclient.Service;
@@ -89,8 +87,8 @@ public class RecommenderPerformanceTest extends AbstractRecommenderRestTest {
 
 	/**
 	 * Run the access test.
+	 * @Test
 	 */
-	@Test
 	public void testRecommendEndpoint() {
 		retrieveDatabaseItems();
 		long traintime = 0;

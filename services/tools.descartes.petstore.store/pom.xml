@@ -78,15 +78,15 @@
   <build>
     <finalName>tools.descartes.petstore.store</finalName>
     <plugins>
-  <plugin>
-	    <groupId>org.apache.maven.plugins</groupId>
-	    <artifactId>maven-surefire-plugin</artifactId>
-	    <version>2.20</version>
-	    <configuration>
-	        <reuseForks>false</reuseForks>
-	        <forkCount>1</forkCount>
-	    </configuration>
-	</plugin>
-</plugins>
+	  <plugin>
+		    <groupId>org.apache.maven.plugins</groupId>
+		    <artifactId>maven-surefire-plugin</artifactId>
+		    <version>2.20</version>
+		    <configuration>
+		        <reuseForks>false</reuseForks>
+		        <forkCount>1</forkCount>
+		    </configuration>
+		</plugin>
+	</plugins>
   </build>
 </project>

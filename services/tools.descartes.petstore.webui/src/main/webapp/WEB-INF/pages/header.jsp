@@ -4,15 +4,17 @@
 	<div class="container-fluid">
 
 		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed"
+			<button id="navbarbutton" type="button" class="navbar-toggle collapsed"
 				data-toggle="collapse" data-target="#navbar" aria-controls="navbar">
 				<span class="sr-only">Toggle navigation</span> <span
 					class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="${pageContext.request.contextPath}"><img
-				height="64" src="${storeIcon}" alt="Pet Supply Store">Pet
-				Supply Store </a>
+			<a class="navbar-brand" href="${pageContext.request.contextPath}">
+    <img src="${storeIcon}" width="30" height="30" class="d-inline-block align-top" alt="">
+    Pet Supply Store
+  </a>
+			
 
 		</div>
 

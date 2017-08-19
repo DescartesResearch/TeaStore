@@ -11,12 +11,12 @@
 
 		<%@include file="categorylist.jsp"%>
 
-		<div class="col-md-9 col-sm-12">
+		<div class="col-md-9 col-lg-10 col-sm-12">
 			<h2 class="category-title">${category}</h2>
 			<div class="row">
 
 				<c:forEach items="${Productslist}" var="product" varStatus="loop">
-					<div class="col-sm-6 col-md-4 col-lg-3 placeholder">
+					<div class="col-sm-6 col-md-4 col-lg-2 placeholder">
 						<%@include file="product_item.jsp"%>
 					</div>
 				</c:forEach>
@@ -56,11 +56,9 @@
 					</ul>
 				</div>
 				<div class="col-sm-6">
-					<c:set var="numberlist">3,5,10,15,18</c:set>
-
 					<form id="formpages" method="post" action="">
 						<select name="number" onChange="this.form.submit()">
-							<c:forEach items="${numberlist}" var="number">
+							<c:forEach items="${productdisplaycountoptions}" var="number">
 								<c:choose>
 									<c:when test="${number == currentnumber}">
 										<option value="${number}" selected="selected">${number}</option>

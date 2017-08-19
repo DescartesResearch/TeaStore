@@ -34,7 +34,7 @@ import org.glassfish.jersey.client.ClientProperties;
 public class RESTClient<T> {
 	
 	private static final int CONNECT_TIMEOUT = 750;
-	private static final int READ_TIMEOUT = 2500;
+	private static final int READ_TIMEOUT = 4000;
 	
 	/**
 	 * Default REST application path.
