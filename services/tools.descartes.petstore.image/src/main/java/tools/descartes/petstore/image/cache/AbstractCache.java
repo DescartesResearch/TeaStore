@@ -122,11 +122,17 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 
 	@Override
 	public void cacheData(T data) {
-		if (!dataIsCachable(data) || dataIsInCache(data.getId()))
+		if (!dataIsCachable(data) || dataIsInCache(data.getId())) {
 			return;
+		}
 		
-		while (!hasStorageFor(data.getByteSize()))
+		if (data.getByteSize() > maxCacheSize) {
+			return;
+		}
+		
+		while (!hasStorageFor(data.getByteSize())) {
 			removeEntryByCachingStrategy();
+		}
 		addEntry(createEntry(data));
 	}
 	
