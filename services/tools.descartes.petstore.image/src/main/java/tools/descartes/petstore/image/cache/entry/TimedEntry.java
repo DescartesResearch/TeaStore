@@ -13,15 +13,32 @@
  */
 package tools.descartes.petstore.image.cache.entry;
 
+/**
+ * Wrapper class for caches with a replacement strategy that relies on a timestamp when the entry was retrieved
+ * from cache. For example the {@link tools.descartes.petstore.image.cache.LeastRecentlyUsed} or 
+ * {@link tools.descartes.petstore.image.cache.MostRecentlyUsed}.
+ * @author Norbert Schmitt
+ *
+ * @param <D> Cachable data that must implement {@link tools.descartes.petstore.image.cache.entry.ICachable}
+ */
 public class TimedEntry<D extends ICachable<D>> extends AbstractEntry<D> {
 
 	private long time = 0;
 	
+	/**
+	 * Basic constructor storing the cachable data. If the cachable data supplied is null, a 
+	 * {@link java.lang.NullPointerException} is thrown.
+	 * @param data Cachable data
+	 */
 	public TimedEntry(D data) {
 		super(data);
 		wasUsed();
 	}
 	
+	/**
+	 * Returns the last time this entry was retrieved from cache.
+	 * @return The last time in nanoseconds
+	 */
 	public long getTime() {
 		return time;
 	}
@@ -30,4 +47,5 @@ public class TimedEntry<D extends ICachable<D>> extends AbstractEntry<D> {
 	public void wasUsed() {
 		time = System.nanoTime();
 	}
+	
 }

@@ -13,8 +13,19 @@
  */
 package tools.descartes.petstore.image.cache.entry;
 
+/**
+ * Instantiable wrapper class not storing any additional data aparat from the cachable data. 
+ * @author Norbert Schmitt
+ *
+ * @param <D> Cachable data that must implement {@link tools.descartes.petstore.image.cache.entry.ICachable}
+ */
 public class SimpleEntry<D extends ICachable<D>> extends AbstractEntry<D> {
 
+	/**
+	 * Basic constructor storing the cachable data. If the cachable data supplied is null, a 
+	 * {@link java.lang.NullPointerException} is thrown.
+	 * @param data Cachable data
+	 */
 	public SimpleEntry(D data) {
 		super(data);
 	}

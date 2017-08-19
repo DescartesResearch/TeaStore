@@ -13,27 +13,54 @@
  */
 package tools.descartes.petstore.image.cache.entry;
 
+/**
+ * Base wrapper class for cachable data types.
+ * @author Norbert Schmitt
+ *
+ * @param <D> Cachable data that must implement {@link tools.descartes.petstore.image.cache.entry.ICachable}
+ */
 public abstract class AbstractEntry<D extends ICachable<D>> {
 	
 	private D data;
 	
+	/**
+	 * Basic constructor storing the cachable data. If the cachable data supplied is null, a 
+	 * {@link java.lang.NullPointerException} is thrown.
+	 * @param data Cachable data
+	 */
 	public AbstractEntry(D data) {
-		if (data == null)
+		if (data == null) {
 			throw new NullPointerException("Supplied data is null.");
+		}
 		
 		this.data = data;
 	}
 
+	/**
+	 * Returns the cachable data stored in this wrapper class.
+	 * @return The cachable data
+	 */
 	public D getData() {
 		return data;
 	}
 	
+	/**
+	 * Method signaling to the wrapper that this entry was read from the cache.
+	 */
 	public abstract void wasUsed();
 	
+	/**
+	 * Returns the unique ID that each cachable data has.
+	 * @return The unique ID for the cachable data
+	 */
 	public long getId() {
 		return data.getId();
 	}
 	
+	/**
+	 * Returns the byte size of the cachable data.
+	 * @return The byte size of the cachable data
+	 */
 	public long getByteSize() {
 		return data.getByteSize();
 	}
