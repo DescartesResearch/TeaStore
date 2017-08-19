@@ -272,7 +272,6 @@ public class SetupController {
 	private void deleteUnusedImages(List<Long> imagesToKeep) {
 		File currentDir = workingDir.toFile();
 		
-		System.out.println("Removing directory: " + currentDir.toPath().toAbsolutePath().toString() + " with Thread " + Thread.currentThread().getName());
 		if (currentDir.isDirectory()) {
 			for (File file : currentDir.listFiles()) {
 				if (file.isFile() && !imagesToKeep.contains(Long.parseLong(file.getName()))) {
