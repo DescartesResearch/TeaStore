@@ -53,16 +53,18 @@ import tools.descartes.petstore.registryclient.Service;
 import tools.descartes.petstore.registryclient.loadbalancers.ServiceLoadBalancer;
 import tools.descartes.petstore.registryclient.rest.LoadBalancedCRUDOperations;
 
-public class SetupController {
-	
-	public final static Path STD_WORKING_DIR = Paths.get("images");
-	public final static int PERSISTENCE_CREATION_WAIT_TIME = 1000;
-	
-	private static SetupController instance = new SetupController();
+public enum SetupController {
+
+	SETUP;
+
+	private interface SetupControllerConstants {
+		public final static Path STD_WORKING_DIR = Paths.get("images");
+		public final static int PERSISTENCE_CREATION_WAIT_TIME = 1000;
+	}
 	
 	private StorageRule storageRule = StorageRule.STD_STORAGE_RULE;
 	private CachingRule cachingRule = CachingRule.STD_CACHING_RULE;
-	private Path workingDir = STD_WORKING_DIR;
+	private Path workingDir = SetupControllerConstants.STD_WORKING_DIR;
 	private long cacheSize = IDataCache.STD_MAX_CACHE_SIZE;
 	private StorageMode storageMode = StorageMode.STD_STORAGE_MODE;
 	private CachingMode cachingMode = CachingMode.STD_CACHING_MODE;
@@ -82,10 +84,6 @@ public class SetupController {
 			workingDir = path;
 		}
 	}
-	
-	public static SetupController getInstance() {
-		return instance;
-	}
 
 	private List<Product> fetchProducts() {
 		// We have to wait for the database that all entries are created before 
@@ -98,7 +96,7 @@ public class SetupController {
 				break;
 			}
 			try {
-				Thread.sleep(PERSISTENCE_CREATION_WAIT_TIME);
+				Thread.sleep(SetupControllerConstants.PERSISTENCE_CREATION_WAIT_TIME);
 			} catch (InterruptedException e) {
 				
 			}
@@ -141,7 +139,7 @@ public class SetupController {
 		this.nrOfImagesToGenerate = nrOfImagesToGenerate;
 		
 		// Create images
-		imgCreatorRunner = new ImageCreatorRunner(productIDs, STD_WORKING_DIR, imgDB, 
+		imgCreatorRunner = new ImageCreatorRunner(productIDs, workingDir, imgDB, 
 				ImageCreator.STD_NR_OF_SHAPES_PER_IMAGE, ImageCreator.STD_SEED, ImageSize.STD_IMAGE_SIZE, 
 				nrOfImagesToGenerate);
 		imgCreatorThread = new Thread(imgCreatorRunner);

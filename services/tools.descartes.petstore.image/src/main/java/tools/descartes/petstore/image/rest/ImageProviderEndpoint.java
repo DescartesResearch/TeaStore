@@ -46,7 +46,7 @@ public class ImageProviderEndpoint {
 	@GET
 	@Path("regenerateImages")
 	public Response regenerateImages() {
-		SetupController.getInstance().reconfiguration();
+		SetupController.SETUP.reconfiguration();
 		return Response.ok().build();
 	}
 }

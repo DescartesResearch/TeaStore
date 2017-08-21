@@ -42,7 +42,7 @@ public class ImageProviderStartup implements ServletContextListener {
      */
     public void contextDestroyed(ServletContextEvent event)  { 
 		RegistryClient.getClient().unregister(event.getServletContext().getContextPath());
-		SetupController.getInstance().deleteAllCreatedData();
+		SetupController.SETUP.deleteAllCreatedData();
     }
 
 	/**
@@ -54,10 +54,10 @@ public class ImageProviderStartup implements ServletContextListener {
 			
 			@Override
 			public void callback() {
-				SetupController.getInstance().deleteAllCreatedData();
-				SetupController.getInstance().detectPreExistingImages();
-				SetupController.getInstance().generateImages();
-				SetupController.getInstance().finalizeSetup();
+				SetupController.SETUP.deleteAllCreatedData();
+				SetupController.SETUP.detectPreExistingImages();
+				SetupController.SETUP.generateImages();
+				SetupController.SETUP.finalizeSetup();
 				RegistryClient.getClient().register(event.getServletContext().getContextPath());
 			}
 		});
