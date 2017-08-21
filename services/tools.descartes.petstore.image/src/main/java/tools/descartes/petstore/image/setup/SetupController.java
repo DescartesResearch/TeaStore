@@ -49,7 +49,6 @@ import tools.descartes.petstore.image.storage.IDataStorage;
 import tools.descartes.petstore.image.storage.LimitedDriveStorage;
 import tools.descartes.petstore.image.storage.rules.StoreAll;
 import tools.descartes.petstore.image.storage.rules.StoreLargeImages;
-import tools.descartes.petstore.registryclient.RegistryClient;
 import tools.descartes.petstore.registryclient.Service;
 import tools.descartes.petstore.registryclient.loadbalancers.ServiceLoadBalancer;
 import tools.descartes.petstore.registryclient.rest.LoadBalancedCRUDOperations;

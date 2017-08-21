@@ -20,38 +20,10 @@ import tools.descartes.petstore.image.cache.entry.AbstractEntry;
 import tools.descartes.petstore.image.cache.entry.ICachable;
 import tools.descartes.petstore.image.cache.rules.CacheAll;
 import tools.descartes.petstore.image.storage.IDataStorage;
+import tools.descartes.petstore.image.storage.NoStorage;
 
 public abstract class AbstractCache<S extends Collection<F>, T extends ICachable<T>, F extends AbstractEntry<T>> 
 		implements IDataCache<T> {
-	
-	private class NoStorage implements IDataStorage<T> {
-
-		@Override
-		public boolean dataExists(long id) {
-			return true;
-		}
-
-		@Override
-		public T loadData(long id) {
-			return null;
-		}
-
-		@Override
-		public boolean saveData(T data) {
-			return true;
-		}
-
-		@Override
-		public boolean dataIsStorable(T data) {
-			return true;
-		}
-
-		@Override
-		public boolean deleteData(T data) {
-			return true;
-		}
-		
-	}
 	
 	protected IDataStorage<T> cachedStorage;
 	protected S entries;
@@ -73,15 +45,18 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 	}
 	
 	public AbstractCache(S entries, IDataStorage<T> cachedStorage, long maxCacheSize, Predicate<T> cachingRule) {
-		if (entries == null)
+		if (entries == null) {
 			throw new NullPointerException("Internal storage is null.");
-		if (maxCacheSize < 0)
+		}
+		if (maxCacheSize < 0) {
 			throw new IllegalArgumentException("Cache size is negative.");
-		if (cachingRule == null)
+		}
+		if (cachingRule == null) {
 			throw new NullPointerException("Rule to determine if image can be cached is null.");
+		}
 	
 		if (cachedStorage == null) {
-			this.cachedStorage = new NoStorage();
+			this.cachedStorage = new NoStorage<T>();
 		} else {
 			this.cachedStorage = cachedStorage;
 		}
