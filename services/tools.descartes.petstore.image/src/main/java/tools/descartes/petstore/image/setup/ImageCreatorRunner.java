@@ -70,22 +70,27 @@ public class ImageCreatorRunner implements Runnable {
 	
 	public ImageCreatorRunner(List<Long> productIDs, Path workingDir, ImageDB preInitDB, int nrOfShapesPerImage, 
 			long creatorSeed, ImageSize imageSize, int nrOfImagesToGenerate) {
-		if (productIDs == null)
+		if (productIDs == null) {
 			throw new NullPointerException("List of product IDs is null.");
-		if (workingDir == null)
+		}
+		if (workingDir == null) {
 			throw new NullPointerException("Image storage directory is null.");
-		if (imageSize == null)
+		}
+		if (imageSize == null) {
 			throw new NullPointerException("Image size is null.");
-		if (nrOfImagesToGenerate < 1)
+		}
+		if (nrOfImagesToGenerate < 1) {
 			throw new IllegalArgumentException("Image creation cannot be limited to a value below one.");
+		}
 		
 		this.productIDs = new ArrayList<>(productIDs);
 		this.workingDir = workingDir;
 		this.imgCreator = new ImageCreator(nrOfShapesPerImage, creatorSeed);
 		this.imgSize = imageSize;
 		this.nrOfImagesToGenerate = nrOfImagesToGenerate;
-		if (preInitDB != null)
+		if (preInitDB != null) {
 			imgDB = preInitDB;
+		}
 	}
 	
 	@Override
@@ -119,8 +124,9 @@ public class ImageCreatorRunner implements Runnable {
 			imgDB.setImageMapping(product, imgID, imgSize);
 
 			// Do not create more images if the maximum number is reached
-			if (imagesCreated >= nrOfImagesToGenerate)
+			if (imagesCreated >= nrOfImagesToGenerate) {
 				continue;
+			}
 			
 			// Resolve path and create a new image
 			Path imgFile = workingDir.resolve(String.valueOf(imgID));
