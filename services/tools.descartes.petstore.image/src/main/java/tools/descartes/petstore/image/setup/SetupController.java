@@ -168,8 +168,6 @@ public class SetupController {
 		
 		createWorkingDir(workingDir);
 		
-		ImageIDFactory idFactory = ImageIDFactory.getInstance();
-		
 		URL url = this.getClass().getResource("front.png");
 		Path dir = null;
 		try {
@@ -187,7 +185,7 @@ public class SetupController {
 		if (currentDir.isDirectory()) {
 			for (File file : currentDir.listFiles()) {
 				if (file.isFile() && file.getName().endsWith(StoreImage.STORE_IMAGE_FORMAT)) {
-					long imageID = idFactory.getNextImageID();
+					long imageID = ImageIDFactory.ID.getNextImageID();
 					
 					// Copy files to correct file with the image id number
 					try {

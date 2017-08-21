@@ -92,7 +92,7 @@ public enum ImageProvider {
 	}
 	
 	private StoreImage scaleAndRegisterImg(BufferedImage image, ImageDBKey key, ImageSize size) {
-		StoreImage storedImg = new StoreImage(ImageIDFactory.getInstance().getNextImageID(), 
+		StoreImage storedImg = new StoreImage(ImageIDFactory.ID.getNextImageID(), 
 				ImageScaler.scale(image, size), size);
 		db.setImageMapping(key, storedImg.getId(), size);
 		storage.saveData(storedImg);

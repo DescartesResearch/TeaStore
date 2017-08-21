@@ -92,7 +92,6 @@ public class ImageCreatorRunner implements Runnable {
 	public void run() {
 		isRunning = true;
 		timeBeforeGeneration = System.currentTimeMillis();
-		ImageIDFactory idFactory = ImageIDFactory.getInstance();
 		
 		for (long product : productIDs) {
 			if (stopped) {
@@ -114,7 +113,7 @@ public class ImageCreatorRunner implements Runnable {
 				}
 			}
 			
-			long imgID = idFactory.getNextImageID();
+			long imgID = ImageIDFactory.ID.getNextImageID();
 			
 			// All products must be added to the database
 			imgDB.setImageMapping(product, imgID, imgSize);
