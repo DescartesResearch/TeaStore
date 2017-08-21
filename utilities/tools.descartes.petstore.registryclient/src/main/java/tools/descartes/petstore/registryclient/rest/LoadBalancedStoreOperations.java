@@ -62,17 +62,33 @@ public final class LoadBalancedStoreOperations {
 				.accept(MediaType.APPLICATION_JSON).get());
 		return r.readEntity(Product.class);
 	}
+
+	/**
+	 * Gets ads.
+	 * @param blob SessionBlob
+	 * @param pid pid of currentProduct
+	 * @return product
+	 */
+	public static List<Product> getAdvertisements(SessionBlob blob) {
+		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
+				"products", Product.class, client -> client.getService().path(client.getApplicationURI())
+				.path(client.getEnpointURI()).path("ads")
+				.request(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.post(Entity.entity(blob.getOrderItems(), MediaType.APPLICATION_JSON), Response.class));
+		return r.readEntity(new GenericType<List<Product>>() { });
+	}
 	
 	/**
 	 * Gets ads.
 	 * @param blob SessionBlob
-	 * @param number number of ads
+	 * @param pid pid of currentProduct
 	 * @return product
 	 */
-	public static List<Product> getAdvertisements(SessionBlob blob, int number) {
+	public static List<Product> getAdvertisements(SessionBlob blob, long pid) {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"products", Product.class, client -> client.getService().path(client.getApplicationURI())
-				.path(client.getEnpointURI()).path("ads").queryParam("number", number)
+				.path(client.getEnpointURI()).path("ads").queryParam("pid", pid)
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob.getOrderItems(), MediaType.APPLICATION_JSON), Response.class));

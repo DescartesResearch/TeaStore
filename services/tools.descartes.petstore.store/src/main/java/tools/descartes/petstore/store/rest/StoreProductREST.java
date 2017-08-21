@@ -58,13 +58,21 @@ public class StoreProductREST {
 	/**
 	 * Get advertisement.
 	 * @param order current cart state
-	 * @param number number of ads
+	 * @param pid pid
 	 * @return Response containing product
 	 */
 	@POST
 	@Path("ads")
-	public Response getAdvertisement(List<OrderItem> orderItems, @QueryParam("number") final int number) {
-		List<Long> productIds = LoadBalancedRecommenderOperations.getRecommendations(orderItems);
+	public Response getAdvertisement(List<OrderItem> orderItems, @QueryParam("pid") final Long pid) {
+		List<OrderItem> items = new LinkedList<>();
+		if (pid != null) {
+			OrderItem oi = new OrderItem();
+			oi.setProductId(pid);
+			oi.setQuantity(1);
+			items.add(oi);
+		}
+		items.addAll(orderItems);
+		List<Long> productIds = LoadBalancedRecommenderOperations.getRecommendations(items);
 		List<Product> products = new LinkedList<Product>();
 		for (Long productId: productIds) {
 			products.add(LoadBalancedStoreOperations.getProduct(productId));
