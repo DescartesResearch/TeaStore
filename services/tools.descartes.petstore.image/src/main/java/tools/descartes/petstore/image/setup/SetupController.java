@@ -288,9 +288,9 @@ public enum SetupController {
 	}
 	
 	public void configureImageProvider() {
-		ImageProvider.PROVIDER.setImageDB(imgDB);
-		ImageProvider.PROVIDER.setImageCreatorRunner(imgCreatorRunner);
-		ImageProvider.PROVIDER.setStorage(storage);
+		ImageProvider.IP.setImageDB(imgDB);
+		ImageProvider.IP.setImageCreatorRunner(imgCreatorRunner);
+		ImageProvider.IP.setStorage(storage);
 	}
 	
 	public Path getWorkingDir() {

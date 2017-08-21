@@ -24,7 +24,7 @@ import tools.descartes.petstore.image.storage.IDataStorage;
 
 public enum ImageProvider {
 
-	PROVIDER;
+	IP;
 	
 	public static final String IMAGE_NOT_FOUND = "notFound";
 	
