@@ -41,6 +41,7 @@ import tools.descartes.petstore.registryclient.rest.LoadBalancedCRUDOperations;
 public class SetupController {
 	
 	public final static Path STD_WORKING_DIR = Paths.get("images");
+	public final static int PERSISTENCE_CREATION_WAIT_TIME = 1000;
 	
 	private static SetupController instance = new SetupController();
 	
@@ -264,6 +265,8 @@ public class SetupController {
 	}
 	
 	public void reconfiguration() {
+
+		
 		// Stop image creation to have sort of a steady state to work on
 		imgCreatorRunner.stopCreation();
 		while (imgCreatorRunner.isRunning()) {
@@ -297,6 +300,16 @@ public class SetupController {
 				.collect(Collectors.toList());
 		imagesToKeep.addAll(copy.getAllWebImageIDs(biggest));
 		deleteUnusedImages(imagesToKeep);
+		
+		// We have to wait for the database that all entries are created before 
+		// generating images (which queries persistence)
+		while (!LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "generatedb/finished", Boolean.class, -1)) {
+			try {
+				Thread.sleep(PERSISTENCE_CREATION_WAIT_TIME);
+			} catch (InterruptedException e) {
+				
+			}
+		}
 		
 		// Start our new image creator thread and finish the reconfiguration
 		generateImages(productsNotInDB, productsNotInDB.size());

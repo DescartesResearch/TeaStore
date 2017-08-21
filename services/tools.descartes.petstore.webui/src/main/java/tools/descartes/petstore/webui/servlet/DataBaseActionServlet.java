@@ -52,7 +52,24 @@ public class DataBaseActionServlet extends AbstractUIServlet {
 				if (resp.getStatus() == 200) {
 					System.out.println("here");
 				}
-
+				
+				// Regenerate images
+				Response imgResp = ServiceLoadBalancer.loadBalanceRESTOperation(Service.IMAGE, "regenerateImages", 
+						null, client -> client.getService().path(client.getApplicationURI())
+								.path(client.getEnpointURI()).request(MediaType.TEXT_PLAIN).get());
+				if (imgResp.getStatus() != 200) {
+					System.out.println("Image provider responded with error " + imgResp.getStatus() 
+							+ " when regenerating images.");
+				}
+				
+				// Retrain recommender
+				Response recResp = ServiceLoadBalancer.loadBalanceRESTOperation(Service.RECOMMENDER, "train",
+						null, client -> client.getService().path(client.getApplicationURI())
+								.path(client.getEnpointURI()).request(MediaType.TEXT_PLAIN).get());
+				if (recResp.getStatus() != 200) {
+					System.out.println("Recommender responded with error + " + recResp.getStatus()
+							+ " when retraining.");
+				}
 			}
 
 		}
