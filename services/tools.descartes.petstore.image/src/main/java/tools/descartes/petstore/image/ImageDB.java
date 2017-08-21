@@ -207,45 +207,45 @@ public class ImageDB {
 		sizes.put(imageID, imageSize);
 	}
 	
-	public void removeWebImages() {
-		removeImagesFromSizeMap(webui);
-		webui = new HashMap<>();
-	}
+//	public void removeWebImages() {
+//		removeImagesFromSizeMap(webui);
+//		webui = new HashMap<>();
+//	}
+//	
+//	public void removeProductImages() {
+//		removeImagesFromSizeMap(products);
+//		products = new HashMap<>();
+//	}
+//	
+//	private <K> void removeImagesFromSizeMap(Map<K, Map<Long, ImageSize>> db) {
+//		db.entrySet().forEach(entry -> entry.getValue().entrySet().forEach(size -> sizes.remove(size.getKey())));
+//	}
 	
-	public void removeProductImages() {
-		removeImagesFromSizeMap(products);
-		products = new HashMap<>();
-	}
-	
-	private <K> void removeImagesFromSizeMap(Map<K, Map<Long, ImageSize>> db) {
-		db.entrySet().forEach(entry -> entry.getValue().entrySet().forEach(size -> sizes.remove(size.getKey())));
-	}
-	
-	public List<Long> getAllWebImageIDs() {
-		return getAllImageIDs(webui, null);
-	}
-	
-	public List<Long> getAllWebImageIDs(ImageSize imageSize) {
-		return getAllImageIDs(webui, imageSize);
-	}
-	
-	public List<Long> getAllProductImageIDs() {
-		return getAllImageIDs(products, null);
-	}
-	
-	public List<Long> getAllProductImageIDs(ImageSize imageSize) {
-		return getAllImageIDs(products, imageSize);
-	}
-	
-	private <K> List<Long> getAllImageIDs(Map<K, Map<Long, ImageSize>> db, ImageSize imageSize) {
-		return db.entrySet().stream()
-				.map(entry -> entry.getValue().entrySet().stream()
-						.filter(size -> imageSize == null || size.getValue().equals(imageSize))
-						.map(size -> size.getKey())
-						.findFirst()
-						.orElse(null))
-				.filter(entry -> entry != null)
-				.collect(Collectors.toList());
-	}
+//	public List<Long> getAllWebImageIDs() {
+//		return getAllImageIDs(webui, null);
+//	}
+//	
+//	public List<Long> getAllWebImageIDs(ImageSize imageSize) {
+//		return getAllImageIDs(webui, imageSize);
+//	}
+//	
+//	public List<Long> getAllProductImageIDs() {
+//		return getAllImageIDs(products, null);
+//	}
+//	
+//	public List<Long> getAllProductImageIDs(ImageSize imageSize) {
+//		return getAllImageIDs(products, imageSize);
+//	}
+//	
+//	private <K> List<Long> getAllImageIDs(Map<K, Map<Long, ImageSize>> db, ImageSize imageSize) {
+//		return db.entrySet().stream()
+//				.map(entry -> entry.getValue().entrySet().stream()
+//						.filter(size -> imageSize == null || size.getValue().equals(imageSize))
+//						.map(size -> size.getKey())
+//						.findFirst()
+//						.orElse(null))
+//				.filter(entry -> entry != null)
+//				.collect(Collectors.toList());
+//	}
 
 }

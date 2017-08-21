@@ -18,7 +18,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
 /**
@@ -32,8 +31,6 @@ import javax.persistence.TypedQuery;
  * 		(i.e., the entity that is stored in the database).
  */
 public abstract class AbstractPersistenceRepository<E, P extends E> {
-
-	private EntityManagerFactory emf = Persistence.createEntityManagerFactory("tools.descartes.petstore.persistence");
 	
 	/**
 	 * Gets the ID of a persistence entity.
@@ -53,7 +50,7 @@ public abstract class AbstractPersistenceRepository<E, P extends E> {
 	 * @return The entity manager factory.
 	 */
 	public EntityManagerFactory getEMF() {
-		return emf;
+		return EMFManager.getEMF();
 	}
 	
 	/**
@@ -62,7 +59,7 @@ public abstract class AbstractPersistenceRepository<E, P extends E> {
 	 * @return A new entity manager.
 	 */
 	protected EntityManager getEM() {
-		return emf.createEntityManager();
+		return getEMF().createEntityManager();
 	}
 	
 	/**

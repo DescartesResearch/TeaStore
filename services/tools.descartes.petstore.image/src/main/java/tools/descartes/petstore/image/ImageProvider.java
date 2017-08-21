@@ -50,7 +50,7 @@ public class ImageProvider {
 	private ImageCreatorRunner imgCreatorRunner;
 	
 	private ImageProvider() {
-		
+
 	}
 	
 	public static ImageProvider getInstance() {

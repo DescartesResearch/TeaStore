@@ -35,7 +35,7 @@ public final class CacheManagerEndpoint {
 	 * @return Status Code 200 and cleared class name if clear succeeded, 404 if it didn't.
 	 */
 	@DELETE
-	@Path("/{class}")
+	@Path("/class/{class}")
 	public Response clearClassCache(@PathParam("class") final String className) {
 		boolean classfound = true;
 		try {
@@ -52,12 +52,23 @@ public final class CacheManagerEndpoint {
 	
 	/**
 	 * Clears the entire cache.
-	 * @return Status Code 200 and "clear" text if clear succeeded, 404 if it didn't.
+	 * @return Status Code 200 and "cleared" text if clear succeeded, 404 if it didn't.
 	 */
 	@DELETE
-	@Path("/")
+	@Path("/cache")
 	public Response clearAllCaches() {
 		CacheManager.MANAGER.clearLocalCacheOnly();
 		return Response.ok("cleared").build();
+	}
+	
+	/**
+	 * Closes and resets the EMF.
+	 * @return Status Code 200 and "clearedEMF" text if reset succeeded, 404 if it didn't.
+	 */
+	@DELETE
+	@Path("/emf")
+	public Response clearEMF() {
+		CacheManager.MANAGER.resetLocalEMF();
+		return Response.ok("clearedEMF").build();
 	}
 }

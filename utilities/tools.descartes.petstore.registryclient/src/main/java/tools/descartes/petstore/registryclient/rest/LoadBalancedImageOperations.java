@@ -1,7 +1,9 @@
 package tools.descartes.petstore.registryclient.rest;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
@@ -76,5 +78,18 @@ public class LoadBalancedImageOperations {
 				.accept(MediaType.APPLICATION_JSON).post(Entity.entity(img, MediaType.APPLICATION_JSON)));
 		
 		return r.readEntity(new GenericType<HashMap<String, String>>() { });	
+	}
+	
+	public static List<Integer> regenerateImages() {
+		List<Response> r = ServiceLoadBalancer.multicastRESTOperation(Service.IMAGE, "image", null, 
+				client -> client.getService().path(client.getApplicationURI())
+				.path(client.getEnpointURI()).path("regenerateImages").request().get());
+		if (r == null) {
+			return new ArrayList<Integer>();
+		}
+		return r.stream()
+				.filter(response -> response != null)
+				.map(response -> response.getStatus())
+				.collect(Collectors.toList());
 	}
 }
