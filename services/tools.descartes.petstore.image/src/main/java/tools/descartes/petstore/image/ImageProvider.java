@@ -22,21 +22,18 @@ import tools.descartes.petstore.image.setup.ImageCreatorRunner;
 import tools.descartes.petstore.image.setup.ImageIDFactory;
 import tools.descartes.petstore.image.storage.IDataStorage;
 
-public class ImageProvider {
+public enum ImageProvider {
+
+	PROVIDER;
 	
 	public static final String IMAGE_NOT_FOUND = "notFound";
 	
-	private static ImageProvider instance = new ImageProvider();
 	private ImageDB db;
 	private IDataStorage<StoreImage> storage;
 	private ImageCreatorRunner imgCreatorRunner;
 	
 	private ImageProvider() {
 
-	}
-	
-	public static ImageProvider getInstance() {
-		return instance;
 	}
 	
 	public void setImageDB(ImageDB imgDB) {

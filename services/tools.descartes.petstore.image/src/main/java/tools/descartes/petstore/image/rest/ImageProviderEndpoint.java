@@ -34,13 +34,13 @@ public class ImageProviderEndpoint {
 	@POST
 	@Path("getProductImages")
 	public Response getProductImages(Map<Long, ImageSize> images) {
-		return Response.ok().entity(ImageProvider.getInstance().getProductImages(images)).build();
+		return Response.ok().entity(ImageProvider.PROVIDER.getProductImages(images)).build();
 	}
 	
 	@POST
 	@Path("getWebImages")
 	public Response getWebUIImages(Map<String, ImageSize> images) {
-		return Response.ok().entity(ImageProvider.getInstance().getWebUIImages(images)).build();
+		return Response.ok().entity(ImageProvider.PROVIDER.getWebUIImages(images)).build();
 	}
 	
 	@GET

@@ -274,15 +274,14 @@ public class SetupController {
 			default: break;
 		}
 
-		ImageProvider provider = ImageProvider.getInstance();
-		provider.setImageDB(imgDB);
-		provider.setImageCreatorRunner(imgCreatorRunner);
+		ImageProvider.PROVIDER.setImageDB(imgDB);
+		ImageProvider.PROVIDER.setImageCreatorRunner(imgCreatorRunner);
 		if (cache == null) {
-			provider.setStorage(storage);
+			ImageProvider.PROVIDER.setStorage(storage);
 		} else {
 			for (StoreImage i : preCacheImg)
 				cache.cacheData(i);
-			provider.setStorage(cache);
+			ImageProvider.PROVIDER.setStorage(cache);
 		}
 	}
 	
