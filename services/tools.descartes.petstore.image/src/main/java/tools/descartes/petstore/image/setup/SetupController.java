@@ -1,3 +1,16 @@
+/**
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package tools.descartes.petstore.image.setup;
 
 import java.awt.image.BufferedImage;
@@ -16,6 +29,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
+import javax.ws.rs.core.Response;
 
 import tools.descartes.petstore.entities.ImageSize;
 import tools.descartes.petstore.entities.Product;
@@ -36,15 +50,16 @@ import tools.descartes.petstore.image.storage.LimitedDriveStorage;
 import tools.descartes.petstore.image.storage.rules.StoreAll;
 import tools.descartes.petstore.image.storage.rules.StoreLargeImages;
 import tools.descartes.petstore.registryclient.Service;
+import tools.descartes.petstore.registryclient.loadbalancers.ServiceLoadBalancer;
 import tools.descartes.petstore.registryclient.rest.LoadBalancedCRUDOperations;
 
 public class SetupController {
 	
 	public final static Path STD_WORKING_DIR = Paths.get("images");
+	public final static int PERSISTENCE_CREATION_WAIT_TIME = 1000;
 	
 	private static SetupController instance = new SetupController();
 	
-	private List<Long> productIDs = new ArrayList<>();
 	private StorageRule storageRule = StorageRule.STD_STORAGE_RULE;
 	private CachingRule cachingRule = CachingRule.STD_CACHING_RULE;
 	private Path workingDir = STD_WORKING_DIR;
@@ -59,15 +74,13 @@ public class SetupController {
 	private Thread imgCreatorThread;
 	
 	private SetupController() {
-		if (!STD_WORKING_DIR.toFile().exists())
-			if (!STD_WORKING_DIR.toFile().mkdir())
-				throw new IllegalArgumentException("Standard working directory \"" 
-						+ STD_WORKING_DIR.toAbsolutePath() + "\" could not be created.");
+		createWorkingDir(workingDir);
 	}
 	
 	public void setWorkingDir(Path path) { 
-		if (path != null)
+		if (path != null) {
 			workingDir = path;
+		}
 	}
 	
 	public static SetupController getInstance() {
@@ -75,8 +88,25 @@ public class SetupController {
 	}
 
 	private List<Product> fetchProducts() {
-		return LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "products", 
+		// We have to wait for the database that all entries are created before 
+		// generating images (which queries persistence)
+		while (true) {
+			Response result = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "generatedb", 
+					String.class, client -> client.getService().path(client.getApplicationURI())
+					.path(client.getEnpointURI()).path("finished").request().get());
+			if (result == null ? false : Boolean.parseBoolean(result.readEntity(String.class))) {
+				break;
+			}
+			try {
+				Thread.sleep(PERSISTENCE_CREATION_WAIT_TIME);
+			} catch (InterruptedException e) {
+				
+			}
+		}
+		// TODO: Make it a REST instead of CRUD operation
+		List<Product> products = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "products", 
 				Product.class, -1, -1);
+		return products == null ? new ArrayList<Product>() : products;
 	}
 	
 	private List<Long> convertToIDs(List<Product> products) {
@@ -85,8 +115,9 @@ public class SetupController {
 	
 	public void generateImages() {
 		List<Product> products = fetchProducts();
-		if (products == null)
+		if (products == null) {
 			return;
+		}
 		
 		List<Long> productIDs = convertToIDs(products);
 		generateImages(productIDs, productIDs.size());		
@@ -94,41 +125,48 @@ public class SetupController {
 
 	public void generateImages(int nrOfImagesToGenerate) {
 		List<Product> products = fetchProducts();
-		if (products == null)
+		if (products == null) {
 			return;
+		}
 		
 		List<Long> productIDs = convertToIDs(products);
 		generateImages(productIDs, nrOfImagesToGenerate);
 	}
 	
 	public void generateImages(List<Long> productIDs, int nrOfImagesToGenerate) {
-		if (productIDs == null || nrOfImagesToGenerate <= 0)
+		if (productIDs == null || nrOfImagesToGenerate <= 0) {
 			return;
+		}
 
-		this.productIDs = productIDs;
 		this.nrOfImagesToGenerate = nrOfImagesToGenerate;
 		
 		// Create images
-		imgCreatorRunner = new ImageCreatorRunner(this.productIDs, STD_WORKING_DIR, imgDB, 
+		imgCreatorRunner = new ImageCreatorRunner(productIDs, STD_WORKING_DIR, imgDB, 
 				ImageCreator.STD_NR_OF_SHAPES_PER_IMAGE, ImageCreator.STD_SEED, ImageSize.STD_IMAGE_SIZE, 
 				nrOfImagesToGenerate);
 		imgCreatorThread = new Thread(imgCreatorRunner);
 		imgCreatorThread.start();
 	}
 	
+	private void createWorkingDir(Path directory) {
+		if (!directory.toFile().exists()) {
+			if (!directory.toFile().mkdir()) {
+				throw new IllegalArgumentException("Standard working directory \"" 
+						+ directory.toAbsolutePath() + "\" could not be created.");
+			}
+		}
+	}	
+	
 	public void detectPreExistingImages() {
-		detectPreExistingImages(imgDB, workingDir);
+		detectPreExistingImages(imgDB);
 	}
 	
-	public void detectPreExistingImages(Path directory) {
-		detectPreExistingImages(imgDB, directory);
-	}
-	
-	public void detectPreExistingImages(ImageDB db, Path directory) {
-		if (db == null)
+	public void detectPreExistingImages(ImageDB db) {
+		if (db == null) {
 			throw new NullPointerException("Image database is null.");
-		if (directory == null)
-			throw new NullPointerException("Working directory is null.");
+		}
+		
+		createWorkingDir(workingDir);
 		
 		ImageIDFactory idFactory = ImageIDFactory.getInstance();
 		
@@ -136,8 +174,9 @@ public class SetupController {
 		Path dir = null;
 		try {
 			String path = URLDecoder.decode(url.getPath(), "UTF-8");
-			if (path.contains(":"))
+			if (path.contains(":")) {
 				path = path.substring(3);
+			}
 			dir = Paths.get(path).getParent();
 		} catch (UnsupportedEncodingException e) {
 			return;
@@ -153,8 +192,9 @@ public class SetupController {
 					// Copy files to correct file with the image id number
 					try {
 						BufferedImage buffImg = ImageIO.read(file);
-						if (buffImg == null)
+						if (buffImg == null) {
 							continue;
+						}
 					
 						db.setImageMapping(file.getName().substring(0, 
 								file.getName().length() - StoreImage.STORE_IMAGE_FORMAT.length() - 1), 
@@ -162,7 +202,7 @@ public class SetupController {
 						
 						StoreImage img = new StoreImage(imageID, buffImg, ImageSize.FULL);
 						preCacheImg.add(img);
-						Files.write(directory.resolve(String.valueOf(imageID)), img.getByteArray(), 
+						Files.write(workingDir.resolve(String.valueOf(imageID)), img.getByteArray(), 
 								StandardOpenOption.CREATE, 
 								StandardOpenOption.WRITE, 
 								StandardOpenOption.TRUNCATE_EXISTING);
@@ -250,6 +290,10 @@ public class SetupController {
 		return workingDir;
 	}
 	
+	private void deleteUnusedImages() {
+		deleteUnusedImages(new ArrayList<>());
+	}
+	
 	private void deleteUnusedImages(List<Long> imagesToKeep) {
 		File currentDir = workingDir.toFile();
 		
@@ -264,43 +308,28 @@ public class SetupController {
 	}
 	
 	public void reconfiguration() {
-		// Stop image creation to have sort of a steady state to work on
-		imgCreatorRunner.stopCreation();
-		while (imgCreatorRunner.isRunning()) {
-			try {
-				Thread.sleep(imgCreatorRunner.getAvgCreationTime());
-			} catch (InterruptedException e) {
-				
-			}
-		}
-		
-		// Get all the new products, compare them with the current database and determine which product is known and 
-		// which is not
-		ImageSize biggest = ImageSize.getBiggestSize();
-		List<Long> productIDs = convertToIDs(fetchProducts());
-		List<Long> productsNotInDB = productIDs.stream()
-				.filter(p -> !imgDB.hasImageID(p, biggest))
-				.collect(Collectors.toList());
-		List<Long> productsInDB = productIDs.stream()
-				.filter(p -> imgDB.hasImageID(p, biggest))
-				.collect(Collectors.toList());
+		Thread x = new Thread() {
 
-		// Make a copy of our database, remove all products from the old one
-		ImageDB copy = new ImageDB(imgDB);
-		imgDB.removeProductImages();
-		
-		// Add all known products with their original image id to the empty database and delete files on the disk
-		// that are not used anymore
-		productsInDB.forEach(p -> imgDB.setImageMapping(p, copy.getImageID(p, biggest), biggest));
-		List<Long> imagesToKeep = productsInDB.stream()
-				.map(p -> copy.getImageID(p, biggest))
-				.collect(Collectors.toList());
-		imagesToKeep.addAll(copy.getAllWebImageIDs(biggest));
-		deleteUnusedImages(imagesToKeep);
-		
-		// Start our new image creator thread and finish the reconfiguration
-		generateImages(productsNotInDB, productsNotInDB.size());
-		finalizeSetup();
+			@Override
+			public void run() {
+				// Stop image creation to have sort of a steady state to work on
+				imgCreatorRunner.stopCreation();
+				while (imgCreatorRunner.isRunning()) {
+					try {
+						Thread.sleep(imgCreatorRunner.getAvgCreationTime());
+					} catch (InterruptedException e) {
+
+					}
+				}
+
+				imgDB = new ImageDB();
+				deleteUnusedImages();
+				detectPreExistingImages();
+				generateImages();
+				finalizeSetup();	
+			}
+		};
+		x.start();
 	}
 	
 }

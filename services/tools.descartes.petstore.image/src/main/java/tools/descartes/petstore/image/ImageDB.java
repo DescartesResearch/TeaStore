@@ -1,3 +1,16 @@
+/**
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package tools.descartes.petstore.image;
 
 import java.util.HashMap;
@@ -39,7 +52,7 @@ public class ImageDB {
 	}
 	
 	/**
-	 * Returns the mapping of image IDs to their size for a given image key.
+	 * Returns the mapping of image IDs to their size for a given image key (product ID or name).
 	 * @param imageKey The image key identifying a range of sizes for a image content
 	 * @return Mapping between image IDs and the corresponding size
 	 */
@@ -69,7 +82,7 @@ public class ImageDB {
 	}
 	
 	/**
-	 * Checks whether a given image key (product ID or name) is available at the given size.
+	 * Checks whether a given image key (product ID or name) is available in the given size.
 	 * @param imageKey Image key to check for
 	 * @param imageSize Image size to check for
 	 * @return True if the image was found in the correct size, otherwise false
@@ -81,14 +94,33 @@ public class ImageDB {
 		return hasImageID(imageKey.getWebUIName(), imageSize);
 	}
 	
+	/**
+	 * Checks whether a given product ID is available in the given size.
+	 * @param productID Product ID to check for
+	 * @param imageSize Image size to check for
+	 * @return True if the image was found in the correct size, otherwise false
+	 */
 	public boolean hasImageID(long productID, ImageSize imageSize) {
 		return findImageID(productID, imageSize, products) != 0;
 	}
 	
+	/**
+	 * Checks whether a given image name is available in the given size.
+	 * @param name Image name to check for
+	 * @param imageSize Image size to check for
+	 * @return True if the image was found in the correct size, otherwise false
+	 */
 	public boolean hasImageID(String name, ImageSize imageSize) {
 		return findImageID(name, imageSize, webui) != 0;
 	}
 	
+	/**
+	 * Finds and returns the image ID for the given image key (product ID or name) and size. If the image key 
+	 * cannot be found or is not available in the given size, 0 will be returned.
+	 * @param imageKey Image key to find
+	 * @param imageSize Image size to find
+	 * @return The image ID if the image with the size was found, otherwise 0
+	 */
 	public long getImageID(ImageDBKey imageKey, ImageSize imageSize) {
 		if (imageKey.isProductKey()) {
 			return getImageID(imageKey.getProductID(), imageSize);
@@ -96,14 +128,29 @@ public class ImageDB {
 		return getImageID(imageKey.getWebUIName(), imageSize);
 	}
 	
+	/**
+	 * Finds and returns the image ID for the given product ID and size. If the product ID
+	 * cannot be found or is not available in the given size, 0 will be returned.
+	 * @param productID Product ID to find
+	 * @param imageSize Image size to find
+	 * @return The image ID if the image with the size was found, otherwise 0
+	 */
 	public long getImageID(long productID, ImageSize imageSize) {
 		return findImageID(productID, imageSize, products);
 	}
 	
+	/**
+	 * Finds and returns the image ID for the given image name and size. If the name
+	 * cannot be found or is not available in the given size, 0 will be returned.
+	 * @param name Image name to find
+	 * @param imageSize Image size to find
+	 * @return The image ID if the image with the size was found, otherwise 0
+	 */	
 	public long getImageID(String name, ImageSize imageSize) {
 		return findImageID(name, imageSize, webui);
 	}
 	
+	// Does actually all the heavy lifting for the getImageID methods
 	private <K> long findImageID(K key, ImageSize imageSize, HashMap<K, Map<Long, ImageSize>> db) {
 		Optional<Map.Entry<Long, ImageSize>> img = db.getOrDefault(key, new HashMap<>()).entrySet().stream()
 				.filter(t -> t.getValue().equals(imageSize))
@@ -114,10 +161,21 @@ public class ImageDB {
 		return 0;
 	}
 	
+	/**
+	 * Returns the image size for a given image ID.
+	 * @param imageID The image ID to get the image size for
+	 * @return The image size or null if the ID could not be found
+	 */
 	public ImageSize getImageSize(long imageID) {
 		return sizes.getOrDefault(imageID, null);
 	}
 	
+	/**
+	 * 
+	 * @param imageKey
+	 * @param imageID
+	 * @param imageSize
+	 */
 	public void setImageMapping(ImageDBKey imageKey, long imageID, ImageSize imageSize) {
 		if (imageKey.isProductKey()) {
 			setImageMapping(imageKey.getProductID(), imageID, imageSize);
@@ -149,45 +207,45 @@ public class ImageDB {
 		sizes.put(imageID, imageSize);
 	}
 	
-	public void removeWebImages() {
-		removeImagesFromSizeMap(webui);
-		webui = new HashMap<>();
-	}
+//	public void removeWebImages() {
+//		removeImagesFromSizeMap(webui);
+//		webui = new HashMap<>();
+//	}
+//	
+//	public void removeProductImages() {
+//		removeImagesFromSizeMap(products);
+//		products = new HashMap<>();
+//	}
+//	
+//	private <K> void removeImagesFromSizeMap(Map<K, Map<Long, ImageSize>> db) {
+//		db.entrySet().forEach(entry -> entry.getValue().entrySet().forEach(size -> sizes.remove(size.getKey())));
+//	}
 	
-	public void removeProductImages() {
-		removeImagesFromSizeMap(products);
-		products = new HashMap<>();
-	}
-	
-	private <K> void removeImagesFromSizeMap(Map<K, Map<Long, ImageSize>> db) {
-		db.entrySet().forEach(entry -> entry.getValue().entrySet().forEach(size -> sizes.remove(size.getKey())));
-	}
-	
-	public List<Long> getAllWebImageIDs() {
-		return getAllImageIDs(webui, null);
-	}
-	
-	public List<Long> getAllWebImageIDs(ImageSize imageSize) {
-		return getAllImageIDs(webui, imageSize);
-	}
-	
-	public List<Long> getAllProductImageIDs() {
-		return getAllImageIDs(products, null);
-	}
-	
-	public List<Long> getAllProductImageIDs(ImageSize imageSize) {
-		return getAllImageIDs(products, imageSize);
-	}
-	
-	private <K> List<Long> getAllImageIDs(Map<K, Map<Long, ImageSize>> db, ImageSize imageSize) {
-		return db.entrySet().stream()
-				.map(entry -> entry.getValue().entrySet().stream()
-						.filter(size -> imageSize == null || size.getValue().equals(imageSize))
-						.map(size -> size.getKey())
-						.findFirst()
-						.orElse(null))
-				.filter(entry -> entry != null)
-				.collect(Collectors.toList());
-	}
+//	public List<Long> getAllWebImageIDs() {
+//		return getAllImageIDs(webui, null);
+//	}
+//	
+//	public List<Long> getAllWebImageIDs(ImageSize imageSize) {
+//		return getAllImageIDs(webui, imageSize);
+//	}
+//	
+//	public List<Long> getAllProductImageIDs() {
+//		return getAllImageIDs(products, null);
+//	}
+//	
+//	public List<Long> getAllProductImageIDs(ImageSize imageSize) {
+//		return getAllImageIDs(products, imageSize);
+//	}
+//	
+//	private <K> List<Long> getAllImageIDs(Map<K, Map<Long, ImageSize>> db, ImageSize imageSize) {
+//		return db.entrySet().stream()
+//				.map(entry -> entry.getValue().entrySet().stream()
+//						.filter(size -> imageSize == null || size.getValue().equals(imageSize))
+//						.map(size -> size.getKey())
+//						.findFirst()
+//						.orElse(null))
+//				.filter(entry -> entry != null)
+//				.collect(Collectors.toList());
+//	}
 
 }
