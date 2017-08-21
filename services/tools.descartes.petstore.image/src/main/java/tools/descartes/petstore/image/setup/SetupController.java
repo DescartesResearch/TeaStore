@@ -134,20 +134,14 @@ public class SetupController {
 	}
 	
 	public void detectPreExistingImages() {
-		detectPreExistingImages(imgDB, workingDir);
+		detectPreExistingImages(imgDB);
 	}
 	
-	public void detectPreExistingImages(Path directory) {
-		detectPreExistingImages(imgDB, directory);
-	}
-	
-	public void detectPreExistingImages(ImageDB db, Path directory) {
+	public void detectPreExistingImages(ImageDB db) {
 		if (db == null)
 			throw new NullPointerException("Image database is null.");
-		if (directory == null)
-			throw new NullPointerException("Working directory is null.");
 		
-		createWorkingDir(directory);
+		createWorkingDir(workingDir);
 		
 		ImageIDFactory idFactory = ImageIDFactory.getInstance();
 		
@@ -181,7 +175,7 @@ public class SetupController {
 						
 						StoreImage img = new StoreImage(imageID, buffImg, ImageSize.FULL);
 						preCacheImg.add(img);
-						Files.write(directory.resolve(String.valueOf(imageID)), img.getByteArray(), 
+						Files.write(workingDir.resolve(String.valueOf(imageID)), img.getByteArray(), 
 								StandardOpenOption.CREATE, 
 								StandardOpenOption.WRITE, 
 								StandardOpenOption.TRUNCATE_EXISTING);
