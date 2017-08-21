@@ -14,8 +14,8 @@
 package tools.descartes.petstore.image;
 
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import tools.descartes.petstore.entities.ImageSize;
 import tools.descartes.petstore.image.setup.ImageCreatorRunner;
@@ -25,24 +25,6 @@ import tools.descartes.petstore.image.storage.IDataStorage;
 public class ImageProvider {
 	
 	public static final String IMAGE_NOT_FOUND = "notFound";
-	
-	private final class Tupel {
-		public final ImageDBKey id;
-		public final String imgString;
-		
-		public Tupel(final ImageDBKey id, final String imgString) {
-			this.id = id;
-			this.imgString = imgString;
-		}
-		
-		public ImageDBKey getKey() {
-			return id;
-		}
-		
-		public String getImgString() {
-			return imgString;
-		}
-	}
 	
 	private static ImageProvider instance = new ImageProvider();
 	private ImageDB db;
@@ -82,20 +64,32 @@ public class ImageProvider {
 
 	public Map<Long, String> getProductImages(Map<Long, ImageSize> images) {
 		waitForImageCreator();
-		Map<Long, String> result = images.entrySet().stream()
-				.map(a -> getImageFor(new ImageDBKey(a.getKey()), a.getValue()))
-				.filter(a -> a != null && a.getImgString() != null)
-				.collect(Collectors.toMap(t -> t.getKey().getProductID(), t -> t.getImgString()));
+		
+		Map<Long, String> result = new HashMap<>();
+		for (Map.Entry<Long, ImageSize> entry : images.entrySet()) {
+			String imgStr = getImageFor(new ImageDBKey(entry.getKey()), entry.getValue());
+			if (imgStr == null) {
+				continue;
+			}
+			result.put(entry.getKey(), imgStr);
+		}
+	
 		imgCreatorRunner.resume();
 		return result;
 	}
 	
 	public Map<String, String> getWebUIImages(Map<String, ImageSize> images) {
 		waitForImageCreator();
-		Map<String, String> result = images.entrySet().stream()
-				.map(a -> getImageFor(new ImageDBKey(a.getKey()), a.getValue()))
-				.filter(a -> a != null && a.getImgString() != null)
-				.collect(Collectors.toMap(t -> t.getKey().getWebUIName(), t -> t.getImgString()));
+		
+		Map<String, String> result = new HashMap<>();
+		for (Map.Entry<String, ImageSize> entry : images.entrySet()) {
+			String imgStr = getImageFor(new ImageDBKey(entry.getKey()), entry.getValue());
+			if (imgStr == null) {
+				continue;
+			}
+			result.put(entry.getKey(), imgStr);
+		}
+		
 		imgCreatorRunner.resume();
 		return result;
 	}
@@ -108,7 +102,7 @@ public class ImageProvider {
 		return storedImg;
 	}
 	
-	private Tupel getImageFor(ImageDBKey key, ImageSize size) {
+	private String getImageFor(ImageDBKey key, ImageSize size) {
 		if (db == null || storage == null)
 			return null;
 		if (key == null || size == null)
@@ -136,7 +130,8 @@ public class ImageProvider {
 			}
 		}
 		
-		return new Tupel(key, storedImg.toString());
+		//return new Tupel(key, storedImg.toString());
+		return storedImg.toString();
 	}
 	
 }
