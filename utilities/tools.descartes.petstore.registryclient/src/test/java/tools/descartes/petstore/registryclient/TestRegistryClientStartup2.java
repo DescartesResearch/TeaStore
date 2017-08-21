@@ -22,7 +22,6 @@ import javax.servlet.annotation.WebListener;
  * @author Simon Eismann
  *
  */
-@WebListener
 public class TestRegistryClientStartup2 implements ServletContextListener {
 	
 	/**
