@@ -109,20 +109,25 @@ public class ImageProvider {
 			return null;
 		if (!key.isProductKey() && (key.getWebUIName() == null || key.getWebUIName().isEmpty()))
 			return null;
+	
+		ImageSize biggest = ImageSize.getBiggestSize();
+		StoreImage storedImg = null;
 		
 		// Try to retrieve image from disk or from cache
-		long storedImgID = db.getImageID(key, size);
-		StoreImage storedImg = storage.loadData(storedImgID);
+		long imgID = db.getImageID(key, size);
+		if (imgID != 0) {
+			storedImg = storage.loadData(db.getImageID(key, size));
+		}
 		
 		// If we dont have the image in the right size, get the biggest one and scale it
 		if (storedImg == null) {
-			storedImg = storage.loadData(db.getImageID(key, ImageSize.getBiggestSize()));
+			storedImg = storage.loadData(db.getImageID(key, biggest));
 			if (storedImg != null) {
 				storedImg = scaleAndRegisterImg(storedImg.getImage(), key, size);
 			} else {
 				storedImg = storage.loadData(db.getImageID(IMAGE_NOT_FOUND, size));
 				if (storedImg == null) {
-					storedImg = storage.loadData(db.getImageID(IMAGE_NOT_FOUND, ImageSize.getBiggestSize()));
+					storedImg = storage.loadData(db.getImageID(IMAGE_NOT_FOUND, biggest));
 					if (storedImg == null)
 						return null;
 					storedImg = scaleAndRegisterImg(storedImg.getImage(), new ImageDBKey(IMAGE_NOT_FOUND), size);
@@ -130,7 +135,6 @@ public class ImageProvider {
 			}
 		}
 		
-		//return new Tupel(key, storedImg.toString());
 		return storedImg.toString();
 	}
 	
