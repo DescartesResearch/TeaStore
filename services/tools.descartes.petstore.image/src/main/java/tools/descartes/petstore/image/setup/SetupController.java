@@ -49,6 +49,7 @@ import tools.descartes.petstore.image.storage.IDataStorage;
 import tools.descartes.petstore.image.storage.LimitedDriveStorage;
 import tools.descartes.petstore.image.storage.rules.StoreAll;
 import tools.descartes.petstore.image.storage.rules.StoreLargeImages;
+import tools.descartes.petstore.registryclient.RegistryClient;
 import tools.descartes.petstore.registryclient.Service;
 import tools.descartes.petstore.registryclient.loadbalancers.ServiceLoadBalancer;
 import tools.descartes.petstore.registryclient.rest.LoadBalancedCRUDOperations;
@@ -60,6 +61,7 @@ public enum SetupController {
 	private interface SetupControllerConstants {
 		public final static Path STD_WORKING_DIR = Paths.get("images");
 		public final static int PERSISTENCE_CREATION_WAIT_TIME = 1000;
+		public final static int PERSISTENCE_CREATION_TRIES = 100;
 	}
 	
 	private StorageRule storageRule = StorageRule.STD_STORAGE_RULE;
@@ -89,22 +91,29 @@ public enum SetupController {
 	private List<Product> fetchProducts() {
 		// We have to wait for the database that all entries are created before 
 		// generating images (which queries persistence)
-		while (true) {
+		boolean maxTriesReached = true;
+		for (int i = 0; i < SetupControllerConstants.PERSISTENCE_CREATION_TRIES; i++) {
 			Response result = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "generatedb", 
 					String.class, client -> client.getService().path(client.getApplicationURI())
 					.path(client.getEnpointURI()).path("finished").request().get());
+			
 			if (result == null ? false : Boolean.parseBoolean(result.readEntity(String.class))) {
+				maxTriesReached = false;
 				break;
 			}
+			
 			try {
 				Thread.sleep(SetupControllerConstants.PERSISTENCE_CREATION_WAIT_TIME);
 			} catch (InterruptedException e) {
 				
 			}
 		}
-		// TODO: Make it a REST instead of CRUD operation
-		List<Product> products = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "products", 
-				Product.class, -1, -1);
+	
+		List<Product> products = null;
+		if (!maxTriesReached) {
+			// TODO: Make it a REST instead of CRUD operation
+			products = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "products", Product.class, -1, -1);
+		}
 		return products == null ? new ArrayList<Product>() : products;
 	}
 	
@@ -118,8 +127,7 @@ public enum SetupController {
 	}
 
 	public void generateImages(int nrOfImagesToGenerate) {
-		List<Long> productIDs = convertToIDs(fetchProducts());;
-		generateImages(productIDs, nrOfImagesToGenerate);
+		generateImages(convertToIDs(fetchProducts()), nrOfImagesToGenerate);
 	}
 	
 	public void generateImages(List<Long> productIDs, int nrOfImagesToGenerate) {
@@ -154,7 +162,8 @@ public enum SetupController {
 		if (db == null) {
 			throw new NullPointerException("Image database is null.");
 		}
-		
+	
+		// TODO: Rework the code piece fetching the pre-existing images until the next comment
 		URL url = this.getClass().getResource("front.png");
 		Path dir = null;
 		try {
@@ -166,10 +175,11 @@ public enum SetupController {
 		} catch (UnsupportedEncodingException e) {
 			return;
 		}
+		// End of rework
 
 		File currentDir = dir.toFile();
 
-		if (currentDir.isDirectory()) {
+		if (currentDir.exists() && currentDir.isDirectory()) {
 			for (File file : currentDir.listFiles()) {
 				if (file.isFile() && file.getName().endsWith(StoreImage.STORE_IMAGE_FORMAT)) {
 					long imageID = ImageIDFactory.ID.getNextImageID();
@@ -333,6 +343,7 @@ public enum SetupController {
 				}
 
 				imgDB = new ImageDB();
+				
 				deleteImages();
 				detectPreExistingImages();
 				generateImages();
