@@ -287,7 +287,7 @@ public enum SetupController {
 		}	
 	}
 	
-	public void setupImageProvider() {
+	public void configureImageProvider() {
 		ImageProvider.PROVIDER.setImageDB(imgDB);
 		ImageProvider.PROVIDER.setImageCreatorRunner(imgCreatorRunner);
 		ImageProvider.PROVIDER.setStorage(storage);
@@ -295,6 +295,26 @@ public enum SetupController {
 	
 	public Path getWorkingDir() {
 		return workingDir;
+	}
+
+	/*
+	 * Convenience methods
+	 */
+
+	public void teardown() {
+		deleteImages();
+		deleteWorkingDir();
+	}
+	
+	public void startup() {
+		// Delete all images in case the image provider was not shutdown gracefully last time, leaving images in disk
+		deleteImages();
+		deleteWorkingDir();
+		createWorkingDir();
+		detectPreExistingImages();
+		generateImages();
+		setupStorage();
+		configureImageProvider();
 	}
 	
 	public void reconfiguration() {
@@ -317,7 +337,7 @@ public enum SetupController {
 				detectPreExistingImages();
 				generateImages();
 				setupStorage();
-				setupImageProvider();
+				configureImageProvider();
 			}
 		};
 		x.start();

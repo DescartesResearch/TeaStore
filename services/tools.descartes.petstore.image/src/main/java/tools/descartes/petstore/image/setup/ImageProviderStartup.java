@@ -42,8 +42,7 @@ public class ImageProviderStartup implements ServletContextListener {
      */
     public void contextDestroyed(ServletContextEvent event)  { 
 		RegistryClient.getClient().unregister(event.getServletContext().getContextPath());
-		SetupController.SETUP.deleteImages();
-		SetupController.SETUP.deleteWorkingDir();
+		SetupController.SETUP.teardown();
     }
 
 	/**
@@ -55,13 +54,7 @@ public class ImageProviderStartup implements ServletContextListener {
 			
 			@Override
 			public void callback() {
-				SetupController.SETUP.deleteImages();
-				SetupController.SETUP.deleteWorkingDir();
-				SetupController.SETUP.createWorkingDir();
-				SetupController.SETUP.detectPreExistingImages();
-				SetupController.SETUP.generateImages();
-				SetupController.SETUP.setupStorage();
-				SetupController.SETUP.setupImageProvider();
+				SetupController.SETUP.startup();
 				RegistryClient.getClient().register(event.getServletContext().getContextPath());
 			}
 		});
