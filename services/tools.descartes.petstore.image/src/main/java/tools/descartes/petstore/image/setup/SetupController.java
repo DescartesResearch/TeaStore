@@ -74,9 +74,10 @@ public enum SetupController {
 	private List<StoreImage> preCacheImg = new ArrayList<>();
 	private ImageCreatorRunner imgCreatorRunner;
 	private Thread imgCreatorThread;
+	private IDataStorage<StoreImage> storage = null;
 	
 	private SetupController() {
-		createWorkingDir(workingDir);
+		
 	}
 	
 	public void setWorkingDir(Path path) { 
@@ -112,27 +113,17 @@ public enum SetupController {
 	}
 	
 	public void generateImages() {
-		List<Product> products = fetchProducts();
-		if (products == null) {
-			return;
-		}
-		
-		List<Long> productIDs = convertToIDs(products);
+		List<Long> productIDs = convertToIDs(fetchProducts());
 		generateImages(productIDs, productIDs.size());		
 	}
 
 	public void generateImages(int nrOfImagesToGenerate) {
-		List<Product> products = fetchProducts();
-		if (products == null) {
-			return;
-		}
-		
-		List<Long> productIDs = convertToIDs(products);
+		List<Long> productIDs = convertToIDs(fetchProducts());;
 		generateImages(productIDs, nrOfImagesToGenerate);
 	}
 	
 	public void generateImages(List<Long> productIDs, int nrOfImagesToGenerate) {
-		if (productIDs == null || nrOfImagesToGenerate <= 0) {
+		if (nrOfImagesToGenerate <= 0) {
 			return;
 		}
 
@@ -146,11 +137,11 @@ public enum SetupController {
 		imgCreatorThread.start();
 	}
 	
-	private void createWorkingDir(Path directory) {
-		if (!directory.toFile().exists()) {
-			if (!directory.toFile().mkdir()) {
+	public void createWorkingDir() {
+		if (!workingDir.toFile().exists()) {
+			if (!workingDir.toFile().mkdir()) {
 				throw new IllegalArgumentException("Standard working directory \"" 
-						+ directory.toAbsolutePath() + "\" could not be created.");
+						+ workingDir.toAbsolutePath() + "\" could not be created.");
 			}
 		}
 	}	
@@ -163,8 +154,6 @@ public enum SetupController {
 		if (db == null) {
 			throw new NullPointerException("Image database is null.");
 		}
-		
-		createWorkingDir(workingDir);
 		
 		URL url = this.getClass().getResource("front.png");
 		Path dir = null;
@@ -232,26 +221,46 @@ public enum SetupController {
 		this.storageRule = StorageRule.getStorageRuleFromString(storageRule);
 	}
 	
-	public void deleteAllCreatedData() {
+	public void deleteImages() {
 		deleteUnusedImages(new ArrayList<>());
 	}
 	
-	public void finalizeSetup() {
+	public void deleteUnusedImages(List<Long> imagesToKeep) {
+		File currentDir = workingDir.toFile();
+		
+		if (currentDir.exists() && currentDir.isDirectory()) {
+			for (File file : currentDir.listFiles()) {
+				if (file.isFile() && !imagesToKeep.contains(Long.parseLong(file.getName()))) {
+					file.delete();
+				}
+			}
+		}
+	}
+	
+	public void deleteWorkingDir() {
+		File currentDir = workingDir.toFile();
+		
+		if (currentDir.exists() && currentDir.isDirectory()) {
+			currentDir.delete();
+		}
+	}
+	
+	public void setupStorage() {
 		Predicate<StoreImage> storagePredicate = null;
 		switch (storageRule) {
 			case ALL: storagePredicate = new StoreAll<StoreImage>(); break;
 			case FULL_SIZE_IMG: storagePredicate = new StoreLargeImages(); break;
 			default: storagePredicate = new StoreAll<StoreImage>(); break;
 		}
-		
-		IDataStorage<StoreImage> storage = null;
+	
+		storage = null;
 		switch (storageMode) {
 			case DRIVE: storage = new DriveStorage(workingDir, imgDB, storagePredicate); break;
 			case DRIVE_LIMITED: storage = new LimitedDriveStorage(workingDir, imgDB, 
 					storagePredicate, nrOfImagesToGenerate + nrOfImagesPreExisting); break;
 			default: storage = new DriveStorage(workingDir, imgDB, storagePredicate); break;
 		}
-		
+
 		Predicate<StoreImage> cachePredicate = null;
 		switch (cachingRule) {
 			case ALL: cachePredicate = new CacheAll<StoreImage>(); break;
@@ -269,37 +278,23 @@ public enum SetupController {
 			case NONE: break;
 			default: break;
 		}
-
+		
+		if (cache != null) {
+			for (StoreImage img : preCacheImg) {
+				cache.cacheData(img);
+			}
+			storage = cache;
+		}	
+	}
+	
+	public void setupImageProvider() {
 		ImageProvider.PROVIDER.setImageDB(imgDB);
 		ImageProvider.PROVIDER.setImageCreatorRunner(imgCreatorRunner);
-		if (cache == null) {
-			ImageProvider.PROVIDER.setStorage(storage);
-		} else {
-			for (StoreImage i : preCacheImg)
-				cache.cacheData(i);
-			ImageProvider.PROVIDER.setStorage(cache);
-		}
+		ImageProvider.PROVIDER.setStorage(storage);
 	}
 	
 	public Path getWorkingDir() {
 		return workingDir;
-	}
-	
-	private void deleteUnusedImages() {
-		deleteUnusedImages(new ArrayList<>());
-	}
-	
-	private void deleteUnusedImages(List<Long> imagesToKeep) {
-		File currentDir = workingDir.toFile();
-		
-		if (currentDir.isDirectory()) {
-			for (File file : currentDir.listFiles()) {
-				if (file.isFile() && !imagesToKeep.contains(Long.parseLong(file.getName()))) {
-					file.delete();
-				}
-			}
-			currentDir.delete();
-		}
 	}
 	
 	public void reconfiguration() {
@@ -318,10 +313,11 @@ public enum SetupController {
 				}
 
 				imgDB = new ImageDB();
-				deleteUnusedImages();
+				deleteImages();
 				detectPreExistingImages();
 				generateImages();
-				finalizeSetup();	
+				setupStorage();
+				setupImageProvider();
 			}
 		};
 		x.start();
