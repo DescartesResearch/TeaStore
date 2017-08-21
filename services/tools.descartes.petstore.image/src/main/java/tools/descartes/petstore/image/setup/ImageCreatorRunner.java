@@ -82,12 +82,20 @@ public class ImageCreatorRunner implements Runnable {
 		ImageIDFactory idFactory = ImageIDFactory.getInstance();
 		
 		for (long product : productIDs) {
-			if (stopped)
+			if (stopped) {
+				timeAfterGeneration = System.currentTimeMillis();
+				isRunning = false;
 				return;
+			}
 			
 			while (isPaused) {
 				try {
 					Thread.sleep(PAUSE_TIME);
+					if (stopped) {
+						timeAfterGeneration = System.currentTimeMillis();
+						isRunning = false;
+						return;
+					}
 				} catch (InterruptedException e) {
 					
 				}
@@ -136,9 +144,14 @@ public class ImageCreatorRunner implements Runnable {
 	}
 	
 	public long getAvgCreationTime() {
-		if (imagesCreated == 0)
+		if (imagesCreated == 0) {
 			return 0;
-		return (System.currentTimeMillis() - timeBeforeGeneration) / imagesCreated;
+		}
+		if (isRunning) {
+			return (System.currentTimeMillis() - timeBeforeGeneration) / imagesCreated;
+		} else {
+			return (timeAfterGeneration - timeBeforeGeneration) / imagesCreated;
+		}
 	}
 	
 	public ImageDB getImageDB() {

@@ -1,6 +1,8 @@
 package tools.descartes.petstore.webui.servlet;
 
 import java.io.IOException;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,8 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.netflix.loadbalancer.Server;
+
+import tools.descartes.petstore.registryclient.RegistryClient;
 import tools.descartes.petstore.registryclient.Service;
 import tools.descartes.petstore.registryclient.loadbalancers.ServiceLoadBalancer;
+import tools.descartes.petstore.registryclient.rest.LoadBalancedCRUDOperations;
+import tools.descartes.petstore.registryclient.rest.LoadBalancedImageOperations;
 
 /**
  * Servlet implementation class DataBaseActionServlet
@@ -54,19 +61,19 @@ public class DataBaseActionServlet extends AbstractUIServlet {
 				}
 				
 				// Regenerate images
-				if (imgResp.getStatus() != 200) {
-					System.out.println("Image provider responded with error " + imgResp.getStatus() 
-							+ " when regenerating images.");
-				}
-				
-				// Retrain recommender
-				Response recResp = ServiceLoadBalancer.loadBalanceRESTOperation(Service.RECOMMENDER, "train",
-						null, client -> client.getService().path(client.getApplicationURI())
-								.path(client.getEnpointURI()).request(MediaType.TEXT_PLAIN).get());
-				if (recResp.getStatus() != 200) {
-					System.out.println("Recommender responded with error + " + recResp.getStatus()
-							+ " when retraining.");
-				}
+				List<Integer> status = LoadBalancedImageOperations.regenerateImages();
+				status.stream()
+						.filter(r -> r != 200)
+						.forEach(r -> System.out.println("An image provider service responded with " 
+									+ r + " when regenerating images."));
+//				// Retrain recommender
+//				List<Response> recResp = ServiceLoadBalancer.multicastRESTOperation(Service.RECOMMENDER, "train",
+//						null, client -> client.getService().path(client.getApplicationURI())
+//						.path(client.getEnpointURI()).request(MediaType.TEXT_PLAIN).get());
+//				recResp.stream()
+//						.filter(r -> r.getStatus() != 200)
+//						.forEach(r -> System.out.println("A recommender service responded with " 
+//									+ r.getStatus() + " when retraining."));
 			}
 
 		}
