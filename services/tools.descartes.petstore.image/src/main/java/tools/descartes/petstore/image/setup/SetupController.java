@@ -76,8 +76,9 @@ public class SetupController {
 	}
 	
 	public void setWorkingDir(Path path) { 
-		if (path != null)
+		if (path != null) {
 			workingDir = path;
+		}
 	}
 	
 	public static SetupController getInstance() {
@@ -95,8 +96,9 @@ public class SetupController {
 	
 	public void generateImages() {
 		List<Product> products = fetchProducts();
-		if (products == null)
+		if (products == null) {
 			return;
+		}
 		
 		List<Long> productIDs = convertToIDs(products);
 		generateImages(productIDs, productIDs.size());		
@@ -104,16 +106,18 @@ public class SetupController {
 
 	public void generateImages(int nrOfImagesToGenerate) {
 		List<Product> products = fetchProducts();
-		if (products == null)
+		if (products == null) {
 			return;
+		}
 		
 		List<Long> productIDs = convertToIDs(products);
 		generateImages(productIDs, nrOfImagesToGenerate);
 	}
 	
 	public void generateImages(List<Long> productIDs, int nrOfImagesToGenerate) {
-		if (productIDs == null || nrOfImagesToGenerate <= 0)
+		if (productIDs == null || nrOfImagesToGenerate <= 0) {
 			return;
+		}
 
 		this.productIDs = productIDs;
 		this.nrOfImagesToGenerate = nrOfImagesToGenerate;
@@ -127,10 +131,12 @@ public class SetupController {
 	}
 	
 	private void createWorkingDir(Path directory) {
-		if (!directory.toFile().exists())
-			if (!directory.toFile().mkdir())
+		if (!directory.toFile().exists()) {
+			if (!directory.toFile().mkdir()) {
 				throw new IllegalArgumentException("Standard working directory \"" 
 						+ directory.toAbsolutePath() + "\" could not be created.");
+			}
+		}
 	}
 	
 	public void detectPreExistingImages() {
@@ -138,8 +144,9 @@ public class SetupController {
 	}
 	
 	public void detectPreExistingImages(ImageDB db) {
-		if (db == null)
+		if (db == null) {
 			throw new NullPointerException("Image database is null.");
+		}
 		
 		createWorkingDir(workingDir);
 		
@@ -149,8 +156,9 @@ public class SetupController {
 		Path dir = null;
 		try {
 			String path = URLDecoder.decode(url.getPath(), "UTF-8");
-			if (path.contains(":"))
+			if (path.contains(":")) {
 				path = path.substring(3);
+			}
 			dir = Paths.get(path).getParent();
 		} catch (UnsupportedEncodingException e) {
 			return;
@@ -166,8 +174,9 @@ public class SetupController {
 					// Copy files to correct file with the image id number
 					try {
 						BufferedImage buffImg = ImageIO.read(file);
-						if (buffImg == null)
+						if (buffImg == null) {
 							continue;
+						}
 					
 						db.setImageMapping(file.getName().substring(0, 
 								file.getName().length() - StoreImage.STORE_IMAGE_FORMAT.length() - 1), 
