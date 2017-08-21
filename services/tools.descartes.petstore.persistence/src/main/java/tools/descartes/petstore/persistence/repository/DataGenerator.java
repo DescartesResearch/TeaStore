@@ -288,6 +288,7 @@ public final class DataGenerator {
 		CacheManager.MANAGER.clearLocalCacheOnly();
 		setGenerationFinishedFlag(false);
 		CacheManager.MANAGER.clearAllCaches();
+		CacheManager.MANAGER.resetAllEMFs();
 	}
 	
 	private void setGenerationFinishedFlag(boolean flag) {

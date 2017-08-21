@@ -105,8 +105,44 @@ public final class CacheManager {
 		WebTarget target = client.getService().path(client.getApplicationURI())
 				.path(client.getEnpointURI());
 		if (entityClass != null) {
-			target = target.path(entityClass.getName());
+			target = target.path("class").path(entityClass.getName());
+		} else {
+			target = target.path("cache");
 		}
+		Response response = target.request(MediaType.TEXT_PLAIN).delete();
+		String message = null;
+		if (response.getStatus() == 200) {
+			message = response.readEntity(String.class);
+		}
+		response.close();
+		return message;
+	}
+	
+	/**
+	 * Reset the local and all remote EMFs.
+	 * @return List of all responses. Contain the "clearedEMF", or "null" if errors occured.
+	 */
+	public List<String> resetAllEMFs() {
+		resetLocalEMF();
+		List<String> responses = null;
+		try {
+			responses = ServiceLoadBalancer.multicastRESTToOtherServiceInstances(ENDPOINTURI, String.class,
+					client -> resetRemoteEMF(client));
+		} catch (Exception e) {
+			
+		}
+		return responses;
+	}
+	
+	/**
+	 * Reset the local EMF.
+	 */
+	public void resetLocalEMF() {
+		EMFManager.clearEMF();
+	}
+	
+	private String resetRemoteEMF(RESTClient<String> client) {
+		WebTarget target = client.getEndpointTarget().path("emf");
 		Response response = target.request(MediaType.TEXT_PLAIN).delete();
 		String message = null;
 		if (response.getStatus() == 200) {

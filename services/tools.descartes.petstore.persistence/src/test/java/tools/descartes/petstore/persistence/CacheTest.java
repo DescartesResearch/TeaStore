@@ -160,12 +160,12 @@ private static final String CONTEXT = "/test";
 		
 		//clear cache for Categories
 		Response response2 = ClientBuilder.newBuilder().build().target("http://localhost:" 
-				 + getPort(client1) + "/" + Service.PERSISTENCE.getServiceName() + "/rest/cache")
+				 + getPort(client1) + "/" + Service.PERSISTENCE.getServiceName() + "/rest/cache/class")
 				.path(Category.class.getName()).request(MediaType.TEXT_PLAIN).delete();
 		Assert.assertEquals(Category.class.getName(), response2.readEntity(String.class));
 		
 		Response response3 = ClientBuilder.newBuilder().build().target("http://localhost:" 
-				 + getPort(client2) + "/" + Service.PERSISTENCE.getServiceName() + "/rest/cache")
+				 + getPort(client2) + "/" + Service.PERSISTENCE.getServiceName() + "/rest/cache/cache")
 				.request(MediaType.TEXT_PLAIN).delete();
 		Assert.assertEquals("cleared", response3.readEntity(String.class));
 		
