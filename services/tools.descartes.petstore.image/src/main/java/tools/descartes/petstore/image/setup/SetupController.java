@@ -76,8 +76,18 @@ public class SetupController {
 	}
 
 	private List<Product> fetchProducts() {
-		return LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "products", 
+		// We have to wait for the database that all entries are created before 
+		// generating images (which queries persistence)
+		while (!LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "generatedb/finished", Boolean.class, -1)) {
+			try {
+				Thread.sleep(PERSISTENCE_CREATION_WAIT_TIME);
+			} catch (InterruptedException e) {
+				
+			}
+		}	
+		List<Product> products = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "products", 
 				Product.class, -1, -1);
+		return products == null ? new ArrayList<Product>() : products;
 	}
 	
 	private List<Long> convertToIDs(List<Product> products) {
@@ -275,15 +285,7 @@ public class SetupController {
 			}
 		}
 		
-		// We have to wait for the database that all entries are created before 
-		// generating images (which queries persistence)
-		while (!LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "generatedb/finished", Boolean.class, -1)) {
-			try {
-				Thread.sleep(PERSISTENCE_CREATION_WAIT_TIME);
-			} catch (InterruptedException e) {
-				
-			}
-		}	
+
 		
 		// Get all the new products, compare them with the current database and determine which product is known and 
 		// which is not

@@ -54,9 +54,6 @@ public class DataBaseActionServlet extends AbstractUIServlet {
 				}
 				
 				// Regenerate images
-				Response imgResp = ServiceLoadBalancer.loadBalanceRESTOperation(Service.IMAGE, "regenerateImages", 
-						null, client -> client.getService().path(client.getApplicationURI())
-								.path(client.getEnpointURI()).request(MediaType.TEXT_PLAIN).get());
 				if (imgResp.getStatus() != 200) {
 					System.out.println("Image provider responded with error " + imgResp.getStatus() 
 							+ " when regenerating images.");
