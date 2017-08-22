@@ -14,7 +14,6 @@ import javax.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tools.descartes.petstore.registryclient.RegistryClient;
 import tools.descartes.petstore.registryclient.Service;
 import tools.descartes.petstore.registryclient.loadbalancers.ServiceLoadBalancer;
 import tools.descartes.petstore.registryclient.rest.LoadBalancedImageOperations;
@@ -27,7 +26,7 @@ public class DataBaseActionServlet extends AbstractUIServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String[] PARAMETERS = new String[] { "categories", "products", "users",
 			"orders" };
-	private static Logger log = LoggerFactory.getLogger(DataBaseActionServlet.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DataBaseActionServlet.class);
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -58,26 +57,26 @@ public class DataBaseActionServlet extends AbstractUIServlet {
 								.queryParam(PARAMETERS[2], infos[2]).queryParam(PARAMETERS[3], infos[3])
 								.request(MediaType.TEXT_PLAIN).get());
 				if (resp.getStatus() == 200) {
-					log.info("DB is re-generating.");
+					LOG.info("DB is re-generating.");
 				}
 				
 				// Regenerate images
 				List<Integer> status = LoadBalancedImageOperations.regenerateImages();
 				status.stream()
 						.filter(r -> r != 200)
-						.forEach(r -> log.warn("An image provider service responded with " 
+						.forEach(r -> LOG.warn("An image provider service responded with " 
 									+ r + " when regenerating images."));
 				// Retrain recommender
 				List<Response> recResp = ServiceLoadBalancer.multicastRESTOperation(Service.RECOMMENDER, "train",
 						String.class, client -> client.getEndpointTarget().path("async").request(MediaType.TEXT_PLAIN).get());
 				recResp.stream()
 						.filter(r -> r.getStatus() != 200)
-						.forEach(r -> log.warn("A recommender service responded with " 
+						.forEach(r -> LOG.warn("A recommender service responded with " 
 									+ r.getStatus() + " when retraining."));
 			}
 
 		}
-		redirect("/databasestatus", response);
+		redirect("/status", response);
 	}
 
 	/**

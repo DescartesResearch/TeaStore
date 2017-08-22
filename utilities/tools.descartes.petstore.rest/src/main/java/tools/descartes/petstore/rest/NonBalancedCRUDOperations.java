@@ -33,7 +33,7 @@ import tools.descartes.petstore.entities.message.IdContainer;
  * @author Joakim von Kistowski
  */
 public final class NonBalancedCRUDOperations {
-	private static Logger log = LoggerFactory.getLogger(NonBalancedCRUDOperations.class);
+	private static final Logger LOG = LoggerFactory.getLogger(NonBalancedCRUDOperations.class);
 	
 	private NonBalancedCRUDOperations() {
 		
@@ -60,7 +60,7 @@ public final class NonBalancedCRUDOperations {
 				try {
 					id = response.readEntity(IdContainer.class).getId();
 				} catch (ProcessingException e) {
-					log.warn("Response did not conform to expected message type. Expected an IdContainer.");
+					LOG.warn("Response did not conform to expected message type. Expected an IdContainer.");
 				}
 		}
 		response.close();
@@ -119,7 +119,7 @@ public final class NonBalancedCRUDOperations {
 		try {
 			entity = response.readEntity(client.getEntityClass());
 		} catch (ProcessingException e) {
-			log.warn("Response did not conform to expected entity type.");
+			LOG.warn("Response did not conform to expected entity type.");
 		}
 		response.close();
 		return entity;
@@ -148,7 +148,7 @@ public final class NonBalancedCRUDOperations {
 			try {
 				entities = response.readEntity(client.getGenericListType());
 			} catch (ProcessingException e) {
-				log.warn("Response did not conform to expected entity type. List expected.");
+				LOG.warn("Response did not conform to expected entity type. List expected.");
 			}
 		}
 		response.close();
@@ -186,7 +186,7 @@ public final class NonBalancedCRUDOperations {
 				entities = response.readEntity(client.getGenericListType());
 			} catch (ProcessingException e) {
 				e.printStackTrace();
-				log.warn("Response did not conform to expected entity type. List expected.");
+				LOG.warn("Response did not conform to expected entity type. List expected.");
 			}
 		}
 		response.close();

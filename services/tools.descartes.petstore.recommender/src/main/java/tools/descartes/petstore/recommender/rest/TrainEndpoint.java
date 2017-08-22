@@ -31,7 +31,6 @@ import tools.descartes.petstore.entities.Order;
 import tools.descartes.petstore.entities.OrderItem;
 import tools.descartes.petstore.recommender.IRecommender;
 import tools.descartes.petstore.recommender.RecommenderSelector;
-import tools.descartes.petstore.registryclient.RegistryClient;
 import tools.descartes.petstore.registryclient.Service;
 import tools.descartes.petstore.registryclient.loadbalancers.ServiceLoadBalancer;
 import tools.descartes.petstore.registryclient.rest.LoadBalancedCRUDOperations;
@@ -46,7 +45,7 @@ import tools.descartes.petstore.registryclient.rest.LoadBalancedCRUDOperations;
 @Produces("text/plain")
 public class TrainEndpoint {
 
-	private static Logger log = LoggerFactory.getLogger(TrainEndpoint.class);
+	private static final Logger LOG = LoggerFactory.getLogger(TrainEndpoint.class);
 	/**
 	 * Triggers the training of the recommendation algorithm. It retrieves all data
 	 * {@link OrderItem}s and all {@link Order}s from the database entity and is
@@ -101,14 +100,12 @@ public class TrainEndpoint {
 					client -> client.getEndpointTarget().path("finished").request(MediaType.TEXT_PLAIN)
 					.get().readEntity(String.class));
 			if (finished.equals("true")) {
-				long start = System.currentTimeMillis();
 				long number = retrieveDataAndRetrain();
-				long time = System.currentTimeMillis() - start;
 				if (number != -1) {
 					asyncTrainExecutor.shutdown();
 				}
 			} else {
-				log.info("Waiting for DB before retraining.");
+				LOG.info("Waiting for DB before retraining.");
 			}
 		}, 0, 3, TimeUnit.SECONDS); 
 		return Response.ok("training").build();

@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+	<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+	<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -13,11 +16,8 @@
 <!-- Bootstrap core CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="StyleSheet"
-	href="${pageContext.request.contextPath}/jpetstore.css" type="text/css"
+	href="<c:url value="/jpetstore.css"/>" type="text/css"
 	media="screen" />
 
 </head>
 <body>
-	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-	<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-	<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
