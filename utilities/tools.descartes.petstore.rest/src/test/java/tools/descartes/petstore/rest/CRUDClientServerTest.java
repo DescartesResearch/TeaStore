@@ -55,7 +55,6 @@ public class CRUDClientServerTest {
 		testTomcat.addServlet(CONTEXT, "restServlet", restServlet);
 		context.addServletMappingDecoded("/rest/*", "restServlet");
 		testTomcat.start();
-		System.out.println("Started Testing Tomcat at port " + getTomcatPort());
 	}
 	
 	/**

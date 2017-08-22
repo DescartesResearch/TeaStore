@@ -71,7 +71,7 @@ public class RegistryClient {
 			System.setProperty("org.slf4j.simpleLogger.logFile", "System.out");
 			registryRESTURL = (String) new InitialContext().lookup("java:comp/env/registryURL");
 		} catch (NamingException e) {
-			System.out.println("registryURL not set. Falling back to default registry URL.");
+			log.warn("registryURL not set. Falling back to default registry URL.");
 			registryRESTURL = "http://localhost:8080/tools.descartes.petstore.registry/rest/services/";
 		}
 	}
@@ -93,7 +93,7 @@ public class RegistryClient {
     public void unregister(String contextPath)  {
     	Service service = getService(contextPath);
     	Server host = getServer();
-    	System.out.println("Shutdown " + service.getServiceName() + "@" + host);
+    	log.info("Shutdown " + service.getServiceName() + "@" + host);
     	RegistryClient.client.unregisterOnce(service, host);
     	heartbeatScheduler.shutdown();
     	loadBalancerUpdateScheduler.shutdown();

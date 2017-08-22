@@ -15,11 +15,16 @@ package tools.descartes.petstore.registry.rest;
 
 import java.util.Iterator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 /**
  * Daemon which sends out heartbeats to the resistered service.
  * @author Simon
  */
 public class RegistryHeartbeatDaemon implements Runnable {
+	private static Logger log = LoggerFactory.getLogger(RegistryHeartbeatDaemon.class);
 
 	@Override
 	public void run() {
@@ -29,7 +34,7 @@ public class RegistryHeartbeatDaemon implements Runnable {
 				String location = iter.next();
 				if (!Registry.getRegistryInstance().isAlive(entry.getKey(), location)) {
 					iter.remove();
-					System.out.println("Removed " + entry.getValue() + "@" + location 
+					log.warn("Removed " + entry.getValue() + "@" + location 
 							+ " since it failed the heartbeat!");
 				}
 			}

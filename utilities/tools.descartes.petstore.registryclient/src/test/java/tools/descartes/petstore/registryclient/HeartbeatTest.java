@@ -69,7 +69,6 @@ public class HeartbeatTest {
 		registryTomcat.addServlet(CONTEXT, "restServlet", restServlet);
 		context.addServletMappingDecoded("/rest/*", "restServlet");
 		registryTomcat.start();
-		System.out.println("Started Registry Tomcat at port " + getRegistryPort());
 	}
 
 	/**

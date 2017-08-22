@@ -63,11 +63,8 @@ public class LoadBalancerTest {
 			context.addServletMappingDecoded("/rest/*", "restServlet");
 			testTomcats.add(testTomcat);
 		} catch (ServletException e) {
-			System.out.println("failed setting up a tomcat.");
 			e.printStackTrace();
 		}
-//		testTomcat.start();
-//		System.out.println("Started Testing Tomcat at port " + getTomcatPort());
 	}
 	
 	/**

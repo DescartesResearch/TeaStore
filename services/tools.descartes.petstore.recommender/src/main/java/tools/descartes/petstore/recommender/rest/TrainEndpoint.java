@@ -24,10 +24,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import tools.descartes.petstore.entities.Order;
 import tools.descartes.petstore.entities.OrderItem;
 import tools.descartes.petstore.recommender.IRecommender;
 import tools.descartes.petstore.recommender.RecommenderSelector;
+import tools.descartes.petstore.registryclient.RegistryClient;
 import tools.descartes.petstore.registryclient.Service;
 import tools.descartes.petstore.registryclient.loadbalancers.ServiceLoadBalancer;
 import tools.descartes.petstore.registryclient.rest.LoadBalancedCRUDOperations;
@@ -42,6 +46,7 @@ import tools.descartes.petstore.registryclient.rest.LoadBalancedCRUDOperations;
 @Produces("text/plain")
 public class TrainEndpoint {
 
+	private static Logger log = LoggerFactory.getLogger(TrainEndpoint.class);
 	/**
 	 * Triggers the training of the recommendation algorithm. It retrieves all data
 	 * {@link OrderItem}s and all {@link Order}s from the database entity and is
@@ -96,17 +101,14 @@ public class TrainEndpoint {
 					client -> client.getEndpointTarget().path("finished").request(MediaType.TEXT_PLAIN)
 					.get().readEntity(String.class));
 			if (finished.equals("true")) {
-				System.out.println("DB is ready, training.");
 				long start = System.currentTimeMillis();
 				long number = retrieveDataAndRetrain();
 				long time = System.currentTimeMillis() - start;
 				if (number != -1) {
-					System.out.println("The (re)train was succesfully done. It took " + time + "ms and " + number
-							+ " of Orderitems were retrieved from the database.");
 					asyncTrainExecutor.shutdown();
 				}
 			} else {
-				System.out.println("Waiting for DB before retraining.");
+				log.info("Waiting for DB before retraining.");
 			}
 		}, 0, 3, TimeUnit.SECONDS); 
 		return Response.ok("training").build();
@@ -122,31 +124,22 @@ public class TrainEndpoint {
 	 *         process failed.
 	 */
 	public static long retrieveDataAndRetrain() {
-		System.out.println("Retrieving data objects from database...");
 		List<OrderItem> items = null;
 		List<Order> orders = null;
 		try {
 			items = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "orderitems", OrderItem.class, -1, -1);
 			if (items == null || items.isEmpty()) {
-				System.out.println("Could not train using empty item set. Are required services up?");
 				return -1;
 			}
-			long noItems = items.size();
-			System.out.println("Retrieved " + noItems + " orderItems, starting retrieving of orders now.");
 			orders = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "orders", Order.class, -1, -1);
 			if (orders == null || orders.isEmpty()) {
-				System.out.println("Could not train using empty order set. Are required services up?");
 				return -1;
 			}
-			long noOrders = orders.size();
-			System.out.println("Retrieved " + noOrders + " orders, starting training now.");
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Database retrieving failed.");
 			return -1;
 		}
 		RecommenderSelector.getInstance().train(items, orders);
-		System.out.println("Finished training, ready for recommendation.");
 		return items.size() + orders.size();
 
 	}
