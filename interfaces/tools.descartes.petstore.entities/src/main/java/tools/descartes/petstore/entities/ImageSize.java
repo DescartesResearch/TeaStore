@@ -13,8 +13,8 @@ public enum ImageSize {
 	public static final ImageSize STD_IMAGE_SIZE = FULL;
 	public static final String IMAGE_SIZE_DIVIDER = ";";
 	
-	public final int width;
-	public final int height;
+	private final int width;
+	private final int height;
 	
 	private ImageSize(int width, int height) {
 		this.width = width;

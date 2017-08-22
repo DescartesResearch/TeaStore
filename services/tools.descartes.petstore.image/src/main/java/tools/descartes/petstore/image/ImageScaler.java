@@ -22,7 +22,7 @@ import tools.descartes.petstore.entities.ImageSize;
 public class ImageScaler {
 	
 	public static BufferedImage scale(BufferedImage image, ImageSize size) {
-		return scale(image, size.width, size.height);
+		return scale(image, size.getWidth(), size.getHeight());
 	}
 	
 	public static BufferedImage scale(BufferedImage image, double scalingFactor) {

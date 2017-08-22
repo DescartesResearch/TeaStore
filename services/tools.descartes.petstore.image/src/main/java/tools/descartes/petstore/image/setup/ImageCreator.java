@@ -60,12 +60,12 @@ public class ImageCreator {
 	}
 	
 	public BufferedImage createImage(ImageSize size) {
-		BufferedImage img = new BufferedImage(size.width, size.height, BufferedImage.OPAQUE);
+		BufferedImage img = new BufferedImage(size.getWidth(), size.getHeight(), BufferedImage.OPAQUE);
 		Graphics2D graphics = img.createGraphics();
 		graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 		
 		switchColor(graphics);
-		graphics.fillRect(0, 0, size.width, size.height);
+		graphics.fillRect(0, 0, size.getWidth(), size.getHeight());
 		
 		for (int i = 0; i < shapesPerImage; i++) {
 			switch (rand.nextInt(4)) {
@@ -87,11 +87,11 @@ public class ImageCreator {
 	private void makeRectangle(Graphics2D graphics, ImageSize maxSize) {
 		switchColor(graphics);
 		
-		int x = rand.nextInt(maxSize.width);
-		int y = rand.nextInt(maxSize.height);
+		int x = rand.nextInt(maxSize.getWidth());
+		int y = rand.nextInt(maxSize.getHeight());
 		
-		Rectangle r = new Rectangle(x, y, rand.nextInt(maxSize.width - x) + 1, 
-				rand.nextInt(maxSize.height - y) + 1);
+		Rectangle r = new Rectangle(x, y, rand.nextInt(maxSize.getWidth() - x) + 1, 
+				rand.nextInt(maxSize.getHeight() - y) + 1);
 		
 		if (rand.nextBoolean()) {
 			graphics.fill(r);
@@ -103,17 +103,17 @@ public class ImageCreator {
 	private void makeLine(Graphics2D graphics, ImageSize maxSize) {
 		switchColor(graphics);
 		
-		graphics.drawLine(rand.nextInt(maxSize.width), rand.nextInt(maxSize.height), 
-				rand.nextInt(maxSize.width), rand.nextInt(maxSize.height));
+		graphics.drawLine(rand.nextInt(maxSize.getWidth()), rand.nextInt(maxSize.getHeight()), 
+				rand.nextInt(maxSize.getWidth()), rand.nextInt(maxSize.getHeight()));
 	}
 	
 	private void makeOval(Graphics2D graphics, ImageSize maxSize) {
 		switchColor(graphics);
 		
-		int x = rand.nextInt(maxSize.width);
-		int y = rand.nextInt(maxSize.height);
-		int width = rand.nextInt(maxSize.width - x) + 1;
-		int height = rand.nextInt(maxSize.height - y) + 1;
+		int x = rand.nextInt(maxSize.getWidth());
+		int y = rand.nextInt(maxSize.getHeight());
+		int width = rand.nextInt(maxSize.getWidth() - x) + 1;
+		int height = rand.nextInt(maxSize.getHeight() - y) + 1;
 	
 		if (rand.nextBoolean()) {
 			graphics.fillOval(x, y, width, height);
@@ -150,7 +150,7 @@ public class ImageCreator {
 				.map(i -> (char)i.intValue())
 				.collect(StringBuilder::new, StringBuilder::append, StringBuilder::append).toString();
 		
-		graphics.drawString(str, rand.nextInt(maxSize.width), rand.nextInt(maxSize.height));
+		graphics.drawString(str, rand.nextInt(maxSize.getWidth()), rand.nextInt(maxSize.getHeight()));
 	}
 
 }
