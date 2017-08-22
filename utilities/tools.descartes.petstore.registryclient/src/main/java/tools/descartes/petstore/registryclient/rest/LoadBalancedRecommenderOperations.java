@@ -30,7 +30,7 @@ public final class LoadBalancedRecommenderOperations {
 	public static List<Long> getRecommendations(List<OrderItem> order) {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.RECOMMENDER,
 				"recommend", Category.class, client -> client.getService().path(client.getApplicationURI())
-				.path(client.getEnpointURI()).request(MediaType.APPLICATION_JSON)
+				.path(client.getEndpointURI()).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).post(Entity.entity(order, MediaType.APPLICATION_JSON)));
 		return r.readEntity(new GenericType<List<Long>>() { });
 	}
