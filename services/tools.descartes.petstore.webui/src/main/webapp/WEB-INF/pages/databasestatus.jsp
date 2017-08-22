@@ -13,7 +13,7 @@
 					Database and image generation may take a while.
 					Leave the Pet Supply Store in a stable and unused state while the database is generating.
 					You may use the site once the database has finished generating.
-					Please wait for the image provider to finish as well, before running any performance tests.
+					Please wait for the image provider to finish as well before running any performance tests.
 				</p>
 				<p/>
 				<table class="table">
