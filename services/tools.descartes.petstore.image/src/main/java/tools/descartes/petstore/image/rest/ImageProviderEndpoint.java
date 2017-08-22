@@ -49,4 +49,17 @@ public class ImageProviderEndpoint {
 		SetupController.SETUP.reconfiguration();
 		return Response.ok().build();
 	}
+	
+	@GET
+	@Path("finished")
+	public Response isFinished() {
+		return Response.ok().entity(SetupController.SETUP.isFinished()).build();
+	}
+	
+	@GET
+	@Path("state")
+	public Response getState() {
+		// TODO: Implement
+		return Response.ok().build();
+	}
 }

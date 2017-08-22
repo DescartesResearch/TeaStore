@@ -13,6 +13,9 @@
  */
 package tools.descartes.petstore.image.cache.entry;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Base wrapper class for cachable data types.
  * @author Norbert Schmitt
@@ -22,6 +25,7 @@ package tools.descartes.petstore.image.cache.entry;
 public abstract class AbstractEntry<D extends ICachable<D>> {
 	
 	private D data;
+	private Logger log = LoggerFactory.getLogger(AbstractEntry.class);
 	
 	/**
 	 * Basic constructor storing the cachable data. If the cachable data supplied is null, a 
@@ -30,6 +34,7 @@ public abstract class AbstractEntry<D extends ICachable<D>> {
 	 */
 	public AbstractEntry(D data) {
 		if (data == null) {
+			log.error("The supplied data is null.");
 			throw new NullPointerException("Supplied data is null.");
 		}
 		

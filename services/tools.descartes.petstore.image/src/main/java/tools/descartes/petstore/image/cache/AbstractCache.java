@@ -51,15 +51,15 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 	public AbstractCache(S entries, IDataStorage<T> cachedStorage, long maxCacheSize, Predicate<T> cachingRule) {
 		if (entries == null) {
 			log.error("The provided internal storage object is null.");
-			throw new NullPointerException("Internal storage is null.");
+			throw new NullPointerException("The provided internal storage object is null.");
 		}
 		if (maxCacheSize < 0) {
 			log.error("The provided cache size is negative. Must be positive.");
-			throw new IllegalArgumentException("Cache size is negative.");
+			throw new IllegalArgumentException("The provided cache size is negative. Must be positive.");
 		}
 		if (cachingRule == null) {
 			log.error("The provided caching rule is null.");
-			throw new NullPointerException("Rule to determine if image can be cached is null.");
+			throw new NullPointerException("The provided caching rule is null.");
 		}
 	
 		if (cachedStorage == null) {
@@ -157,8 +157,9 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 		if (entry == null) {
 			// No entry in cache found, search in underlying storage
 			entry = cachedStorage.loadData(id);
-			if (entry == null)
+			if (entry == null) {
 				return null;
+			}
 			// Image found, cache it and return
 			cacheData(entry);
 		}
@@ -168,8 +169,9 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 	
 	@Override
 	public boolean saveData(T data) {
-		if (data == null)
-			throw new NullPointerException("Supplied data to save in storage is null.");
+		if (data == null) {
+			return false;
+		}
 	
 		cacheData(data);
 		return cachedStorage.saveData(data);
@@ -191,8 +193,10 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 	 */
 	
 	protected void dataRemovedFromCache(long size) {
-		if (size > currentCacheSize)
+		// This case should not happen
+		if (size > currentCacheSize) {
 			currentCacheSize = 0;
+		}
 		currentCacheSize -= size;
 	}
 	
@@ -213,5 +217,4 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 
 	protected abstract void removeEntryByCachingStrategy();
 	
-	//protected abstract void removeAllEntries(S entries);
 }

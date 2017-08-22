@@ -31,6 +31,9 @@ import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import javax.ws.rs.core.Response;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import tools.descartes.petstore.entities.ImageSize;
 import tools.descartes.petstore.entities.Product;
 import tools.descartes.petstore.image.ImageDB;
@@ -76,6 +79,7 @@ public enum SetupController {
 	private ImageCreatorRunner imgCreatorRunner;
 	private Thread imgCreatorThread;
 	private IDataStorage<StoreImage> storage = null;
+	private Logger log = LoggerFactory.getLogger(SetupController.class);
 	
 	private SetupController() {
 		
@@ -112,6 +116,8 @@ public enum SetupController {
 		if (!maxTriesReached) {
 			// TODO: Make it a REST instead of CRUD operation
 			products = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "products", Product.class, -1, -1);
+		} else {
+			log.warn("Maximum tries to reach persistence service reached. No products fetched.");
 		}
 		return products == null ? new ArrayList<Product>() : products;
 	}
@@ -147,6 +153,7 @@ public enum SetupController {
 	public void createWorkingDir() {
 		if (!workingDir.toFile().exists()) {
 			if (!workingDir.toFile().mkdir()) {
+				log.error("Standard working directory \"" + workingDir.toAbsolutePath() + "\" could not be created.");
 				throw new IllegalArgumentException("Standard working directory \"" 
 						+ workingDir.toAbsolutePath() + "\" could not be created.");
 			}
@@ -159,19 +166,22 @@ public enum SetupController {
 	
 	public void detectPreExistingImages(ImageDB db) {
 		if (db == null) {
-			throw new NullPointerException("Image database is null.");
+			log.error("The supplied image database is null.");
+			throw new NullPointerException("The supplied image database is null.");
 		}
 	
 		// TODO: Rework the code piece fetching the pre-existing images until the next comment
 		URL url = this.getClass().getResource("front.png");
 		Path dir = null;
+		String path = "";
 		try {
-			String path = URLDecoder.decode(url.getPath(), "UTF-8");
+			path = URLDecoder.decode(url.getPath(), "UTF-8");
 			if (path.contains(":")) {
 				path = path.substring(3);
 			}
 			dir = Paths.get(path).getParent();
 		} catch (UnsupportedEncodingException e) {
+			log.warn("The resource path \"" + path + "\" could not be decoded with UTF-8.");
 			return;
 		}
 		// End of rework
@@ -183,25 +193,34 @@ public enum SetupController {
 				if (file.isFile() && file.getName().endsWith(StoreImage.STORE_IMAGE_FORMAT)) {
 					long imageID = ImageIDFactory.ID.getNextImageID();
 					
+					BufferedImage buffImg = null;
 					// Copy files to correct file with the image id number
 					try {
-						BufferedImage buffImg = ImageIO.read(file);
+						buffImg = ImageIO.read(file);
 						if (buffImg == null) {
+							log.warn("The file \"" + file.toPath().toAbsolutePath() + "\" could not be read.");
 							continue;
 						}
+					} catch (IOException ioException) {
+						log.warn("An IOException occured while reading the file \"" + file.getAbsolutePath() 
+								+ "\" from disk. Message: \"" + ioException.getMessage());
+					}
 					
-						db.setImageMapping(file.getName().substring(0, 
-								file.getName().length() - StoreImage.STORE_IMAGE_FORMAT.length() - 1), 
-								imageID, ImageSize.FULL);
-						
-						StoreImage img = new StoreImage(imageID, buffImg, ImageSize.FULL);
-						preCacheImg.add(img);
+					db.setImageMapping(file.getName().substring(0, 
+							file.getName().length() - StoreImage.STORE_IMAGE_FORMAT.length() - 1), 
+							imageID, ImageSize.FULL);	
+					StoreImage img = new StoreImage(imageID, buffImg, ImageSize.FULL);
+					preCacheImg.add(img);
+					
+					try {
 						Files.write(workingDir.resolve(String.valueOf(imageID)), img.getByteArray(), 
 								StandardOpenOption.CREATE, 
 								StandardOpenOption.WRITE, 
 								StandardOpenOption.TRUNCATE_EXISTING);
-					} catch (IOException e) {
-						
+					} catch (IOException ioException) {
+						log.warn("An IOException occured while writing the image with ID " + String.valueOf(imageID)
+								+ " to the file \"" + workingDir.resolve(String.valueOf(imageID)).toAbsolutePath()
+								+ "\". Message: \"" + ioException.getMessage());
 					}
 					// Increment to have correct number of images for the limited drive storage
 					nrOfImagesPreExisting++; 
@@ -293,7 +312,7 @@ public enum SetupController {
 				cache.cacheData(img);
 			}
 			storage = cache;
-		}	
+		}
 	}
 	
 	public void configureImageProvider() {
@@ -304,6 +323,19 @@ public enum SetupController {
 	
 	public Path getWorkingDir() {
 		return workingDir;
+	}
+	
+	public boolean isFinished() {
+		if (storage == null) {
+			return false;
+		}
+		if (imgCreatorRunner.isRunning()) {
+			return false;
+		}
+		if (imgCreatorRunner.getNrOfImagesCreated() != nrOfImagesToGenerate) {
+			return false;
+		}
+		return true;
 	}
 
 	/*
@@ -336,8 +368,9 @@ public enum SetupController {
 				while (imgCreatorRunner.isRunning()) {
 					try {
 						Thread.sleep(imgCreatorRunner.getAvgCreationTime());
-					} catch (InterruptedException e) {
-
+					} catch (InterruptedException interrupted) {
+						log.info("Thread to regenerate images interrupted while waiting for image creator "
+								+ "thread to stop.", interrupted);
 					}
 				}
 

@@ -16,6 +16,10 @@ package tools.descartes.petstore.image;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import tools.descartes.petstore.entities.ImageSize;
 
 /**
@@ -30,6 +34,7 @@ public class ImageDB {
 	private HashMap<Long, Map<Long, ImageSize>> products = new HashMap<>();
 	private HashMap<String, Map<Long, ImageSize>> webui = new HashMap<>();
 	private HashMap<Long, ImageSize> sizes = new HashMap<>();
+	private Logger log = LoggerFactory.getLogger(ImageDB.class);
 	
 	/**
 	 * Standard constructor creating a new and empty image database.
@@ -191,7 +196,8 @@ public class ImageDB {
 	
 	private <K> void map(K key, long imageID, ImageSize imageSize, HashMap<K, Map<Long, ImageSize>> db) {
 		if (imageSize == null) {
-			throw new NullPointerException("Image size is null.");
+			log.error("Supplied image size is null.");
+			throw new NullPointerException("Supplied image size is null.");
 		}
 		
 		Map<Long, ImageSize> images = new HashMap<>();

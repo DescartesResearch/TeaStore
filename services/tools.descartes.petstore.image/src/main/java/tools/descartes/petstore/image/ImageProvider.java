@@ -17,6 +17,9 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import tools.descartes.petstore.entities.ImageSize;
 import tools.descartes.petstore.image.setup.ImageCreatorRunner;
 import tools.descartes.petstore.image.setup.ImageIDFactory;
@@ -31,6 +34,7 @@ public enum ImageProvider {
 	private ImageDB db;
 	private IDataStorage<StoreImage> storage;
 	private ImageCreatorRunner imgCreatorRunner;
+	private Logger log = LoggerFactory.getLogger(ImageProvider.class);
 	
 	private ImageProvider() {
 
@@ -53,8 +57,8 @@ public enum ImageProvider {
 			imgCreatorRunner.pause();
 			try {
 				Thread.sleep(imgCreatorRunner.getAvgCreationTime());
-			} catch (InterruptedException e) {
-				
+			} catch (InterruptedException interrupted) {
+				log.info("Thread was interrupted while waiting for image creator thread to pause.", interrupted);
 			}
 		}
 	}
@@ -100,12 +104,18 @@ public enum ImageProvider {
 	}
 	
 	private String getImageFor(ImageDBKey key, ImageSize size) {
-		if (db == null || storage == null)
+		if (db == null || storage == null) {
+			log.warn("Image provider not correctly initialized. Missing image database and storage.");
 			return null;
-		if (key == null || size == null)
+		}
+		if (key == null || size == null) {
+			log.info("Supplied image key or size are null.");
 			return null;
-		if (!key.isProductKey() && (key.getWebUIName() == null || key.getWebUIName().isEmpty()))
+		}
+		if (!key.isProductKey() && (key.getWebUIName() == null || key.getWebUIName().isEmpty())) {
+			log.info("Supplied image key invalid. Is neither web image nor product image.");
 			return null;
+		}
 	
 		ImageSize biggest = ImageSize.getBiggestSize();
 		StoreImage storedImg = null;
@@ -125,8 +135,9 @@ public enum ImageProvider {
 				storedImg = storage.loadData(db.getImageID(IMAGE_NOT_FOUND, size));
 				if (storedImg == null) {
 					storedImg = storage.loadData(db.getImageID(IMAGE_NOT_FOUND, biggest));
-					if (storedImg == null)
+					if (storedImg == null) {
 						return null;
+					}
 					storedImg = scaleAndRegisterImg(storedImg.getImage(), new ImageDBKey(IMAGE_NOT_FOUND), size);
 				}
 			}
