@@ -173,10 +173,11 @@ public class ImageDB {
 	}
 	
 	/**
-	 * 
-	 * @param imageKey
-	 * @param imageID
-	 * @param imageSize
+	 * Creates a new mapping between, an image key (either product ID or name), the unique image ID and the size of
+	 * the image.
+	 * @param imageKey The image key, either product ID or image name
+	 * @param imageID The unique image ID
+	 * @param imageSize The size of the image
 	 */
 	public void setImageMapping(ImageDBKey imageKey, long imageID, ImageSize imageSize) {
 		if (imageKey.isProductKey()) {
@@ -186,25 +187,42 @@ public class ImageDB {
 		}
 	}
 	
+	/**
+	 * Creates a new mapping between, a product ID, the unique image ID and the size of
+	 * the image.
+	 * @param productID The product ID
+	 * @param imageID The unique image ID
+	 * @param imageSize The size of the image
+	 */	
 	public void setImageMapping(long productID, long imageID, ImageSize imageSize) {
 		map(productID, imageID, imageSize, products);
 	}
 	
+	/**
+	 * Creates a new mapping between, an image name, the unique image ID and the size of
+	 * the image.
+	 * @param name The image name
+	 * @param imageID The unique image ID
+	 * @param imageSize The size of the image
+	 */	
 	public void setImageMapping(String name, long imageID, ImageSize imageSize) {
 		map(name, imageID, imageSize, webui);
 	}
-	
+
+	// Actually creates the image mapping
 	private <K> void map(K key, long imageID, ImageSize imageSize, HashMap<K, Map<Long, ImageSize>> db) {
 		if (imageSize == null) {
 			log.error("Supplied image size is null.");
 			throw new NullPointerException("Supplied image size is null.");
 		}
-		
+	
+		// In case the product ID or image name is not known, we create a new map to store the mapping
 		Map<Long, ImageSize> images = new HashMap<>();
 		if (db.containsKey(key)) {
 			images = db.get(key);
 		}
 		
+		// Add the new mapping to the internal map and put it back into the correct database (map)
 		images.put(imageID, imageSize);
 		db.put(key, images);
 		sizes.put(imageID, imageSize);
