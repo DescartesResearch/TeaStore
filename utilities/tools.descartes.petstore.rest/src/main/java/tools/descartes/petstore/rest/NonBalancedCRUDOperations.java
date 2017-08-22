@@ -45,7 +45,7 @@ public final class NonBalancedCRUDOperations {
 	 */
 	public static <T> long sendEntityForCreation(RESTClient<T> client, T entity) {
 		Response response = client.getService().path(client.getApplicationURI())
-				.path(client.getEnpointURI()).request(MediaType.APPLICATION_JSON).
+				.path(client.getEndpointURI()).request(MediaType.APPLICATION_JSON).
 				post(Entity.entity(entity, MediaType.APPLICATION_JSON), Response.class);
 		long id = -1L;
 		//If resource was created successfully
@@ -73,7 +73,7 @@ public final class NonBalancedCRUDOperations {
 	 * @return True, if update succeeded. False, otherwise.
 	 */
 	public static <T> boolean sendEntityForUpdate(RESTClient<T> client, long id, T entity) {
-		Response response = client.getService().path(client.getApplicationURI()).path(client.getEnpointURI()).
+		Response response = client.getService().path(client.getApplicationURI()).path(client.getEndpointURI()).
 				path(String.valueOf(id)).request(MediaType.APPLICATION_JSON).
 				put(Entity.entity(entity, MediaType.APPLICATION_JSON), Response.class);
 		if (response.getStatus() == 200) {
@@ -91,7 +91,7 @@ public final class NonBalancedCRUDOperations {
 	 * @return True, if deletion succeeded; false otherwise.
 	 */
 	public static <T> boolean deleteEntity(RESTClient<T> client, long id) {
-		Response response = client.getService().path(client.getApplicationURI()).path(client.getEnpointURI()).
+		Response response = client.getService().path(client.getApplicationURI()).path(client.getEndpointURI()).
 				path(String.valueOf(id)).request(MediaType.APPLICATION_JSON).delete();
 		if (response.getStatus() == 200) {
 			return true;
@@ -108,7 +108,7 @@ public final class NonBalancedCRUDOperations {
 	 * @return The entity; null if it does not exist.
 	 */
 	public static <T> T getEntity(RESTClient<T> client, long id) {
-		Response response = client.getService().path(client.getApplicationURI()).path(client.getEnpointURI()).
+		Response response = client.getService().path(client.getApplicationURI()).path(client.getEndpointURI()).
 				path(String.valueOf(id)).request(MediaType.APPLICATION_JSON).get();
 		T entity = null;
 		try {
@@ -130,7 +130,7 @@ public final class NonBalancedCRUDOperations {
 	 * @return List of entities; empty list if non were found.
 	 */
 	public static <T> List<T> getEntities(RESTClient<T> client, int startIndex, int limit) {
-		WebTarget target = client.getService().path(client.getApplicationURI()).path(client.getEnpointURI());
+		WebTarget target = client.getService().path(client.getApplicationURI()).path(client.getEndpointURI());
 		if (startIndex >= 0) {
 			target = target.queryParam("start", startIndex);
 		}
@@ -167,7 +167,7 @@ public final class NonBalancedCRUDOperations {
 	public static <T> List<T> getEntities(RESTClient<T> client, String filterURI,
 			long filterId, int startIndex, int limit) {
 		WebTarget target = client.getService().path(client.getApplicationURI())
-				.path(client.getEnpointURI()).path(filterURI).path(String.valueOf(filterId));
+				.path(client.getEndpointURI()).path(filterURI).path(String.valueOf(filterId));
 		if (startIndex >= 0) {
 			target = target.queryParam("start", startIndex);
 		}
@@ -202,7 +202,7 @@ public final class NonBalancedCRUDOperations {
 	public static <T> T getEntityWithProperty(RESTClient<T> client, String propertyURI,
 			String propertyValue) {
 		WebTarget target = client.getService().path(client.getApplicationURI())
-				.path(client.getEnpointURI()).path(propertyURI).path(propertyValue);
+				.path(client.getEndpointURI()).path(propertyURI).path(propertyValue);
 		Response response = target.request(MediaType.APPLICATION_JSON).get();
 		T entity = null;
 		try {

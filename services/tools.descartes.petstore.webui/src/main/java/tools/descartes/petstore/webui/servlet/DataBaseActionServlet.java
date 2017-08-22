@@ -48,7 +48,7 @@ public class DataBaseActionServlet extends AbstractUIServlet {
 				destroySessionBlob(getSessionBlob(request), response);
 				Response resp = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "generatedb",
 						String.class,
-						client -> client.getService().path(client.getApplicationURI()).path(client.getEnpointURI())
+						client -> client.getService().path(client.getApplicationURI()).path(client.getEndpointURI())
 								.queryParam(PARAMETERS[0], infos[0]).queryParam(PARAMETERS[1], infos[1])
 								.queryParam(PARAMETERS[2], infos[2]).queryParam(PARAMETERS[3], infos[3])
 								.request(MediaType.TEXT_PLAIN).get());

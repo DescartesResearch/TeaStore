@@ -129,7 +129,7 @@ public class RESTClient<T> {
 	 * URI of the REST Endpoint within the application.
 	 * @return The enpoint URI.
 	 */
-	public String getEnpointURI() {
+	public String getEndpointURI() {
 		return endpointURI;
 	}
 	

@@ -93,7 +93,7 @@ public class SetupController {
 		while (true) {
 			Response result = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "generatedb", 
 					String.class, client -> client.getService().path(client.getApplicationURI())
-					.path(client.getEnpointURI()).path("finished").request().get());
+					.path(client.getEndpointURI()).path("finished").request().get());
 			if (result == null ? false : Boolean.parseBoolean(result.readEntity(String.class))) {
 				break;
 			}

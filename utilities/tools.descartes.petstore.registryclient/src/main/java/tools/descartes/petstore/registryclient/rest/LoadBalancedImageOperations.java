@@ -31,7 +31,7 @@ public class LoadBalancedImageOperations {
 		
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.IMAGE, "image", HashMap.class,
 				client -> client.getService().path(client.getApplicationURI())
-				.path(client.getEnpointURI()).path("getProductImages").request(MediaType.APPLICATION_JSON)
+				.path(client.getEndpointURI()).path("getProductImages").request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).post(Entity.entity(img, MediaType.APPLICATION_JSON)));
 		
 		HashMap<Long, String> encoded = r.readEntity(new GenericType<HashMap<Long, String>>() { });
@@ -49,7 +49,7 @@ public class LoadBalancedImageOperations {
 		
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.IMAGE, "image", HashMap.class,
 				client -> client.getService().path(client.getApplicationURI())
-				.path(client.getEnpointURI()).path("getProductImages").request(MediaType.APPLICATION_JSON)
+				.path(client.getEndpointURI()).path("getProductImages").request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).post(Entity.entity(img, MediaType.APPLICATION_JSON)));
 		return r.readEntity(new GenericType<HashMap<Long, String>>() { });
 	}
@@ -60,7 +60,7 @@ public class LoadBalancedImageOperations {
 		
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.IMAGE, "image", HashMap.class,
 				client -> client.getService().path(client.getApplicationURI())
-				.path(client.getEnpointURI()).path("getWebImages").request(MediaType.APPLICATION_JSON)
+				.path(client.getEndpointURI()).path("getWebImages").request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).post(Entity.entity(img, MediaType.APPLICATION_JSON)));
 		
 		HashMap<String, String> encoded = r.readEntity(new GenericType<HashMap<String, String>>() { });
@@ -74,7 +74,7 @@ public class LoadBalancedImageOperations {
 		
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.IMAGE, "image", HashMap.class,
 				client -> client.getService().path(client.getApplicationURI())
-				.path(client.getEnpointURI()).path("getWebImages").request(MediaType.APPLICATION_JSON)
+				.path(client.getEndpointURI()).path("getWebImages").request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).post(Entity.entity(img, MediaType.APPLICATION_JSON)));
 		
 		return r.readEntity(new GenericType<HashMap<String, String>>() { });	
@@ -83,7 +83,7 @@ public class LoadBalancedImageOperations {
 	public static List<Integer> regenerateImages() {
 		List<Response> r = ServiceLoadBalancer.multicastRESTOperation(Service.IMAGE, "image", null, 
 				client -> client.getService().path(client.getApplicationURI())
-				.path(client.getEnpointURI()).path("regenerateImages").request().get());
+				.path(client.getEndpointURI()).path("regenerateImages").request().get());
 		if (r == null) {
 			return new ArrayList<Integer>();
 		}
