@@ -77,7 +77,7 @@ public class DataBaseActionServlet extends AbstractUIServlet {
 			}
 
 		}
-		redirect("/databasestatus", response);
+		redirect("/status", response);
 	}
 
 	/**
