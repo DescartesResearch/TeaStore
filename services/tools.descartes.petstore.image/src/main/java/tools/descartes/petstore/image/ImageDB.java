@@ -174,12 +174,17 @@ public class ImageDB {
 	
 	/**
 	 * Creates a new mapping between, an image key (either product ID or name), the unique image ID and the size of
-	 * the image.
+	 * the image. If the image key or image size is null, a {@link java.lang.NullPointerException} will be thrown.
 	 * @param imageKey The image key, either product ID or image name
 	 * @param imageID The unique image ID
 	 * @param imageSize The size of the image
 	 */
 	public void setImageMapping(ImageDBKey imageKey, long imageID, ImageSize imageSize) {
+		if (imageKey == null) {
+			log.error("The supplied image key is null.");
+			throw new NullPointerException("The supplied image key is null.");
+		}
+		
 		if (imageKey.isProductKey()) {
 			setImageMapping(imageKey.getProductID(), imageID, imageSize);
 		} else {
@@ -189,7 +194,7 @@ public class ImageDB {
 	
 	/**
 	 * Creates a new mapping between, a product ID, the unique image ID and the size of
-	 * the image.
+	 * the image. If the image size is null, a {@link java.lang.NullPointerException} will be thrown.
 	 * @param productID The product ID
 	 * @param imageID The unique image ID
 	 * @param imageSize The size of the image
@@ -200,12 +205,17 @@ public class ImageDB {
 	
 	/**
 	 * Creates a new mapping between, an image name, the unique image ID and the size of
-	 * the image.
+	 * the image. If the image name or size is null, a {@link java.lang.NullPointerExcpetion} will be thrown.
 	 * @param name The image name
 	 * @param imageID The unique image ID
 	 * @param imageSize The size of the image
 	 */	
 	public void setImageMapping(String name, long imageID, ImageSize imageSize) {
+		if (name == null) {
+			log.error("The supplied image name is null.");
+			throw new NullPointerException("The supplied image name is null.");
+		}
+		
 		map(name, imageID, imageSize, webui);
 	}
 
