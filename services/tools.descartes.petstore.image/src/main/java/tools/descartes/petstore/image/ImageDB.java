@@ -44,10 +44,16 @@ public class ImageDB {
 	}
 	
 	/**
-	 * Copy constructor making a shallow copy of the given image database.
+	 * Copy constructor making a shallow copy of the given image database. If the database to copy is null, a 
+	 * {@link java.lang.NullPointerException} will be thrown.
 	 * @param copy Image database to copy.
 	 */
 	public ImageDB(ImageDB copy) {
+		if (copy == null) {
+			log.error("The supplied image database to copy is null.");
+			throw new NullPointerException("The supplied image database to copy is null.");
+		}
+		
 		this.products = new HashMap<>(copy.products);
 		this.webui = new HashMap<>(copy.webui);
 		this.sizes = new HashMap<>(copy.sizes);
