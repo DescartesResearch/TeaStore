@@ -11,12 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.netflix.loadbalancer.Server;
-
-import tools.descartes.petstore.registryclient.RegistryClient;
 import tools.descartes.petstore.registryclient.Service;
 import tools.descartes.petstore.registryclient.loadbalancers.ServiceLoadBalancer;
-import tools.descartes.petstore.registryclient.rest.LoadBalancedCRUDOperations;
 import tools.descartes.petstore.registryclient.rest.LoadBalancedImageOperations;
 
 /**
@@ -57,7 +53,7 @@ public class DataBaseActionServlet extends AbstractUIServlet {
 								.queryParam(PARAMETERS[2], infos[2]).queryParam(PARAMETERS[3], infos[3])
 								.request(MediaType.TEXT_PLAIN).get());
 				if (resp.getStatus() == 200) {
-					System.out.println("here");
+					System.out.println("DB is re-generating.");
 				}
 				
 				// Regenerate images
@@ -66,18 +62,17 @@ public class DataBaseActionServlet extends AbstractUIServlet {
 						.filter(r -> r != 200)
 						.forEach(r -> System.out.println("An image provider service responded with " 
 									+ r + " when regenerating images."));
-//				// Retrain recommender
-//				List<Response> recResp = ServiceLoadBalancer.multicastRESTOperation(Service.RECOMMENDER, "train",
-//						null, client -> client.getService().path(client.getApplicationURI())
-//						.path(client.getEnpointURI()).request(MediaType.TEXT_PLAIN).get());
-//				recResp.stream()
-//						.filter(r -> r.getStatus() != 200)
-//						.forEach(r -> System.out.println("A recommender service responded with " 
-//									+ r.getStatus() + " when retraining."));
+				// Retrain recommender
+				List<Response> recResp = ServiceLoadBalancer.multicastRESTOperation(Service.RECOMMENDER, "train",
+						String.class, client -> client.getEndpointTarget().path("async").request(MediaType.TEXT_PLAIN).get());
+				recResp.stream()
+						.filter(r -> r.getStatus() != 200)
+						.forEach(r -> System.out.println("A recommender service responded with " 
+									+ r.getStatus() + " when retraining."));
 			}
 
 		}
-		redirect("/", response);
+		redirect("/databasestatus", response);
 	}
 
 	/**
