@@ -52,37 +52,7 @@ public class ImageDB {
 		this.webui = new HashMap<>(copy.webui);
 		this.sizes = new HashMap<>(copy.sizes);
 	}
-	
-//	/**
-//	 * Returns the mapping of image IDs to their size for a given image key (product ID or name).
-//	 * @param imageKey The image key identifying a range of sizes for a image content
-//	 * @return Mapping between image IDs and the corresponding size
-//	 */
-//	public Map<Long, ImageSize> getAllSizes(ImageDBKey imageKey) {
-//		if (imageKey.isProductKey()) {
-//			return getAllSizes(imageKey.getProductID());
-//		}
-//		return getAllSizes(imageKey.getWebUIName());
-//	}
-//	
-//	/**
-//	 * Returns the mapping of image IDs to their size for a given product ID.
-//	 * @param productID The product ID identifying a range of sizes for a image content
-//	 * @return Mapping between image IDs and the corresponding size
-//	 */
-//	public Map<Long, ImageSize> getAllSizes(long productID) {
-//		return products.getOrDefault(productID, new HashMap<>());
-//	}
-//	
-//	/**
-//	 * Returns the mapping of image IDs to their size for a given image name.
-//	 * @param name The image name identifying a range of sizes for a image content
-//	 * @return Mapping between image IDs and the corresponding size
-//	 */
-//	public Map<Long, ImageSize> getAllSizes(String name) {
-//		return webui.getOrDefault(name, new HashMap<>());
-//	}
-	
+
 	/**
 	 * Checks whether a given image key (product ID or name) is available in the given size. If the given image key 
 	 * is null, a {@link java.lang.NullPointerException} will be thrown.
