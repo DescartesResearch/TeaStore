@@ -47,6 +47,8 @@ import tools.descartes.petstore.registryclient.loadbalancers.LoadBalancerUpdater
  */
 public class RegistryClient {
 
+	private static final Logger LOG = LoggerFactory.getLogger(RegistryClient.class);
+	
 	/**
 	 * The registry client.
 	 */
@@ -58,7 +60,6 @@ public class RegistryClient {
 	
 	private static final int LOAD_BALANCER_REFRESH_INTERVAL_MS = 2500;
 	private static final int HEARTBEAT_INTERVAL_MS = 2500;
-	private static final Logger LOG = LoggerFactory.getLogger(RegistryClient.class);
 	
 	private ScheduledExecutorService loadBalancerUpdateScheduler;
 	private ScheduledExecutorService heartbeatScheduler;
@@ -67,8 +68,8 @@ public class RegistryClient {
 	 * Constructor.
 	 */
 	protected RegistryClient() {
+		System.setProperty("org.slf4j.simpleLogger.logFile", "System.out");
 		try {
-			System.setProperty("org.slf4j.simpleLogger.logFile", "System.out");
 			registryRESTURL = (String) new InitialContext().lookup("java:comp/env/registryURL");
 		} catch (NamingException e) {
 			LOG.warn("registryURL not set. Falling back to default registry URL.");
