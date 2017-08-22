@@ -16,6 +16,9 @@ package tools.descartes.petstore.image.cache;
 import java.util.Collection;
 import java.util.function.Predicate;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import tools.descartes.petstore.image.cache.entry.AbstractEntry;
 import tools.descartes.petstore.image.cache.entry.ICachable;
 import tools.descartes.petstore.image.cache.rules.CacheAll;
@@ -31,6 +34,7 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 	private long maxCacheSize;
 	private long currentCacheSize;
 	private Predicate<T> cachingRule;
+	private Logger log = LoggerFactory.getLogger(AbstractCache.class);
 	
 	public AbstractCache(S entries) {
 		this(entries, IDataCache.STD_MAX_CACHE_SIZE);
@@ -46,16 +50,20 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 	
 	public AbstractCache(S entries, IDataStorage<T> cachedStorage, long maxCacheSize, Predicate<T> cachingRule) {
 		if (entries == null) {
+			log.error("The provided internal storage object is null.");
 			throw new NullPointerException("Internal storage is null.");
 		}
 		if (maxCacheSize < 0) {
+			log.error("The provided cache size is negative. Must be positive.");
 			throw new IllegalArgumentException("Cache size is negative.");
 		}
 		if (cachingRule == null) {
+			log.error("The provided caching rule is null.");
 			throw new NullPointerException("Rule to determine if image can be cached is null.");
 		}
 	
 		if (cachedStorage == null) {
+			log.info("No underlying disk storage supplied, assuming no data is stored on disk.");
 			this.cachedStorage = new NoStorage<T>();
 		} else {
 			this.cachedStorage = cachedStorage;
