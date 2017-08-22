@@ -13,7 +13,7 @@
 <!-- Bootstrap core CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="StyleSheet"
-	href="${pageContext.request.contextPath}/jpetstore.css" type="text/css"
+	href="<c:url value="/jpetstore.css"/>" type="text/css"
 	media="screen" />
 
 </head>

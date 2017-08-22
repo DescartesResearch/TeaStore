@@ -18,10 +18,10 @@
 				<li><a href="http://www.descartes.tools" target="_blank">www.descartes.tools</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="${pageContext.request.contextPath}/database">Database</a></li>
+				<li><a href="<c:url value="/database"/>">Database</a></li>
 				<li><a href="<c:url value="/status"/>">Status</a></li>
-				<li><a href="${pageContext.request.contextPath}/about">About us</a></li>
-				<li><a href="#"><span
+				<li><a href="<c:url value="/about"/>">About us</a></li>
+				<li><a href="https://github.com/DescartesResearch/Pet-Supply-Store/wiki"><span
 						class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a></li>
 			</ul>
 		</div>
