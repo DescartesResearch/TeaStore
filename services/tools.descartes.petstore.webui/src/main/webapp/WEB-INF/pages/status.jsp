@@ -67,7 +67,7 @@
 							   <td class="success">OK and populated</td>
 							</c:when>
 							<c:otherwise>
-							   <td class="warning">Generating data ...</td>
+							   <td class="warning">Generating data <span class="statusloader"></span></td>
 							</c:otherwise>
  						</c:choose>
 					</tr>
@@ -87,7 +87,7 @@
 				            	<td class="info">Probably OK and trained</td>
 				         	</c:when>
 				         	<c:otherwise>
-				            	<td class="warning">Waiting for Persistence ...</td>
+				            	<td class="warning">Waiting for Persistence <span class="statusloader"></span></td>
 				         	</c:otherwise>
 						</c:choose>
 					</tr>
@@ -104,10 +104,10 @@
 							   <td class="danger">Offline</td>
 							</c:when>
 				        	<c:when test = "${dbfinished == false}">
-				            	<td class="warning">Waiting for Persistence ...</td>
+				            	<td class="warning">Waiting for Persistence <span class="statusloader"></span></td>
 				        	</c:when>
 				        	<c:when test = "${imagefinished == false}">
-				            	<td class="warning">Generating images ...</td>
+				            	<td class="warning">Generating images <span class="statusloader"></span></td>
 				        	</c:when>
 				         	<c:otherwise>
 			            		<td class="success">OK and populated</td>
