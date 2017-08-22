@@ -16,42 +16,17 @@ package tools.descartes.petstore.image.cache;
 import java.util.Collection;
 import java.util.function.Predicate;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import tools.descartes.petstore.image.cache.entry.AbstractEntry;
 import tools.descartes.petstore.image.cache.entry.ICachable;
 import tools.descartes.petstore.image.cache.rules.CacheAll;
 import tools.descartes.petstore.image.storage.IDataStorage;
+import tools.descartes.petstore.image.storage.NoStorage;
 
 public abstract class AbstractCache<S extends Collection<F>, T extends ICachable<T>, F extends AbstractEntry<T>> 
 		implements IDataCache<T> {
-	
-	private class NoStorage implements IDataStorage<T> {
-
-		@Override
-		public boolean dataExists(long id) {
-			return true;
-		}
-
-		@Override
-		public T loadData(long id) {
-			return null;
-		}
-
-		@Override
-		public boolean saveData(T data) {
-			return true;
-		}
-
-		@Override
-		public boolean dataIsStorable(T data) {
-			return true;
-		}
-
-		@Override
-		public boolean deleteData(T data) {
-			return true;
-		}
-		
-	}
 	
 	protected IDataStorage<T> cachedStorage;
 	protected S entries;
@@ -59,6 +34,7 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 	private long maxCacheSize;
 	private long currentCacheSize;
 	private Predicate<T> cachingRule;
+	private Logger log = LoggerFactory.getLogger(AbstractCache.class);
 	
 	public AbstractCache(S entries) {
 		this(entries, IDataCache.STD_MAX_CACHE_SIZE);
@@ -73,15 +49,22 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 	}
 	
 	public AbstractCache(S entries, IDataStorage<T> cachedStorage, long maxCacheSize, Predicate<T> cachingRule) {
-		if (entries == null)
-			throw new NullPointerException("Internal storage is null.");
-		if (maxCacheSize < 0)
-			throw new IllegalArgumentException("Cache size is negative.");
-		if (cachingRule == null)
-			throw new NullPointerException("Rule to determine if image can be cached is null.");
+		if (entries == null) {
+			log.error("The provided internal storage object is null.");
+			throw new NullPointerException("The provided internal storage object is null.");
+		}
+		if (maxCacheSize < 0) {
+			log.error("The provided cache size is negative. Must be positive.");
+			throw new IllegalArgumentException("The provided cache size is negative. Must be positive.");
+		}
+		if (cachingRule == null) {
+			log.error("The provided caching rule is null.");
+			throw new NullPointerException("The provided caching rule is null.");
+		}
 	
 		if (cachedStorage == null) {
-			this.cachedStorage = new NoStorage();
+			log.info("No underlying disk storage supplied, assuming no data is stored on disk.");
+			this.cachedStorage = new NoStorage<T>();
 		} else {
 			this.cachedStorage = cachedStorage;
 		}
@@ -174,8 +157,9 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 		if (entry == null) {
 			// No entry in cache found, search in underlying storage
 			entry = cachedStorage.loadData(id);
-			if (entry == null)
+			if (entry == null) {
 				return null;
+			}
 			// Image found, cache it and return
 			cacheData(entry);
 		}
@@ -185,8 +169,9 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 	
 	@Override
 	public boolean saveData(T data) {
-		if (data == null)
-			throw new NullPointerException("Supplied data to save in storage is null.");
+		if (data == null) {
+			return false;
+		}
 	
 		cacheData(data);
 		return cachedStorage.saveData(data);
@@ -208,8 +193,10 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 	 */
 	
 	protected void dataRemovedFromCache(long size) {
-		if (size > currentCacheSize)
+		// This case should not happen
+		if (size > currentCacheSize) {
 			currentCacheSize = 0;
+		}
 		currentCacheSize -= size;
 	}
 	
@@ -230,5 +217,4 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 
 	protected abstract void removeEntryByCachingStrategy();
 	
-	//protected abstract void removeAllEntries(S entries);
 }

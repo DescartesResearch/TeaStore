@@ -14,47 +14,30 @@
 package tools.descartes.petstore.image;
 
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import tools.descartes.petstore.entities.ImageSize;
 import tools.descartes.petstore.image.setup.ImageCreatorRunner;
 import tools.descartes.petstore.image.setup.ImageIDFactory;
 import tools.descartes.petstore.image.storage.IDataStorage;
 
-public class ImageProvider {
+public enum ImageProvider {
+
+	IP;
 	
 	public static final String IMAGE_NOT_FOUND = "notFound";
 	
-	private final class Tupel {
-		public final ImageDBKey id;
-		public final String imgString;
-		
-		public Tupel(final ImageDBKey id, final String imgString) {
-			this.id = id;
-			this.imgString = imgString;
-		}
-		
-		public ImageDBKey getKey() {
-			return id;
-		}
-		
-		public String getImgString() {
-			return imgString;
-		}
-	}
-	
-	private static ImageProvider instance = new ImageProvider();
 	private ImageDB db;
 	private IDataStorage<StoreImage> storage;
 	private ImageCreatorRunner imgCreatorRunner;
+	private Logger log = LoggerFactory.getLogger(ImageProvider.class);
 	
 	private ImageProvider() {
 
-	}
-	
-	public static ImageProvider getInstance() {
-		return instance;
 	}
 	
 	public void setImageDB(ImageDB imgDB) {
@@ -74,69 +57,93 @@ public class ImageProvider {
 			imgCreatorRunner.pause();
 			try {
 				Thread.sleep(imgCreatorRunner.getAvgCreationTime());
-			} catch (InterruptedException e) {
-				
+			} catch (InterruptedException interrupted) {
+				log.info("Thread was interrupted while waiting for image creator thread to pause.", interrupted);
 			}
 		}
 	}
 
 	public Map<Long, String> getProductImages(Map<Long, ImageSize> images) {
 		waitForImageCreator();
-		Map<Long, String> result = images.entrySet().stream()
-				.map(a -> getImageFor(new ImageDBKey(a.getKey()), a.getValue()))
-				.filter(a -> a != null && a.getImgString() != null)
-				.collect(Collectors.toMap(t -> t.getKey().getProductID(), t -> t.getImgString()));
+		
+		Map<Long, String> result = new HashMap<>();
+		for (Map.Entry<Long, ImageSize> entry : images.entrySet()) {
+			String imgStr = getImageFor(new ImageDBKey(entry.getKey()), entry.getValue());
+			if (imgStr == null) {
+				continue;
+			}
+			result.put(entry.getKey(), imgStr);
+		}
+	
 		imgCreatorRunner.resume();
 		return result;
 	}
 	
 	public Map<String, String> getWebUIImages(Map<String, ImageSize> images) {
 		waitForImageCreator();
-		Map<String, String> result = images.entrySet().stream()
-				.map(a -> getImageFor(new ImageDBKey(a.getKey()), a.getValue()))
-				.filter(a -> a != null && a.getImgString() != null)
-				.collect(Collectors.toMap(t -> t.getKey().getWebUIName(), t -> t.getImgString()));
+		
+		Map<String, String> result = new HashMap<>();
+		for (Map.Entry<String, ImageSize> entry : images.entrySet()) {
+			String imgStr = getImageFor(new ImageDBKey(entry.getKey()), entry.getValue());
+			if (imgStr == null) {
+				continue;
+			}
+			result.put(entry.getKey(), imgStr);
+		}
+		
 		imgCreatorRunner.resume();
 		return result;
 	}
 	
 	private StoreImage scaleAndRegisterImg(BufferedImage image, ImageDBKey key, ImageSize size) {
-		StoreImage storedImg = new StoreImage(ImageIDFactory.getInstance().getNextImageID(), 
+		StoreImage storedImg = new StoreImage(ImageIDFactory.ID.getNextImageID(), 
 				ImageScaler.scale(image, size), size);
 		db.setImageMapping(key, storedImg.getId(), size);
 		storage.saveData(storedImg);
 		return storedImg;
 	}
 	
-	private Tupel getImageFor(ImageDBKey key, ImageSize size) {
-		if (db == null || storage == null)
+	private String getImageFor(ImageDBKey key, ImageSize size) {
+		if (db == null || storage == null) {
+			log.warn("Image provider not correctly initialized. Missing image database and storage.");
 			return null;
-		if (key == null || size == null)
+		}
+		if (key == null || size == null) {
+			log.info("Supplied image key or size are null.");
 			return null;
-		if (!key.isProductKey() && (key.getWebUIName() == null || key.getWebUIName().isEmpty()))
+		}
+		if (!key.isProductKey() && (key.getWebUIName() == null || key.getWebUIName().isEmpty())) {
+			log.info("Supplied image key invalid. Is neither web image nor product image.");
 			return null;
+		}
+	
+		ImageSize biggest = ImageSize.getBiggestSize();
+		StoreImage storedImg = null;
 		
 		// Try to retrieve image from disk or from cache
-		long storedImgID = db.getImageID(key, size);
-		StoreImage storedImg = storage.loadData(storedImgID);
+		long imgID = db.getImageID(key, size);
+		if (imgID != 0) {
+			storedImg = storage.loadData(db.getImageID(key, size));
+		}
 		
 		// If we dont have the image in the right size, get the biggest one and scale it
 		if (storedImg == null) {
-			storedImg = storage.loadData(db.getImageID(key, ImageSize.getBiggestSize()));
+			storedImg = storage.loadData(db.getImageID(key, biggest));
 			if (storedImg != null) {
 				storedImg = scaleAndRegisterImg(storedImg.getImage(), key, size);
 			} else {
 				storedImg = storage.loadData(db.getImageID(IMAGE_NOT_FOUND, size));
 				if (storedImg == null) {
-					storedImg = storage.loadData(db.getImageID(IMAGE_NOT_FOUND, ImageSize.getBiggestSize()));
-					if (storedImg == null)
+					storedImg = storage.loadData(db.getImageID(IMAGE_NOT_FOUND, biggest));
+					if (storedImg == null) {
 						return null;
+					}
 					storedImg = scaleAndRegisterImg(storedImg.getImage(), new ImageDBKey(IMAGE_NOT_FOUND), size);
 				}
 			}
 		}
 		
-		return new Tupel(key, storedImg.toString());
+		return storedImg.toString();
 	}
 	
 }

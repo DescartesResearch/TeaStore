@@ -22,6 +22,9 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import tools.descartes.petstore.entities.ImageSize;
 
 public class ImageCreator {
@@ -35,6 +38,7 @@ public class ImageCreator {
 	
 	private Random rand = new Random();
 	private int shapesPerImage = STD_NR_OF_SHAPES_PER_IMAGE;
+	private Logger log = LoggerFactory.getLogger(ImageCreator.class);
 	
 	public ImageCreator() {
 		this(STD_NR_OF_SHAPES_PER_IMAGE);
@@ -45,10 +49,13 @@ public class ImageCreator {
 	}
 	
 	public ImageCreator(int shapesPerImage, long seed) {
-		if (shapesPerImage < 1)
-			throw new IllegalArgumentException("Number of shapes per image is below 1.");
+		if (shapesPerImage < 0) {
+			log.info("Shapes per image is below 0 and is now set to 0.");
+			this.shapesPerImage = 0;
+		} else {
+			this.shapesPerImage = shapesPerImage;
+		}
 		
-		this.shapesPerImage = shapesPerImage;
 		rand.setSeed(seed);
 	}
 	
@@ -86,8 +93,9 @@ public class ImageCreator {
 		Rectangle r = new Rectangle(x, y, rand.nextInt(maxSize.width - x) + 1, 
 				rand.nextInt(maxSize.height - y) + 1);
 		
-		if (rand.nextBoolean())
+		if (rand.nextBoolean()) {
 			graphics.fill(r);
+		}
 		
 		graphics.draw(r);
 	}
@@ -107,8 +115,9 @@ public class ImageCreator {
 		int width = rand.nextInt(maxSize.width - x) + 1;
 		int height = rand.nextInt(maxSize.height - y) + 1;
 	
-		if (rand.nextBoolean())
+		if (rand.nextBoolean()) {
 			graphics.fillOval(x, y, width, height);
+		}
 
 		graphics.drawOval(x, y, width, height);
 	}
