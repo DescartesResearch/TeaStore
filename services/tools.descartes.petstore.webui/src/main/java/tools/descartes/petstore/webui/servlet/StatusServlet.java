@@ -1,6 +1,8 @@
 package tools.descartes.petstore.webui.servlet;
 
 import java.io.IOException;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -73,12 +75,16 @@ public class StatusServlet extends AbstractUIServlet {
 	}
 	
 	private boolean isImageFinished() {
-		String finished = ServiceLoadBalancer.loadBalanceRESTOperation(
+		List<String> finishedMessages = ServiceLoadBalancer.multicastRESTOperation(
 				Service.IMAGE, "image", String.class,
 				client -> client.getEndpointTarget().path("finished").request(MediaType.APPLICATION_JSON)
 				.get().readEntity(String.class));
-		if (finished != null) {
-			return Boolean.parseBoolean(finished);
+		if (finishedMessages != null && !finishedMessages.isEmpty()) {
+			boolean finished = true;
+			for (String finishedMessage : finishedMessages) {
+				finished = finished && Boolean.parseBoolean(finishedMessage);
+			}
+			return finished;
 		}
 		return false;
 	}
