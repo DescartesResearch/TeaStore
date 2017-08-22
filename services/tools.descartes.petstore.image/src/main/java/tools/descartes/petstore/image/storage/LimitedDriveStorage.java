@@ -16,6 +16,9 @@ package tools.descartes.petstore.image.storage;
 import java.nio.file.Path;
 import java.util.function.Predicate;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import tools.descartes.petstore.image.ImageDB;
 import tools.descartes.petstore.image.StoreImage;
 
@@ -26,6 +29,7 @@ public class LimitedDriveStorage extends DriveStorage {
 	private ImageDB imgDB;
 	private int nrOfImagesOnDrive;
 	private int maxImagesOnDrive;
+	private Logger log = LoggerFactory.getLogger(LimitedDriveStorage.class);
 	
 	public LimitedDriveStorage(Path workingDir, ImageDB imgDB, Predicate<StoreImage> storageRule) {
 		this(workingDir, imgDB, storageRule, STD_MAX_IMAGES_ON_DRIVE);
@@ -33,8 +37,10 @@ public class LimitedDriveStorage extends DriveStorage {
 	
 	public LimitedDriveStorage(Path workingDir, ImageDB imgDB, Predicate<StoreImage> storageRule, int maxImagesOnDrive) {
 		super(workingDir, imgDB, storageRule);
-		if (maxImagesOnDrive < 0)
+		if (maxImagesOnDrive < 0) {
+			log.error("Maximum number of images on drive is negative.");
 			throw new IllegalArgumentException("Maximum number of images on drive is negative.");
+		}
 		
 		this.maxImagesOnDrive = maxImagesOnDrive;
 	}
@@ -47,16 +53,18 @@ public class LimitedDriveStorage extends DriveStorage {
 	@Override
 	public StoreImage loadData(long id) {
 		Path imgFile = workingDir.resolve(Long.toString(id % maxImagesOnDrive));
-		if (!imgFile.toFile().exists())
+		if (!imgFile.toFile().exists()) {
 			return null;
+		}
 		
 		return loadFromDisk(imgFile, id);
 	}
 	
 	@Override
 	public boolean saveData(StoreImage image) {
-		if (nrOfImagesOnDrive >= maxImagesOnDrive)
+		if (nrOfImagesOnDrive >= maxImagesOnDrive) {
 			return true;
+		}
 		nrOfImagesOnDrive++;
 		return super.saveData(image);
 	}

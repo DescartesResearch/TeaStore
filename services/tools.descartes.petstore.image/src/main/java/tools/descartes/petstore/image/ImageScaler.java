@@ -38,11 +38,12 @@ public class ImageScaler {
 	}
 
 	/**
-	 * 
-	 * @param image
-	 * @param width
-	 * @param height
-	 * @return
+	 * Scales a given image by rendering the supplied image with the given width and height into a new image and 
+	 * returning the new image.
+	 * @param image Image to scale to the given width and height
+	 * @param width Width to scale image to
+	 * @param height Height to scale image to
+	 * @return New image scaled to the given width and height
 	 */
 	public static BufferedImage scale(BufferedImage image, int width, int height) {
 		BufferedImage scaledImg = new BufferedImage(width, height, BufferedImage.TRANSLUCENT);

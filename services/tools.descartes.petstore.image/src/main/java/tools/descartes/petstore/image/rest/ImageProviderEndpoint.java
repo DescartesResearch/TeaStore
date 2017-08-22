@@ -34,19 +34,32 @@ public class ImageProviderEndpoint {
 	@POST
 	@Path("getProductImages")
 	public Response getProductImages(Map<Long, ImageSize> images) {
-		return Response.ok().entity(ImageProvider.getInstance().getProductImages(images)).build();
+		return Response.ok().entity(ImageProvider.IP.getProductImages(images)).build();
 	}
 	
 	@POST
 	@Path("getWebImages")
 	public Response getWebUIImages(Map<String, ImageSize> images) {
-		return Response.ok().entity(ImageProvider.getInstance().getWebUIImages(images)).build();
+		return Response.ok().entity(ImageProvider.IP.getWebUIImages(images)).build();
 	}
 	
 	@GET
 	@Path("regenerateImages")
 	public Response regenerateImages() {
-		SetupController.getInstance().reconfiguration();
+		SetupController.SETUP.reconfiguration();
+		return Response.ok().build();
+	}
+	
+	@GET
+	@Path("finished")
+	public Response isFinished() {
+		return Response.ok().entity(SetupController.SETUP.isFinished()).build();
+	}
+	
+	@GET
+	@Path("state")
+	public Response getState() {
+		// TODO: Implement
 		return Response.ok().build();
 	}
 }

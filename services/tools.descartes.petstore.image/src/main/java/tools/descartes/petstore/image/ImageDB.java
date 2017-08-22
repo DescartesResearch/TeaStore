@@ -14,10 +14,11 @@
 package tools.descartes.petstore.image;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import tools.descartes.petstore.entities.ImageSize;
 
@@ -33,6 +34,7 @@ public class ImageDB {
 	private HashMap<Long, Map<Long, ImageSize>> products = new HashMap<>();
 	private HashMap<String, Map<Long, ImageSize>> webui = new HashMap<>();
 	private HashMap<Long, ImageSize> sizes = new HashMap<>();
+	private Logger log = LoggerFactory.getLogger(ImageDB.class);
 	
 	/**
 	 * Standard constructor creating a new and empty image database.
@@ -194,7 +196,8 @@ public class ImageDB {
 	
 	private <K> void map(K key, long imageID, ImageSize imageSize, HashMap<K, Map<Long, ImageSize>> db) {
 		if (imageSize == null) {
-			throw new NullPointerException("Image size is null.");
+			log.error("Supplied image size is null.");
+			throw new NullPointerException("Supplied image size is null.");
 		}
 		
 		Map<Long, ImageSize> images = new HashMap<>();
@@ -206,46 +209,5 @@ public class ImageDB {
 		db.put(key, images);
 		sizes.put(imageID, imageSize);
 	}
-	
-//	public void removeWebImages() {
-//		removeImagesFromSizeMap(webui);
-//		webui = new HashMap<>();
-//	}
-//	
-//	public void removeProductImages() {
-//		removeImagesFromSizeMap(products);
-//		products = new HashMap<>();
-//	}
-//	
-//	private <K> void removeImagesFromSizeMap(Map<K, Map<Long, ImageSize>> db) {
-//		db.entrySet().forEach(entry -> entry.getValue().entrySet().forEach(size -> sizes.remove(size.getKey())));
-//	}
-	
-//	public List<Long> getAllWebImageIDs() {
-//		return getAllImageIDs(webui, null);
-//	}
-//	
-//	public List<Long> getAllWebImageIDs(ImageSize imageSize) {
-//		return getAllImageIDs(webui, imageSize);
-//	}
-//	
-//	public List<Long> getAllProductImageIDs() {
-//		return getAllImageIDs(products, null);
-//	}
-//	
-//	public List<Long> getAllProductImageIDs(ImageSize imageSize) {
-//		return getAllImageIDs(products, imageSize);
-//	}
-//	
-//	private <K> List<Long> getAllImageIDs(Map<K, Map<Long, ImageSize>> db, ImageSize imageSize) {
-//		return db.entrySet().stream()
-//				.map(entry -> entry.getValue().entrySet().stream()
-//						.filter(size -> imageSize == null || size.getValue().equals(imageSize))
-//						.map(size -> size.getKey())
-//						.findFirst()
-//						.orElse(null))
-//				.filter(entry -> entry != null)
-//				.collect(Collectors.toList());
-//	}
 
 }

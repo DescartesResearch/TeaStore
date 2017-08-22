@@ -15,17 +15,14 @@ package tools.descartes.petstore.image.setup;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-public final class ImageIDFactory {
+public enum ImageIDFactory {
 
-	private static ImageIDFactory instance = new ImageIDFactory();
+	ID;
+	
 	private AtomicLong nextID = new AtomicLong(1);
 	
 	private ImageIDFactory() {
 
-	}
-	
-	public static ImageIDFactory getInstance() {
-		return instance;
 	}
 	
 	public long getNextImageID() {

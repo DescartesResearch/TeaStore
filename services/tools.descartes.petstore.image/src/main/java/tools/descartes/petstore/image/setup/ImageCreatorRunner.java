@@ -25,6 +25,9 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import tools.descartes.petstore.entities.ImageSize;
 import tools.descartes.petstore.image.ImageDB;
 import tools.descartes.petstore.image.StoreImage;
@@ -45,6 +48,7 @@ public class ImageCreatorRunner implements Runnable {
 	private ImageSize imgSize;
 	private boolean isPaused = false;
 	private boolean stopped = false;
+	private Logger log = LoggerFactory.getLogger(ImageCreatorRunner.class);
 	
 	public ImageCreatorRunner(List<Long> productIDs, Path workingDir) {
 		this(productIDs, workingDir, ImageCreator.STD_NR_OF_SHAPES_PER_IMAGE);
@@ -70,29 +74,39 @@ public class ImageCreatorRunner implements Runnable {
 	
 	public ImageCreatorRunner(List<Long> productIDs, Path workingDir, ImageDB preInitDB, int nrOfShapesPerImage, 
 			long creatorSeed, ImageSize imageSize, int nrOfImagesToGenerate) {
-		if (productIDs == null)
+		if (productIDs == null) {
+			log.error("List of product IDs is null.");
 			throw new NullPointerException("List of product IDs is null.");
-		if (workingDir == null)
+		}
+		if (workingDir == null) {
+			log.error("Image storage directory is null.");
 			throw new NullPointerException("Image storage directory is null.");
-		if (imageSize == null)
+		}
+		if (imageSize == null) {
+			log.error("Image size is null.");
 			throw new NullPointerException("Image size is null.");
-		if (nrOfImagesToGenerate < 1)
-			throw new IllegalArgumentException("Image creation cannot be limited to a value below one.");
+		}
+		
+		if (nrOfImagesToGenerate < 0) {
+			log.info("Image creation cannot be limited to a value below 0. Is now set to 0.");
+			this.nrOfImagesToGenerate = 0;
+		} else {
+			this.nrOfImagesToGenerate = nrOfImagesToGenerate;
+		}
+		if (preInitDB != null) {
+			imgDB = preInitDB;
+		}
 		
 		this.productIDs = new ArrayList<>(productIDs);
 		this.workingDir = workingDir;
 		this.imgCreator = new ImageCreator(nrOfShapesPerImage, creatorSeed);
 		this.imgSize = imageSize;
-		this.nrOfImagesToGenerate = nrOfImagesToGenerate;
-		if (preInitDB != null)
-			imgDB = preInitDB;
 	}
 	
 	@Override
 	public void run() {
 		isRunning = true;
 		timeBeforeGeneration = System.currentTimeMillis();
-		ImageIDFactory idFactory = ImageIDFactory.getInstance();
 		
 		for (long product : productIDs) {
 			if (stopped) {
@@ -109,19 +123,20 @@ public class ImageCreatorRunner implements Runnable {
 						isRunning = false;
 						return;
 					}
-				} catch (InterruptedException e) {
-					
+				} catch (InterruptedException interrupted) {
+					log.info("Thread interrupted during pause.", interrupted);
 				}
 			}
 			
-			long imgID = idFactory.getNextImageID();
+			long imgID = ImageIDFactory.ID.getNextImageID();
 			
 			// All products must be added to the database
 			imgDB.setImageMapping(product, imgID, imgSize);
 
 			// Do not create more images if the maximum number is reached
-			if (imagesCreated >= nrOfImagesToGenerate)
+			if (imagesCreated >= nrOfImagesToGenerate) {
 				continue;
+			}
 			
 			// Resolve path and create a new image
 			Path imgFile = workingDir.resolve(String.valueOf(imgID));
@@ -134,11 +149,8 @@ public class ImageCreatorRunner implements Runnable {
 				Files.write(imgFile, Base64.getEncoder().encode(stream.toByteArray()), 
 						StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
 			} catch (IOException ioException) {
-				imagesCreated++;
-				timeAfterGeneration = System.currentTimeMillis();
-				isRunning = false;
-				
-				return;
+				log.warn("An IOException occured while writing image with ID " + String.valueOf(imgID) + " to file \""
+						+ imgFile.toAbsolutePath() + "\".", ioException);
 			}
 			
 			imagesCreated++;

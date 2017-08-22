@@ -31,6 +31,9 @@ import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import javax.ws.rs.core.Response;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import tools.descartes.petstore.entities.ImageSize;
 import tools.descartes.petstore.entities.Product;
 import tools.descartes.petstore.image.ImageDB;
@@ -53,16 +56,19 @@ import tools.descartes.petstore.registryclient.Service;
 import tools.descartes.petstore.registryclient.loadbalancers.ServiceLoadBalancer;
 import tools.descartes.petstore.registryclient.rest.LoadBalancedCRUDOperations;
 
-public class SetupController {
-	
-	public final static Path STD_WORKING_DIR = Paths.get("images");
-	public final static int PERSISTENCE_CREATION_WAIT_TIME = 1000;
-	
-	private static SetupController instance = new SetupController();
+public enum SetupController {
+
+	SETUP;
+
+	private interface SetupControllerConstants {
+		public final static Path STD_WORKING_DIR = Paths.get("images");
+		public final static int PERSISTENCE_CREATION_WAIT_TIME = 1000;
+		public final static int PERSISTENCE_CREATION_TRIES = 100;
+	}
 	
 	private StorageRule storageRule = StorageRule.STD_STORAGE_RULE;
 	private CachingRule cachingRule = CachingRule.STD_CACHING_RULE;
-	private Path workingDir = STD_WORKING_DIR;
+	private Path workingDir = SetupControllerConstants.STD_WORKING_DIR;
 	private long cacheSize = IDataCache.STD_MAX_CACHE_SIZE;
 	private StorageMode storageMode = StorageMode.STD_STORAGE_MODE;
 	private CachingMode cachingMode = CachingMode.STD_CACHING_MODE;
@@ -72,9 +78,11 @@ public class SetupController {
 	private List<StoreImage> preCacheImg = new ArrayList<>();
 	private ImageCreatorRunner imgCreatorRunner;
 	private Thread imgCreatorThread;
+	private IDataStorage<StoreImage> storage = null;
+	private Logger log = LoggerFactory.getLogger(SetupController.class);
 	
 	private SetupController() {
-		createWorkingDir(workingDir);
+		
 	}
 	
 	public void setWorkingDir(Path path) { 
@@ -82,30 +90,35 @@ public class SetupController {
 			workingDir = path;
 		}
 	}
-	
-	public static SetupController getInstance() {
-		return instance;
-	}
 
 	private List<Product> fetchProducts() {
 		// We have to wait for the database that all entries are created before 
 		// generating images (which queries persistence)
-		while (true) {
+		boolean maxTriesReached = true;
+		for (int i = 0; i < SetupControllerConstants.PERSISTENCE_CREATION_TRIES; i++) {
 			Response result = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "generatedb", 
 					String.class, client -> client.getService().path(client.getApplicationURI())
 					.path(client.getEndpointURI()).path("finished").request().get());
+			
 			if (result == null ? false : Boolean.parseBoolean(result.readEntity(String.class))) {
+				maxTriesReached = false;
 				break;
 			}
+			
 			try {
-				Thread.sleep(PERSISTENCE_CREATION_WAIT_TIME);
-			} catch (InterruptedException e) {
-				
+				Thread.sleep(SetupControllerConstants.PERSISTENCE_CREATION_WAIT_TIME);
+			} catch (InterruptedException interrupted) {
+				log.info("Thread interrupted while waiting for persistence to be available.", interrupted);
 			}
 		}
-		// TODO: Make it a REST instead of CRUD operation
-		List<Product> products = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "products", 
-				Product.class, -1, -1);
+	
+		List<Product> products = null;
+		if (!maxTriesReached) {
+			// TODO: Make it a REST instead of CRUD operation
+			products = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "products", Product.class, -1, -1);
+		} else {
+			log.warn("Maximum tries to reach persistence service reached. No products fetched.");
+		}
 		return products == null ? new ArrayList<Product>() : products;
 	}
 	
@@ -114,45 +127,35 @@ public class SetupController {
 	}
 	
 	public void generateImages() {
-		List<Product> products = fetchProducts();
-		if (products == null) {
-			return;
-		}
-		
-		List<Long> productIDs = convertToIDs(products);
+		List<Long> productIDs = convertToIDs(fetchProducts());
 		generateImages(productIDs, productIDs.size());		
 	}
 
 	public void generateImages(int nrOfImagesToGenerate) {
-		List<Product> products = fetchProducts();
-		if (products == null) {
-			return;
-		}
-		
-		List<Long> productIDs = convertToIDs(products);
-		generateImages(productIDs, nrOfImagesToGenerate);
+		generateImages(convertToIDs(fetchProducts()), nrOfImagesToGenerate);
 	}
 	
 	public void generateImages(List<Long> productIDs, int nrOfImagesToGenerate) {
-		if (productIDs == null || nrOfImagesToGenerate <= 0) {
+		if (nrOfImagesToGenerate <= 0) {
 			return;
 		}
 
 		this.nrOfImagesToGenerate = nrOfImagesToGenerate;
 		
 		// Create images
-		imgCreatorRunner = new ImageCreatorRunner(productIDs, STD_WORKING_DIR, imgDB, 
+		imgCreatorRunner = new ImageCreatorRunner(productIDs, workingDir, imgDB, 
 				ImageCreator.STD_NR_OF_SHAPES_PER_IMAGE, ImageCreator.STD_SEED, ImageSize.STD_IMAGE_SIZE, 
 				nrOfImagesToGenerate);
 		imgCreatorThread = new Thread(imgCreatorRunner);
 		imgCreatorThread.start();
 	}
 	
-	private void createWorkingDir(Path directory) {
-		if (!directory.toFile().exists()) {
-			if (!directory.toFile().mkdir()) {
+	public void createWorkingDir() {
+		if (!workingDir.toFile().exists()) {
+			if (!workingDir.toFile().mkdir()) {
+				log.error("Standard working directory \"" + workingDir.toAbsolutePath() + "\" could not be created.");
 				throw new IllegalArgumentException("Standard working directory \"" 
-						+ directory.toAbsolutePath() + "\" could not be created.");
+						+ workingDir.toAbsolutePath() + "\" could not be created.");
 			}
 		}
 	}	
@@ -163,51 +166,61 @@ public class SetupController {
 	
 	public void detectPreExistingImages(ImageDB db) {
 		if (db == null) {
-			throw new NullPointerException("Image database is null.");
+			log.error("The supplied image database is null.");
+			throw new NullPointerException("The supplied image database is null.");
 		}
-		
-		createWorkingDir(workingDir);
-		
-		ImageIDFactory idFactory = ImageIDFactory.getInstance();
-		
+	
+		// TODO: Rework the code piece fetching the pre-existing images until the next comment
 		URL url = this.getClass().getResource("front.png");
 		Path dir = null;
+		String path = "";
 		try {
-			String path = URLDecoder.decode(url.getPath(), "UTF-8");
+			path = URLDecoder.decode(url.getPath(), "UTF-8");
 			if (path.contains(":")) {
 				path = path.substring(3);
 			}
 			dir = Paths.get(path).getParent();
 		} catch (UnsupportedEncodingException e) {
+			log.warn("The resource path \"" + path + "\" could not be decoded with UTF-8.");
 			return;
 		}
+		// End of rework
 
 		File currentDir = dir.toFile();
 
-		if (currentDir.isDirectory()) {
+		if (currentDir.exists() && currentDir.isDirectory()) {
 			for (File file : currentDir.listFiles()) {
 				if (file.isFile() && file.getName().endsWith(StoreImage.STORE_IMAGE_FORMAT)) {
-					long imageID = idFactory.getNextImageID();
+					long imageID = ImageIDFactory.ID.getNextImageID();
 					
+					BufferedImage buffImg = null;
 					// Copy files to correct file with the image id number
 					try {
-						BufferedImage buffImg = ImageIO.read(file);
+						buffImg = ImageIO.read(file);
 						if (buffImg == null) {
+							log.warn("The file \"" + file.toPath().toAbsolutePath() + "\" could not be read.");
 							continue;
 						}
+					} catch (IOException ioException) {
+						log.warn("An IOException occured while reading the file \"" + file.getAbsolutePath() 
+								+ "\" from disk. Message: \"" + ioException.getMessage());
+					}
 					
-						db.setImageMapping(file.getName().substring(0, 
-								file.getName().length() - StoreImage.STORE_IMAGE_FORMAT.length() - 1), 
-								imageID, ImageSize.FULL);
-						
-						StoreImage img = new StoreImage(imageID, buffImg, ImageSize.FULL);
-						preCacheImg.add(img);
+					db.setImageMapping(file.getName().substring(0, 
+							file.getName().length() - StoreImage.STORE_IMAGE_FORMAT.length() - 1), 
+							imageID, ImageSize.FULL);	
+					StoreImage img = new StoreImage(imageID, buffImg, ImageSize.FULL);
+					preCacheImg.add(img);
+					
+					try {
 						Files.write(workingDir.resolve(String.valueOf(imageID)), img.getByteArray(), 
 								StandardOpenOption.CREATE, 
 								StandardOpenOption.WRITE, 
 								StandardOpenOption.TRUNCATE_EXISTING);
-					} catch (IOException e) {
-						
+					} catch (IOException ioException) {
+						log.warn("An IOException occured while writing the image with ID " + String.valueOf(imageID)
+								+ " to the file \"" + workingDir.resolve(String.valueOf(imageID)).toAbsolutePath()
+								+ "\". Message: \"" + ioException.getMessage());
 					}
 					// Increment to have correct number of images for the limited drive storage
 					nrOfImagesPreExisting++; 
@@ -236,26 +249,46 @@ public class SetupController {
 		this.storageRule = StorageRule.getStorageRuleFromString(storageRule);
 	}
 	
-	public void deleteAllCreatedData() {
+	public void deleteImages() {
 		deleteUnusedImages(new ArrayList<>());
 	}
 	
-	public void finalizeSetup() {
+	public void deleteUnusedImages(List<Long> imagesToKeep) {
+		File currentDir = workingDir.toFile();
+		
+		if (currentDir.exists() && currentDir.isDirectory()) {
+			for (File file : currentDir.listFiles()) {
+				if (file.isFile() && !imagesToKeep.contains(Long.parseLong(file.getName()))) {
+					file.delete();
+				}
+			}
+		}
+	}
+	
+	public void deleteWorkingDir() {
+		File currentDir = workingDir.toFile();
+		
+		if (currentDir.exists() && currentDir.isDirectory()) {
+			currentDir.delete();
+		}
+	}
+	
+	public void setupStorage() {
 		Predicate<StoreImage> storagePredicate = null;
 		switch (storageRule) {
 			case ALL: storagePredicate = new StoreAll<StoreImage>(); break;
 			case FULL_SIZE_IMG: storagePredicate = new StoreLargeImages(); break;
 			default: storagePredicate = new StoreAll<StoreImage>(); break;
 		}
-		
-		IDataStorage<StoreImage> storage = null;
+	
+		storage = null;
 		switch (storageMode) {
 			case DRIVE: storage = new DriveStorage(workingDir, imgDB, storagePredicate); break;
 			case DRIVE_LIMITED: storage = new LimitedDriveStorage(workingDir, imgDB, 
 					storagePredicate, nrOfImagesToGenerate + nrOfImagesPreExisting); break;
 			default: storage = new DriveStorage(workingDir, imgDB, storagePredicate); break;
 		}
-		
+
 		Predicate<StoreImage> cachePredicate = null;
 		switch (cachingRule) {
 			case ALL: cachePredicate = new CacheAll<StoreImage>(); break;
@@ -273,38 +306,56 @@ public class SetupController {
 			case NONE: break;
 			default: break;
 		}
-
-		ImageProvider provider = ImageProvider.getInstance();
-		provider.setImageDB(imgDB);
-		provider.setImageCreatorRunner(imgCreatorRunner);
-		if (cache == null) {
-			provider.setStorage(storage);
-		} else {
-			for (StoreImage i : preCacheImg)
-				cache.cacheData(i);
-			provider.setStorage(cache);
+		
+		if (cache != null) {
+			for (StoreImage img : preCacheImg) {
+				cache.cacheData(img);
+			}
+			storage = cache;
 		}
+	}
+	
+	public void configureImageProvider() {
+		ImageProvider.IP.setImageDB(imgDB);
+		ImageProvider.IP.setImageCreatorRunner(imgCreatorRunner);
+		ImageProvider.IP.setStorage(storage);
 	}
 	
 	public Path getWorkingDir() {
 		return workingDir;
 	}
 	
-	private void deleteUnusedImages() {
-		deleteUnusedImages(new ArrayList<>());
+	public boolean isFinished() {
+		if (storage == null) {
+			return false;
+		}
+		if (imgCreatorRunner.isRunning()) {
+			return false;
+		}
+		if (imgCreatorRunner.getNrOfImagesCreated() != nrOfImagesToGenerate) {
+			return false;
+		}
+		return true;
+	}
+
+	/*
+	 * Convenience methods
+	 */
+
+	public void teardown() {
+		deleteImages();
+		deleteWorkingDir();
 	}
 	
-	private void deleteUnusedImages(List<Long> imagesToKeep) {
-		File currentDir = workingDir.toFile();
-		
-		if (currentDir.isDirectory()) {
-			for (File file : currentDir.listFiles()) {
-				if (file.isFile() && !imagesToKeep.contains(Long.parseLong(file.getName()))) {
-					file.delete();
-				}
-			}
-			currentDir.delete();
-		}
+	public void startup() {
+		// Delete all images in case the image provider was not shutdown gracefully last time, leaving images in disk
+		deleteImages();
+		deleteWorkingDir();
+		createWorkingDir();
+		detectPreExistingImages();
+		generateImages();
+		setupStorage();
+		configureImageProvider();
 	}
 	
 	public void reconfiguration() {
@@ -317,16 +368,19 @@ public class SetupController {
 				while (imgCreatorRunner.isRunning()) {
 					try {
 						Thread.sleep(imgCreatorRunner.getAvgCreationTime());
-					} catch (InterruptedException e) {
-
+					} catch (InterruptedException interrupted) {
+						log.info("Thread to regenerate images interrupted while waiting for image creator "
+								+ "thread to stop.", interrupted);
 					}
 				}
 
 				imgDB = new ImageDB();
-				deleteUnusedImages();
+				
+				deleteImages();
 				detectPreExistingImages();
 				generateImages();
-				finalizeSetup();	
+				setupStorage();
+				configureImageProvider();
 			}
 		};
 		x.start();
