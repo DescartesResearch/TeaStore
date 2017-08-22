@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
  * @author Simon
  */
 public class RegistryHeartbeatDaemon implements Runnable {
-	private static Logger log = LoggerFactory.getLogger(RegistryHeartbeatDaemon.class);
+	private static final Logger LOG = LoggerFactory.getLogger(RegistryHeartbeatDaemon.class);
 
 	@Override
 	public void run() {
@@ -34,7 +34,7 @@ public class RegistryHeartbeatDaemon implements Runnable {
 				String location = iter.next();
 				if (!Registry.getRegistryInstance().isAlive(entry.getKey(), location)) {
 					iter.remove();
-					log.warn("Removed " + entry.getValue() + "@" + location 
+					LOG.warn("Removed " + entry.getValue() + "@" + location 
 							+ " since it failed the heartbeat!");
 				}
 			}

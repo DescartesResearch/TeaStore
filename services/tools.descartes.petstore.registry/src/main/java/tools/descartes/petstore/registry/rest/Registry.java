@@ -32,7 +32,7 @@ public final class Registry {
 	private static Registry registry = null;
 	private Map<String, List<String>> map = new ConcurrentHashMap<String, List<String>>();
 	private Map<String, HeartbeatInfo> heartbeatMap = new ConcurrentHashMap<String, HeartbeatInfo>();
-	private static Logger log = LoggerFactory.getLogger(Registry.class);
+	private static final Logger LOG = LoggerFactory.getLogger(Registry.class);
 	
 	private Registry() { } 
 	
@@ -130,7 +130,7 @@ public final class Registry {
 		if (locations.contains(location)) {
 			return false;
 		}
-		log.info("Registered " + name + "@" + location);
+		LOG.info("Registered " + name + "@" + location);
 		locations.add(location);
 		return true;
 	}

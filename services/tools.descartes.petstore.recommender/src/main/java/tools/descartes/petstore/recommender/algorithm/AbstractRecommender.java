@@ -28,7 +28,6 @@ import tools.descartes.petstore.entities.Order;
 import tools.descartes.petstore.entities.OrderItem;
 import tools.descartes.petstore.entities.Product;
 import tools.descartes.petstore.recommender.IRecommender;
-import tools.descartes.petstore.registryclient.RegistryClient;
 
 /**
  * Abstract class for basic recommendation functionality.
@@ -45,7 +44,7 @@ public abstract class AbstractRecommender implements IRecommender {
 	 * should return. Is NOT mandatory for any of the algorithms.
 	 */
 	public static final int MAX_NUMBER_OF_RECOMMENDATIONS = 10;
-	private static Logger log = LoggerFactory.getLogger(AbstractRecommender.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AbstractRecommender.class);
 
 	/**
 	 * This set maps a userId to a set, containing the corresponding OrderItemSets,
@@ -79,7 +78,7 @@ public abstract class AbstractRecommender implements IRecommender {
 			userItemSets.get(order.getUserId()).add(itemSets.get(order));
 		}
 		executePreprocessing();
-		log.info("Training recommender finished. Training took: " + (System.currentTimeMillis() - tic) + "ms.");
+		LOG.info("Training recommender finished. Training took: " + (System.currentTimeMillis() - tic) + "ms.");
 		trainingFinished = true;
 	}
 

@@ -23,6 +23,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.netflix.client.DefaultLoadBalancerRetryHandler;
 import com.netflix.client.RetryHandler;
 import com.netflix.loadbalancer.BaseLoadBalancer;
@@ -42,6 +45,8 @@ import tools.descartes.petstore.rest.RESTClient;
  */
 public final class ServiceLoadBalancer {
 
+	private static final Logger LOG = LoggerFactory.getLogger(ServiceLoadBalancer.class);
+	
 	//Loadbalancers for each service name
 	private static ConcurrentHashMap<String, ServiceLoadBalancer> serviceMap = new ConcurrentHashMap<>();
 	
@@ -163,12 +168,12 @@ public final class ServiceLoadBalancer {
     	R r = null;
     	loadBalancerModificationLock.readLock().lock();
     	if (loadBalancer == null) {
-    		System.err.println("Load Balancer was not initialized for service: " + targetService.getServiceName());
-    		System.err.println("\tIs Registry up?");
+    		LOG.warn("Load Balancer was not initialized for service: " + targetService.getServiceName()
+    			+ ". Is Registry up?");
     		updateLoadBalancersForServiceUsingRegistry(targetService);
     	}
     	if (loadBalancer == null || loadBalancer.getAllServers().isEmpty()) {
-    		System.err.println("No Server registered for Service: " + targetService.getServiceName());
+    		LOG.warn("No Server registered for Service: " + targetService.getServiceName());
     	} else {
     		r = LoadBalancerCommand.<R>builder()
                     .withLoadBalancer(loadBalancer)
@@ -222,7 +227,7 @@ public final class ServiceLoadBalancer {
     }
     
     //exception can be null
-    private <T,R> List<R> multicastRESTOperation(String endpointURI, Class<T> entityClass,
+    private <T, R> List<R> multicastRESTOperation(String endpointURI, Class<T> entityClass,
     		Function<RESTClient<T>, R> operation, Server exception) {
     	loadBalancerModificationLock.readLock().lock();
     	List<Server> servers = new ArrayList<>(loadBalancer.getAllServers());
