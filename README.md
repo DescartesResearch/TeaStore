@@ -1,8 +1,7 @@
 # Descartes Pet Supply Store Initial Working Git #
 
-Working Git for Descartes Pet Store (working name). This git will be moved to
-the institute gitlab when Norbert returns from vacation. We will also rename it
-to a cool new name, once we have one.
+Working Git for Descartes Pet Store (working name). We will rename it
+to a new name, once we have one.
 
 ## 1. Directory Structure ##
 
@@ -127,7 +126,7 @@ Install Checkstyle into your Eclipse. You can find it here (Browser Link):
 http://eclipse-cs.sourceforge.net/
 
 The Pet Supply Store uses the well-established and SPEC RG approved
-LIMBO-Checkstyle. It is located in the root directory of the Pett Suply Store
+LIMBO-Checkstyle. It is located in the root directory of the Pet Suply Store
 Git repository. To add it to your Eclipse:
 
 * Window -> Preferences -> Checkstyle
