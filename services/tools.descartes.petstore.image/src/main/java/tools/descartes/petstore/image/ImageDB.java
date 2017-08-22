@@ -53,43 +53,49 @@ public class ImageDB {
 		this.sizes = new HashMap<>(copy.sizes);
 	}
 	
-	/**
-	 * Returns the mapping of image IDs to their size for a given image key (product ID or name).
-	 * @param imageKey The image key identifying a range of sizes for a image content
-	 * @return Mapping between image IDs and the corresponding size
-	 */
-	public Map<Long, ImageSize> getAllSizes(ImageDBKey imageKey) {
-		if (imageKey.isProductKey()) {
-			return getAllSizes(imageKey.getProductID());
-		}
-		return getAllSizes(imageKey.getWebUIName());
-	}
+//	/**
+//	 * Returns the mapping of image IDs to their size for a given image key (product ID or name).
+//	 * @param imageKey The image key identifying a range of sizes for a image content
+//	 * @return Mapping between image IDs and the corresponding size
+//	 */
+//	public Map<Long, ImageSize> getAllSizes(ImageDBKey imageKey) {
+//		if (imageKey.isProductKey()) {
+//			return getAllSizes(imageKey.getProductID());
+//		}
+//		return getAllSizes(imageKey.getWebUIName());
+//	}
+//	
+//	/**
+//	 * Returns the mapping of image IDs to their size for a given product ID.
+//	 * @param productID The product ID identifying a range of sizes for a image content
+//	 * @return Mapping between image IDs and the corresponding size
+//	 */
+//	public Map<Long, ImageSize> getAllSizes(long productID) {
+//		return products.getOrDefault(productID, new HashMap<>());
+//	}
+//	
+//	/**
+//	 * Returns the mapping of image IDs to their size for a given image name.
+//	 * @param name The image name identifying a range of sizes for a image content
+//	 * @return Mapping between image IDs and the corresponding size
+//	 */
+//	public Map<Long, ImageSize> getAllSizes(String name) {
+//		return webui.getOrDefault(name, new HashMap<>());
+//	}
 	
 	/**
-	 * Returns the mapping of image IDs to their size for a given product ID.
-	 * @param productID The product ID identifying a range of sizes for a image content
-	 * @return Mapping between image IDs and the corresponding size
-	 */
-	public Map<Long, ImageSize> getAllSizes(long productID) {
-		return products.getOrDefault(productID, new HashMap<>());
-	}
-	
-	/**
-	 * Returns the mapping of image IDs to their size for a given image name.
-	 * @param name The image name identifying a range of sizes for a image content
-	 * @return Mapping between image IDs and the corresponding size
-	 */
-	public Map<Long, ImageSize> getAllSizes(String name) {
-		return webui.getOrDefault(name, new HashMap<>());
-	}
-	
-	/**
-	 * Checks whether a given image key (product ID or name) is available in the given size.
+	 * Checks whether a given image key (product ID or name) is available in the given size. If the given image key 
+	 * is null, a {@link java.lang.NullPointerException} will be thrown.
 	 * @param imageKey Image key to check for
 	 * @param imageSize Image size to check for
 	 * @return True if the image was found in the correct size, otherwise false
 	 */
 	public boolean hasImageID(ImageDBKey imageKey, ImageSize imageSize) {
+		if (imageKey == null) {
+			log.error("The supplied image key is null.");
+			throw new NullPointerException("The supplied image key is null.");
+		}
+		
 		if (imageKey.isProductKey()) {
 			return hasImageID(imageKey.getProductID(), imageSize);
 		}
@@ -118,12 +124,18 @@ public class ImageDB {
 	
 	/**
 	 * Finds and returns the image ID for the given image key (product ID or name) and size. If the image key 
-	 * cannot be found or is not available in the given size, 0 will be returned.
+	 * cannot be found or is not available in the given size, 0 will be returned. If the image key 
+	 * is null, a {@link java.lang.NullPointerException} will be thrown.
 	 * @param imageKey Image key to find
 	 * @param imageSize Image size to find
 	 * @return The image ID if the image with the size was found, otherwise 0
 	 */
 	public long getImageID(ImageDBKey imageKey, ImageSize imageSize) {
+		if (imageKey == null) {
+			log.error("The supplied image key is null.");
+			throw new NullPointerException("The supplied image key is null.");
+		}
+		
 		if (imageKey.isProductKey()) {
 			return getImageID(imageKey.getProductID(), imageSize);
 		}
@@ -143,7 +155,7 @@ public class ImageDB {
 	
 	/**
 	 * Finds and returns the image ID for the given image name and size. If the name
-	 * cannot be found or is not available in the given size, 0 will be returned.
+	 * cannot be found or is not available in the given size, 0 will be returned. 
 	 * @param name Image name to find
 	 * @param imageSize Image size to find
 	 * @return The image ID if the image with the size was found, otherwise 0
@@ -157,14 +169,16 @@ public class ImageDB {
 		Optional<Map.Entry<Long, ImageSize>> img = db.getOrDefault(key, new HashMap<>()).entrySet().stream()
 				.filter(t -> t.getValue().equals(imageSize))
 				.findFirst();
+		
 		if (img.isPresent()) {
 			return img.get().getKey();
 		}
+		
 		return 0;
 	}
 	
 	/**
-	 * Returns the image size for a given image ID.
+	 * Returns the image size for a given image ID or null if it could not be found.
 	 * @param imageID The image ID to get the image size for
 	 * @return The image size or null if the ID could not be found
 	 */
