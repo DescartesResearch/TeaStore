@@ -19,20 +19,60 @@ import java.awt.image.BufferedImage;
 
 import tools.descartes.petstore.entities.ImageSize;
 
-public class ImageScaler {
-	
+/**
+ * Utility class with static methods to scale a {@link java.awt.image.BufferedImage} to a given size or by a 
+ * given ratio, returning a copy of the {@link java.awt.image.BufferedImage} with the scaled size and identical
+ * content. 
+ * @author Norbert Schmitt
+ *
+ */
+public final class ImageScaler {
+
+	/**
+	 * Scales a given image by rendering the supplied image to the size, determined by the given 
+	 * {@link tools.descartes.petstore.entities.ImageSize}.
+	 * @param image Image to scale to the given size
+	 * @param size Size to scale image to
+	 * @return New image scaled to the given {@link tools.descartes.petstore.entities.ImageSize}
+	 */
 	public static BufferedImage scale(BufferedImage image, ImageSize size) {
 		return scale(image, size.getWidth(), size.getHeight());
 	}
-	
+
+	/**
+	 * Scales a given image by rendering the supplied image by the given scaling factor. Width and height are scaled 
+	 * by the same factor. Ratios above one will result in larger images and ratios below one will result in smaller
+	 * images. The new image size is calculated by multiplying the ratio with the old image size. Numbers behind the 
+	 * decimal point will dropped (integer arithmetics).
+	 * @param image Image to scale by the given ratio
+	 * @param scalingFactor Ratio to scale image
+	 * @return New image scaled by the given ratio
+	 */
 	public static BufferedImage scale(BufferedImage image, double scalingFactor) {
 		return scale(image, scalingFactor, scalingFactor);
 	}
 	
+	/**
+	 * Scales a given image by rendering the supplied image by the two given scaling factors for width and height. 
+	 * Width and height are scaled independently. Ratios above one will result in larger images and ratios below one 
+	 * will result in smaller images. The new image size is calculated by multiplying the ratio with the old image 
+	 * size. Numbers behind the decimal point will dropped (integer arithmetics).
+	 * @param image Image to scale by the two given ratio
+	 * @param widthScaling Ratio to scale image width
+	 * @param heightScaling Ratio to scale image height
+	 * @return New image scaled by the given ratios
+	 */
 	public static BufferedImage scale(BufferedImage image, double widthScaling, double heightScaling) {
 		return scale(image, (int)(image.getWidth() * widthScaling), (int)(image.getHeight() * heightScaling));
 	}
 	
+	/**
+	 * Scales a given image by rendering the supplied image to the given size. The method will return a new image 
+	 * with the given size as width and height.
+	 * @param image Image to scale to the given size
+	 * @param size Size to scale image to in pixel
+	 * @return New image scaled to the given size
+	 */
 	public static BufferedImage scale(BufferedImage image, int size) {
 		return scale(image, size, size);
 	}
