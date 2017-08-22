@@ -103,7 +103,7 @@ public final class CacheManager {
 	
 	private String clearRemoteCacheREST(RESTClient<String> client, Class<?> entityClass) {
 		WebTarget target = client.getService().path(client.getApplicationURI())
-				.path(client.getEnpointURI());
+				.path(client.getEndpointURI());
 		if (entityClass != null) {
 			target = target.path("class").path(entityClass.getName());
 		} else {

@@ -32,7 +32,7 @@ public final class LoadBalancedStoreOperations {
 	public static List<Category> getCategories() {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"categories", Category.class, client -> client.getService().path(client.getApplicationURI())
-				.path(client.getEnpointURI()).request(MediaType.APPLICATION_JSON)
+				.path(client.getEndpointURI()).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
 		return r.readEntity(new GenericType<List<Category>>() { });
 	}
@@ -45,7 +45,7 @@ public final class LoadBalancedStoreOperations {
 	public static Category getCategory(long cid) {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"categories", Category.class, client -> client.getService().path(client.getApplicationURI())
-				.path(client.getEnpointURI()).path("" + cid).request(MediaType.APPLICATION_JSON)
+				.path(client.getEndpointURI()).path("" + cid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
 		return r.readEntity(Category.class);
 	}
@@ -58,21 +58,37 @@ public final class LoadBalancedStoreOperations {
 	public static Product getProduct(long pid) {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"products", Product.class, client -> client.getService().path(client.getApplicationURI())
-				.path(client.getEnpointURI()).path("" + pid).request(MediaType.APPLICATION_JSON)
+				.path(client.getEndpointURI()).path("" + pid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
 		return r.readEntity(Product.class);
+	}
+
+	/**
+	 * Gets ads.
+	 * @param blob SessionBlob
+	 * @param pid pid of currentProduct
+	 * @return product
+	 */
+	public static List<Product> getAdvertisements(SessionBlob blob) {
+		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
+				"products", Product.class, client -> client.getService().path(client.getApplicationURI())
+				.path(client.getEndpointURI()).path("ads")
+				.request(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.post(Entity.entity(blob.getOrderItems(), MediaType.APPLICATION_JSON), Response.class));
+		return r.readEntity(new GenericType<List<Product>>() { });
 	}
 	
 	/**
 	 * Gets ads.
 	 * @param blob SessionBlob
-	 * @param number number of ads
+	 * @param pid pid of currentProduct
 	 * @return product
 	 */
-	public static List<Product> getAdvertisements(SessionBlob blob, int number) {
+	public static List<Product> getAdvertisements(SessionBlob blob, long pid) {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"products", Product.class, client -> client.getService().path(client.getApplicationURI())
-				.path(client.getEnpointURI()).path("ads").queryParam("number", number)
+				.path(client.getEndpointURI()).path("ads").queryParam("pid", pid)
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob.getOrderItems(), MediaType.APPLICATION_JSON), Response.class));
@@ -87,7 +103,7 @@ public final class LoadBalancedStoreOperations {
 	public static int getNumberOfProducts(long cid) {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"products", List.class, client -> client.getService().path(client.getApplicationURI())
-				.path(client.getEnpointURI()).path("category").path("" + cid).path("totalNumber")
+				.path(client.getEndpointURI()).path("category").path("" + cid).path("totalNumber")
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
 		return r.readEntity(int.class);
@@ -103,7 +119,7 @@ public final class LoadBalancedStoreOperations {
 	public static List<Product> getProducts(long cid, int page, int articlesPerPage) {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"products", List.class, client -> client.getService().path(client.getApplicationURI())
-				.path(client.getEnpointURI()).path("category").path("" + cid).queryParam("page", page)
+				.path(client.getEndpointURI()).path("category").path("" + cid).queryParam("page", page)
 				.queryParam("articlesPerPage", articlesPerPage).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
 		return r.readEntity(new GenericType<List<Product>>() { });
@@ -126,7 +142,7 @@ public final class LoadBalancedStoreOperations {
 			String creditCardNumber) {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"useractions", Product.class, client -> client.getService().path(client.getApplicationURI())
-				.path(client.getEnpointURI()).path("placeorder")
+				.path(client.getEndpointURI()).path("placeorder")
 				.queryParam("addressName", addressName)
 				.queryParam("address1", address1)
 				.queryParam("address2", address2)
@@ -154,7 +170,7 @@ public final class LoadBalancedStoreOperations {
 	public static SessionBlob login(SessionBlob blob, String name, String password) {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"useractions", Product.class, client -> client.getService().path(client.getApplicationURI())
-				.path(client.getEnpointURI()).path("login").queryParam("name", name)
+				.path(client.getEndpointURI()).path("login").queryParam("name", name)
 				.queryParam("password", password).request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
 		return r.readEntity(SessionBlob.class);
@@ -168,7 +184,7 @@ public final class LoadBalancedStoreOperations {
 	public static SessionBlob logout(SessionBlob blob) {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"useractions", Product.class, client -> client.getService().path(client.getApplicationURI())
-				.path(client.getEnpointURI()).path("logout").request(MediaType.APPLICATION_JSON)
+				.path(client.getEndpointURI()).path("logout").request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
 		return r.readEntity(SessionBlob.class);
@@ -182,7 +198,7 @@ public final class LoadBalancedStoreOperations {
 	public static boolean isLoggedIn(SessionBlob blob) {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"useractions", Product.class, client -> client.getService().path(client.getApplicationURI())
-				.path(client.getEnpointURI()).path("isloggedin").request(MediaType.APPLICATION_JSON)
+				.path(client.getEndpointURI()).path("isloggedin").request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
 		SessionBlob validatedBlob = r.readEntity(SessionBlob.class);
@@ -198,7 +214,7 @@ public final class LoadBalancedStoreOperations {
 	public static SessionBlob addProductToCart(SessionBlob blob, long pid) {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"cart", Product.class, client -> client.getService().path(client.getApplicationURI())
-				.path(client.getEnpointURI()).path("add").path("" + pid).request(MediaType.APPLICATION_JSON)
+				.path(client.getEndpointURI()).path("add").path("" + pid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
 		if (r.getStatus() == 200)  {
@@ -217,7 +233,7 @@ public final class LoadBalancedStoreOperations {
 	public static SessionBlob removeProductFromCart(SessionBlob blob, long pid) {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"cart", Product.class, client -> client.getService().path(client.getApplicationURI())
-				.path(client.getEnpointURI()).path("remove").path("" + pid).request(MediaType.APPLICATION_JSON)
+				.path(client.getEndpointURI()).path("remove").path("" + pid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
 		if (r.getStatus() == 200) {
@@ -240,7 +256,7 @@ public final class LoadBalancedStoreOperations {
 		}
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"cart", Product.class, client -> client.getService().path(client.getApplicationURI())
-				.path(client.getEnpointURI()).path("" + pid).queryParam("quantity", quantity)
+				.path(client.getEndpointURI()).path("" + pid).queryParam("quantity", quantity)
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.put(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
 		if (r.getStatus() == 200) {
@@ -258,7 +274,7 @@ public final class LoadBalancedStoreOperations {
 	public static User getUser(long uid) {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"users", User.class, client -> client.getService().path(client.getApplicationURI())
-				.path(client.getEnpointURI()).path("" + uid)
+				.path(client.getEndpointURI()).path("" + uid)
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.get());
 		return r.readEntity(User.class);
@@ -272,7 +288,7 @@ public final class LoadBalancedStoreOperations {
 	public static List<Order> getOrdersForUser(long uid) {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"users", User.class, client -> client.getService().path(client.getApplicationURI())
-				.path(client.getEnpointURI()).path("" + uid).path("orders")
+				.path(client.getEndpointURI()).path("" + uid).path("orders")
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.get());
 		return r.readEntity(new GenericType<List<Order>>() { });

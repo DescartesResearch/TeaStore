@@ -14,9 +14,14 @@
 package tools.descartes.petstore.recommender.rest;
 
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import tools.descartes.petstore.entities.Order;
@@ -24,6 +29,7 @@ import tools.descartes.petstore.entities.OrderItem;
 import tools.descartes.petstore.recommender.IRecommender;
 import tools.descartes.petstore.recommender.RecommenderSelector;
 import tools.descartes.petstore.registryclient.Service;
+import tools.descartes.petstore.registryclient.loadbalancers.ServiceLoadBalancer;
 import tools.descartes.petstore.registryclient.rest.LoadBalancedCRUDOperations;
 
 /**
@@ -33,6 +39,7 @@ import tools.descartes.petstore.registryclient.rest.LoadBalancedCRUDOperations;
  *
  */
 @Path("train")
+@Produces("text/plain")
 public class TrainEndpoint {
 
 	/**
@@ -66,6 +73,47 @@ public class TrainEndpoint {
 				.entity("The (re)trainprocess failed.").build();
 	}
 
+	/**
+	 * Triggers the training of the recommendation algorithm. It retrieves all data
+	 * {@link OrderItem}s and all {@link Order}s from the database entity and is
+	 * therefore both very network and computation time intensive. <br>
+	 * This method must be called before the {@link RecommendEndpoint} is usable, as
+	 * the {@link IRecommender} will throw an
+	 * {@link UnsupportedOperationException}.<br/>
+	 * Waits for the Database to be ready before training but returns immediately.
+	 * Calling this method twice will trigger a retraining.
+	 * 
+	 * @return Returns a {@link Response} with
+	 *         {@link javax.servlet.http.HttpServletResponse#SC_OK}.
+	 */
+	@GET
+	@Path("async")
+	public Response trainAsync() {
+		ScheduledExecutorService asyncTrainExecutor = Executors.newSingleThreadScheduledExecutor();
+		asyncTrainExecutor.scheduleWithFixedDelay(() -> {
+			String finished = ServiceLoadBalancer.loadBalanceRESTOperation(
+					Service.PERSISTENCE, "generatedb", String.class,
+					client -> client.getEndpointTarget().path("finished").request(MediaType.TEXT_PLAIN)
+					.get().readEntity(String.class));
+			if (finished.equals("true")) {
+				System.out.println("DB is ready, training.");
+				long start = System.currentTimeMillis();
+				long number = retrieveDataAndRetrain();
+				long time = System.currentTimeMillis() - start;
+				if (number != -1) {
+					System.out.println("The (re)train was succesfully done. It took " + time + "ms and " + number
+							+ " of Orderitems were retrieved from the database.");
+					asyncTrainExecutor.shutdown();
+				}
+			} else {
+				System.out.println("Waiting for DB before retraining.");
+			}
+		}, 0, 3, TimeUnit.SECONDS); 
+		return Response.ok("training").build();
+	}
+	
+	
+	
 	/**
 	 * Connects via REST to the database and retrieves all {@link OrderItem}s and
 	 * all {@link Order}s. Then, it triggers the training of the recommender.

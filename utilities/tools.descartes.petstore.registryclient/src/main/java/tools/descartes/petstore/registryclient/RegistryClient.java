@@ -33,6 +33,8 @@ import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.netflix.loadbalancer.Server;
 
@@ -56,6 +58,7 @@ public class RegistryClient {
 	
 	private static final int LOAD_BALANCER_REFRESH_INTERVAL_MS = 2500;
 	private static final int HEARTBEAT_INTERVAL_MS = 2500;
+	private static Logger log = LoggerFactory.getLogger(RegistryClient.class);
 	
 	private ScheduledExecutorService loadBalancerUpdateScheduler;
 	private ScheduledExecutorService heartbeatScheduler;
@@ -65,6 +68,7 @@ public class RegistryClient {
 	 */
 	protected RegistryClient() {
 		try {
+			System.setProperty("org.slf4j.simpleLogger.logFile", "System.out");
 			registryRESTURL = (String) new InitialContext().lookup("java:comp/env/registryURL");
 		} catch (NamingException e) {
 			System.out.println("registryURL not set. Falling back to default registry URL.");
@@ -128,14 +132,19 @@ public class RegistryClient {
 		    	List<Server> servers;
 		    	do {
 		    		servers = getServersForService(service);
-		    		if (!servers.isEmpty()) {
+		    		if (servers == null || !servers.isEmpty()) {
 		    			try {
+		    				if (servers == null) {
+		    					log.info("Registry not online. Waiting for it to come online");
+		    				} else {
+		    					log.info(service.getServiceName() + " not online. Waiting for it to come online");
+		    				}
 							Thread.sleep(1000);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
 		    		}
-		    	} while (servers.isEmpty());
+		    	} while (servers == null || servers.isEmpty());
 		    	callback.callback();
 			}
 		}, 0, TimeUnit.NANOSECONDS);
@@ -156,7 +165,7 @@ public class RegistryClient {
 					.request(MediaType.APPLICATION_JSON).get();
 			list = response.readEntity(new GenericType<List<String>>() { }); 
 		} catch (ProcessingException e) {
-			System.err.println("Could not connect to Registry. Is it up?");
+			return null;
 		}
 		
 		if (list != null) {

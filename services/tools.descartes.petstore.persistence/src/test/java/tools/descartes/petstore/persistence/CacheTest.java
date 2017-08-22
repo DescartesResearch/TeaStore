@@ -138,7 +138,7 @@ private static final String CONTEXT = "/test";
 				 + getPort(client1) + "/" + Service.PERSISTENCE.getServiceName(),
 				 "rest", "generatedb", String.class);
 		Response response = dbc.getService()
-				.path(dbc.getApplicationURI()).path(dbc.getEnpointURI())
+				.path(dbc.getApplicationURI()).path(dbc.getEndpointURI())
 				.queryParam("categories", 3)
 				.queryParam("products", 10)
 				.queryParam("users", 20)
@@ -146,13 +146,13 @@ private static final String CONTEXT = "/test";
 				.request(MediaType.TEXT_PLAIN).get();
 		//wait for database to finish generating and check if the flag is correct
 		String finishedGenerating = dbc.getService()
-				.path(dbc.getApplicationURI()).path(dbc.getEnpointURI()).path("finished")
+				.path(dbc.getApplicationURI()).path(dbc.getEndpointURI()).path("finished")
 				.request(MediaType.TEXT_PLAIN).get().readEntity(String.class);
 		Assert.assertEquals("false", finishedGenerating);
 		while (finishedGenerating.equals("false")) {
 			Thread.sleep(2000);
 			finishedGenerating = dbc.getService()
-					.path(dbc.getApplicationURI()).path(dbc.getEnpointURI()).path("finished")
+					.path(dbc.getApplicationURI()).path(dbc.getEndpointURI()).path("finished")
 					.request(MediaType.TEXT_PLAIN).get().readEntity(String.class);
 		}
 		Assert.assertEquals("true", finishedGenerating);

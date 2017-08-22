@@ -98,7 +98,7 @@ public enum SetupController {
 		for (int i = 0; i < SetupControllerConstants.PERSISTENCE_CREATION_TRIES; i++) {
 			Response result = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "generatedb", 
 					String.class, client -> client.getService().path(client.getApplicationURI())
-					.path(client.getEnpointURI()).path("finished").request().get());
+					.path(client.getEndpointURI()).path("finished").request().get());
 			
 			if (result == null ? false : Boolean.parseBoolean(result.readEntity(String.class))) {
 				maxTriesReached = false;
@@ -107,8 +107,8 @@ public enum SetupController {
 			
 			try {
 				Thread.sleep(SetupControllerConstants.PERSISTENCE_CREATION_WAIT_TIME);
-			} catch (InterruptedException e) {
-				
+			} catch (InterruptedException interrupted) {
+				log.info("Thread interrupted while waiting for persistence to be available.", interrupted);
 			}
 		}
 	

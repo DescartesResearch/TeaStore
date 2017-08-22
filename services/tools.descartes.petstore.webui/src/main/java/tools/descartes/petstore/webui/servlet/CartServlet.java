@@ -62,7 +62,7 @@ public class CartServlet extends AbstractUIServlet {
 		request.setAttribute("Products", products);
 		request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
 
-		List<Product> ad = LoadBalancedStoreOperations.getAdvertisements(blob, 3);
+		List<Product> ad = LoadBalancedStoreOperations.getAdvertisements(blob);
 		if (ad.size() > 3) {
 			ad.subList(3, ad.size()).clear();
 		}
