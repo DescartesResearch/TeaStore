@@ -65,6 +65,7 @@ public class ProductEndpointTest {
 		testTomcat.addServlet(CONTEXT, "restServlet", restServlet);
 		context.addServletMappingDecoded("/rest/*", "restServlet");
 		testTomcat.start();
+		System.out.println("Initializing Database with size " + CategoryRepository.REPOSITORY.getAllEntities().size());
 	}
 	
 	/**

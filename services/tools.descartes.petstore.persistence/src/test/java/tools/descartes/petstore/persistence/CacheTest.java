@@ -76,6 +76,7 @@ private static final String CONTEXT = "/test";
 		registryTomcat.addServlet(CONTEXT, "restServlet", restServlet);
 		context.addServletMappingDecoded("/rest/*", "restServlet");
 		registryTomcat.start();
+		System.out.println("Initializing Database with size " + CategoryRepository.REPOSITORY.getAllEntities().size());
 	}
 	
 	private Tomcat createClientTomcat(Service service, Tomcat tomcat) throws ServletException, LifecycleException {

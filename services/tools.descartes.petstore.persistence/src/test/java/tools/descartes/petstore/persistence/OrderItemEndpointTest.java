@@ -34,7 +34,6 @@ import tools.descartes.petstore.persistence.rest.OrderEndpoint;
 import tools.descartes.petstore.persistence.rest.OrderItemEndpoint;
 import tools.descartes.petstore.persistence.rest.ProductEndpoint;
 import tools.descartes.petstore.persistence.rest.UserEndpoint;
-import tools.descartes.petstore.persistence.domain.CategoryRepository;
 import tools.descartes.petstore.rest.NonBalancedCRUDOperations;
 import tools.descartes.petstore.rest.RESTClient;
 
