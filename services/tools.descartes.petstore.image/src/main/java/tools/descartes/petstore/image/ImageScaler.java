@@ -17,6 +17,9 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import tools.descartes.petstore.entities.ImageSize;
 
 /**
@@ -27,6 +30,8 @@ import tools.descartes.petstore.entities.ImageSize;
  *
  */
 public final class ImageScaler {
+	
+	private static Logger log = LoggerFactory.getLogger(ImageScaler.class);
 
 	/**
 	 * Scales a given image by rendering the supplied image to the size, determined by the given 
@@ -36,6 +41,11 @@ public final class ImageScaler {
 	 * @return New image scaled to the given {@link tools.descartes.petstore.entities.ImageSize}
 	 */
 	public static BufferedImage scale(BufferedImage image, ImageSize size) {
+		if (size == null) {
+			log.error("The supplied image size is null.");
+			throw new NullPointerException("The supplied image size is null.");
+		}
+		
 		return scale(image, size.getWidth(), size.getHeight());
 	}
 
@@ -49,6 +59,11 @@ public final class ImageScaler {
 	 * @return New image scaled by the given ratio
 	 */
 	public static BufferedImage scale(BufferedImage image, double scalingFactor) {
+		if (scalingFactor <= 0.0) {
+			log.error("The supplied scaling factor is 0 or below.");
+			throw new IllegalArgumentException("The supplied scaling factor is 0 or below.");
+		}
+		
 		return scale(image, scalingFactor, scalingFactor);
 	}
 	
@@ -63,7 +78,18 @@ public final class ImageScaler {
 	 * @return New image scaled by the given ratios
 	 */
 	public static BufferedImage scale(BufferedImage image, double widthScaling, double heightScaling) {
-		return scale(image, (int)(image.getWidth() * widthScaling), (int)(image.getHeight() * heightScaling));
+		if (widthScaling <= 0.0) {
+			log.error("The supplied width scaling factor is 0 or below.");
+			throw new IllegalArgumentException("The supplied width scaling factor is 0 or below.");
+		}
+		if (heightScaling <= 0.0) {
+			log.error("The supplied height scaling factor is 0 or below.");
+			throw new IllegalArgumentException("The supplied height scaling factor is 0 or below.");
+		}	
+		
+		int newWidth = (int)(image.getWidth() * widthScaling);
+		int newHeight= (int)(image.getHeight() * heightScaling);
+		return scale(image, newWidth == 0 ? 1 : newWidth, newHeight == 0 ? 1 : newHeight);
 	}
 	
 	/**
@@ -74,6 +100,11 @@ public final class ImageScaler {
 	 * @return New image scaled to the given size
 	 */
 	public static BufferedImage scale(BufferedImage image, int size) {
+		if (size < 1) {
+			log.error("The supplied pixel size is below 1.");
+			throw new IllegalArgumentException("The supplied pixel size is below 1.");
+		}
+		
 		return scale(image, size, size);
 	}
 
@@ -86,6 +117,19 @@ public final class ImageScaler {
 	 * @return New image scaled to the given width and height
 	 */
 	public static BufferedImage scale(BufferedImage image, int width, int height) {
+		if (image == null) {
+			log.error("The supplied image is null.");
+			throw new NullPointerException("The supplied image is null.");
+		}
+		if (width < 1) {
+			log.error("The supplied pixel width is below 1.");
+			throw new IllegalArgumentException("The supplied pixel width is below 1.");
+		}
+		if (height < 1) {
+			log.error("The supplied pixel height is below 1.");
+			throw new IllegalArgumentException("The supplied pixel height is below 1.");
+		}
+		
 		BufferedImage scaledImg = new BufferedImage(width, height, BufferedImage.TRANSLUCENT);
 		Graphics2D graphics = scaledImg.createGraphics();
 		graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
