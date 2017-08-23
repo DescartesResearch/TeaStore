@@ -13,8 +13,15 @@
  */
 package tools.descartes.petstore.persistence.repository;
 
+import java.util.HashMap;
+
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class for managing the EMF singleton.
@@ -24,6 +31,13 @@ import javax.persistence.Persistence;
 final class EMFManager {
 
 	private static EntityManagerFactory emf = null; 
+	
+	private static final Logger LOG = LoggerFactory.getLogger(EMFManager.class);
+	
+	private static final String MYSQL_URL_PREFIX = "jdbc:mysql://";
+	private static final String MYSQL_URL_POSTFIX = "/petsupplydb";
+	private static final String MYSQL_DEFAULT_HOST = "localhost";
+	private static final String MYSQL_DEFAULT_PORT = "3306";
 	
 	private EMFManager() {
 		
@@ -35,7 +49,10 @@ final class EMFManager {
 	 */
 	static EntityManagerFactory getEMF() {
 		if (emf == null) {
-			emf = Persistence.createEntityManagerFactory("tools.descartes.petstore.persistence");
+			
+			HashMap<String, String> persistenceProperties = createPersistencePropertiesFromJavaEnv();
+			emf = Persistence.createEntityManagerFactory("tools.descartes.petstore.persistence", persistenceProperties);
+			
 		}
 		return emf;
 	}
@@ -48,5 +65,39 @@ final class EMFManager {
 			emf.close();
 		}
 		emf = null;
+	}
+	
+	private static HashMap<String, String> createPersistencePropertiesFromJavaEnv() {
+		HashMap<String, String> persistenceProperties = new HashMap<String, String>();
+		String dbhost = null;
+		String dbport = null;
+		String url = MYSQL_URL_PREFIX;
+		try {
+			dbhost = (String) new InitialContext().lookup("java:comp/env/databaseHost");
+		} catch (NamingException e) {
+			LOG.info("Database host not set. Falling back to default host at " + MYSQL_DEFAULT_HOST + ".");
+		}
+		try {
+			dbport = (String) new InitialContext().lookup("java:comp/env/databasePort");
+		} catch (NamingException e) {
+			LOG.info("Database port not set. Falling back to default host at " + MYSQL_DEFAULT_PORT + ".");
+		}
+		if (dbhost != null || dbport != null) {
+			if (dbhost != null) {
+				url += dbhost;
+			} else {
+				url += MYSQL_DEFAULT_HOST;
+			}
+			url += ":";
+			if (dbport != null) {
+				url += dbport;
+			} else {
+				url += MYSQL_DEFAULT_PORT;
+			}
+			url += MYSQL_URL_POSTFIX;
+			LOG.info("Setting jdbc url to \"" + url + "\".");
+			persistenceProperties.put("javax.persistence.jdbc.url", url);
+		}
+		return persistenceProperties;
 	}
 }
