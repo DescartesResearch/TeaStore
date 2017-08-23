@@ -15,11 +15,10 @@ package tools.descartes.petstore.recommender.algorithm.impl.pop;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.TreeMap;
 
 import tools.descartes.petstore.recommender.algorithm.AbstractRecommender;
 import tools.descartes.petstore.recommender.algorithm.OrderItemSet;
@@ -32,7 +31,8 @@ import tools.descartes.petstore.recommender.algorithm.OrderItemSet;
  */
 public class PopularityBasedRecommender extends AbstractRecommender {
 
-	private TreeSet<CountItem> popRanking;
+	//map with all count items for the corresponding purchase count
+	private TreeMap<Long, List<Long>> popRanking;
 
 	/*
 	 * (non-Javadoc)
@@ -44,11 +44,16 @@ public class PopularityBasedRecommender extends AbstractRecommender {
 	@Override
 	protected List<Long> execute(List<Long> currentItems) {
 		List<Long> reco = new ArrayList<>(MAX_NUMBER_OF_RECOMMENDATIONS);
-		for (Iterator<CountItem> iterator = popRanking.descendingSet().iterator(); iterator.hasNext()
-				&& reco.size() < MAX_NUMBER_OF_RECOMMENDATIONS;) {
-			CountItem product = (CountItem) iterator.next();
-			if (!currentItems.contains(product.getProductId())) {
-				reco.add(product.getProductId());
+		for (Long count : popRanking.descendingKeySet()) {
+			List<Long> productIds = popRanking.get(count);
+			for (long productId : productIds) {
+				if (reco.size() < MAX_NUMBER_OF_RECOMMENDATIONS) {
+					if (!currentItems.contains(productId)) {
+						reco.add(productId);
+					}
+				} else {
+					return reco;
+				}
 			}
 		}
 		return reco;
@@ -69,9 +74,14 @@ public class PopularityBasedRecommender extends AbstractRecommender {
 				}
 			}
 		}
-		popRanking = new TreeSet<>();
+		popRanking = new TreeMap<Long, List<Long>>();
 		for (Entry<Long, Long> entry : tmp.entrySet()) {
-			popRanking.add(new CountItem(entry.getKey(), entry.getValue()));
+			List<Long> productIds = popRanking.get(entry.getValue());
+			if (productIds == null) {
+				productIds = new ArrayList<>();
+				popRanking.put(entry.getValue(), productIds);
+			}
+			productIds.add(entry.getKey());
 		}
 	}
 
