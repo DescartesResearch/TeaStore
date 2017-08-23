@@ -47,7 +47,8 @@ public class TestImageScaler {
 		try {
 			img = ImageIO.read(bais);
 		} catch (IOException e) {
-			System.out.println("Fail");
+			System.out.println("IOException while reading from input stream. Message: " + e.getMessage());
+			e.printStackTrace();
 		}
 		widthBefore = img.getWidth();
 		heightBefore = img.getHeight();
