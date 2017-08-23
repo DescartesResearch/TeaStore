@@ -109,14 +109,6 @@ public class RecommenderPerformanceTest extends AbstractRecommenderRestTest {
 				singlerecotime += System.currentTimeMillis() - tic;
 			}
 		}
-		System.out.println(String.format("Ran for %d repeats with in total %d recommendations.", NUMBER_OF_REPEATS,
-				NUMBER_OF_REPEATS
-						* (NUMBER_OF_RECOMMENDATIONS_PER_REPEAT + NUMBER_OF_SINGLE_RECOMMENDATIONS_PER_REPEAT)));
-		System.out.println("Average time per training: " + traintime / (double) NUMBER_OF_REPEATS + "ms.");
-		System.out.println("Average time per recommendation: "
-				+ recotime / ((double) NUMBER_OF_REPEATS * NUMBER_OF_RECOMMENDATIONS_PER_REPEAT) + "ms.");
-		System.out.println("Average time per single recommendation: "
-				+ singlerecotime / ((double) NUMBER_OF_REPEATS * NUMBER_OF_SINGLE_RECOMMENDATIONS_PER_REPEAT) + "ms.");
 	}
 
 	/**

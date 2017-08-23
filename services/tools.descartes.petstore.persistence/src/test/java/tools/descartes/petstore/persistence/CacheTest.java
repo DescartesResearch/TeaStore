@@ -76,10 +76,6 @@ private static final String CONTEXT = "/test";
 		registryTomcat.addServlet(CONTEXT, "restServlet", restServlet);
 		context.addServletMappingDecoded("/rest/*", "restServlet");
 		registryTomcat.start();
-		System.out.println("Started Registry Tomcat at port " + getRegistryPort());
-		
-		int dbinitializationSize = CategoryRepository.REPOSITORY.getAllEntities().size();
-		System.out.println("DB initialized at size " + dbinitializationSize);
 	}
 	
 	private Tomcat createClientTomcat(Service service, Tomcat tomcat) throws ServletException, LifecycleException {

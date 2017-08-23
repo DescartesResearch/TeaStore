@@ -316,3 +316,25 @@ a:hover, .nav-sidebar>li>a:hover {
         display:block !important;
     }
 }
+
+.statusloader {
+	display: inline-block;
+	float:right;
+	border: 5px solid #a4a4a4;
+	border-radius: 50%;
+	border-top: 5px solid #1baf5e;
+	width: 18px;
+	height: 18px;
+	-webkit-animation: spin 1.4s linear infinite;
+	animation: spin 1.4s linear infinite;
+}
+
+@-webkit-keyframes spin {
+	0% { -webkit-transform: rotate(0deg); }
+	100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}

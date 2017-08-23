@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import tools.descartes.petstore.entities.Order;
 import tools.descartes.petstore.entities.OrderItem;
 import tools.descartes.petstore.entities.Product;
@@ -41,6 +44,7 @@ public abstract class AbstractRecommender implements IRecommender {
 	 * should return. Is NOT mandatory for any of the algorithms.
 	 */
 	public static final int MAX_NUMBER_OF_RECOMMENDATIONS = 10;
+	private static final Logger LOG = LoggerFactory.getLogger(AbstractRecommender.class);
 
 	/**
 	 * This set maps a userId to a set, containing the corresponding OrderItemSets,
@@ -74,12 +78,7 @@ public abstract class AbstractRecommender implements IRecommender {
 			userItemSets.get(order.getUserId()).add(itemSets.get(order));
 		}
 		executePreprocessing();
-		System.out.println(userItemSets.size() + " users are known to the recommender.");
-		System.out.println("Each has an average of " + itemSets.size() / (double) userItemSets.keySet().size()
-				+ " orders, with itself an average of " + orderItems.size() / (double) orders.size() + " orderItems.");
-		System.out.println("In total, that makes " + orderItems.size() + " orderItems, " + orders.size()
-				+ " orders and " + userItemSets.keySet().size() + " users.");
-		System.out.println("Training took: " + (System.currentTimeMillis() - tic) + "ms.");
+		LOG.info("Training recommender finished. Training took: " + (System.currentTimeMillis() - tic) + "ms.");
 		trainingFinished = true;
 	}
 

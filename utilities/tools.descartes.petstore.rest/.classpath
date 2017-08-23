@@ -43,5 +43,7 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/tools.descartes.petstore.devenvlibraries/logging/slf4j-api-1.7.25.jar"/>
+	<classpathentry kind="lib" path="/tools.descartes.petstore.devenvlibraries/logging/slf4j-simple-1.7.25.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

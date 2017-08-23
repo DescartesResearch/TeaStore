@@ -10,7 +10,7 @@
 					class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="${pageContext.request.contextPath}">
+			<a class="navbar-brand" href="<c:url value="/"/>">
     <img src="${storeIcon}" width="30" height="30" class="d-inline-block align-top" alt="">
     Pet Supply Store
   </a>
@@ -30,12 +30,12 @@
 						<li><form action="loginAction" method="POST">
 								<button type="submit" name="logout" class="logout">Logout</button>
 							</form></li>
-						<li><a href="${pageContext.request.contextPath}/profile"><span
+						<li><a href="<c:url value="/profile"/>"><span
 								class="glyphicon glyphicon glyphicon-user" aria-hidden="true"></span></a></li>
 					</c:otherwise>
 				</c:choose>
 
-				<li><a href="${pageContext.request.contextPath}/cart"><span
+				<li><a href="<c:url value="/cart"/>"><span
 						class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></a></li>
 			</ul>
 		</div>

@@ -65,9 +65,6 @@ public class ProductEndpointTest {
 		testTomcat.addServlet(CONTEXT, "restServlet", restServlet);
 		context.addServletMappingDecoded("/rest/*", "restServlet");
 		testTomcat.start();
-		System.out.println("Started Testing Tomcat at port " + getTomcatPort());
-		int dbinitializationSize = CategoryRepository.REPOSITORY.getAllEntities().size();
-		System.out.println("DB initialized at size " + dbinitializationSize);
 	}
 	
 	/**
