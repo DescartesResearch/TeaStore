@@ -24,8 +24,8 @@ import org.junit.Test;
 import org.junit.Assert;
 
 import tools.descartes.petstore.entities.Category;
-import tools.descartes.petstore.persistence.rest.CategoryEndpoint;
 import tools.descartes.petstore.persistence.domain.CategoryRepository;
+import tools.descartes.petstore.persistence.rest.CategoryEndpoint;
 import tools.descartes.petstore.rest.NonBalancedCRUDOperations;
 import tools.descartes.petstore.rest.RESTClient;
 
@@ -57,6 +57,7 @@ public class CategoryEndpointTest {
 		testTomcat.addServlet(CONTEXT, "restServlet", restServlet);
 		context.addServletMappingDecoded("/rest/*", "restServlet");
 		testTomcat.start();
+		System.out.println("Initializing Database with size " + CategoryRepository.REPOSITORY.getAllEntities().size());
 	}
 	
 	/**

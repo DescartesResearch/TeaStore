@@ -44,6 +44,11 @@ public abstract class AbstractRecommenderTest {
 
 	/**
 	 * Run the dummy test.
+	 * 
+	 * trainOrders = [{10, user100}, {11, user101}, {12, user103}, {13, user104},
+	 * 				  {14, user101}, {15, user101}, {16, user105}, {17, user106}]
+	 * orderItems: 10 = {1, 2, 3}; 11 = {2, 4}; 12 = {1, 3, 4}; 13 = {2}; 14 = {2};
+	 * 				15 = {2}; 16 = {2, 3, 4, 5}; 17 = {3};
 	 */
 	@Before
 	public void setup() {

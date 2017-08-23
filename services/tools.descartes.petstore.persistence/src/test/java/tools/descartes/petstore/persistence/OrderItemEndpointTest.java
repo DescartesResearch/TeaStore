@@ -29,12 +29,12 @@ import tools.descartes.petstore.entities.Order;
 import tools.descartes.petstore.entities.OrderItem;
 import tools.descartes.petstore.entities.Product;
 import tools.descartes.petstore.entities.User;
+import tools.descartes.petstore.persistence.domain.CategoryRepository;
 import tools.descartes.petstore.persistence.rest.CategoryEndpoint;
 import tools.descartes.petstore.persistence.rest.OrderEndpoint;
 import tools.descartes.petstore.persistence.rest.OrderItemEndpoint;
 import tools.descartes.petstore.persistence.rest.ProductEndpoint;
 import tools.descartes.petstore.persistence.rest.UserEndpoint;
-import tools.descartes.petstore.persistence.domain.CategoryRepository;
 import tools.descartes.petstore.rest.NonBalancedCRUDOperations;
 import tools.descartes.petstore.rest.RESTClient;
 
@@ -70,6 +70,7 @@ public class OrderItemEndpointTest {
 		testTomcat.addServlet(CONTEXT, "restServlet", restServlet);
 		context.addServletMappingDecoded("/rest/*", "restServlet");
 		testTomcat.start();
+		System.out.println("Initializing Database with size " + CategoryRepository.REPOSITORY.getAllEntities().size());
 	}
 	
 	/**
