@@ -42,7 +42,7 @@ import tools.descartes.petstore.registryclient.rest.LoadBalancedCRUDOperations;
  *
  */
 @Path("train")
-@Produces("text/plain")
+@Produces({ "text/plain", "application/json" })
 public class TrainEndpoint {
 
 	private static final Logger LOG = LoggerFactory.getLogger(TrainEndpoint.class);
