@@ -25,8 +25,6 @@ import javax.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tools.descartes.petstore.entities.message.IdContainer;
-
 /**
  * Default REST operations that transfer Entities to/from a service that has a standard conforming REST-API.
  * Do not utilize any load balancers. Use the LoadBalancedCRUDOperations instead for all normal use cases.
@@ -58,9 +56,9 @@ public final class NonBalancedCRUDOperations {
 			 id = 0L;
 			//check if response contained an IdContainer; if yes: return the id
 				try {
-					id = response.readEntity(IdContainer.class).getId();
+					id = response.readEntity(Long.class);
 				} catch (ProcessingException e) {
-					LOG.warn("Response did not conform to expected message type. Expected an IdContainer.");
+					LOG.warn("Response did not conform to expected message type. Expected a Long ID.");
 				}
 		}
 		response.close();
