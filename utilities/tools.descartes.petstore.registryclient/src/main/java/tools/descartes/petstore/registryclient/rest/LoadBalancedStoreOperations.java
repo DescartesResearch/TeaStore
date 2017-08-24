@@ -66,7 +66,6 @@ public final class LoadBalancedStoreOperations {
 	/**
 	 * Gets ads.
 	 * @param blob SessionBlob
-	 * @param pid pid of currentProduct
 	 * @return product
 	 */
 	public static List<Product> getAdvertisements(SessionBlob blob) {

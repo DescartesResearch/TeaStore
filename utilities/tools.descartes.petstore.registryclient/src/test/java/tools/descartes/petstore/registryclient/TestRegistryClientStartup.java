@@ -15,7 +15,6 @@ package tools.descartes.petstore.registryclient;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
 
 /**
  * Application Lifecycle Listener implementation class Registry Client Startup.
