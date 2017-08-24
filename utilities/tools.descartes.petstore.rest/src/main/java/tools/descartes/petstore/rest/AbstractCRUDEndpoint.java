@@ -28,8 +28,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
-import tools.descartes.petstore.entities.message.IdContainer;
-
 /**
  * Abstract endpoint for providing entities as resources using REST.
  * @author Joakim von Kistowski
@@ -51,7 +49,7 @@ public abstract class AbstractCRUDEndpoint<T> {
 	public Response create(final T entity) {
 		long id = createEntity(entity);
 		return Response.created(UriBuilder.fromResource(AbstractCRUDEndpoint.class).
-				path(String.valueOf(id)).build()).entity(new IdContainer(id)).build();
+				path(String.valueOf(id)).build()).entity(id).build();
 	}
 	
 	/**

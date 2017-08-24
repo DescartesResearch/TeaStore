@@ -15,9 +15,9 @@
         <class>tools.descartes.petstore.persistence.domain.converters.LocalDateTimeAttributeConverter</class>
 		<properties>
       		<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-        	<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/petdb"/>
-        	<property name="javax.persistence.jdbc.user" value="petuser"/>
-        	<property name="javax.persistence.jdbc.password" value="petsareawesome"/>
+        	<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/petsupplydb"/>
+        	<property name="javax.persistence.jdbc.user" value="petsupplyuser"/>
+        	<property name="javax.persistence.jdbc.password" value="petsupplypassword"/>
  
 		    <property name="eclipselink.logging.level" value="INFO"/> 
 		    <property name="eclipselink.ddl-generation" value="create-tables"/>
