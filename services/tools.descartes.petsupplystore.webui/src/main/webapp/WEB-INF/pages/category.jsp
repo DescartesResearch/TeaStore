@@ -31,21 +31,21 @@
 							<c:choose>
 								<c:when test="${paginationitem == 'previous'}">
 									<li><a
-										href="${pageContext.request.contextPath}/category?category=${categoryID}&page=${pagenumber-1}">${paginationitem}</a></li>
+										href="<c:url value="/category?category=${categoryID}&page=${pagenumber-1}"/>">${paginationitem}</a></li>
 								</c:when>
 								<c:when test="${paginationitem == 'next'}">
 									<li><a
-										href="${pageContext.request.contextPath}/category?category=${categoryID}&page=${pagenumber+1}">${paginationitem}</a></li>
+										href="<c:url value="/category?category=${categoryID}&page=${pagenumber+1}"/>">${paginationitem}</a></li>
 								</c:when>
 								<c:otherwise>
 									<c:choose>
 										<c:when test="${paginationitem == pagenumber}">
 											<li class="active"><a
-												href="${pageContext.request.contextPath}/category?category=${categoryID}&page=${paginationitem}">${paginationitem}</a></li>
+												href="<c:url value="/category?category=${categoryID}&page=${paginationitem}"/>">${paginationitem}</a></li>
 										</c:when>
 										<c:otherwise>
 											<li><a
-												href="${pageContext.request.contextPath}/category?category=${categoryID}&page=${paginationitem}">${paginationitem}</a></li>
+												href="<c:url value="/category?category=${categoryID}&page=${paginationitem}"/>">${paginationitem}</a></li>
 										</c:otherwise>
 									</c:choose>
 								</c:otherwise>

@@ -22,7 +22,7 @@
 
 	</div>
 
-	<input type="button" class="btn" value="Back to Shop" onclick="location.href = '${pageContext.request.contextPath}';">
+	<input type="button" class="btn" value="Back to Shop" onclick="location.href = '<c:url value='/' />';">
 </div>
 
 

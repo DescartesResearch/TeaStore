@@ -23,7 +23,7 @@
 		</div>
 
 		<div class="col-sm-4 col-md-4">
-			<img src="${portraitAndre}" alt="" class="img-rounded img-responsive" />
+			<img src="${portraitAndre}" alt="André Bauer" class="img-rounded img-responsive" />
 			<blockquote>
 				<p>André Bauer</p>
 				<small><cite title="Source Title">WebUI </cite></small>
@@ -31,7 +31,7 @@
 		</div>
 
 		<div class="col-sm-4 col-md-4">
-			<img src="${portraitSimon}" alt="" class="img-rounded img-responsive" />
+			<img src="${portraitSimon}" alt="Simon Eismann" class="img-rounded img-responsive" />
 			<blockquote>
 				<p>Simon Eismann</p>
 				<small><cite title="Source Title">Blob </cite></small>
@@ -40,7 +40,7 @@
 
 
 		<div class="col-sm-4 col-md-4">
-			<img src="${portraitJoakim}" alt=""
+			<img src="${portraitJoakim}" alt="Jóakim v. Kistowski"
 				class="img-rounded img-responsive" />
 			<blockquote>
 				<p>Jóakim v. Kistowski</p>
@@ -49,7 +49,7 @@
 		</div>
 
 		<div class="col-sm-4 col-md-4">
-			<img src="${portraitJohannes}" alt=""
+			<img src="${portraitJohannes}" alt="Johannes Grohmann"
 				class="img-rounded img-responsive" />
 			<blockquote>
 				<p>Johannes Grohmann</p>
@@ -58,7 +58,7 @@
 		</div>
 
 		<div class="col-sm-4 col-md-4">
-			<img src="${portraitNorbert}" alt=""
+			<img src="${portraitNorbert}" alt="Norbert Schmitt"
 				class="img-rounded img-responsive" />
 			<blockquote>
 				<p>Norbert Schmitt</p>

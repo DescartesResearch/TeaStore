@@ -10,7 +10,7 @@
 
 <meta name="description" content="">
 <meta name="author" content="">
-<link rel="icon" href="${pageContext.request.contextPath}/images/icon.ico">
+<link rel="icon" href="<c:url value="/images/icon.ico" />" >
 <title>${title}</title>
 
 <!-- Bootstrap core CSS -->

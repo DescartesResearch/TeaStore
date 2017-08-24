@@ -5,7 +5,7 @@
 <div class="thumbnail">
 	<form action="cartAction" method="POST">
 		<input type='hidden' name="productid" value="${product.id}"> <a
-			href="${pageContext.request.contextPath}/product?id=${product.id}"><img
+			href="<c:url value="/product?id=${product.id}" />" ><img
 			src="${productImages[product.id]}"
 			alt="${product.name}"></a>
 		<div class="divider"></div>

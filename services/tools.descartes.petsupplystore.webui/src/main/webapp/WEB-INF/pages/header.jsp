@@ -23,7 +23,7 @@
 			<ul class="nav navbar-nav navbar-right headnavbarlist">
 				<c:choose>
 					<c:when test="${login == false}">
-						<li><a href="${pageContext.request.contextPath}/login">Sign
+						<li><a href="<c:url value="/login" />" >Sign
 								in</a></li>
 					</c:when>
 					<c:otherwise>
