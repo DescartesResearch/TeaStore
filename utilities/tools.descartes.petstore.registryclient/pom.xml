@@ -5,7 +5,7 @@
   <artifactId>registryclient</artifactId>
   <packaging>jar</packaging>
   <version>0.0.1-SNAPSHOT</version>
-  <name>Petstore Registry Client</name>
+  <name>PetSupplyStore Registry Client</name>
   <url>http://descartes.tools</url>
   
   <distributionManagement>

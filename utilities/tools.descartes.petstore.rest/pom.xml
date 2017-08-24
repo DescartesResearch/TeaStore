@@ -5,7 +5,7 @@
   <artifactId>rest</artifactId>
   <packaging>jar</packaging>
   <version>0.0.1-SNAPSHOT</version>
-  <name>Petstore Rest Utilities</name>
+  <name>PetSupplyStore Rest Utilities</name>
   <url>http://descartes.tools</url>
   
   <distributionManagement>

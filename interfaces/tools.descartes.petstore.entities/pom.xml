@@ -5,7 +5,7 @@
   <artifactId>entities</artifactId>
   <packaging>jar</packaging>
   <version>0.0.1-SNAPSHOT</version>
-  <name>Petstore Entities</name>
+  <name>PetSupplyStore Entities</name>
   <url>http://descartes.tools</url>
   
   <distributionManagement>

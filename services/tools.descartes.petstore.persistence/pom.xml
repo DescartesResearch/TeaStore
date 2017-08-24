@@ -5,7 +5,7 @@
   <artifactId>persistence</artifactId>
   <packaging>war</packaging>
   <version>0.0.1-SNAPSHOT</version>
-  <name>Petstore Persistence</name>
+  <name>PetSupplyStore Persistence</name>
   <url>http://descartes.tools</url>
   
   <distributionManagement>

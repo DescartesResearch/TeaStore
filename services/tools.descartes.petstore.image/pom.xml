@@ -5,7 +5,7 @@
   <artifactId>imageprovider</artifactId>
   <packaging>war</packaging>
   <version>0.0.1-SNAPSHOT</version>
-  <name>Petstore Image Provider</name>
+  <name>PetSupplyStore Image Provider</name>
   <url>http://descartes.tools</url>
   
   <distributionManagement>

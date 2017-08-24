@@ -5,7 +5,7 @@
   <artifactId>registry</artifactId>
   <packaging>war</packaging>
   <version>0.0.1-SNAPSHOT</version>
-  <name>Petstore Registry</name>
+  <name>PetSupplyStore Registry</name>
   <url>http://descartes.tools</url>
   
   <distributionManagement>
