@@ -83,7 +83,7 @@ public class ImageCreator {
 	private void switchColor(Graphics2D graphics) {
 		graphics.setColor(new Color(rand.nextInt(MAX_RGB + 1), rand.nextInt(MAX_RGB + 1), rand.nextInt(MAX_RGB + 1)));
 	}
-	
+
 	private void makeRectangle(Graphics2D graphics, ImageSize maxSize) {
 		switchColor(graphics);
 		
@@ -152,5 +152,5 @@ public class ImageCreator {
 		
 		graphics.drawString(str, rand.nextInt(maxSize.getWidth()), rand.nextInt(maxSize.getHeight()));
 	}
-
+	
 }

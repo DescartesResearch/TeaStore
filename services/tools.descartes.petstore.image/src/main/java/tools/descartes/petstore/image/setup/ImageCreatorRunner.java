@@ -18,10 +18,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
 
@@ -107,6 +113,8 @@ public class ImageCreatorRunner implements Runnable {
 	public void run() {
 		isRunning = true;
 		timeBeforeGeneration = System.currentTimeMillis();
+	
+		//LinkedList<BufferedImage> images = productIDs.stream().parallel().map(p -> imgCreator.createImage(imgSize)).collect(Collectors.toCollection(LinkedList::new));
 		
 		for (long product : productIDs) {
 			if (stopped) {
@@ -142,6 +150,7 @@ public class ImageCreatorRunner implements Runnable {
 			Path imgFile = workingDir.resolve(String.valueOf(imgID));
 			
 			BufferedImage img = imgCreator.createImage(imgSize);
+			//BufferedImage img = images.poll();
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			
 			try {
@@ -198,5 +207,16 @@ public class ImageCreatorRunner implements Runnable {
 	public void stopCreation() {
 		stopped = true;
 	}
+
 	
+//	public static void main(String[] args) {
+//		Random r = new Random(4);
+//		List<Long> p = Stream.generate(() -> Math.abs(r.nextLong())).distinct().limit(1000).collect(Collectors.toList());
+//		ImageCreatorRunner c = new ImageCreatorRunner(p, Paths.get("test"));
+//		long before = System.currentTimeMillis();
+//		c.run();
+//		long after = System.currentTimeMillis();
+//		
+//		System.out.println("time: " + (after - before));
+//	}
 }
