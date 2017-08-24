@@ -9,7 +9,7 @@ The Pet Supply Store is designed to be a reference / test application to be used
 * Testing micro-service and cloud management mechanisms, such as multi-tier auto-scalers
 * Testing energy efficiency and power prediction and management mechanisms
 
-Check out our wiki with information on how to [get started using/developing the Pet Supply Store](https://github.com/DescartesResearch/Pet-Supply-Store/wiki/Getting-Started), more information on the architecture and services of the Pet Supply Store, and guides on how to [run the Pet Supply Store for benchmarking/testing](https://github.com/DescartesResearch/Pet-Supply-Store/wiki/Testing-and-Benchmarking).
+Check out our **[wiki](https://github.com/DescartesResearch/Pet-Supply-Store/wiki)** with information on how to [get started using/developing the Pet Supply Store](https://github.com/DescartesResearch/Pet-Supply-Store/wiki/Getting-Started), more information on the architecture and services of the Pet Supply Store, and guides on how to [run the Pet Supply Store for benchmarking/testing](https://github.com/DescartesResearch/Pet-Supply-Store/wiki/Testing-and-Benchmarking).
 
 ## Getting Started
 
