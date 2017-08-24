@@ -6,7 +6,7 @@
 		<maven>3.0</maven>
 	</prerequisites>
   
-	<groupId>tools.descartes.petstore</groupId>
+	<groupId>tools.descartes.petsupplystore</groupId>
 	<artifactId>parent</artifactId>
 	<packaging>pom</packaging>
 	<version>0.0.1-SNAPSHOT</version>
@@ -40,14 +40,14 @@
 	</repositories>
 
 	<modules>
-		<module>./interfaces/tools.descartes.petstore.entities</module>
-		<module>./utilities/tools.descartes.petstore.rest</module>
-		<module>./utilities/tools.descartes.petstore.registryclient</module>
-		<module>./services/tools.descartes.petstore.registry</module>
-		<module>./services/tools.descartes.petstore.persistence</module>
-		<module>./services/tools.descartes.petstore.store</module>
-		<module>./services/tools.descartes.petstore.recommender</module>
-		<module>./services/tools.descartes.petstore.webui</module>
-		<module>./services/tools.descartes.petstore.image</module>
+		<module>./interfaces/tools.descartes.petsupplystore.entities</module>
+		<module>./utilities/tools.descartes.petsupplystore.rest</module>
+		<module>./utilities/tools.descartes.petsupplystore.registryclient</module>
+		<module>./services/tools.descartes.petsupplystore.registry</module>
+		<module>./services/tools.descartes.petsupplystore.persistence</module>
+		<module>./services/tools.descartes.petsupplystore.store</module>
+		<module>./services/tools.descartes.petsupplystore.recommender</module>
+		<module>./services/tools.descartes.petsupplystore.webui</module>
+		<module>./services/tools.descartes.petsupplystore.image</module>
 	</modules>
 </project>
