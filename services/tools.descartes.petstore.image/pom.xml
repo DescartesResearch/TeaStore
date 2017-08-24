@@ -81,6 +81,6 @@
     </dependency>
   </dependencies>
   <build>
-    <finalName>tools.descartes.petstore.imageprovider</finalName>
+    <finalName>tools.descartes.petsupplystore.imageprovider</finalName>
   </build>
 </project>

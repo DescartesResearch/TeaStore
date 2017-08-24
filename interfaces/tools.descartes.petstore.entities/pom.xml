@@ -56,6 +56,6 @@
 	</dependency>
   </dependencies>
   <build>
-    <finalName>tools.descartes.petstore.entities</finalName>
+    <finalName>tools.descartes.petsupplystore.entities</finalName>
   </build>
 </project>

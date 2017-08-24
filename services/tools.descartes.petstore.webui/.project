@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>tools.descartes.petstore.webui</name>
+	<name>tools.descartes.petsupplystore.webui</name>
 	<comment></comment>
 	<projects>
-		<project>tools.descartes.petstore.rest</project>
-		<project>tools.descartes.petstore.entities</project>
-		<project>tools.descartes.petstore.registryclient</project>
+		<project>tools.descartes.petsupplystore.rest</project>
+		<project>tools.descartes.petsupplystore.entities</project>
+		<project>tools.descartes.petsupplystore.registryclient</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

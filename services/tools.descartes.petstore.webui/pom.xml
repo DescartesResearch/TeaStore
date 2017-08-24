@@ -90,6 +90,6 @@
 	</dependency>
   </dependencies>
   <build>
-    <finalName>tools.descartes.petstore.webui</finalName>
+    <finalName>tools.descartes.petsupplystore.webui</finalName>
   </build>
 </project>

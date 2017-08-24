@@ -105,6 +105,6 @@
 	</dependency>
   </dependencies>
   <build>
-    <finalName>tools.descartes.petstore.rest</finalName>
+    <finalName>tools.descartes.petsupplystore.rest</finalName>
   </build>
 </project>

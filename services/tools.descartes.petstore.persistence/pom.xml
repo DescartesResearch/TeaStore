@@ -106,7 +106,7 @@
 	
   </dependencies>
   <build>
-    <finalName>tools.descartes.petstore.persistence</finalName>
+    <finalName>tools.descartes.petsupplystore.persistence</finalName>
     <plugins>
   		<plugin>            
 		  	<groupId>org.apache.maven.plugins</groupId>

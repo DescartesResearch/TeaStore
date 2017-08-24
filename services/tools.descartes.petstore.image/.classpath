@@ -14,14 +14,14 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/tools.descartes.petstore.entities"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/tools.descartes.petstore.registryclient"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/tools.descartes.petstore.rest"/>
-	<classpathentry kind="lib" path="/tools.descartes.petstore.devenvlibraries/test/tomcat-embed-core-8.5.16.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tools.descartes.petsupplystore.entities"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tools.descartes.petsupplystore.registryclient"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tools.descartes.petsupplystore.rest"/>
+	<classpathentry kind="lib" path="/tools.descartes.petsupplystore.devenvlibraries/test/tomcat-embed-core-8.5.16.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="/tools.descartes.petstore.devenvlibraries/test/mockito-core-2.8.9.jar"/>
-	<classpathentry kind="lib" path="/tools.descartes.petstore.devenvlibraries/test/byte-buddy-1.6.14.jar"/>
-	<classpathentry kind="lib" path="/tools.descartes.petstore.devenvlibraries/test/byte-buddy-agent-1.6.14.jar"/>
-	<classpathentry kind="lib" path="/tools.descartes.petstore.devenvlibraries/test/objenesis-2.5.jar"/>
+	<classpathentry kind="lib" path="/tools.descartes.petsupplystore.devenvlibraries/test/mockito-core-2.8.9.jar"/>
+	<classpathentry kind="lib" path="/tools.descartes.petsupplystore.devenvlibraries/test/byte-buddy-1.6.14.jar"/>
+	<classpathentry kind="lib" path="/tools.descartes.petsupplystore.devenvlibraries/test/byte-buddy-agent-1.6.14.jar"/>
+	<classpathentry kind="lib" path="/tools.descartes.petsupplystore.devenvlibraries/test/objenesis-2.5.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

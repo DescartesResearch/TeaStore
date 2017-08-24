@@ -120,7 +120,7 @@
     </dependency>
   </dependencies>
   <build>
-    <finalName>tools.descartes.petstore.registryclient</finalName>
+    <finalName>tools.descartes.petsupplystore.registryclient</finalName>
   <plugins>
   <plugin>
 	    <groupId>org.apache.maven.plugins</groupId>

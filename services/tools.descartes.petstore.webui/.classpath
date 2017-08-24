@@ -14,11 +14,10 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/tools.descartes.petstore.entities"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/tools.descartes.petstore.registryclient"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tools.descartes.petsupplystore.entities"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tools.descartes.petsupplystore.registryclient"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/tools.descartes.petstore.rest"/>
-	<classpathentry kind="lib" path="/tools.descartes.petstore.devenvlibraries/test/tomcat-embed-core-8.5.16.jar"/>
-	<classpathentry kind="src" path="java"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tools.descartes.petsupplystore.rest"/>
+	<classpathentry kind="lib" path="/tools.descartes.petsupplystore.devenvlibraries/test/tomcat-embed-core-8.5.16.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>tools.descartes.petstore.registry</name>
+	<name>tools.descartes.petsupplystore.registry</name>
 	<comment></comment>
 	<projects>
-		<project>tools.descartes.petstore.entities</project>
-		<project>tools.descartes.petstore.rest</project>
+		<project>tools.descartes.petsupplystore.entities</project>
+		<project>tools.descartes.petsupplystore.rest</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
