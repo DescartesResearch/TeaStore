@@ -59,7 +59,6 @@ public class ImageProviderEndpoint {
 	@GET
 	@Path("state")
 	public Response getState() {
-		// TODO: Implement
-		return Response.ok().build();
+		return Response.ok().entity(SetupController.SETUP.getState()).build();
 	}
 }

@@ -148,6 +148,8 @@ public enum SetupController {
 				nrOfImagesToGenerate);
 		imgCreatorThread = new Thread(imgCreatorRunner);
 		imgCreatorThread.start();
+		
+		log.info("Image creator thread started. {} images to generate.", nrOfImagesToGenerate);
 	}
 	
 	public void createWorkingDir() {
@@ -156,7 +158,11 @@ public enum SetupController {
 				log.error("Standard working directory \"" + workingDir.toAbsolutePath() + "\" could not be created.");
 				throw new IllegalArgumentException("Standard working directory \"" 
 						+ workingDir.toAbsolutePath() + "\" could not be created.");
+			} else {
+				log.info("Working directory {} created.", workingDir.toAbsolutePath().toString());
 			}
+		} else {
+			log.info("Working directory {} already existed.", workingDir.toAbsolutePath().toString());
 		}
 	}	
 	
@@ -185,6 +191,8 @@ public enum SetupController {
 			return;
 		}
 		// End of rework
+		
+		log.info("Found resource directory with existing images at {}.", dir.toAbsolutePath().toString());
 
 		File currentDir = dir.toFile();
 
@@ -202,8 +210,8 @@ public enum SetupController {
 							continue;
 						}
 					} catch (IOException ioException) {
-						log.warn("An IOException occured while reading the file \"" + file.getAbsolutePath() 
-								+ "\" from disk. Message: \"" + ioException.getMessage());
+						log.warn("An IOException occured while reading the file " + file.getAbsolutePath() 
+								+ " from disk.", ioException.getMessage());
 					}
 					
 					db.setImageMapping(file.getName().substring(0, 
@@ -219,14 +227,17 @@ public enum SetupController {
 								StandardOpenOption.TRUNCATE_EXISTING);
 					} catch (IOException ioException) {
 						log.warn("An IOException occured while writing the image with ID " + String.valueOf(imageID)
-								+ " to the file \"" + workingDir.resolve(String.valueOf(imageID)).toAbsolutePath()
-								+ "\". Message: \"" + ioException.getMessage());
+								+ " to the file " + workingDir.resolve(String.valueOf(imageID)).toAbsolutePath()
+								+ ".", ioException.getMessage());
 					}
 					// Increment to have correct number of images for the limited drive storage
 					nrOfImagesPreExisting++; 
 				}
 			}
 		}
+		
+		log.info("Scanned path {} for existing images. {} images found.", 
+				dir.toAbsolutePath().toString(), nrOfImagesPreExisting);
 	}
 	
 	public void setCachingMode(String cachingMode) {
@@ -255,14 +266,19 @@ public enum SetupController {
 	
 	public void deleteUnusedImages(List<Long> imagesToKeep) {
 		File currentDir = workingDir.toFile();
+		int nrOfImagesDeleted = 0;
 		
 		if (currentDir.exists() && currentDir.isDirectory()) {
 			for (File file : currentDir.listFiles()) {
 				if (file.isFile() && !imagesToKeep.contains(Long.parseLong(file.getName()))) {
 					file.delete();
+					nrOfImagesDeleted++;
 				}
 			}
 		}
+		
+		log.info("Deleted images in working directory {}. {} images deleted.", 
+				workingDir.toAbsolutePath().toString(), nrOfImagesDeleted);
 	}
 	
 	public void deleteWorkingDir() {
@@ -271,6 +287,8 @@ public enum SetupController {
 		if (currentDir.exists() && currentDir.isDirectory()) {
 			currentDir.delete();
 		}
+		
+		log.info("Deleted working directory {}.", workingDir.toAbsolutePath().toString());
 	}
 	
 	public void setupStorage() {
@@ -313,12 +331,16 @@ public enum SetupController {
 			}
 			storage = cache;
 		}
+		
+		log.info("Storage setup done.");
 	}
 	
 	public void configureImageProvider() {
 		ImageProvider.IP.setImageDB(imgDB);
 		ImageProvider.IP.setImageCreatorRunner(imgCreatorRunner);
 		ImageProvider.IP.setStorage(storage);
+		
+		log.info("Storage and image database handed over to image provider");
 	}
 	
 	public Path getWorkingDir() {
@@ -336,6 +358,28 @@ public enum SetupController {
 			return false;
 		}
 		return true;
+	}
+	
+	public String getState() {
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("Image Provider State:").append(System.lineSeparator());
+		sb.append("---------------------").append(System.lineSeparator());
+		sb.append("Working Directory: ").append(workingDir.toAbsolutePath().toString()).append(System.lineSeparator());
+		sb.append("Storage Mode: ").append(storageMode.getStrRepresentation()).append(System.lineSeparator());
+		sb.append("Storage Rule: ").append(storageRule.getStrRepresentation()).append(System.lineSeparator());
+		sb.append("Caching Mode: ").append(cachingMode.getStrRepresentation()).append(System.lineSeparator());
+		sb.append("Caching Rule: ").append(cachingRule.getStrRepresentation()).append(System.lineSeparator());
+		sb.append("Creator Thread: ").append(imgCreatorRunner.isRunning() ? "Running" : "Finished")
+				.append(System.lineSeparator());
+		sb.append("Images Created: ").append(String.valueOf(imgCreatorRunner.getNrOfImagesCreated()))
+				.append(" / ").append(String.valueOf(nrOfImagesToGenerate)).append(System.lineSeparator());
+		sb.append("Avg. Creation Time Per Image (ms): ").append(String.valueOf(imgCreatorRunner.getAvgCreationTime()))
+				.append(System.lineSeparator());
+		sb.append("Pre-Existing Images Found: ").append(String.valueOf(nrOfImagesPreExisting))
+				.append(System.lineSeparator());
+		
+		return sb.toString();
 	}
 
 	/*
