@@ -1,3 +1,16 @@
+/**
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package tools.descartes.petsupplystore.webui.servlet;
 
 import java.io.IOException;
@@ -17,7 +30,9 @@ import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOpera
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
 
 /**
- * Servlet implementation class ProductServlet
+ * Servlet implementation for the web view of "Product"
+ * 
+ * @author Andre Bauer
  */
 @WebServlet("/product")
 public class ProductServlet extends AbstractUIServlet {
@@ -28,7 +43,6 @@ public class ProductServlet extends AbstractUIServlet {
 	 */
 	public ProductServlet() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -37,7 +51,7 @@ public class ProductServlet extends AbstractUIServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		checkforCookie(request,response);
+		checkforCookie(request, response);
 		if (request.getParameter("id") != null) {
 			long id = Long.valueOf(request.getParameter("id"));
 			request.setAttribute("CategoryList", LoadBalancedStoreOperations.getCategories());
@@ -52,11 +66,11 @@ public class ProductServlet extends AbstractUIServlet {
 				ad.subList(3, ad.size()).clear();
 			}
 			request.setAttribute("Advertisment", ad);
-			
+
 			request.setAttribute("productImages", LoadBalancedImageOperations.getProductPreviewImages(ad));
 			request.setAttribute("productImage", LoadBalancedImageOperations.getProductImage(p));
 			request.setAttribute("storeIcon", LoadBalancedImageOperations.getWebImage("icon", ImageSize.ICON));
-			
+
 			request.getRequestDispatcher("WEB-INF/pages/product.jsp").forward(request, response);
 		} else {
 			redirect("/", response);
@@ -69,7 +83,6 @@ public class ProductServlet extends AbstractUIServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

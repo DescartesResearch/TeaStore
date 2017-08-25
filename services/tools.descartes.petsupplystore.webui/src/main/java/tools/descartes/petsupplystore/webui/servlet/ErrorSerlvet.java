@@ -1,3 +1,17 @@
+/**
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package tools.descartes.petsupplystore.webui.servlet;
 
 import java.io.IOException;
@@ -12,7 +26,9 @@ import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOpera
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
 
 /**
- * Servlet implementation class ErrorSerlvet
+ * Servlet implementation for the web view of "Error page"
+ * 
+ * @author Andre Bauer
  */
 @WebServlet("/error")
 public class ErrorSerlvet extends AbstractUIServlet {
@@ -23,7 +39,6 @@ public class ErrorSerlvet extends AbstractUIServlet {
 	 */
 	public ErrorSerlvet() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -33,10 +48,9 @@ public class ErrorSerlvet extends AbstractUIServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-
 		Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
 
-		if(statusCode == null) {
+		if (statusCode == null) {
 			redirect("/", response);
 		} else {
 			request.setAttribute("storeIcon", LoadBalancedImageOperations.getWebImage("icon", ImageSize.ICON));
@@ -52,9 +66,9 @@ public class ErrorSerlvet extends AbstractUIServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	protected void doPost(HttpServletRequest request
+			, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

@@ -33,40 +33,45 @@ import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOpera
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
 
 /**
- * Index Servlet for WebUI.
+ * Servlet implementation for the web view of "Index"
+ * 
  * @author Andre Bauer
  */
 @WebServlet("/index")
 public class IndexServlet extends AbstractUIServlet {
-	
+
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public IndexServlet() {
-        super();
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		checkforCookie(request,response);
+	public IndexServlet() {
+		super();
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		checkforCookie(request, response);
 		request.setAttribute("CategoryList", LoadBalancedStoreOperations.getCategories());
 		request.setAttribute("title", "Pet Supply Store Home");
 		request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
-		
+
 		request.setAttribute("storeMainImage", LoadBalancedImageOperations.getWebImage("front", ImageSize.MAIN_IMAGE));
 		request.setAttribute("storeIcon", LoadBalancedImageOperations.getWebImage("icon", ImageSize.ICON));
-		
+
 		request.getRequestDispatcher("WEB-INF/pages/index.jsp").forward(request, response);
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doGet(request, response);
 	}
 

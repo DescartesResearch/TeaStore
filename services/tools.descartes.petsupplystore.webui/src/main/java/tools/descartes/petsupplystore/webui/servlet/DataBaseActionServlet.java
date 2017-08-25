@@ -1,3 +1,17 @@
+/**
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package tools.descartes.petsupplystore.webui.servlet;
 
 import java.io.IOException;
@@ -19,13 +33,12 @@ import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBa
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
 
 /**
- * Servlet implementation class DataBaseActionServlet
+ * Servlet implementation for handling the data base action
  */
 @WebServlet("/dataBaseAction")
 public class DataBaseActionServlet extends AbstractUIServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String[] PARAMETERS = new String[] { "categories", "products", "users",
-			"orders" };
+	private static final String[] PARAMETERS = new String[] { "categories", "products", "users", "orders" };
 	private static final Logger LOG = LoggerFactory.getLogger(DataBaseActionServlet.class);
 
 	/**
@@ -33,7 +46,6 @@ public class DataBaseActionServlet extends AbstractUIServlet {
 	 */
 	public DataBaseActionServlet() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -47,7 +59,7 @@ public class DataBaseActionServlet extends AbstractUIServlet {
 
 			String[] infos = extractOrderInformation(request);
 			if (infos.length == 0) {
-				// TODO
+				redirect("/database", response);
 			} else {
 				destroySessionBlob(getSessionBlob(request), response);
 				Response resp = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "generatedb",
@@ -59,24 +71,23 @@ public class DataBaseActionServlet extends AbstractUIServlet {
 				if (resp.getStatus() == 200) {
 					LOG.info("DB is re-generating.");
 				}
-				
+
 				// Regenerate images
 				List<Integer> status = LoadBalancedImageOperations.regenerateImages();
-				status.stream()
-						.filter(r -> r != 200)
-						.forEach(r -> LOG.warn("An image provider service responded with " 
-									+ r + " when regenerating images."));
+				status.stream().filter(r -> r != 200).forEach(
+						r -> LOG.warn("An image provider service responded with " + r + " when regenerating images."));
 				// Retrain recommender
 				List<Response> recResp = ServiceLoadBalancer.multicastRESTOperation(Service.RECOMMENDER, "train",
-						String.class, client -> client.getEndpointTarget().path("async").request(MediaType.TEXT_PLAIN).get());
-				recResp.stream()
-						.filter(r -> r.getStatus() != 200)
-						.forEach(r -> LOG.warn("A recommender service responded with " 
-									+ r.getStatus() + " when retraining."));
+						String.class,
+						client -> client.getEndpointTarget().path("async").request(MediaType.TEXT_PLAIN).get());
+				recResp.stream().filter(r -> r.getStatus() != 200).forEach(
+						r -> LOG.warn("A recommender service responded with " + r.getStatus() + " when retraining."));
+				redirect("/status", response);
 			}
 
+		} else {
+			redirect("/", response);
 		}
-		redirect("/status", response);
 	}
 
 	/**
@@ -85,10 +96,15 @@ public class DataBaseActionServlet extends AbstractUIServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 
+	/**
+	 * Extracts the information from the input fields.
+	 * 
+	 * @param request
+	 * @return String[] with the info for the database generation
+	 */
 	private String[] extractOrderInformation(HttpServletRequest request) {
 
 		String[] infos = new String[PARAMETERS.length];

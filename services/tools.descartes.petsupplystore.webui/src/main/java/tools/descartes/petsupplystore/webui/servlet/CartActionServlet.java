@@ -1,3 +1,17 @@
+/**
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package tools.descartes.petsupplystore.webui.servlet;
 
 import java.io.IOException;
@@ -16,7 +30,9 @@ import tools.descartes.petsupplystore.entities.message.SessionBlob;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
 
 /**
- * Servlet implementation class UpdateCartServlet
+ * Servlet for handling all cart actions
+ * 
+ * @author Andre Bauer
  */
 @WebServlet("/cartAction")
 public class CartActionServlet extends AbstractUIServlet {
@@ -28,7 +44,6 @@ public class CartActionServlet extends AbstractUIServlet {
 	 */
 	public CartActionServlet() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -76,11 +91,18 @@ public class CartActionServlet extends AbstractUIServlet {
 
 	}
 
-	private void confirmOrder(HttpServletRequest request, HttpServletResponse response) {
+	/**
+	 * Handles the confirm order action. Saves the order into the sessionBlob
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
+	private void confirmOrder(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 		String[] infos = extractOrderInformation(request);
 		if (infos.length == 0) {
-			// TODO
+			redirect("/order", response);
 		} else {
 
 			SessionBlob blob = getSessionBlob(request);
@@ -88,14 +110,21 @@ public class CartActionServlet extends AbstractUIServlet {
 			for (OrderItem item : blob.getOrderItems()) {
 				price += item.getQuantity() * item.getUnitPriceInCents();
 			}
-			blob = LoadBalancedStoreOperations.placeOrder(getSessionBlob(request), infos[0] + " " + infos[1],
-					infos[2], infos[3], infos[4], 
+			blob = LoadBalancedStoreOperations.placeOrder(getSessionBlob(request), infos[0] + " " + infos[1], infos[2],
+					infos[3], infos[4],
 					YearMonth.parse(infos[6], dtf).atDay(1).format(DateTimeFormatter.ISO_LOCAL_DATE), price, infos[5]);
 			saveSessionBlob(blob, response);
 		}
 
 	}
 
+	/**
+	 * Extracts the user information from the input fields.
+	 * 
+	 * @param request
+	 * @return String[] with user infos.
+	 * 
+	 */
 	private String[] extractOrderInformation(HttpServletRequest request) {
 
 		String[] parameters = new String[] { "firstname", "lastname", "address1", "address2", "cardtype", "cardnumber",
@@ -111,6 +140,13 @@ public class CartActionServlet extends AbstractUIServlet {
 		return infos;
 	}
 
+	/**
+	 * Updates the items in the cart.
+	 * 
+	 * @param request
+	 * @param orderItems
+	 * @param response
+	 */
 	private void updateOrder(HttpServletRequest request, List<OrderItem> orderItems, HttpServletResponse response) {
 		SessionBlob blob = getSessionBlob(request);
 		for (OrderItem orderItem : orderItems) {
@@ -128,7 +164,6 @@ public class CartActionServlet extends AbstractUIServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

@@ -26,7 +26,7 @@ import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOpera
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
 
 /**
- * Index Servlet for WebUI.
+ * Servlet implementation for the web view of "Profile"
  * 
  * @author Andre Bauer
  */
