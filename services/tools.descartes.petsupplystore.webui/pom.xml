@@ -70,6 +70,12 @@
 	</dependency>
 	
 	<!-- Test Dependencies -->
+	<dependency>
+	    <groupId>com.github.tomakehurst</groupId>
+	    <artifactId>wiremock</artifactId>
+	    <version>1.18</version>
+	    <scope>test</scope>
+	</dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
