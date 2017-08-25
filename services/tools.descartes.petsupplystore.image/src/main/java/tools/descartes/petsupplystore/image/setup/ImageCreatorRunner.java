@@ -18,17 +18,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.LongStream;
-import java.util.stream.Stream;
-
 import javax.imageio.ImageIO;
 
 import org.slf4j.Logger;
@@ -113,13 +106,15 @@ public class ImageCreatorRunner implements Runnable {
 	public void run() {
 		isRunning = true;
 		timeBeforeGeneration = System.currentTimeMillis();
-	
-		//LinkedList<BufferedImage> images = productIDs.stream().parallel().map(p -> imgCreator.createImage(imgSize)).collect(Collectors.toCollection(LinkedList::new));
 		
+		log.info("Image creator runner started called at {}.", String.valueOf(timeBeforeGeneration));
+	
 		for (long product : productIDs) {
 			if (stopped) {
 				timeAfterGeneration = System.currentTimeMillis();
 				isRunning = false;
+				log.info("Image creator runner stopped by external signal at {}. Generated {} images.", 
+						String.valueOf(timeAfterGeneration), String.valueOf(imagesCreated));
 				return;
 			}
 			
@@ -129,6 +124,8 @@ public class ImageCreatorRunner implements Runnable {
 					if (stopped) {
 						timeAfterGeneration = System.currentTimeMillis();
 						isRunning = false;
+						log.info("Image creator runner stopped by external signal at {}. Generated {} images.", 
+								String.valueOf(timeAfterGeneration), String.valueOf(imagesCreated));
 						return;
 					}
 				} catch (InterruptedException interrupted) {
@@ -158,8 +155,8 @@ public class ImageCreatorRunner implements Runnable {
 				Files.write(imgFile, Base64.getEncoder().encode(stream.toByteArray()), 
 						StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
 			} catch (IOException ioException) {
-				log.warn("An IOException occured while writing image with ID " + String.valueOf(imgID) + " to file \""
-						+ imgFile.toAbsolutePath() + "\".", ioException);
+				log.warn("An IOException occured while writing image with ID " + String.valueOf(imgID) + " to file "
+						+ imgFile.toAbsolutePath() + ".", ioException);
 			}
 			
 			imagesCreated++;
@@ -167,6 +164,9 @@ public class ImageCreatorRunner implements Runnable {
 		
 		timeAfterGeneration = System.currentTimeMillis();
 		isRunning = false;
+		
+		log.info("Image creator runner stopped automatically at {}. Generated {} images.", 
+				String.valueOf(timeAfterGeneration), String.valueOf(imagesCreated));
 	}
 
 	public boolean isRunning() {
@@ -208,15 +208,4 @@ public class ImageCreatorRunner implements Runnable {
 		stopped = true;
 	}
 
-	
-//	public static void main(String[] args) {
-//		Random r = new Random(4);
-//		List<Long> p = Stream.generate(() -> Math.abs(r.nextLong())).distinct().limit(1000).collect(Collectors.toList());
-//		ImageCreatorRunner c = new ImageCreatorRunner(p, Paths.get("test"));
-//		long before = System.currentTimeMillis();
-//		c.run();
-//		long after = System.currentTimeMillis();
-//		
-//		System.out.println("time: " + (after - before));
-//	}
 }
