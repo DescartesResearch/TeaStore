@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import tools.descartes.petsupplystore.entities.ImageSize;
-import tools.descartes.petsupplystore.entities.message.SessionBlob;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
 
@@ -62,6 +61,7 @@ public class OrderServlet extends AbstractUIServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setAttribute("CategoryList", LoadBalancedStoreOperations.getCategories());
 		request.setAttribute("storeIcon", LoadBalancedImageOperations.getWebImage("icon", ImageSize.ICON));
 		request.setAttribute("title", "Pet Supply Store Order");
 		request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));

@@ -14,21 +14,12 @@
 package tools.descartes.petsupplystore.webui.servlet;
 
 import java.io.IOException;
-import java.util.HashMap;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import tools.descartes.petsupplystore.entities.ImageSize;
-import tools.descartes.petsupplystore.registryclient.Service;
-import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
 

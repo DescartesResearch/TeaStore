@@ -53,6 +53,7 @@ public class ErrorSerlvet extends AbstractUIServlet {
 		if (statusCode == null) {
 			redirect("/", response);
 		} else {
+			request.setAttribute("CategoryList", LoadBalancedStoreOperations.getCategories());
 			request.setAttribute("storeIcon", LoadBalancedImageOperations.getWebImage("icon", ImageSize.ICON));
 			request.setAttribute("errorImage", LoadBalancedImageOperations.getWebImage("error", ImageSize.MAIN_IMAGE));
 			request.setAttribute("title", "Pet Supply Store Error ");

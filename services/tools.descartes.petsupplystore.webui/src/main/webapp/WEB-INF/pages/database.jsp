@@ -9,7 +9,7 @@
 	<form action="dataBaseAction" method="POST">
 		<div class="row">
 			<div class="col-sm-9">
-				<h4 class="category-title">Setup the Database</h4>
+				<h4 class="minipage-title">Setup the Database</h4>
 				<div class="form-group row">
 					<label for="categories"
 						class="col-sm-6 col-form-label col-form-label-lg"> Number of new categories</label>

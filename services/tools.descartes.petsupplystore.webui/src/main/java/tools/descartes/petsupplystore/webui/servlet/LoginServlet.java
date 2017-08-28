@@ -47,10 +47,13 @@ public class LoginServlet extends AbstractUIServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		checkforCookie(request, response);
+		request.setAttribute("CategoryList", LoadBalancedStoreOperations.getCategories());
 		request.setAttribute("storeIcon", LoadBalancedImageOperations.getWebImage("icon", ImageSize.ICON));
 		request.setAttribute("title", "Pet Supply Store Login");
 		request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
+
 		request.setAttribute("referer", request.getHeader("Referer"));
+
 		request.getRequestDispatcher("WEB-INF/pages/login.jsp").forward(request, response);
 	}
 

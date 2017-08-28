@@ -12,7 +12,7 @@
 
 		<div class="col-sm-6 col-md-6 col-lg-8">
 
-			<h2 class="category-title">${product.name}</h2>
+			<h2 class="minipage-title">${product.name}</h2>
 
 			<form action="cartAction" method="POST">
 				<div class="row">
@@ -45,9 +45,6 @@
 
 
 </div>
-
-</div>
-
 
 <%@include file="footer.jsp"%>
 

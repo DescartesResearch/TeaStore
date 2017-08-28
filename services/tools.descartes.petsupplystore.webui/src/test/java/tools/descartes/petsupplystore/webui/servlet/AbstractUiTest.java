@@ -3,17 +3,20 @@ package tools.descartes.petsupplystore.webui.servlet;
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.startup.Tomcat;
+import org.apache.tomcat.util.descriptor.web.ContextEnvironment;
 import org.junit.Before;
 import org.junit.Rule;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
+import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.registryclient.Service;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -27,7 +30,7 @@ import javax.servlet.ServletException;
 
 public abstract class AbstractUiTest {
 	@Rule
-	public WireMockRule wireMockRule = new WireMockRule();
+	public WireMockRule wireMockRule = new WireMockRule(9001);
 
 	private static final String CONTEXT = "/test";
 	private Tomcat webUITomcat;
@@ -38,14 +41,23 @@ public abstract class AbstractUiTest {
 		webUITomcat = new Tomcat();
 		webUITomcat.setPort(3000);
 		webUITomcat.setBaseDir(testWorkingDir);
-		Context context = webUITomcat.addWebapp(CONTEXT, System.getProperty("user.dir") + "\\src\\main\\webapp");
+		webUITomcat.enableNaming();
+		Context context = webUITomcat.addWebapp(CONTEXT, System.getProperty("user.dir") + File.separator + "src"
+				+ File.separator + "main" + File.separator + "webapp");
+		ContextEnvironment registryURL = new ContextEnvironment();
+		registryURL.setDescription("");
+		registryURL.setOverride(false);
+		registryURL.setType("java.lang.String");
+		registryURL.setName("registryURL");
+		registryURL.setValue("http://localhost:9001/tools.descartes.petsupplystore.registry/rest/services/");
+		context.getNamingResources().addEnvironment(registryURL);
 		webUITomcat.addServlet(CONTEXT, "servlet", getServlet());
 		context.addServletMappingDecoded("/test", "servlet");
 		webUITomcat.start();
-		
+
 		// Mock registry
 		List<String> strings = new LinkedList<String>();
-		strings.add("localhost:8080");
+		strings.add("localhost:9001");
 		String json = new ObjectMapper().writeValueAsString(strings);
 		wireMockRule.stubFor(get(urlEqualTo(
 				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.IMAGE.getServiceName() + "/"))
@@ -59,8 +71,8 @@ public abstract class AbstractUiTest {
 		wireMockRule.stubFor(get(urlEqualTo(
 				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.RECOMMENDER.getServiceName() + "/"))
 						.willReturn(okJson(json)));
-		
-		// Mock images 
+
+		// Mock images
 		HashMap<String, String> img = new HashMap<>();
 		img.put("andreBauer", "andreBauer");
 		img.put("johannesGrohmann", "johannesGrohmann");
@@ -80,7 +92,7 @@ public abstract class AbstractUiTest {
 			e.printStackTrace();
 		}
 	}
-	
+
 	protected void mockValidGetRestCall(Object input, String path) {
 		try {
 			wireMockRule
@@ -90,11 +102,41 @@ public abstract class AbstractUiTest {
 		}
 	}
 
+	protected int countString(String token, String html) {
+		String[] webpage = html.split("\n");
+		int count = 0;
+		for (String line : webpage) {
+			if (line.contains(token)) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	protected void mockCategories(int numberCategories) {
+		List<Category> categories = new LinkedList<Category>();
+		for (int i = 0; i < numberCategories; i++) {
+			Category category = new Category();
+			category.setId(i);
+			category.setName("Category " + i);
+			category.setDescription("Description " + i);
+			categories.add(category);
+		}
+		mockValidGetRestCall(categories, "/tools.descartes.petsupplystore.store/rest/categories");
+	}
+
 	protected String getResultingHTML() {
+		return getResultingHTML("");
+	}
+
+	protected String getResultingHTML(String requestparams) {
 		try {
+			if (!requestparams.equals("") && !requestparams.startsWith("?")) {
+				requestparams = "?" + requestparams;
+			}
 			URL obj;
 			BufferedReader in = null;
-			String url = "http://localhost:3000/test/test";
+			String url = "http://localhost:3000/test/test" + requestparams;
 			obj = new URL(url);
 			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
@@ -103,7 +145,7 @@ public abstract class AbstractUiTest {
 			StringBuffer response = new StringBuffer();
 
 			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
+				response.append(inputLine + "\n");
 			}
 			in.close();
 			return response.toString();
