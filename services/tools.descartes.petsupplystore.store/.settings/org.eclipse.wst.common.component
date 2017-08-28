@@ -1,151 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
     <wb-module deploy-name="tools.descartes.petsupplystore.store">
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resources"/>
-        <dependent-module archiveName="jackson-jaxrs-base-2.8.4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/rest/common/jackson-jaxrs-base-2.8.4.jar">
+        <dependent-module archiveName="registryclient-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.registryclient/tools.descartes.petsupplystore.registryclient">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="jersey-container-servlet-2.25.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/rest/server/jersey-container-servlet-2.25.1.jar">
+        <dependent-module archiveName="rest-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.rest/tools.descartes.petsupplystore.rest">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="hk2-locator-2.5.0-b32.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/rest/common/hk2-locator-2.5.0-b32.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="tools.descartes.petsupplystore.entities.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.entities/tools.descartes.petsupplystore.entities">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="jackson-databind-2.8.4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/rest/common/jackson-databind-2.8.4.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="jackson-annotations-2.8.4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/rest/common/jackson-annotations-2.8.4.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="javax.inject-2.5.0-b32.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/rest/common/javax.inject-2.5.0-b32.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="javax.ws.rs-api-2.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/rest/common/javax.ws.rs-api-2.0.1.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="javax.json-1.0.4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/rest/server/javax.json-1.0.4.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="jackson-jaxrs-json-provider-2.8.4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/rest/common/jackson-jaxrs-json-provider-2.8.4.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="commonj.sdo-2.1.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/rest/server/commonj.sdo-2.1.1.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="jersey-client-2.25.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/rest/common/jersey-client-2.25.1.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="hk2-utils-2.5.0-b32.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/rest/common/hk2-utils-2.5.0-b32.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="tools.descartes.petsupplystore.registryclient.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.registryclient/tools.descartes.petsupplystore.registryclient">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="jersey-media-json-jackson-2.25.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/rest/common/jersey-media-json-jackson-2.25.1.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="aopalliance-repackaged-2.5.0-b32.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/rest/common/aopalliance-repackaged-2.5.0-b32.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="osgi-resource-locator-1.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/rest/common/osgi-resource-locator-1.0.1.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="javassist-3.20.0-GA.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/rest/common/javassist-3.20.0-GA.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="jackson-module-jaxb-annotations-2.8.4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/rest/common/jackson-module-jaxb-annotations-2.8.4.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="jackson-core-2.8.4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/rest/common/jackson-core-2.8.4.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="jersey-common-2.25.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/rest/common/jersey-common-2.25.1.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="validation-api-1.1.0.Final.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/rest/server/validation-api-1.1.0.Final.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="jersey-media-jaxb-2.25.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/rest/server/jersey-media-jaxb-2.25.1.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="jersey-entity-filtering-2.25.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/rest/common/jersey-entity-filtering-2.25.1.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="hk2-api-2.5.0-b32.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/rest/common/hk2-api-2.5.0-b32.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="jersey-server-2.25.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/rest/server/jersey-server-2.25.1.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="javax.annotation-api-1.2.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/rest/common/javax.annotation-api-1.2.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="jersey-container-servlet-core-2.25.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/rest/server/jersey-container-servlet-core-2.25.1.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="jersey-guava-2.25.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/rest/common/jersey-guava-2.25.1.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="tools.descartes.petsupplystore.rest.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.rest/tools.descartes.petsupplystore.rest">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="ribbon-core-2.2.2.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/ribbon/ribbon-core-2.2.2.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="guava-16.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/ribbon/guava-16.0.1.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="ribbon-loadbalancer-2.2.2.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/ribbon/ribbon-loadbalancer-2.2.2.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="commons-lang-2.6.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/ribbon/commons-lang-2.6.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="netflix-commons-util-0.1.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/ribbon/netflix-commons-util-0.1.1.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="servo-core-0.10.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/ribbon/servo-core-0.10.1.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="servo-internal-0.10.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/ribbon/servo-internal-0.10.1.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="archaius-core-0.7.4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/ribbon/archaius-core-0.7.4.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="commons-logging-1.1.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/ribbon/commons-logging-1.1.1.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="rxjava-1.0.9.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/ribbon/rxjava-1.0.9.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="annotations-2.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/ribbon/annotations-2.0.0.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="netflix-statistics-0.1.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/ribbon/netflix-statistics-0.1.1.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="guava-16.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/ribbon/guava-16.0.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="commons-configuration-1.8.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/ribbon/commons-configuration-1.8.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="jsr305-3.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/ribbon/jsr305-3.0.1.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="jbcrypt-0.4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/security/jbcrypt-0.4.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="slf4j-api-1.7.25.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/logging/slf4j-api-1.7.25.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="slf4j-simple-1.7.25.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.devenvlibraries/logging/slf4j-simple-1.7.25.jar">
+        <dependent-module archiveName="entities-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.entities/tools.descartes.petsupplystore.entities">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="context-root" value="tools.descartes.petsupplystore.store"/>

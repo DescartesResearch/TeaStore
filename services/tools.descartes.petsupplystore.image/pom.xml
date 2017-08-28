@@ -2,7 +2,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>tools.descartes.petsupplystore</groupId>
-  <artifactId>imageprovider</artifactId>
+  <artifactId>image</artifactId>
   <packaging>war</packaging>
   <version>0.0.1-SNAPSHOT</version>
   <name>PetSupplyStore Image Provider</name>
@@ -81,6 +81,6 @@
     </dependency>
   </dependencies>
   <build>
-    <finalName>tools.descartes.petsupplystore.imageprovider</finalName>
+    <finalName>tools.descartes.petsupplystore.image</finalName>
   </build>
 </project>
