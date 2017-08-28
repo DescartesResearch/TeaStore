@@ -107,7 +107,8 @@ public class ImageCreatorRunner implements Runnable {
 		isRunning = true;
 		timeBeforeGeneration = System.currentTimeMillis();
 		
-		log.info("Image creator runner started called at {}.", String.valueOf(timeBeforeGeneration));
+		log.info("Image creator runner started at {}. {} images to generate.", 
+				String.valueOf(timeBeforeGeneration), String.valueOf(nrOfImagesToGenerate));
 	
 		for (long product : productIDs) {
 			if (stopped) {

@@ -14,6 +14,8 @@
 package tools.descartes.petsupplystore.image.cache;
 
 import java.util.Collection;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Predicate;
 
 import org.slf4j.Logger;
@@ -32,9 +34,11 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 	protected S entries;
 	
 	private long maxCacheSize;
-	private long currentCacheSize;
+	private long currentCacheSize; 
 	private Predicate<T> cachingRule;
 	private Logger log = LoggerFactory.getLogger(AbstractCache.class);
+	
+	private final ReadWriteLock lock = new ReentrantReadWriteLock();
 	
 	public AbstractCache(S entries) {
 		this(entries, IDataCache.STD_MAX_CACHE_SIZE);
@@ -70,12 +74,17 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 		}
 		this.entries = entries;
 		this.maxCacheSize = maxCacheSize;
-		this.currentCacheSize = 0;
 		this.cachingRule = cachingRule;
 	}
 	
 	private T getData(long id) {
-		F data = entries.stream().filter(entry -> entry.getId() == id).findFirst().orElse(null);
+		F data = null;
+		lock.readLock().lock();
+		try {
+			data = entries.stream().filter(entry -> entry.getId() == id).findFirst().orElse(null);
+		} finally {
+			lock.readLock().unlock();
+		}
 		return data == null ? null : data.getData();
 	}
 	
@@ -90,12 +99,19 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 	
 	@Override
 	public long getCurrentCacheSize() {
-		return currentCacheSize;
+		long size = 0;
+		lock.readLock().lock();
+		try {
+			size = currentCacheSize;
+		} finally {
+			lock.readLock().unlock();
+		}
+		return size;
 	}
 	
 	@Override
 	public long getFreeSpace() {
-		return maxCacheSize - currentCacheSize;
+		return maxCacheSize - getCurrentCacheSize();
 	}
 	
 	@Override
@@ -113,16 +129,26 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 			return;
 		}
 		
-		while (!hasStorageFor(data.getByteSize())) {
-			removeEntryByCachingStrategy();
+		lock.writeLock().lock();
+		try {
+			while (!hasStorageFor(data.getByteSize())) {
+				removeEntryByCachingStrategy();
+			}
+			addEntry(createEntry(data));
+		} finally {
+			lock.writeLock().unlock();
 		}
-		addEntry(createEntry(data));
 	}
 	
 	@Override
 	public void uncacheData(T data) {
-		entries.remove(createEntry(data));
-		dataRemovedFromCache(data.getByteSize());
+		lock.writeLock().lock();
+		try {
+			entries.remove(createEntry(data));
+			dataRemovedFromCache(data.getByteSize());
+		} finally {
+			lock.writeLock().unlock();
+		}
 	}
 	
 	@Override
@@ -137,8 +163,13 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 	
 	@Override
 	public void clearCache() {
-		entries.clear();
-		currentCacheSize = 0;
+		lock.writeLock().lock();
+		try {
+			entries.clear();
+			currentCacheSize = 0;
+		} finally {
+			lock.writeLock().unlock();
+		}
 	}
 	
 	/*
@@ -147,7 +178,14 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 	
 	@Override
 	public boolean dataExists(long id) {
-		return dataIsInCache(id) ? cachedStorage.dataExists(id) : false;
+		boolean result = false;
+		lock.readLock().lock();
+		try {
+			result = dataIsInCache(id) ? cachedStorage.dataExists(id) : false;
+		} finally {
+			lock.readLock().lock();
+		}
+		return result;
 	}
 	
 	@Override
@@ -194,14 +232,24 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 	
 	protected void dataRemovedFromCache(long size) {
 		// This case should not happen
-		if (size > currentCacheSize) {
-			currentCacheSize = 0;
+		lock.writeLock().lock();
+		try {
+			if (size > currentCacheSize) {
+				currentCacheSize = 0;
+			}
+			currentCacheSize -= size;
+		} finally {
+			lock.writeLock().lock();
 		}
-		currentCacheSize -= size;
 	}
 	
 	protected void dataAddedToCache(long size) {
-		currentCacheSize += size;
+		lock.writeLock().lock();
+		try {
+			currentCacheSize += size;
+		} finally {
+			lock.writeLock().unlock();
+		}
 	}
 	
 	/*

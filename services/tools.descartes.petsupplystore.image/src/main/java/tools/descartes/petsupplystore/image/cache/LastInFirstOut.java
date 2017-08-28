@@ -38,8 +38,7 @@ public class LastInFirstOut<T extends ICachable<T>> extends AbstractQueueCache<T
 
 	@Override
 	protected void removeEntryByCachingStrategy() {
-		T data = entries.pollLast().getData();
-		dataRemovedFromCache(data.getByteSize());
+		dataRemovedFromCache(entries.pollLast().getData().getByteSize());
 	}
 
 }

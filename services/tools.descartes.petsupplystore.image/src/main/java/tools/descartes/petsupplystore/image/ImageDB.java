@@ -16,6 +16,8 @@ package tools.descartes.petsupplystore.image;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +37,11 @@ public class ImageDB {
 	private HashMap<String, Map<Long, ImageSize>> webui = new HashMap<>();
 	private HashMap<Long, ImageSize> sizes = new HashMap<>();
 	private Logger log = LoggerFactory.getLogger(ImageDB.class);
+	
+	// Locking
+	private final ReadWriteLock sizeLock = new ReentrantReadWriteLock();
+	private final ReadWriteLock webuiLock = new ReentrantReadWriteLock();
+	private final ReadWriteLock productsLock = new ReentrantReadWriteLock();
 	
 	/**
 	 * Standard constructor creating a new and empty image database.
@@ -85,7 +92,7 @@ public class ImageDB {
 	 * @return True if the image was found in the correct size, otherwise false
 	 */
 	public boolean hasImageID(long productID, ImageSize imageSize) {
-		return findImageID(productID, imageSize, products) != 0;
+		return findImageID(productID, imageSize, products, productsLock) != 0;
 	}
 	
 	/**
@@ -95,7 +102,7 @@ public class ImageDB {
 	 * @return True if the image was found in the correct size, otherwise false
 	 */
 	public boolean hasImageID(String name, ImageSize imageSize) {
-		return findImageID(name, imageSize, webui) != 0;
+		return findImageID(name, imageSize, webui, webuiLock) != 0;
 	}
 	
 	/**
@@ -126,7 +133,7 @@ public class ImageDB {
 	 * @return The image ID if the image with the size was found, otherwise 0
 	 */
 	public long getImageID(long productID, ImageSize imageSize) {
-		return findImageID(productID, imageSize, products);
+		return findImageID(productID, imageSize, products, productsLock);
 	}
 	
 	/**
@@ -137,14 +144,20 @@ public class ImageDB {
 	 * @return The image ID if the image with the size was found, otherwise 0
 	 */	
 	public long getImageID(String name, ImageSize imageSize) {
-		return findImageID(name, imageSize, webui);
+		return findImageID(name, imageSize, webui, webuiLock);
 	}
 	
 	// Does actually all the heavy lifting for the getImageID methods
-	private <K> long findImageID(K key, ImageSize imageSize, HashMap<K, Map<Long, ImageSize>> db) {
-		Optional<Map.Entry<Long, ImageSize>> img = db.getOrDefault(key, new HashMap<>()).entrySet().stream()
-				.filter(t -> t.getValue().equals(imageSize))
-				.findFirst();
+	private <K> long findImageID(K key, ImageSize imageSize, HashMap<K, Map<Long, ImageSize>> db, ReadWriteLock lock) {
+		Optional<Map.Entry<Long, ImageSize>> img = null;
+		lock.readLock().lock();
+		try {
+			img = db.getOrDefault(key, new HashMap<>()).entrySet().stream()
+					.filter(t -> t.getValue().equals(imageSize))
+					.findFirst();
+		} finally {
+			lock.readLock().unlock();
+		}
 		
 		if (img.isPresent()) {
 			return img.get().getKey();
@@ -159,7 +172,14 @@ public class ImageDB {
 	 * @return The image size or null if the ID could not be found
 	 */
 	public ImageSize getImageSize(long imageID) {
-		return sizes.getOrDefault(imageID, null);
+		ImageSize result = null;	
+		sizeLock.readLock().lock();
+		try {
+			result = sizes.getOrDefault(imageID, null);
+		} finally {
+			sizeLock.readLock().unlock();
+		}
+		return result;
 	}
 	
 	/**
@@ -190,7 +210,7 @@ public class ImageDB {
 	 * @param imageSize The size of the image
 	 */	
 	public void setImageMapping(long productID, long imageID, ImageSize imageSize) {
-		map(productID, imageID, imageSize, products);
+		map(productID, imageID, imageSize, products, productsLock);
 	}
 	
 	/**
@@ -206,11 +226,12 @@ public class ImageDB {
 			throw new NullPointerException("The supplied image name is null.");
 		}
 		
-		map(name, imageID, imageSize, webui);
+		map(name, imageID, imageSize, webui, webuiLock);
 	}
 
 	// Actually creates the image mapping
-	private <K> void map(K key, long imageID, ImageSize imageSize, HashMap<K, Map<Long, ImageSize>> db) {
+	private <K> void map(K key, long imageID, ImageSize imageSize, HashMap<K, Map<Long, ImageSize>> db, 
+			ReadWriteLock lock) {
 		if (imageSize == null) {
 			log.error("Supplied image size is null.");
 			throw new NullPointerException("Supplied image size is null.");
@@ -218,14 +239,53 @@ public class ImageDB {
 	
 		// In case the product ID or image name is not known, we create a new map to store the mapping
 		Map<Long, ImageSize> images = new HashMap<>();
-		if (db.containsKey(key)) {
-			images = db.get(key);
+		
+		lock.readLock().lock();
+		try {
+			if (db.containsKey(key)) {
+				images = db.get(key);
+			}
+		} finally {
+			lock.readLock().unlock();
 		}
 		
+		lock.writeLock().lock();
+		sizeLock.writeLock().lock();
+		
 		// Add the new mapping to the internal map and put it back into the correct database (map)
-		images.put(imageID, imageSize);
-		db.put(key, images);
-		sizes.put(imageID, imageSize);
+		try {
+			images.put(imageID, imageSize);
+			db.put(key, images);
+			sizes.put(imageID, imageSize);
+		} finally {
+			sizeLock.writeLock().unlock();
+			lock.writeLock().unlock();
+		}
+	}
+	
+	public void removeImageMapping(long imageID) {
+		sizeLock.writeLock().lock();
+		try {
+			unmap(imageID, webui, webuiLock);
+			unmap(imageID, products, productsLock);
+			sizes.remove(imageID);
+		} finally {
+			sizeLock.writeLock().unlock();
+		}
+	}
+	
+	private <K> void unmap(long imageID, HashMap<K, Map<Long, ImageSize>> db, ReadWriteLock lock) {
+		lock.writeLock().lock();
+		try {
+			Map.Entry<String, Map<Long, ImageSize>> img = webui.entrySet().stream()
+					.filter(entry -> entry.getValue().containsKey(imageID))
+					.findFirst().orElse(null);
+			if (img != null) {
+				webui.remove(img.getKey());
+			}
+		} finally {
+			lock.writeLock().unlock();
+		}
 	}
 
 }
