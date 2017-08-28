@@ -9,7 +9,7 @@
 		<%@include file="categorylist.jsp"%>
 
 		<div class="col-sm-6 col-lg-8">
-			<h2 class="category-title">Login</h2>
+			<h2 class="minipage-title">Login</h2>
 			<form action="loginAction" method="POST">
 				<div class="row">
 					<h4 class="advertismenttitle">Please enter your username and

@@ -6,7 +6,7 @@
 <div class="container" id="main">
 	<div class="row">
 			<div class="col-sm-12 col-lg-8 col-lg-offset-2">
-				<h2 class="category-title">Pet Supply Store Service Status</h2>
+				<h2 class="minipage-title">Pet Supply Store Service Status</h2>
 				<br/>
 				<c:if test = "${noregistry == true}"> <h2>Load Balancer does not work. Is Registry offline?</h2> <br/></c:if>
 				<p><b>This page does not auto refresh!</b> Refresh manually when checking the current status (e.g. to see if database generation has finished).</p>

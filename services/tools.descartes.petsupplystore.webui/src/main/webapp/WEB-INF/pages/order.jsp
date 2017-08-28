@@ -9,11 +9,11 @@
 
 		<%@include file="categorylist.jsp"%>
 		<div class="col-sm-6 col-lg-8">
-			<h2 class="category-title">Order</h2>
+			<h2 class="minipage-title">Order</h2>
 			<form action="cartAction" method="POST">
 				<div class="row">
 					<div class="col-sm-12 col-md-12 col-lg-4">
-						<h4 class="category-title">Billing Address</h4>
+						<h4 class="minipage-title">Billing Address</h4>
 						<div class="form-group row">
 							<label for="firstname"
 								class="col-sm-6 col-md-5 col-form-label col-form-label-lg">First
@@ -56,7 +56,7 @@
 						</div>
 					</div>
 					<div class="col-sm-12 col-md-12 col-lg-4">
-						<h4 class="category-title">Payment Details</h4>
+						<h4 class="minipage-title">Payment Details</h4>
 						<div class="form-group row">
 							<label for="cardtype"
 								class="col-sm-6 col-md-5 col-form-label col-form-label-lg">Card

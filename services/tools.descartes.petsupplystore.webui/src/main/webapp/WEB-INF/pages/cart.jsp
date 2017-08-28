@@ -10,7 +10,7 @@
 		<%@include file="categorylist.jsp"%>
 
 		<div class="col-sm-6 col-md-6  col-lg-8">
-			<h2 class="category-title">Shopping Cart</h2>
+			<h2 class="minipage-title">Shopping Cart</h2>
 			<form action="cartAction" method="POST">
 				<table class="table table-bordered">
 					<thead>
