@@ -5,24 +5,19 @@ import org.apache.catalina.LifecycleException;
 import org.apache.catalina.startup.Tomcat;
 import org.junit.Before;
 import org.junit.Rule;
-import org.mockito.Mockito;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
-import tools.descartes.petsupplystore.entities.ImageSize;
 import tools.descartes.petsupplystore.registryclient.Service;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,7 +25,7 @@ import java.util.List;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 
-public abstract class AbstractUiTest extends Mockito {
+public abstract class AbstractUiTest {
 	@Rule
 	public WireMockRule wireMockRule = new WireMockRule();
 
@@ -47,8 +42,7 @@ public abstract class AbstractUiTest extends Mockito {
 		webUITomcat.addServlet(CONTEXT, "servlet", getServlet());
 		context.addServletMappingDecoded("/test", "servlet");
 		webUITomcat.start();
-//		webUITomcat.getServer().await();
-
+		
 		// Mock registry
 		List<String> strings = new LinkedList<String>();
 		strings.add("localhost:8080");
@@ -67,7 +61,14 @@ public abstract class AbstractUiTest extends Mockito {
 						.willReturn(okJson(json)));
 		
 		// Mock images 
-		HashMap<String, ImageSize> img = new HashMap<>();
+		HashMap<String, String> img = new HashMap<>();
+		img.put("andreBauer", "andreBauer");
+		img.put("johannesGrohmann", "johannesGrohmann");
+		img.put("joakimKistowski", "joakimKistowski");
+		img.put("simonEismann", "simonEismann");
+		img.put("norbertSchmitt", "norbertSchmitt");
+		img.put("descartesLogo", "descartesLogo");
+		img.put("icon", "icon");
 		mockValidPostRestCall(img, "/tools.descartes.petsupplystore.image/rest/image/getWebImages");
 	}
 
