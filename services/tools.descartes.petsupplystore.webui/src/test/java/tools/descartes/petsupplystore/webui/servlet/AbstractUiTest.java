@@ -42,8 +42,8 @@ public abstract class AbstractUiTest {
 		webUITomcat.setPort(3000);
 		webUITomcat.setBaseDir(testWorkingDir);
 		webUITomcat.enableNaming();
-		Context context = webUITomcat.addWebapp(CONTEXT, System.getProperty("user.dir") + File.separator + 
-				"src" + File.separator + "main" + File.separator + "webapp");
+		Context context = webUITomcat.addWebapp(CONTEXT, System.getProperty("user.dir") + File.separator + "src"
+				+ File.separator + "main" + File.separator + "webapp");
 		ContextEnvironment registryURL = new ContextEnvironment();
 		registryURL.setDescription("");
 		registryURL.setOverride(false);
@@ -54,7 +54,7 @@ public abstract class AbstractUiTest {
 		webUITomcat.addServlet(CONTEXT, "servlet", getServlet());
 		context.addServletMappingDecoded("/test", "servlet");
 		webUITomcat.start();
-		
+
 		// Mock registry
 		List<String> strings = new LinkedList<String>();
 		strings.add("localhost:9001");
@@ -71,8 +71,8 @@ public abstract class AbstractUiTest {
 		wireMockRule.stubFor(get(urlEqualTo(
 				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.RECOMMENDER.getServiceName() + "/"))
 						.willReturn(okJson(json)));
-		
-		// Mock images 
+
+		// Mock images
 		HashMap<String, String> img = new HashMap<>();
 		img.put("andreBauer", "andreBauer");
 		img.put("johannesGrohmann", "johannesGrohmann");
@@ -92,7 +92,7 @@ public abstract class AbstractUiTest {
 			e.printStackTrace();
 		}
 	}
-	
+
 	protected void mockValidGetRestCall(Object input, String path) {
 		try {
 			wireMockRule
@@ -105,31 +105,38 @@ public abstract class AbstractUiTest {
 	protected int countString(String token, String html) {
 		String[] webpage = html.split("\n");
 		int count = 0;
-		for(String line: webpage) {
-			if(line.contains(token)) {
+		for (String line : webpage) {
+			if (line.contains(token)) {
 				count++;
 			}
 		}
 		return count;
 	}
-	
+
 	protected void mockCategories(int numberCategories) {
-		List<Category> categories = new LinkedList<Category>();	
-		for(int i = 0; i < numberCategories; i++) {
+		List<Category> categories = new LinkedList<Category>();
+		for (int i = 0; i < numberCategories; i++) {
 			Category category = new Category();
 			category.setId(i);
-			category.setName("Category "+i);
-			category.setDescription("Description "+i);
+			category.setName("Category " + i);
+			category.setDescription("Description " + i);
 			categories.add(category);
 		}
 		mockValidGetRestCall(categories, "/tools.descartes.petsupplystore.store/rest/categories");
 	}
-	
+
 	protected String getResultingHTML() {
+		return getResultingHTML("");
+	}
+
+	protected String getResultingHTML(String requestparams) {
 		try {
+			if (!requestparams.equals("") && !requestparams.startsWith("?")) {
+				requestparams = "?" + requestparams;
+			}
 			URL obj;
 			BufferedReader in = null;
-			String url = "http://localhost:3000/test/test";
+			String url = "http://localhost:3000/test/test" + requestparams;
 			obj = new URL(url);
 			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
@@ -138,7 +145,7 @@ public abstract class AbstractUiTest {
 			StringBuffer response = new StringBuffer();
 
 			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine+"\n");
+				response.append(inputLine + "\n");
 			}
 			in.close();
 			return response.toString();
