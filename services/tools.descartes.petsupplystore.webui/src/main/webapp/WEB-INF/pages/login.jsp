@@ -14,7 +14,7 @@
 				<div class="row">
 					<h4 class="advertismenttitle">Please enter your username and
 						password.</h4>
-					<input type="hidden" name="referer" value="${referer}"}>
+					<input type="hidden" name="referer" value="${referer}">
 					<div class="col-sm-6 col-md-4 col-lg-3">
 
 						<div class="form-group row">

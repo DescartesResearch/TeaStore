@@ -15,6 +15,7 @@ import tools.descartes.petsupplystore.registryclient.Service;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -40,7 +41,8 @@ public abstract class AbstractUiTest {
 		webUITomcat.setPort(3000);
 		webUITomcat.setBaseDir(testWorkingDir);
 		webUITomcat.enableNaming();
-		Context context = webUITomcat.addWebapp(CONTEXT, System.getProperty("user.dir") + "\\src\\main\\webapp");
+		Context context = webUITomcat.addWebapp(CONTEXT, System.getProperty("user.dir") + File.separator + 
+				"src" + File.separator + "main" + File.separator + "webapp");
 		ContextEnvironment registryURL = new ContextEnvironment();
 		registryURL.setDescription("");
 		registryURL.setOverride(false);
