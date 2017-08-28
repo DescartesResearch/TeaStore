@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
+import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.registryclient.Service;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -90,6 +91,29 @@ public abstract class AbstractUiTest {
 		}
 	}
 
+	protected int countString(String token, String html) {
+		String[] webpage = html.split("\n");
+		int count = 0;
+		for(String line: webpage) {
+			if(line.contains(token)) {
+				count++;
+			}
+		}
+		return count;
+	}
+	
+	protected void mockCategories(int numberCategories) {
+		List<Category> categories = new LinkedList<Category>();	
+		for(int i = 0; i < numberCategories; i++) {
+			Category category = new Category();
+			category.setId(i);
+			category.setName("Category "+i);
+			category.setDescription("Description "+i);
+			categories.add(category);
+		}
+		mockValidGetRestCall(categories, "/tools.descartes.petsupplystore.store/rest/categories");
+	}
+	
 	protected String getResultingHTML() {
 		try {
 			URL obj;
@@ -103,7 +127,7 @@ public abstract class AbstractUiTest {
 			StringBuffer response = new StringBuffer();
 
 			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
+				response.append(inputLine+"\n");
 			}
 			in.close();
 			return response.toString();

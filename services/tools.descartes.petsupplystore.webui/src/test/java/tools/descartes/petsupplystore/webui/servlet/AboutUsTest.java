@@ -11,12 +11,7 @@ import tools.descartes.petsupplystore.entities.message.SessionBlob;
 public class AboutUsTest extends AbstractUiTest {
 
 	
-	@Test
-	public void servesWindSpeedBasedOnForecastIoResponse() throws IOException, ServletException, InterruptedException {
-		mockValidPostRestCall(new SessionBlob(), "/tools.descartes.petsupplystore.store/rest/useractions/isloggedin");
-		
-		System.out.println(getResultingHTML());
-	}
+	
 	
 	@Override
 	protected Servlet getServlet() {
