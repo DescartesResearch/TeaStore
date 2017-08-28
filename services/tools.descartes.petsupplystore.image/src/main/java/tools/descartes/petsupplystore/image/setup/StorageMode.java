@@ -17,8 +17,7 @@ import java.util.Arrays;
 
 public enum StorageMode {
 	
-	DRIVE("Drive"),
-	DRIVE_LIMITED("Drive-Limited");
+	DRIVE("Drive");
 	
 	public static final StorageMode STD_STORAGE_MODE = DRIVE;
 	

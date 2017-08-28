@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import tools.descartes.petsupplystore.entities.ImageSize;
-import tools.descartes.petsupplystore.image.setup.ImageCreatorRunner;
 import tools.descartes.petsupplystore.image.setup.ImageIDFactory;
 import tools.descartes.petsupplystore.image.storage.IDataStorage;
 
@@ -33,7 +32,6 @@ public enum ImageProvider {
 	
 	private ImageDB db;
 	private IDataStorage<StoreImage> storage;
-	private ImageCreatorRunner imgCreatorRunner;
 	private Logger log = LoggerFactory.getLogger(ImageProvider.class);
 	
 	private ImageProvider() {
@@ -47,25 +45,8 @@ public enum ImageProvider {
 	public void setStorage(IDataStorage<StoreImage> imgStorage) {
 		storage = imgStorage;
 	}
-	
-	public void setImageCreatorRunner(ImageCreatorRunner runner) {
-		imgCreatorRunner = runner;
-	}
-
-	private void waitForImageCreator() {
-		if (imgCreatorRunner.isRunning()) {
-			imgCreatorRunner.pause();
-			try {
-				Thread.sleep(imgCreatorRunner.getAvgCreationTime());
-			} catch (InterruptedException interrupted) {
-				log.info("Thread was interrupted while waiting for image creator thread to pause.", interrupted);
-			}
-		}
-	}
 
 	public Map<Long, String> getProductImages(Map<Long, ImageSize> images) {
-		waitForImageCreator();
-		
 		Map<Long, String> result = new HashMap<>();
 		for (Map.Entry<Long, ImageSize> entry : images.entrySet()) {
 			String imgStr = getImageFor(new ImageDBKey(entry.getKey()), entry.getValue());
@@ -74,14 +55,10 @@ public enum ImageProvider {
 			}
 			result.put(entry.getKey(), imgStr);
 		}
-	
-		imgCreatorRunner.resume();
 		return result;
 	}
 	
 	public Map<String, String> getWebUIImages(Map<String, ImageSize> images) {
-		waitForImageCreator();
-		
 		Map<String, String> result = new HashMap<>();
 		for (Map.Entry<String, ImageSize> entry : images.entrySet()) {
 			String imgStr = getImageFor(new ImageDBKey(entry.getKey()), entry.getValue());
@@ -90,8 +67,6 @@ public enum ImageProvider {
 			}
 			result.put(entry.getKey(), imgStr);
 		}
-		
-		imgCreatorRunner.resume();
 		return result;
 	}
 	
