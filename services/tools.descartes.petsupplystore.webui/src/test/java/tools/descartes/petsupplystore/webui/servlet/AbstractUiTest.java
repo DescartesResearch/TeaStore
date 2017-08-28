@@ -3,6 +3,7 @@ package tools.descartes.petsupplystore.webui.servlet;
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.startup.Tomcat;
+import org.apache.tomcat.util.descriptor.web.ContextEnvironment;
 import org.junit.Before;
 import org.junit.Rule;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -27,7 +28,7 @@ import javax.servlet.ServletException;
 
 public abstract class AbstractUiTest {
 	@Rule
-	public WireMockRule wireMockRule = new WireMockRule();
+	public WireMockRule wireMockRule = new WireMockRule(9001);
 
 	private static final String CONTEXT = "/test";
 	private Tomcat webUITomcat;
@@ -38,14 +39,22 @@ public abstract class AbstractUiTest {
 		webUITomcat = new Tomcat();
 		webUITomcat.setPort(3000);
 		webUITomcat.setBaseDir(testWorkingDir);
+		webUITomcat.enableNaming();
 		Context context = webUITomcat.addWebapp(CONTEXT, System.getProperty("user.dir") + "\\src\\main\\webapp");
+		ContextEnvironment registryURL = new ContextEnvironment();
+		registryURL.setDescription("");
+		registryURL.setOverride(false);
+		registryURL.setType("java.lang.String");
+		registryURL.setName("registryURL");
+		registryURL.setValue("http://localhost:9001/tools.descartes.petsupplystore.registry/rest/services/");
+		context.getNamingResources().addEnvironment(registryURL);
 		webUITomcat.addServlet(CONTEXT, "servlet", getServlet());
 		context.addServletMappingDecoded("/test", "servlet");
 		webUITomcat.start();
 		
 		// Mock registry
 		List<String> strings = new LinkedList<String>();
-		strings.add("localhost:8080");
+		strings.add("localhost:9001");
 		String json = new ObjectMapper().writeValueAsString(strings);
 		wireMockRule.stubFor(get(urlEqualTo(
 				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.IMAGE.getServiceName() + "/"))
