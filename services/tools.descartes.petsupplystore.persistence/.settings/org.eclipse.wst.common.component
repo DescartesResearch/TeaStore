@@ -3,7 +3,7 @@
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resources"/>
+        <wb-resource deploy-path="/WEB-INF/lib" source-path="/src/dev/webapp/WEB-INF/lib"/>
         <dependent-module archiveName="registryclient-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.registryclient/tools.descartes.petsupplystore.registryclient">
             <dependency-type>uses</dependency-type>
         </dependent-module>
@@ -11,9 +11,6 @@
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="entities-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.entities/tools.descartes.petsupplystore.entities">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="hsqldb-2.4.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/tools.descartes.petsupplystore.persistence/src/dev/webapp/WEB-INF/lib/hsqldb-2.4.0.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="java-output-path" value="/tools.descartes.petsupplystore.persistence/build/classes"/>
