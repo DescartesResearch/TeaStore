@@ -1,9 +1,4 @@
 <root>
-  <facet id="jpt.jpa">
-    <node name="libprov">
-      <attribute name="provider-id" value="jpa-user-library-provider"/>
-    </node>
-  </facet>
   <facet id="jst.jsf">
     <node name="libprov">
       <attribute name="provider-id" value="jsf-no-op-library-provider"/>
