@@ -61,8 +61,9 @@ public class RegistryClient {
 	private static final int LOAD_BALANCER_REFRESH_INTERVAL_MS = 2500;
 	private static final int HEARTBEAT_INTERVAL_MS = 2500;
 	
-	private ScheduledExecutorService loadBalancerUpdateScheduler;
-	private ScheduledExecutorService heartbeatScheduler;
+	private ScheduledExecutorService loadBalancerUpdateScheduler = Executors.newSingleThreadScheduledExecutor();
+	private ScheduledExecutorService heartbeatScheduler = Executors.newSingleThreadScheduledExecutor();
+	private ScheduledExecutorService availabilityScheduler = Executors.newSingleThreadScheduledExecutor();
 	
 	/**
 	 * Constructor.
@@ -94,10 +95,22 @@ public class RegistryClient {
     public void unregister(String contextPath)  {
     	Service service = getService(contextPath);
     	Server host = getServer();
-    	LOG.info("Shutdown " + service.getServiceName() + "@" + host);
-    	RegistryClient.client.unregisterOnce(service, host);
-    	heartbeatScheduler.shutdown();
-    	loadBalancerUpdateScheduler.shutdown();
+    	LOG.info("Shutingdown " + service.getServiceName() + "@" + host);
+    	heartbeatScheduler.shutdownNow();
+    	loadBalancerUpdateScheduler.shutdownNow();
+    	availabilityScheduler.shutdownNow();
+    	try {
+        	loadBalancerUpdateScheduler.awaitTermination(20, TimeUnit.SECONDS);
+        	heartbeatScheduler.awaitTermination(20, TimeUnit.SECONDS);
+        	availabilityScheduler.awaitTermination(20, TimeUnit.SECONDS);
+    		RegistryClient.client.unregisterOnce(service, host);
+    	} catch (ProcessingException e) {
+    		LOG.warn("Could not unregister " + service.getServiceName() + " when it was shutting "
+    				+ "down, since it could not reach the registry. This can be caused by shutting "
+    				+ "down the registry before other services, but is in it self not a problem.");
+    	} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
     }
 	
 	/**
@@ -110,11 +123,9 @@ public class RegistryClient {
     public void register(String contextPath)  {
     	Service service = getService(contextPath);
     	Server host = getServer();
-		heartbeatScheduler = Executors.newSingleThreadScheduledExecutor();
 		heartbeatScheduler.scheduleAtFixedRate(
 				new RegistryClientHeartbeatDaemon(service, host), 0,
 				HEARTBEAT_INTERVAL_MS, TimeUnit.MILLISECONDS);
-		loadBalancerUpdateScheduler = Executors.newSingleThreadScheduledExecutor();
 		loadBalancerUpdateScheduler.scheduleAtFixedRate(new LoadBalancerUpdaterDaemon(), 1000,
 				LOAD_BALANCER_REFRESH_INTERVAL_MS, TimeUnit.MILLISECONDS);
     }
@@ -125,8 +136,7 @@ public class RegistryClient {
      * @param callback StartupCallback to call
      */
     public void runAfterServiceIsAvailable(Service service, StartupCallback callback) {
-    	ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-    	scheduler.schedule(new Runnable() {
+    	availabilityScheduler.schedule(new Runnable() {
 			
 			@Override
 			public void run() {
@@ -149,7 +159,7 @@ public class RegistryClient {
 		    	callback.callback();
 			}
 		}, 0, TimeUnit.NANOSECONDS);
-    	
+    	availabilityScheduler.shutdown();
     }
     
 	/**
@@ -161,7 +171,7 @@ public class RegistryClient {
 		List<String> list = null;
 		List<Server> serverList = new ArrayList<Server>();
 		try {
-			Response response = getRESTClient().target(registryRESTURL)
+			Response response = getRESTClient(5000).target(registryRESTURL)
 					.path("/" + targetService.getServiceName() + "/")
 					.request(MediaType.APPLICATION_JSON).get();
 			list = response.readEntity(new GenericType<List<String>>() { }); 
@@ -205,7 +215,7 @@ public class RegistryClient {
 	protected boolean registerOnce(Service service, Server server) {
 		myService = service;
 		myServiceInstanceServer = server;
-		Response response = getRESTClient().target(registryRESTURL)
+		Response response = getRESTClient(5000).target(registryRESTURL)
 				.path(service.getServiceName()).path(server.toString())
 				.request(MediaType.APPLICATION_JSON).put(Entity.text(""));
 		return (response.getStatus() == Response.Status.OK.getStatusCode());
@@ -218,16 +228,16 @@ public class RegistryClient {
 	 * @return True, if unregistration succeeded.
 	 */
 	private boolean unregisterOnce(Service service, Server server) {
-		Response response = getRESTClient().target(registryRESTURL)
+		Response response = getRESTClient(1000).target(registryRESTURL)
 				.path(service.getServiceName()).path(server.toString())
 				.request(MediaType.APPLICATION_JSON).delete();
 		return (response.getStatus() == Response.Status.OK.getStatusCode());
 	}
 	
-	private Client getRESTClient() {
+	private Client getRESTClient(int timeout) {
 		ClientConfig configuration = new ClientConfig();
-		configuration.property(ClientProperties.CONNECT_TIMEOUT, 5000);
-		configuration.property(ClientProperties.READ_TIMEOUT, 5000);
+		configuration.property(ClientProperties.CONNECT_TIMEOUT, timeout);
+		configuration.property(ClientProperties.READ_TIMEOUT, timeout);
 		return ClientBuilder.newClient(configuration);
 	}
     

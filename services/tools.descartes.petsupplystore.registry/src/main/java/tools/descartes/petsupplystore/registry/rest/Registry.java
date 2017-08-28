@@ -115,7 +115,15 @@ public final class Registry {
 		}
 		List<String> locations = map.get(name);
 		
-		return locations.remove(location);
+		boolean removed = locations.remove(location);
+		if (locations.size() == 0) {
+			map.remove(name);
+		}
+		
+		if (removed) {
+			LOG.info("Unregistered " + name + "@" + location);
+		}
+		return removed;
 	}
 
 	/**

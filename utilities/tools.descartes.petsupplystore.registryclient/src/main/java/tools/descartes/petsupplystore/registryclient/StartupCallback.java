@@ -5,7 +5,6 @@ package tools.descartes.petsupplystore.registryclient;
  * @author Simon
  *
  */
-@FunctionalInterface
 public interface StartupCallback {
 	/**
 	 * This function is called to trigger callback.

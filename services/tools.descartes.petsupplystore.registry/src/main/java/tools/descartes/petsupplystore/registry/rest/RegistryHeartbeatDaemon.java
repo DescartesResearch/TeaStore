@@ -34,7 +34,7 @@ public class RegistryHeartbeatDaemon implements Runnable {
 				String location = iter.next();
 				if (!Registry.getRegistryInstance().isAlive(entry.getKey(), location)) {
 					iter.remove();
-					LOG.warn("Removed " + entry.getValue() + "@" + location 
+					LOG.warn("Removed " + entry.getKey() + "@" + location 
 							+ " since it failed the heartbeat!");
 				}
 			}

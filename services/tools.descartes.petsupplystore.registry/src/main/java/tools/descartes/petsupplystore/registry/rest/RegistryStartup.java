@@ -21,6 +21,9 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Application Lifecycle Listener implementation class Registry Client Startup.
  * @author Simon Eismann
@@ -28,7 +31,8 @@ import javax.servlet.annotation.WebListener;
  */
 @WebListener
 public class RegistryStartup implements ServletContextListener {
-	
+
+	private static final Logger LOG = LoggerFactory.getLogger(RegistryStartup.class);
 	/**
 	 * Also set this accordingly in RegistryClientStartup.
 	 */
@@ -48,7 +52,8 @@ public class RegistryStartup implements ServletContextListener {
      * @param arg0 The servlet context event at destruction.
      */
     public void contextDestroyed(ServletContextEvent arg0)  { 
-    	heartbeatScheduler.shutdown();
+    	heartbeatScheduler.shutdownNow();
+    	LOG.info("Shutdown registry");
     }
 
 	/**
@@ -59,6 +64,7 @@ public class RegistryStartup implements ServletContextListener {
 		heartbeatScheduler = Executors.newSingleThreadScheduledExecutor();
 		heartbeatScheduler.scheduleAtFixedRate(new RegistryHeartbeatDaemon(),
 				HEARTBEAT_INTERVAL_MS,  HEARTBEAT_INTERVAL_MS, TimeUnit.MILLISECONDS);
+    	LOG.info("Registry online");
     }
     
 }
