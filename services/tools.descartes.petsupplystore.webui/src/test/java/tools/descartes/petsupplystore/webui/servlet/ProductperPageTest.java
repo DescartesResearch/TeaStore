@@ -38,10 +38,12 @@ public class ProductperPageTest extends AbstractUiTest {
 		
 		mockProducts(20,1, products);
 
+		String html = getResultingHTML();
+		
 		Assert.assertEquals("No category parameter should redirect to home", "Pet Supply Store Home",
-				getWebSiteTitle());
+				getWebSiteTitle(html));
 
-		String html = getResultingHTML("?category=0&page=1");
+		html = getResultingHTML("?category=0&page=1");
 
 		Assert.assertEquals("There should be 20 products on page 1", 20, countString("productid", html));
 

@@ -54,8 +54,10 @@ public abstract class AbstractUiTest {
 		context.getNamingResources().addEnvironment(registryURL);
 		webUITomcat.addServlet(CONTEXT, "servlet", getServlet());
 		webUITomcat.addServlet(CONTEXT, "index", new IndexServlet());
+		webUITomcat.addServlet(CONTEXT, "login", new LoginServlet());
 		context.addServletMappingDecoded("/test", "servlet");
 		context.addServletMappingDecoded("/index", "index");
+		context.addServletMappingDecoded("/login", "login");
 		context.addWelcomeFile("/index");
 		webUITomcat.start();
 
@@ -210,8 +212,8 @@ public abstract class AbstractUiTest {
 		return page;
 	}
 
-	protected String getWebSiteTitle() {
-		String[] webpage = getResultingHTML().split("\n");
+	protected String getWebSiteTitle(String html) {
+		String[] webpage = html.split("\n");
 		for(String line: webpage) {
 			if(line.contains("title")) {
 				return line.replace("<title>", "").replace("</title>", "");

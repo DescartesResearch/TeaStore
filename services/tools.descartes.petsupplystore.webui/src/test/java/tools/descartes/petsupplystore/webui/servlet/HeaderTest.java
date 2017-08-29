@@ -23,6 +23,7 @@ public class HeaderTest extends AbstractUiTest {
 		//
 		
 		SessionBlob blob = new SessionBlob();
+		blob.setSID("1");
 		mockValidPostRestCall(blob, "/tools.descartes.petsupplystore.store/rest/useractions/isloggedin");
 		html = getResultingHTML();
 		Assert.assertEquals("Test if header shows correct illustration: Profile", 1,
