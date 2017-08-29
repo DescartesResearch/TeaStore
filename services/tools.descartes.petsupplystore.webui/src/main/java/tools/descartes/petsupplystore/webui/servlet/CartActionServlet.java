@@ -83,7 +83,6 @@ public class CartActionServlet extends AbstractUIServlet {
 				break;
 			} else if (param.contains("confirm")) {
 				confirmOrder(request, response);
-				redirect("/", response, MESSAGECOOKIE, ORDERCONFIRMED);
 				break;
 			}
 
@@ -114,6 +113,7 @@ public class CartActionServlet extends AbstractUIServlet {
 					infos[3], infos[4],
 					YearMonth.parse(infos[6], dtf).atDay(1).format(DateTimeFormatter.ISO_LOCAL_DATE), price, infos[5]);
 			saveSessionBlob(blob, response);
+			redirect("/", response, MESSAGECOOKIE, ORDERCONFIRMED);
 		}
 
 	}

@@ -18,7 +18,7 @@ import tools.descartes.petsupplystore.entities.Product;
 public class PaginationTest extends AbstractUiTest {
 
 	@Test
-	public void TestPagination() throws IOException, ServletException, InterruptedException {
+	public void testPagination() throws IOException, ServletException, InterruptedException {
 		mockCategories(1);
 		mockValidPostRestCall(null, "/tools.descartes.petsupplystore.store/rest/useractions/isloggedin");
 		mockValidGetRestCall(new Category(), "/tools.descartes.petsupplystore.store/rest/categories/0");
@@ -33,28 +33,28 @@ public class PaginationTest extends AbstractUiTest {
 		mockValidGetRestCall(products,
 				"/tools.descartes.petsupplystore.store/rest/products/category/0?page=5&articlesPerPage=20");
 
-		String html = getResultingHTML("?category=0&page=1");
+		String html = doGet("?category=0&page=1");
 
 		String[] pagination = getPagination(html);
 
 		Assert.assertArrayEquals("Test the pagination on page 1: 100 products and 20 per page",
 				new String[] { "1", "2", "3", "4", "5", "next" }, pagination);
 
-		html = getResultingHTML("?category=0&page=3");
+		html = doGet("?category=0&page=3");
 
 		pagination = getPagination(html);
 
 		Assert.assertArrayEquals("Test the paginationon page 3: 100 products and 20 per page",
 				new String[] { "previous", "1", "2", "3", "4", "5", "next" }, pagination);
 
-		html = getResultingHTML("?category=0&page=5");
+		html = doGet("?category=0&page=5");
 
 		pagination = getPagination(html);
 
 		Assert.assertArrayEquals("Test the paginationon page 5: 100 products and 20 per page",
 				new String[] { "previous", "1", "2", "3", "4", "5" }, pagination);
 
-		html = getResultingHTML("?category=0&page=6");
+		html = doGet("?category=0&page=6");
 		
 		pagination = getPagination(html);
 		

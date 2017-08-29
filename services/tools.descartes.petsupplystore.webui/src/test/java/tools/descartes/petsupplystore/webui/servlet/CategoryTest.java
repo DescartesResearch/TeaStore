@@ -12,10 +12,10 @@ public class CategoryTest extends AbstractUiTest {
 	public void testCategories() {
 		mockCategories(3);
 		mockValidPostRestCall(new SessionBlob(), "/tools.descartes.petsupplystore.store/rest/useractions/isloggedin");
-		String html = getResultingHTML();
+		String html = doGet();
 		Assert.assertEquals("Test the number of shown categories", 3, countString("Category ", html));
 		mockCategories(0);
-		html = getResultingHTML();
+		html = doGet();
 		Assert.assertEquals("Test the number of shown categories", 0, countString("Category ", html));
 		
 	}

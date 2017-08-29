@@ -16,6 +16,7 @@ import tools.descartes.petsupplystore.registryclient.Service;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -55,9 +56,11 @@ public abstract class AbstractUiTest {
 		webUITomcat.addServlet(CONTEXT, "servlet", getServlet());
 		webUITomcat.addServlet(CONTEXT, "index", new IndexServlet());
 		webUITomcat.addServlet(CONTEXT, "login", new LoginServlet());
+		webUITomcat.addServlet(CONTEXT, "order", new OrderServlet());
 		context.addServletMappingDecoded("/test", "servlet");
 		context.addServletMappingDecoded("/index", "index");
 		context.addServletMappingDecoded("/login", "login");
+		context.addServletMappingDecoded("/order", "order"); 
 		context.addWelcomeFile("/index");
 		webUITomcat.start();
 
@@ -131,11 +134,15 @@ public abstract class AbstractUiTest {
 		mockValidGetRestCall(categories, "/tools.descartes.petsupplystore.store/rest/categories");
 	}
 
-	protected String getResultingHTML() {
-		return getResultingHTML("");
+	protected String doGet() {
+		return doGet("", "", "");
 	}
 
-	protected String getResultingHTML(String requestparams) {
+	protected String doGet(String requestparams) {
+		return doGet(requestparams, "", "");
+	}
+
+	protected String doGet(String requestparams, String cookiename, String value) {
 		try {
 			if (!requestparams.equals("") && !requestparams.startsWith("?")) {
 				requestparams = "?" + requestparams;
@@ -145,7 +152,9 @@ public abstract class AbstractUiTest {
 			String url = "http://localhost:3000/test/test" + requestparams;
 			obj = new URL(url);
 			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
+			if (!cookiename.equals("") && !value.equals("")) {
+				con.setRequestProperty("Cookie", cookiename + "=" + value);
+			}
 			in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 			String inputLine;
 			StringBuffer response = new StringBuffer();
@@ -160,34 +169,7 @@ public abstract class AbstractUiTest {
 			return null;
 		}
 	}
-	
-	protected String getResultingHTML(String requestparams, String cookiename, String value) {
-		try {
-			if (!requestparams.equals("") && !requestparams.startsWith("?")) {
-				requestparams = "?" + requestparams;
-			}
-			URL obj;
-			BufferedReader in = null;
-			String url = "http://localhost:3000/test/test" + requestparams;
-			obj = new URL(url);
-			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-			con.setRequestProperty("Cookie", cookiename+"="+value );
 
-			in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-			String inputLine;
-			StringBuffer response = new StringBuffer();
-
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine + "\n");
-			}
-			in.close();
-			return response.toString();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
 	protected String[] getPagination(String html) {
 		ArrayList<String> pagination = new ArrayList<String>();
 		String[] webpage = html.split("\n");
@@ -212,15 +194,45 @@ public abstract class AbstractUiTest {
 		return page;
 	}
 
+	protected String doPost(String query) throws IOException {
+		URL url = new URL("http://localhost:3000/test/test");
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		connection.setRequestMethod("POST");
+		connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+		connection.setRequestProperty("Content-Length", "" + Integer.toString(query.getBytes().length));
+		connection.setRequestProperty("Content-Language", "en-US");
+
+		connection.setUseCaches(false);
+		connection.setDoInput(true);
+		connection.setDoOutput(true);
+
+		// Send request
+		DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+		wr.writeBytes(query);
+		wr.flush();
+		wr.close();
+
+		BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine + "\n");
+		}
+		in.close();
+		return response.toString();
+	}
+
 	protected String getWebSiteTitle(String html) {
 		String[] webpage = html.split("\n");
-		for(String line: webpage) {
-			if(line.contains("title")) {
+		for (String line : webpage) {
+			if (line.contains("title")) {
 				return line.replace("<title>", "").replace("</title>", "");
 			}
 		}
 		return "";
 	}
-	
+
 	protected abstract Servlet getServlet();
 }

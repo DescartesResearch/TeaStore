@@ -21,7 +21,7 @@ import tools.descartes.petsupplystore.entities.message.SessionBlob;
 public class LoginActionTest extends AbstractUiTest {
 
 	@Test
-	public void TestHeaderLogging() throws IOException, ServletException, InterruptedException {
+	public void testLoginAction() throws IOException, ServletException, InterruptedException {
 		mockCategories(1);
 		mockValidPostRestCall(null, "/tools.descartes.petsupplystore.store/rest/useractions/isloggedin");
 
@@ -30,14 +30,14 @@ public class LoginActionTest extends AbstractUiTest {
 		mockValidPostRestCall(blob,
 				"/tools.descartes.petsupplystore.store/rest/useractions/login?name=user&password=password");
 
-		String html = post("username=user&password=password");
+		String html = doPost("username=user&password=password");
 		Assert.assertEquals("After sucessful login redirect home", "Pet Supply Store Home", getWebSiteTitle(html));
 		
 
 		blob = new SessionBlob();
 		mockValidPostRestCall(blob,
 				"/tools.descartes.petsupplystore.store/rest/useractions/login?name=user&password=wrong");
-		html = post("username=user&password=wrong");
+		html = doPost("username=user&password=wrong");
 		Assert.assertEquals("After failed login redirect login", "Pet Supply Store Login", getWebSiteTitle(html));
 
 	}
@@ -47,34 +47,6 @@ public class LoginActionTest extends AbstractUiTest {
 		return new LoginActionServlet();
 	}
 
-	public String post(String query) throws IOException {
-		URL url = new URL("http://localhost:3000/test/test");
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-		connection.setRequestMethod("POST");
-		connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
-		connection.setRequestProperty("Content-Length", "" + Integer.toString(query.getBytes().length));
-		connection.setRequestProperty("Content-Language", "en-US");
-
-		connection.setUseCaches(false);
-		connection.setDoInput(true);
-		connection.setDoOutput(true);
-
-		// Send request
-		DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-		wr.writeBytes(query);
-		wr.flush();
-		wr.close();
-
-		BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-		String inputLine;
-		StringBuffer response = new StringBuffer();
-
-		while ((inputLine = in.readLine()) != null) {
-			response.append(inputLine + "\n");
-		}
-		in.close();
-		return response.toString();
-	}
+	
 
 }
