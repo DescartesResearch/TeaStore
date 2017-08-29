@@ -1,0 +1,75 @@
+package tools.descartes.petsupplystore.image.setup;
+
+import java.awt.image.BufferedImage;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import tools.descartes.petsupplystore.entities.Category;
+import tools.descartes.petsupplystore.entities.ImageSize;
+import tools.descartes.petsupplystore.image.ImageDB;
+
+public class CreatorFactory {
+
+	private int shapesPerImage = 0;
+	private ImageSize imgSize = ImageSize.STD_IMAGE_SIZE;
+	private Path workingDir = SetupController.SETUP.getWorkingDir();
+	private Map<Category, BufferedImage> categoryImages;
+	private List<Long> products;
+	private List<String> categories;
+	private ImageDB imgDB;
+	private Random rand = new Random();
+	private final Logger log = LoggerFactory.getLogger(CreatorFactory.class);
+	
+	public CreatorFactory(int shapesPerImage, ImageDB imgDB, ImageSize imgSize, Path workingDir, long seed,
+			Map<Category, List<Long>> products, Map<Category, BufferedImage> categoryImages) {
+		if (imgDB == null) {
+			log.error("Supplied image database is null.");
+			throw new NullPointerException("Supplied image database is null.");
+		}
+		if (products == null) {
+			log.error("Supplied product map is null.");
+			throw new NullPointerException("Supplied product map is null.");
+		}
+		
+		if (workingDir == null) {
+			log.info("Supplied working directory is null. Set to value {}.", SetupController.SETUP.getWorkingDir());
+		} else {
+			this.workingDir = workingDir;
+		}
+		if (categoryImages == null) {
+			log.info("Supplied category images are null. Defaulting to not add category images.");
+		} else {
+			this.categoryImages = categoryImages;
+		}
+		if (imgSize == null) {
+			log.info("Supplied image size is null. Defaulting to standard size of {}.", ImageSize.STD_IMAGE_SIZE);
+		} else {
+			this.imgSize = imgSize;
+		}
+		if (shapesPerImage < 0) {
+			log.info("Number of shapes per image cannot be below 0, was {}. Set to 0.", shapesPerImage);
+		} else {
+			this.shapesPerImage = shapesPerImage;
+		}
+		this.products = products.entrySet().stream()
+				.flatMap(e -> e.getValue().stream())
+				.collect(Collectors.toList());
+		this.categories = products.entrySet().stream()
+				.flatMap(e -> e.getValue().stream().map(x -> e.getKey().getName()))
+				.collect(Collectors.toList());
+		this.imgDB = imgDB;
+		this.rand.setSeed(seed);
+	}
+	
+	public Runnable newRunnable() {
+		return new CreatorRunner(imgDB, imgSize, products.remove(0), shapesPerImage, 
+				categoryImages.getOrDefault(categories.remove(0), null), rand.nextLong(), workingDir);
+	}
+
+}

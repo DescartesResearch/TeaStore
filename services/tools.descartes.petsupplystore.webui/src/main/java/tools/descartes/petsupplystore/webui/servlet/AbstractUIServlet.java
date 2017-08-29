@@ -116,14 +116,14 @@ public abstract class AbstractUIServlet extends HttpServlet {
 	 * @return if redirect was successful
 	 * @throws IOException
 	 */
-	protected boolean redirect(String target, HttpServletResponse response, String cookiename, String value)
+	protected void redirect(String target, HttpServletResponse response, String cookiename, String value)
 			throws IOException {
 		if (!cookiename.equals("")) {
 			Cookie cookie = new Cookie(cookiename, value.replace(" ", "_"));
 			response.addCookie(cookie);
 		}
 
-		return redirect(target, response);
+		redirect(target, response);
 	}
 
 	/**
@@ -134,13 +134,13 @@ public abstract class AbstractUIServlet extends HttpServlet {
 	 * @return if redirect was successful
 	 * @throws IOException
 	 */
-	protected boolean redirect(String target, HttpServletResponse response) throws IOException {
+	protected void redirect(String target, HttpServletResponse response) throws IOException {
 		if (!target.startsWith("/")) {
 			target = "/" + target;
 		}
 		response.sendRedirect(getServletContext().getContextPath() + target);
 
-		return true;
+
 
 	}
 
