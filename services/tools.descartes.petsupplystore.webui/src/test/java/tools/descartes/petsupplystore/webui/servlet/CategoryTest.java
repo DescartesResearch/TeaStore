@@ -1,16 +1,9 @@
 package tools.descartes.petsupplystore.webui.servlet;
 
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-
 import javax.servlet.Servlet;
-import javax.servlet.ServletException;
-
 import org.junit.Assert;
 import org.junit.Test;
 
-import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.message.SessionBlob;
 
 public class CategoryTest extends AbstractUiTest {
