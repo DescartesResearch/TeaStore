@@ -22,9 +22,6 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 import java.util.stream.Stream;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import tools.descartes.petsupplystore.entities.ImageSize;
 
 public class ImageCreator {
@@ -36,56 +33,45 @@ public class ImageCreator {
 	public static final int MAX_TEXT_LENGTH = 30;
 	public static final int MAX_CHAR_SIZE = 255;
 	
-	private Random rand = new Random();
-	private int shapesPerImage = STD_NR_OF_SHAPES_PER_IMAGE;
-	private Logger log = LoggerFactory.getLogger(ImageCreator.class);
-	
-	public ImageCreator() {
-		this(STD_NR_OF_SHAPES_PER_IMAGE);
-	}
-	
-	public ImageCreator(int shapesPerImage) {
-		this(shapesPerImage, STD_SEED);		
-	}
-	
-	public ImageCreator(int shapesPerImage, long seed) {
-		if (shapesPerImage < 0) {
-			log.info("Shapes per image is below 0 and is now set to 0.");
-			this.shapesPerImage = 0;
-		} else {
-			this.shapesPerImage = shapesPerImage;
-		}
-		
-		rand.setSeed(seed);
-	}
-	
-	public BufferedImage createImage(ImageSize size) {
+	public static BufferedImage createImage(int shapesPerImage, BufferedImage categoryImg, ImageSize size, 
+			Random rand) {
 		BufferedImage img = new BufferedImage(size.getWidth(), size.getHeight(), BufferedImage.OPAQUE);
 		Graphics2D graphics = img.createGraphics();
 		graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 		
-		switchColor(graphics);
+		switchColor(graphics, rand);
 		graphics.fillRect(0, 0, size.getWidth(), size.getHeight());
 		
 		for (int i = 0; i < shapesPerImage; i++) {
 			switch (rand.nextInt(4)) {
-				case 0: makeRectangle(graphics, size); break;
-				case 1: makeLine(graphics, size); break;
-				case 2: makeOval(graphics, size); break;
-				case 3: makeText(graphics, size); break;
+				case 0: makeRectangle(graphics, size, rand); break;
+				case 1: makeLine(graphics, size, rand); break;
+				case 2: makeOval(graphics, size, rand); break;
+				case 3: makeText(graphics, size, rand); break;
 			}
+		}
+		
+		if (categoryImg != null) {
+			drawCategoryImage(graphics, size, categoryImg, rand);
 		}
 		
 		graphics.dispose();
 		return img;
 	}
 	
-	private void switchColor(Graphics2D graphics) {
+	private static void drawCategoryImage(Graphics2D graphics, ImageSize maxSize, BufferedImage categoryImg, 
+			Random rand) {
+		graphics.drawImage(categoryImg, rand.nextInt(maxSize.getWidth() - categoryImg.getWidth()), 
+				rand.nextInt(maxSize.getHeight() - categoryImg.getHeight()), categoryImg.getWidth(), 
+				categoryImg.getHeight(), null);
+	}
+	
+	private static void switchColor(Graphics2D graphics, Random rand) {
 		graphics.setColor(new Color(rand.nextInt(MAX_RGB + 1), rand.nextInt(MAX_RGB + 1), rand.nextInt(MAX_RGB + 1)));
 	}
 
-	private void makeRectangle(Graphics2D graphics, ImageSize maxSize) {
-		switchColor(graphics);
+	private static void makeRectangle(Graphics2D graphics, ImageSize maxSize, Random rand) {
+		switchColor(graphics, rand);
 		
 		int x = rand.nextInt(maxSize.getWidth());
 		int y = rand.nextInt(maxSize.getHeight());
@@ -100,15 +86,15 @@ public class ImageCreator {
 		graphics.draw(r);
 	}
 	
-	private void makeLine(Graphics2D graphics, ImageSize maxSize) {
-		switchColor(graphics);
+	private static void makeLine(Graphics2D graphics, ImageSize maxSize, Random rand) {
+		switchColor(graphics, rand);
 		
 		graphics.drawLine(rand.nextInt(maxSize.getWidth()), rand.nextInt(maxSize.getHeight()), 
 				rand.nextInt(maxSize.getWidth()), rand.nextInt(maxSize.getHeight()));
 	}
 	
-	private void makeOval(Graphics2D graphics, ImageSize maxSize) {
-		switchColor(graphics);
+	private static void makeOval(Graphics2D graphics, ImageSize maxSize, Random rand) {
+		switchColor(graphics, rand);
 		
 		int x = rand.nextInt(maxSize.getWidth());
 		int y = rand.nextInt(maxSize.getHeight());
@@ -122,8 +108,8 @@ public class ImageCreator {
 		graphics.drawOval(x, y, width, height);
 	}
 	
-	private void makeText(Graphics2D graphics, ImageSize maxSize) {
-		switchColor(graphics);
+	private static void makeText(Graphics2D graphics, ImageSize maxSize, Random rand) {
+		switchColor(graphics, rand);
 		
 		String fontName = Font.SANS_SERIF;
 		switch (rand.nextInt(4)) {

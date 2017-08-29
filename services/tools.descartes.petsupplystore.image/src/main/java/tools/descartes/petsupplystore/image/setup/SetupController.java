@@ -24,16 +24,22 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.ImageSize;
 import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.image.ImageDB;
@@ -49,12 +55,10 @@ import tools.descartes.petsupplystore.image.cache.RandomReplacement;
 import tools.descartes.petsupplystore.image.cache.rules.CacheAll;
 import tools.descartes.petsupplystore.image.storage.DriveStorage;
 import tools.descartes.petsupplystore.image.storage.IDataStorage;
-import tools.descartes.petsupplystore.image.storage.LimitedDriveStorage;
 import tools.descartes.petsupplystore.image.storage.rules.StoreAll;
 import tools.descartes.petsupplystore.image.storage.rules.StoreLargeImages;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
-import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;
 
 public enum SetupController {
 
@@ -64,6 +68,8 @@ public enum SetupController {
 		public final static Path STD_WORKING_DIR = Paths.get("images");
 		public final static int PERSISTENCE_CREATION_WAIT_TIME = 1000;
 		public final static int PERSISTENCE_CREATION_TRIES = 100;
+		public final static int CREATION_THREAD_POOL_SIZE = Runtime.getRuntime().availableProcessors();
+		public final static long CREATION_THREAD_POOL_WAIT = 500;
 	}
 	
 	private StorageRule storageRule = StorageRule.STD_STORAGE_RULE;
@@ -72,13 +78,15 @@ public enum SetupController {
 	private long cacheSize = IDataCache.STD_MAX_CACHE_SIZE;
 	private StorageMode storageMode = StorageMode.STD_STORAGE_MODE;
 	private CachingMode cachingMode = CachingMode.STD_CACHING_MODE;
-	private int nrOfImagesToGenerate = 0;
-	private int nrOfImagesPreExisting = 0;
+	private long nrOfImagesToGenerate = 0;
+	private long nrOfImagesPreExisting = 0;
+	private long nrOfImagesForCategory = 0;
+	private HashMap<String, BufferedImage> categoryImages = new HashMap<>();
 	private ImageDB imgDB = new ImageDB();
 	private List<StoreImage> preCacheImg = new ArrayList<>();
-	private ImageCreatorRunner imgCreatorRunner;
-	private Thread imgCreatorThread;
 	private IDataStorage<StoreImage> storage = null;
+	private ScheduledThreadPoolExecutor imgCreationPool = 
+			new ScheduledThreadPoolExecutor(SetupControllerConstants.CREATION_THREAD_POOL_SIZE); 
 	private Logger log = LoggerFactory.getLogger(SetupController.class);
 	
 	private SetupController() {
@@ -87,11 +95,14 @@ public enum SetupController {
 	
 	public void setWorkingDir(Path path) { 
 		if (path != null) {
+			log.info("Working directory set to {}.", path.toAbsolutePath().toString());
 			workingDir = path;
+		} else {
+			log.info("Working directory null. Left to current value {}.", workingDir.toAbsolutePath().toString());
 		}
 	}
-
-	private List<Product> fetchProducts() {
+	
+	private boolean waitForPersistence() {
 		// We have to wait for the database that all entries are created before 
 		// generating images (which queries persistence)
 		boolean maxTriesReached = true;
@@ -106,50 +117,133 @@ public enum SetupController {
 			}
 			
 			try {
+				log.info("Persistence not reachable. Waiting for {}ms.", 
+						SetupControllerConstants.PERSISTENCE_CREATION_WAIT_TIME);
 				Thread.sleep(SetupControllerConstants.PERSISTENCE_CREATION_WAIT_TIME);
 			} catch (InterruptedException interrupted) {
 				log.info("Thread interrupted while waiting for persistence to be available.", interrupted);
 			}
 		}
-	
-		List<Product> products = null;
+		return maxTriesReached;
+	}
+
+	private void fetchProductsForCategory(Category category, HashMap<Category, List<Long>> products) {
+		boolean maxTriesReached = waitForPersistence();
+
 		if (!maxTriesReached) {
-			// TODO: Make it a REST instead of CRUD operation
-			products = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "products", Product.class, -1, -1);
+			Response result = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "products", 
+					Product.class, client -> client.getService().path(client.getApplicationURI())
+					.path(client.getEndpointURI()).path("category").path(String.valueOf(category.getId()))
+					.queryParam("start", 0).queryParam("max", -1).request().get()); 
+			
+			if (result == null) {
+				products.put(category, new ArrayList<>());
+				log.info("No products for category {} ({}) found.", category.getName(), category.getId());
+			} else {
+				List<Long> tmp = convertToIDs(result.readEntity(new GenericType<List<Product>>() { }));
+				products.put(category, tmp);
+				log.info("Category {} ({}) contains {} products.", category.getName(), category.getId(), tmp.size());
+			}
 		} else {
 			log.warn("Maximum tries to reach persistence service reached. No products fetched.");
 		}
-		return products == null ? new ArrayList<Product>() : products;
+	}
+	
+	private List<Category> fetchCategories() {
+		boolean maxTriesReached = waitForPersistence();
+		
+		List<Category> categories = null;
+		if (!maxTriesReached) {
+			Response result = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "categories", 
+					Category.class, client -> client.getService().path(client.getApplicationURI())
+					.path(client.getEndpointURI()).request().get());
+			
+			if (result == null) {
+				log.warn("No categories found.");
+			} else {
+				categories = result.readEntity(new GenericType<List<Category>>() { });
+				log.info("{} categories found.", categories.size());
+			}
+		} else {
+			log.warn("Maximum tries to reach persistence service reached. No categories fetched.");
+		}
+		return categories == null ? new ArrayList<Category>() : categories;
 	}
 	
 	private List<Long> convertToIDs(List<Product> products) {
 		return products.stream().map(product -> product.getId()).collect(Collectors.toList());
 	}
 	
-	public void generateImages() {
-		List<Long> productIDs = convertToIDs(fetchProducts());
-		generateImages(productIDs, productIDs.size());		
-	}
-
-	public void generateImages(int nrOfImagesToGenerate) {
-		generateImages(convertToIDs(fetchProducts()), nrOfImagesToGenerate);
+	private HashMap<Category, BufferedImage> matchCategoriesToImage(List<Category> categories) {
+		HashMap<Category, BufferedImage> result = new HashMap<>();
+		
+		List<String> imageNames = categoryImages.entrySet().stream().map(e -> e.getKey()).collect(Collectors.toList());
+		for (String name : imageNames) {
+			for (Category category : categories) {
+				String[] tmp = category.getName().split(",");
+				if (tmp[0].toLowerCase().equals(name)) {
+					log.info("Found matching category {} ({}) for image {}.", category.getName(), category.getId(), 
+							name + "." + StoreImage.STORE_IMAGE_FORMAT);
+					result.put(category, categoryImages.get(name));
+				}
+			}
+		}
+		return result;
 	}
 	
-	public void generateImages(List<Long> productIDs, int nrOfImagesToGenerate) {
-		if (nrOfImagesToGenerate <= 0) {
+	public void generateImages() {
+		List<Category> categories = fetchCategories();
+		HashMap<Category, List<Long>> products = new HashMap<>();
+		categories.forEach(cat -> fetchProductsForCategory(cat, products));
+		
+		generateImages(products, matchCategoriesToImage(categories));		
+	}
+
+	public void generateImages(Map<Category, List<Long>> products, Map<Category, BufferedImage> categoryImages) {
+		long nrOfImagesToGenerate = products.entrySet().stream()
+				.flatMap(e -> e.getValue().stream())
+				.count();
+		
+		CreatorFactory factory = new CreatorFactory(ImageCreator.STD_NR_OF_SHAPES_PER_IMAGE, imgDB, 
+				ImageSize.STD_IMAGE_SIZE, workingDir, products, categoryImages);
+	
+		// Schedule all image creation tasks
+		for (long i = 0; i < nrOfImagesToGenerate; i++) {
+			imgCreationPool.execute(factory.newRunnable());
+		}
+		
+		log.info("Image creator thread started. {} images to generate using {} threads.", nrOfImagesToGenerate, 
+				SetupControllerConstants.CREATION_THREAD_POOL_SIZE);
+	}
+	
+	public void detectCategoryImages() {
+		log.info("Trying to find images that indicate categories in generated images.");
+		
+		String resPath = "categoryimg/dogs.png";
+		File dir = getPathToResource(resPath).toFile();
+		
+		if (dir != null) {
+			log.info("Found resource directory with category images at {}.", dir.toPath().toAbsolutePath().toString());
+		} else {
+			log.info("Resource path {} not found.", resPath);
 			return;
 		}
-
-		this.nrOfImagesToGenerate = nrOfImagesToGenerate;
-		
-		// Create images
-		imgCreatorRunner = new ImageCreatorRunner(productIDs, workingDir, imgDB, 
-				ImageCreator.STD_NR_OF_SHAPES_PER_IMAGE, ImageCreator.STD_SEED, ImageSize.STD_IMAGE_SIZE, 
-				nrOfImagesToGenerate);
-		imgCreatorThread = new Thread(imgCreatorRunner);
-		imgCreatorThread.start();
-		
-		log.info("Image creator thread started. {} images to generate.", nrOfImagesToGenerate);
+	
+		int nr = 0;
+		if (dir != null && dir.exists() && dir.isDirectory()) {
+			for (File file : dir.listFiles()) {
+				if (file.isFile() && file.getName().endsWith(StoreImage.STORE_IMAGE_FORMAT)) {
+					try {
+						categoryImages.put(file.getName().substring(0, file.getName().length() - 4), ImageIO.read(file));
+						nr++;
+					} catch (IOException ioException) {
+						log.warn("An IOException occured while reading image file "
+								+ file.getAbsolutePath() + ".", ioException);
+					}
+				}
+			}
+		}
+		log.info("Found {} images for categories.", nr);	
 	}
 	
 	public void createWorkingDir() {
@@ -166,18 +260,9 @@ public enum SetupController {
 		}
 	}	
 	
-	public void detectPreExistingImages() {
-		detectPreExistingImages(imgDB);
-	}
-	
-	public void detectPreExistingImages(ImageDB db) {
-		if (db == null) {
-			log.error("The supplied image database is null.");
-			throw new NullPointerException("The supplied image database is null.");
-		}
-	
-		// TODO: Rework the code piece fetching the pre-existing images until the next comment
-		URL url = this.getClass().getResource("front.png");
+	public Path getPathToResource(String resource) {
+		// NOTODO: Rework the code piece fetching the existing images until the next comment
+		URL url = this.getClass().getResource(resource);
 		Path dir = null;
 		String path = "";
 		try {
@@ -188,11 +273,30 @@ public enum SetupController {
 			dir = Paths.get(path).getParent();
 		} catch (UnsupportedEncodingException e) {
 			log.warn("The resource path \"" + path + "\" could not be decoded with UTF-8.");
-			return;
 		}
 		// End of rework
-		
-		log.info("Found resource directory with existing images at {}.", dir.toAbsolutePath().toString());
+		return dir;
+	}
+	
+	public void detectPreExistingImages() {
+		detectPreExistingImages(imgDB);
+	}	
+	
+	public void detectPreExistingImages(ImageDB db) {
+		if (db == null) {
+			log.error("The supplied image database is null.");
+			throw new NullPointerException("The supplied image database is null.");
+		}
+
+		String resPath = "existingimg/front.png";
+		Path dir = getPathToResource(resPath);
+	
+		if (dir != null) {
+			log.info("Found resource directory with existing images at {}.", dir.toAbsolutePath().toString());
+		} else {
+			log.info("Resource path {} not found.", resPath);
+			return;
+		}
 
 		File currentDir = dir.toFile();
 
@@ -302,8 +406,6 @@ public enum SetupController {
 		storage = null;
 		switch (storageMode) {
 			case DRIVE: storage = new DriveStorage(workingDir, imgDB, storagePredicate); break;
-			case DRIVE_LIMITED: storage = new LimitedDriveStorage(workingDir, imgDB, 
-					storagePredicate, nrOfImagesToGenerate + nrOfImagesPreExisting); break;
 			default: storage = new DriveStorage(workingDir, imgDB, storagePredicate); break;
 		}
 
@@ -337,7 +439,6 @@ public enum SetupController {
 	
 	public void configureImageProvider() {
 		ImageProvider.IP.setImageDB(imgDB);
-		ImageProvider.IP.setImageCreatorRunner(imgCreatorRunner);
 		ImageProvider.IP.setStorage(storage);
 		
 		log.info("Storage and image database handed over to image provider");
@@ -351,10 +452,7 @@ public enum SetupController {
 		if (storage == null) {
 			return false;
 		}
-		if (imgCreatorRunner.isRunning()) {
-			return false;
-		}
-		if (imgCreatorRunner.getNrOfImagesCreated() != nrOfImagesToGenerate) {
+		if (imgCreationPool.getQueue().size() != 0) {
 			return false;
 		}
 		return true;
@@ -370,13 +468,13 @@ public enum SetupController {
 		sb.append("Storage Rule: ").append(storageRule.getStrRepresentation()).append(System.lineSeparator());
 		sb.append("Caching Mode: ").append(cachingMode.getStrRepresentation()).append(System.lineSeparator());
 		sb.append("Caching Rule: ").append(cachingRule.getStrRepresentation()).append(System.lineSeparator());
-		sb.append("Creator Thread: ").append(imgCreatorRunner.isRunning() ? "Running" : "Finished")
+		sb.append("Creator Thread: ").append(imgCreationPool.getQueue().size() != 0 ? "Running" : "Finished")
 				.append(System.lineSeparator());
-		sb.append("Images Created: ").append(String.valueOf(imgCreatorRunner.getNrOfImagesCreated()))
+		sb.append("Images Created: ").append(String.valueOf(imgCreationPool.getCompletedTaskCount()))
 				.append(" / ").append(String.valueOf(nrOfImagesToGenerate)).append(System.lineSeparator());
-		sb.append("Avg. Creation Time Per Image (ms): ").append(String.valueOf(imgCreatorRunner.getAvgCreationTime()))
-				.append(System.lineSeparator());
 		sb.append("Pre-Existing Images Found: ").append(String.valueOf(nrOfImagesPreExisting))
+				.append(System.lineSeparator());
+		sb.append("Category Images Found: ").append(String.valueOf(nrOfImagesForCategory))
 				.append(System.lineSeparator());
 		
 		return sb.toString();
@@ -397,6 +495,7 @@ public enum SetupController {
 		deleteWorkingDir();
 		createWorkingDir();
 		detectPreExistingImages();
+		detectCategoryImages();
 		generateImages();
 		setupStorage();
 		configureImageProvider();
@@ -408,20 +507,26 @@ public enum SetupController {
 			@Override
 			public void run() {
 				// Stop image creation to have sort of a steady state to work on
-				imgCreatorRunner.stopCreation();
-				while (imgCreatorRunner.isRunning()) {
-					try {
-						Thread.sleep(imgCreatorRunner.getAvgCreationTime());
-					} catch (InterruptedException interrupted) {
-						log.info("Thread to regenerate images interrupted while waiting for image creator "
-								+ "thread to stop.", interrupted);
+				imgCreationPool.shutdownNow();
+				try {
+					if (imgCreationPool.awaitTermination(SetupControllerConstants.CREATION_THREAD_POOL_WAIT, 
+							TimeUnit.MILLISECONDS)) {
+						log.info("Stopped image creation.");
+					} else {
+						log.warn("Image creation thread pool not terminating after {}ms. Stop waiting.", 
+								SetupControllerConstants.CREATION_THREAD_POOL_WAIT);
 					}
+				} catch (InterruptedException interruptedException) {
+					log.warn("Waiting for image creation thread pool to terminate interrupted by exception.", 
+							interruptedException);
 				}
-
+				imgCreationPool = new ScheduledThreadPoolExecutor(SetupControllerConstants.CREATION_THREAD_POOL_SIZE);
+				
 				imgDB = new ImageDB();
 				
 				deleteImages();
 				detectPreExistingImages();
+				detectCategoryImages();
 				generateImages();
 				setupStorage();
 				configureImageProvider();

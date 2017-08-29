@@ -95,7 +95,7 @@ public class RegistryClient {
     public void unregister(String contextPath)  {
     	Service service = getService(contextPath);
     	Server host = getServer();
-    	LOG.info("Shutingdown " + service.getServiceName() + "@" + host);
+    	LOG.info("Shutting down " + service.getServiceName() + "@" + host);
     	heartbeatScheduler.shutdownNow();
     	loadBalancerUpdateScheduler.shutdownNow();
     	availabilityScheduler.shutdownNow();
