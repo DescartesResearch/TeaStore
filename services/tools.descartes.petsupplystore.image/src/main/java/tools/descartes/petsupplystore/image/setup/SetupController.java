@@ -453,6 +453,9 @@ public enum SetupController {
 		if (storage == null) {
 			return false;
 		}
+		if (imgCreationPool.getQueue().size() != 0) {
+			return false;
+		}
 		return true;
 	}
 	
@@ -518,6 +521,7 @@ public enum SetupController {
 					log.warn("Waiting for image creation thread pool to terminate interrupted by exception.", 
 							interruptedException);
 				}
+				imgCreationPool = new ScheduledThreadPoolExecutor(SetupControllerConstants.CREATION_THREAD_POOL_SIZE);
 				
 				imgDB = new ImageDB();
 				
