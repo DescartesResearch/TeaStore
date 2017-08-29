@@ -179,14 +179,13 @@ public enum SetupController {
 		
 		List<String> imageNames = categoryImages.entrySet().stream().map(e -> e.getKey()).collect(Collectors.toList());
 		for (String name : imageNames) {
-			Category category = categories.stream()
-					.filter(cat -> cat.getName().toLowerCase().contains(name))
-					.findFirst().orElse(null);
-			
-			if (category != null) {
-				log.info("Found matching category {} ({}) for image {}.", category.getName(), category.getId(), 
-						name + "." + StoreImage.STORE_IMAGE_FORMAT);
-				result.put(category, categoryImages.get(name));
+			for (Category category : categories) {
+				String[] tmp = category.getName().split(",");
+				if (tmp[0].toLowerCase().equals(name)) {
+					log.info("Found matching category {} ({}) for image {}.", category.getName(), category.getId(), 
+							name + "." + StoreImage.STORE_IMAGE_FORMAT);
+					result.put(category, categoryImages.get(name));
+				}
 			}
 		}
 		return result;
