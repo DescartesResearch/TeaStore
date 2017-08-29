@@ -65,22 +65,16 @@ public class DriveStorage implements IDataStorage<StoreImage> {
 	
 	private ReadWriteLock getIDLock(long id) {
 		ReadWriteLock l = null;
-		mapLock.readLock().lock();
+		mapLock.writeLock().lock();
 		try {
 			if (lockedIDs.containsKey(id)) {
 				l = lockedIDs.get(id);
 			} else {
-				mapLock.readLock().unlock();
-				mapLock.writeLock().lock();
-				try {
-					l = new ReentrantReadWriteLock();
-					lockedIDs.put(id, l);
-				} finally {
-					mapLock.writeLock().unlock();
-				}
+				l = new ReentrantReadWriteLock();
+				lockedIDs.put(id, l);
 			}
 		} finally {
-			mapLock.readLock().unlock();
+			mapLock.writeLock().unlock();
 		}
 		return l;
 	}

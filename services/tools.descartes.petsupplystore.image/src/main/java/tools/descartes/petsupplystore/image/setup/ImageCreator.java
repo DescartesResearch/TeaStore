@@ -61,8 +61,8 @@ public class ImageCreator {
 	
 	private static void drawCategoryImage(Graphics2D graphics, ImageSize maxSize, BufferedImage categoryImg, 
 			Random rand) {
-		graphics.drawImage(categoryImg, rand.nextInt(maxSize.getWidth() - categoryImg.getWidth() - 1), 
-				rand.nextInt(maxSize.getHeight() - categoryImg.getHeight() - 1), categoryImg.getWidth(), 
+		graphics.drawImage(categoryImg, rand.nextInt(maxSize.getWidth() - categoryImg.getWidth()), 
+				rand.nextInt(maxSize.getHeight() - categoryImg.getHeight()), categoryImg.getWidth(), 
 				categoryImg.getHeight(), null);
 	}
 	

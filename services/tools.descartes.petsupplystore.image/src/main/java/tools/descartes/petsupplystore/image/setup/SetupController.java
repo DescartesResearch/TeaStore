@@ -117,6 +117,8 @@ public enum SetupController {
 			}
 			
 			try {
+				log.info("Persistence not reachable. Waiting for {}ms.", 
+						SetupControllerConstants.PERSISTENCE_CREATION_WAIT_TIME);
 				Thread.sleep(SetupControllerConstants.PERSISTENCE_CREATION_WAIT_TIME);
 			} catch (InterruptedException interrupted) {
 				log.info("Thread interrupted while waiting for persistence to be available.", interrupted);
@@ -128,11 +130,11 @@ public enum SetupController {
 	private void fetchProductsForCategory(Category category, HashMap<Category, List<Long>> products) {
 		boolean maxTriesReached = waitForPersistence();
 
-		String catPath = "category/" + String.valueOf(category.getId()) + "?start=0&limit=-1";
 		if (!maxTriesReached) {
 			Response result = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "products", 
 					Product.class, client -> client.getService().path(client.getApplicationURI())
-					.path(client.getEndpointURI()).path(catPath).request().get());
+					.path(client.getEndpointURI()).path("category").path(String.valueOf(category.getId()))
+					.queryParam("start", 0).queryParam("max", -1).request().get()); 
 			
 			if (result == null) {
 				products.put(category, new ArrayList<>());
@@ -160,6 +162,7 @@ public enum SetupController {
 				log.warn("No categories found.");
 			} else {
 				categories = result.readEntity(new GenericType<List<Category>>() { });
+				log.info("{} categories found.", categories.size());
 			}
 		} else {
 			log.warn("Maximum tries to reach persistence service reached. No categories fetched.");
@@ -181,6 +184,8 @@ public enum SetupController {
 					.findFirst().orElse(null);
 			
 			if (category != null) {
+				log.info("Found matching category {} ({}) for image {}.", category.getName(), category.getId(), 
+						name + "." + StoreImage.STORE_IMAGE_FORMAT);
 				result.put(category, categoryImages.get(name));
 			}
 		}
@@ -213,10 +218,19 @@ public enum SetupController {
 	
 	public void detectCategoryImages() {
 		log.info("Trying to find images that indicate categories in generated images.");
-		File dir = getPathToResource("creationimg/dogs.png").toFile();
+		
+		String resPath = "categoryimg/dogs.png";
+		File dir = getPathToResource(resPath).toFile();
+		
+		if (dir != null) {
+			log.info("Found resource directory with category images at {}.", dir.toPath().toAbsolutePath().toString());
+		} else {
+			log.info("Resource path {} not found.", resPath);
+			return;
+		}
 	
 		int nr = 0;
-		if (dir.exists() && dir.isDirectory()) {
+		if (dir != null && dir.exists() && dir.isDirectory()) {
 			for (File file : dir.listFiles()) {
 				if (file.isFile() && file.getName().endsWith(StoreImage.STORE_IMAGE_FORMAT)) {
 					try {
@@ -247,7 +261,7 @@ public enum SetupController {
 	}	
 	
 	public Path getPathToResource(String resource) {
-		// NOTODO: Rework the code piece fetching the pre-existing images until the next comment
+		// NOTODO: Rework the code piece fetching the existing images until the next comment
 		URL url = this.getClass().getResource(resource);
 		Path dir = null;
 		String path = "";
@@ -273,10 +287,16 @@ public enum SetupController {
 			log.error("The supplied image database is null.");
 			throw new NullPointerException("The supplied image database is null.");
 		}
+
+		String resPath = "existingimg/front.png";
+		Path dir = getPathToResource(resPath);
 	
-		Path dir = getPathToResource("existingimg/front.png");
-		
-		log.info("Found resource directory with existing images at {}.", dir.toAbsolutePath().toString());
+		if (dir != null) {
+			log.info("Found resource directory with existing images at {}.", dir.toAbsolutePath().toString());
+		} else {
+			log.info("Resource path {} not found.", resPath);
+			return;
+		}
 
 		File currentDir = dir.toFile();
 

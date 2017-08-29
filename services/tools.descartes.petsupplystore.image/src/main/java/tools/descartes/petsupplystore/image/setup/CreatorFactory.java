@@ -21,7 +21,7 @@ public class CreatorFactory {
 	private Path workingDir = SetupController.SETUP.getWorkingDir();
 	private Map<Category, BufferedImage> categoryImages;
 	private List<Long> products;
-	private List<String> categories;
+	private List<Category> categories;
 	private ImageDB imgDB;
 	private Random rand = new Random();
 	private final Logger log = LoggerFactory.getLogger(CreatorFactory.class);
@@ -61,7 +61,7 @@ public class CreatorFactory {
 				.flatMap(e -> e.getValue().stream())
 				.collect(Collectors.toList());
 		this.categories = products.entrySet().stream()
-				.flatMap(e -> e.getValue().stream().map(x -> e.getKey().getName()))
+				.flatMap(e -> e.getValue().stream().map(x -> e.getKey()))
 				.collect(Collectors.toList());
 		this.imgDB = imgDB;
 		this.rand.setSeed(seed);

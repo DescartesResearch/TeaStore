@@ -77,7 +77,7 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 		this.cachingRule = cachingRule;
 	}
 	
-	private T getData(long id) {
+	private T getData(long id, boolean markUsed) {
 		F data = null;
 		lock.readLock().lock();
 		try {
@@ -85,7 +85,11 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 		} finally {
 			lock.readLock().unlock();
 		}
-		return data == null ? null : data.getData();
+		if (data != null && markUsed) {
+			data.wasUsed();
+			return data.getData();
+		}
+		return null;
 	}
 	
 	/*
@@ -158,7 +162,7 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 
 	@Override
 	public boolean dataIsInCache(long id) {
-		return getData(id) != null;
+		return getData(id, false) != null;
 	}
 	
 	@Override
@@ -183,7 +187,7 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 		try {
 			result = dataIsInCache(id) ? cachedStorage.dataExists(id) : false;
 		} finally {
-			lock.readLock().lock();
+			lock.readLock().unlock();
 		}
 		return result;
 	}
@@ -191,7 +195,7 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 	@Override
 	public T loadData(long id) {
 		// Search entry in cache
-		T entry = getData(id);
+		T entry = getData(id, true);
 		if (entry == null) {
 			// No entry in cache found, search in underlying storage
 			entry = cachedStorage.loadData(id);
@@ -201,7 +205,6 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 			// Image found, cache it and return
 			cacheData(entry);
 		}
-		// Image found in cache, increment and return
 		return entry;
 	}
 	
@@ -239,7 +242,7 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 			}
 			currentCacheSize -= size;
 		} finally {
-			lock.writeLock().lock();
+			lock.writeLock().unlock();
 		}
 	}
 	

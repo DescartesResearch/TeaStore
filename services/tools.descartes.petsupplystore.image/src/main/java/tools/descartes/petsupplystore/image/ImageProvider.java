@@ -98,7 +98,7 @@ public enum ImageProvider {
 		// Try to retrieve image from disk or from cache
 		long imgID = db.getImageID(key, size);
 		if (imgID != 0) {
-			storedImg = storage.loadData(db.getImageID(key, size));
+			storedImg = storage.loadData(imgID);
 		}
 		
 		// If we dont have the image in the right size, get the biggest one and scale it
