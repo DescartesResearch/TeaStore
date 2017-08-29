@@ -55,47 +55,49 @@ public class CategoryServlet extends AbstractUIServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		checkforCookie(request,response);
-		long categoryID = Long.valueOf(request.getParameter("category"));
+		if (request.getParameter("category") != null) {
+			checkforCookie(request, response);
+			long categoryID = Long.valueOf(request.getParameter("category"));
 
-		Category category = LoadBalancedStoreOperations.getCategory(categoryID);
+			Category category = LoadBalancedStoreOperations.getCategory(categoryID);
 
-		
+			int products = LoadBalancedStoreOperations.getNumberOfProducts(categoryID);
 
-		int products = LoadBalancedStoreOperations.getNumberOfProducts(categoryID);
-
-		int numberProducts = INITIAL_PRODUCT_DISPLAY_COUNT;
-		if(request.getSession().getAttribute("numberProducts")!=null) {
-			numberProducts = Integer.valueOf(request.getSession().getAttribute("numberProducts").toString());
-		}
-		
-		int page = 1;
-		if (request.getParameter("page") != null) {
-			int pagenumber = Integer.valueOf(request.getParameter("page"));
-			int maxpages = (int) Math.ceil(((double) products) / numberProducts);
-			if(pagenumber <= maxpages) {
-				page = pagenumber;
+			int numberProducts = INITIAL_PRODUCT_DISPLAY_COUNT;
+			if (request.getSession().getAttribute("numberProducts") != null) {
+				numberProducts = Integer.valueOf(request.getSession().getAttribute("numberProducts").toString());
 			}
+
+			int page = 1;
+			if (request.getParameter("page") != null) {
+				int pagenumber = Integer.valueOf(request.getParameter("page"));
+				int maxpages = (int) Math.ceil(((double) products) / numberProducts);
+				if (pagenumber <= maxpages) {
+					page = pagenumber;
+				}
+			}
+
+			ArrayList<String> navigation = createNavigation(products, page, numberProducts);
+
+			List<Product> productlist = LoadBalancedStoreOperations.getProducts(categoryID, page, numberProducts);
+			request.setAttribute("productImages", LoadBalancedImageOperations.getProductPreviewImages(productlist));
+			request.setAttribute("storeIcon", LoadBalancedImageOperations.getWebImage("icon", ImageSize.ICON));
+			request.setAttribute("CategoryList", LoadBalancedStoreOperations.getCategories());
+			request.setAttribute("title", "Pet Supply Store Categorie " + category.getName());
+
+			request.setAttribute("Productslist", productlist);
+
+			request.setAttribute("category", category.getName());
+			request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
+			request.setAttribute("categoryID", categoryID);
+			request.setAttribute("currentnumber", numberProducts);
+			request.setAttribute("pagination", navigation);
+			request.setAttribute("pagenumber", page);
+			request.setAttribute("productdisplaycountoptions", PRODUCT_DISPLAY_COUNT_OPTIONS);
+			request.getRequestDispatcher("WEB-INF/pages/category.jsp").forward(request, response);
+		} else {
+			redirect("/", response);
 		}
-		
-		ArrayList<String> navigation = createNavigation(products, page, numberProducts);
-
-		List<Product> productlist = LoadBalancedStoreOperations.getProducts(categoryID, page, numberProducts);
-		request.setAttribute("productImages", LoadBalancedImageOperations.getProductPreviewImages(productlist));
-		request.setAttribute("storeIcon", LoadBalancedImageOperations.getWebImage("icon", ImageSize.ICON));
-		request.setAttribute("CategoryList", LoadBalancedStoreOperations.getCategories());
-		request.setAttribute("title", "Pet Supply Store Categorie " + category.getName());
-
-		request.setAttribute("Productslist", productlist);
-
-		request.setAttribute("category", category.getName());
-		request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
-		request.setAttribute("categoryID", categoryID);
-		request.setAttribute("currentnumber", numberProducts);
-		request.setAttribute("pagination", navigation);
-		request.setAttribute("pagenumber", page);
-		request.setAttribute("productdisplaycountoptions", PRODUCT_DISPLAY_COUNT_OPTIONS);
-		request.getRequestDispatcher("WEB-INF/pages/category.jsp").forward(request, response);
 	}
 
 	/**
@@ -115,6 +117,7 @@ public class CategoryServlet extends AbstractUIServlet {
 
 	/**
 	 * Creates the entries for the pagination
+	 * 
 	 * @param products
 	 * @param page
 	 * @param numberProducts
@@ -152,10 +155,10 @@ public class CategoryServlet extends AbstractUIServlet {
 				return navigation;
 
 			} else {
-				int lowerbound = (int) Math.ceil((numberpagination-1)/2);
-				int upperbound = (int) Math.floor((numberpagination-1)/2);
-				int up = Math.min(page+upperbound, maxpages);
-				int down = Math.max(page-lowerbound, 1); 
+				int lowerbound = (int) Math.ceil((numberpagination - 1) / 2);
+				int upperbound = (int) Math.floor((numberpagination - 1) / 2);
+				int up = Math.min(page + upperbound, maxpages);
+				int down = Math.max(page - lowerbound, 1);
 				for (int i = down; i <= up; i++) {
 					navigation.add(String.valueOf(i));
 				}
