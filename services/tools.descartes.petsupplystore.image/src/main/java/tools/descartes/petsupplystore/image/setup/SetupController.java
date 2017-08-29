@@ -206,14 +206,15 @@ public enum SetupController {
 				.count();
 		
 		CreatorFactory factory = new CreatorFactory(ImageCreator.STD_NR_OF_SHAPES_PER_IMAGE, imgDB, 
-				ImageSize.STD_IMAGE_SIZE, workingDir, ImageCreator.STD_SEED, products, categoryImages);
+				ImageSize.STD_IMAGE_SIZE, workingDir, products, categoryImages);
 	
 		// Schedule all image creation tasks
 		for (long i = 0; i < nrOfImagesToGenerate; i++) {
 			imgCreationPool.execute(factory.newRunnable());
 		}
 		
-		log.info("Image creator thread started. {} images to generate.", nrOfImagesToGenerate);
+		log.info("Image creator thread started. {} images to generate using {} threads.", nrOfImagesToGenerate, 
+				SetupControllerConstants.CREATION_THREAD_POOL_SIZE);
 	}
 	
 	public void detectCategoryImages() {

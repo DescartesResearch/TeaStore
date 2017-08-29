@@ -21,7 +21,6 @@ import tools.descartes.petsupplystore.image.StoreImage;
 public class CreatorRunner implements Runnable {
 
 	long productID;
-	long seed;
 	ImageDB imgDB;
 	ImageSize size = ImageSize.STD_IMAGE_SIZE;
 	Path workingDir;
@@ -30,20 +29,19 @@ public class CreatorRunner implements Runnable {
 	Logger log = LoggerFactory.getLogger(CreatorRunner.class);
 	
 	public CreatorRunner(ImageDB imgDB, ImageSize size, long productID, int shapesPerImage, 
-			BufferedImage categoryImage, long seed, Path workingDir) {
+			BufferedImage categoryImage, Path workingDir) {
 		this.imgDB = imgDB;
 		this.size = size;
 		this.productID = productID;
 		this.shapesPerImage = shapesPerImage;
 		this.categoryImage = categoryImage;
-		this.seed = seed;
 		this.workingDir = workingDir;
 	}
 	
 	@Override
 	public void run() {
 		long imgID = ImageIDFactory.ID.getNextImageID();
-		Random rand = new Random(seed);
+		Random rand = new Random(productID);
 	
 		// All products must be added to the database
 		imgDB.setImageMapping(productID, imgID, size);

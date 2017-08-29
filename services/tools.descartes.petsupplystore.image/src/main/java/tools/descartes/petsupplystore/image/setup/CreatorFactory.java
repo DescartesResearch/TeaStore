@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -23,10 +22,9 @@ public class CreatorFactory {
 	private List<Long> products;
 	private List<Category> categories;
 	private ImageDB imgDB;
-	private Random rand = new Random();
 	private final Logger log = LoggerFactory.getLogger(CreatorFactory.class);
 	
-	public CreatorFactory(int shapesPerImage, ImageDB imgDB, ImageSize imgSize, Path workingDir, long seed,
+	public CreatorFactory(int shapesPerImage, ImageDB imgDB, ImageSize imgSize, Path workingDir, 
 			Map<Category, List<Long>> products, Map<Category, BufferedImage> categoryImages) {
 		if (imgDB == null) {
 			log.error("Supplied image database is null.");
@@ -64,12 +62,11 @@ public class CreatorFactory {
 				.flatMap(e -> e.getValue().stream().map(x -> e.getKey()))
 				.collect(Collectors.toList());
 		this.imgDB = imgDB;
-		this.rand.setSeed(seed);
 	}
 	
 	public Runnable newRunnable() {
 		return new CreatorRunner(imgDB, imgSize, products.remove(0), shapesPerImage, 
-				categoryImages.getOrDefault(categories.remove(0), null), rand.nextLong(), workingDir);
+				categoryImages.getOrDefault(categories.remove(0), null), workingDir);
 	}
 
 }
