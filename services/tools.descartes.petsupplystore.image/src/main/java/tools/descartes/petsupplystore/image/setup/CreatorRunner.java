@@ -60,7 +60,7 @@ public class CreatorRunner implements Runnable {
 		} catch (IOException ioException) {
 			if (!(ioException instanceof ClosedByInterruptException)) {
 				log.warn("An IOException occured while writing image with ID " + String.valueOf(imgID) + " to file "
-						+ imgFile.toAbsolutePath() + ".");
+						+ imgFile.toAbsolutePath() + ".", ioException);
 			}
 		}
 	}
