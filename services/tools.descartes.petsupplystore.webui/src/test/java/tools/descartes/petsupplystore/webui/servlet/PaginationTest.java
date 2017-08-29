@@ -63,29 +63,7 @@ public class PaginationTest extends AbstractUiTest {
 
 	}
 
-	private String[] getPagination(String html) {
-		ArrayList<String> pagination = new ArrayList<String>();
-		String[] webpage = html.split("\n");
-		boolean start = false;
-		for (String line : webpage) {
-			if (line.contains("pagination")) {
-				start = true;
-			}
-			if (start && line.contains("page")) {
-				line = line.replace("</a>", "").replace("</li>", "").substring(line.indexOf(">") + 1);
-				pagination.add(line);
-			}
-			if (start && line.contains("</ul>")) {
-				start = false;
-			}
-		}
-		String[] page = new String[pagination.size()];
-		for (int i = 0; i < page.length; i++) {
-			page[i] = pagination.get(i);
-		}
-
-		return page;
-	}
+	
 
 	@Override
 	protected Servlet getServlet() {

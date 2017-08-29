@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -52,7 +53,10 @@ public abstract class AbstractUiTest {
 		registryURL.setValue("http://localhost:9001/tools.descartes.petsupplystore.registry/rest/services/");
 		context.getNamingResources().addEnvironment(registryURL);
 		webUITomcat.addServlet(CONTEXT, "servlet", getServlet());
+		webUITomcat.addServlet(CONTEXT, "index", new IndexServlet());
 		context.addServletMappingDecoded("/test", "servlet");
+		context.addServletMappingDecoded("/index", "index");
+		context.addWelcomeFile("/index");
 		webUITomcat.start();
 
 		// Mock registry
@@ -154,6 +158,67 @@ public abstract class AbstractUiTest {
 			return null;
 		}
 	}
+	
+	protected String getResultingHTML(String requestparams, String cookiename, String value) {
+		try {
+			if (!requestparams.equals("") && !requestparams.startsWith("?")) {
+				requestparams = "?" + requestparams;
+			}
+			URL obj;
+			BufferedReader in = null;
+			String url = "http://localhost:3000/test/test" + requestparams;
+			obj = new URL(url);
+			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+			con.setRequestProperty("Cookie", cookiename+"="+value );
 
+			in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine + "\n");
+			}
+			in.close();
+			return response.toString();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	protected String[] getPagination(String html) {
+		ArrayList<String> pagination = new ArrayList<String>();
+		String[] webpage = html.split("\n");
+		boolean start = false;
+		for (String line : webpage) {
+			if (line.contains("pagination")) {
+				start = true;
+			}
+			if (start && line.contains("page")) {
+				line = line.replace("</a>", "").replace("</li>", "").substring(line.indexOf(">") + 1);
+				pagination.add(line);
+			}
+			if (start && line.contains("</ul>")) {
+				start = false;
+			}
+		}
+		String[] page = new String[pagination.size()];
+		for (int i = 0; i < page.length; i++) {
+			page[i] = pagination.get(i);
+		}
+
+		return page;
+	}
+
+	protected String getWebSiteTitle() {
+		String[] webpage = getResultingHTML().split("\n");
+		for(String line: webpage) {
+			if(line.contains("title")) {
+				return line.replace("<title>", "").replace("</title>", "");
+			}
+		}
+		return "";
+	}
+	
 	protected abstract Servlet getServlet();
 }
