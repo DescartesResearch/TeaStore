@@ -3,6 +3,7 @@ package tools.descartes.petsupplystore.image.setup;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.channels.ClosedByInterruptException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -57,8 +58,10 @@ public class CreatorRunner implements Runnable {
 			Files.write(imgFile, Base64.getEncoder().encode(stream.toByteArray()), 
 					StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
 		} catch (IOException ioException) {
-			log.warn("An IOException occured while writing image with ID " + String.valueOf(imgID) + " to file "
-					+ imgFile.toAbsolutePath() + ".", ioException);
+			if (!(ioException instanceof ClosedByInterruptException)) {
+				log.warn("An IOException occured while writing image with ID " + String.valueOf(imgID) + " to file "
+						+ imgFile.toAbsolutePath() + ".");
+			}
 		}
 	}
 
