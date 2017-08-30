@@ -35,8 +35,10 @@ public class CartActionTest extends AbstractUiTest {
 		ObjectMapper o = new ObjectMapper();
 		String value = URLEncoder.encode(o.writeValueAsString(blob), "UTF-8");
 		
-//		html = doPost("proceedtoCheckout=", "sessionBlob", value);
-		System.out.println(html);
+		
+		html = doPost("proceedtoCheckout=", "sessionBlob", value);
+		Assert.assertEquals("User should be redirect to order", "Pet Supply Store Order", getWebSiteTitle(html));
+
 
 	}
 
