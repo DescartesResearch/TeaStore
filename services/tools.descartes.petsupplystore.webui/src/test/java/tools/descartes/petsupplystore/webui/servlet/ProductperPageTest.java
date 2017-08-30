@@ -2,6 +2,7 @@ package tools.descartes.petsupplystore.webui.servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,33 +33,38 @@ public class ProductperPageTest extends AbstractUiTest {
 			Product p = new Product();
 			p.setName("Name" + i);
 			p.setId(i);
-			
+
 			products.add(p);
 		}
-		
-		mockProducts(20,1, products);
+
+		mockProducts(20, 1, products);
 
 		String html = doGet();
-		
+
 		Assert.assertEquals("No category parameter should redirect to home", "Pet Supply Store Home",
 				getWebSiteTitle(html));
 
-		html = doGet("?category=0&page=1");
+		List<Integer> productsPerPage = Arrays.asList(5, 10, 20, 30, 50);
 
-		Assert.assertEquals("There should be 20 products on page 1", 20, countString("productid", html));
+		for (int page : productsPerPage) {
 
-		mockProducts(30,1, products);
+			mockProducts(page, 1, products);
 
+			html = doGet("?category=0&page=1", AbstractUIServlet.PRODUCTCOOKIE, page + "");
+
+			Assert.assertEquals("There should be page products on page 1", page, countString("productid", html));
+
+		}
+
+		mockProducts(30, 1, products);
 		html = doGet("?category=0&page=1", AbstractUIServlet.PRODUCTCOOKIE, 30 + "");
-		Assert.assertEquals("There should be 30 products on page 1", 30, countString("productid", html));
-
 		String[] pagination = getPagination(html);
 
 		Assert.assertArrayEquals("Test the paginationon page 1: 100 products and 30 per page",
 				new String[] { "1", "2", "3", "4", "next" }, pagination);
-		
-		mockProducts(30,4, products);
-		
+
+		mockProducts(30, 4, products);
+
 		html = doGet("?category=0&page=4", AbstractUIServlet.PRODUCTCOOKIE, 30 + "");
 		Assert.assertEquals("There should be 10 products on page 4", 10, countString("productid", html));
 
@@ -66,13 +72,13 @@ public class ProductperPageTest extends AbstractUiTest {
 
 	private void mockProducts(int amount, int page, List<Product> productlist) {
 		List<Product> products = new LinkedList<Product>();
-		int max = Math.min(amount*page, productlist.size());
-		for(int i = (page-1)*amount; i < max; i++) {
+		int max = Math.min(amount * page, productlist.size());
+		for (int i = (page - 1) * amount; i < max; i++) {
 			products.add(productlist.get(i));
 		}
-		
-		mockValidGetRestCall(products,
-				"/tools.descartes.petsupplystore.store/rest/products/category/0?page="+page+"&articlesPerPage=" + amount);
+
+		mockValidGetRestCall(products, "/tools.descartes.petsupplystore.store/rest/products/category/0?page=" + page
+				+ "&articlesPerPage=" + amount);
 	}
 
 	@Override

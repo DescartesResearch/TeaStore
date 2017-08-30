@@ -1,5 +1,8 @@
 package tools.descartes.petsupplystore.webui.servlet;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.servlet.Servlet;
 import org.junit.Assert;
 import org.junit.Test;
@@ -10,17 +13,18 @@ public class CategoryTest extends AbstractUiTest {
 
 	@Test
 	public void testCategories() {
-		mockCategories(3);
-		mockValidPostRestCall(new SessionBlob(), "/tools.descartes.petsupplystore.store/rest/useractions/isloggedin");
-		String html = doGet();
-		Assert.assertEquals("Test the number of shown categories", 3, countString("Category ", html));
-		mockCategories(0);
-		html = doGet();
-		Assert.assertEquals("Test the number of shown categories", 0, countString("Category ", html));
-		
+
+		List<Integer> categories = Arrays.asList(0, 3, 5, 1);
+		for (int category : categories) {
+			mockCategories(category);
+			mockValidPostRestCall(new SessionBlob(),
+					"/tools.descartes.petsupplystore.store/rest/useractions/isloggedin");
+			String html = doGet();
+			Assert.assertEquals("Test the number of shown categories", category, countString("Category ", html));
+
+		}
+
 	}
-	
-	
 
 	@Override
 	protected Servlet getServlet() {
