@@ -20,6 +20,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.CookieManager;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -60,7 +61,7 @@ public abstract class AbstractUiTest {
 		context.addServletMappingDecoded("/test", "servlet");
 		context.addServletMappingDecoded("/index", "index");
 		context.addServletMappingDecoded("/login", "login");
-		context.addServletMappingDecoded("/order", "order"); 
+		context.addServletMappingDecoded("/order", "order");
 		context.addWelcomeFile("/index");
 		webUITomcat.start();
 
@@ -195,7 +196,7 @@ public abstract class AbstractUiTest {
 	}
 
 	protected String doPost(String query) throws IOException {
-		URL url = new URL("http://localhost:3000/test/test");
+		/*URL url = new URL("http://localhost:3000/test/test");
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setRequestMethod("POST");
 		connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -212,6 +213,66 @@ public abstract class AbstractUiTest {
 		wr.writeBytes(query);
 		wr.flush();
 		wr.close();
+
+		BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine + "\n");
+		}
+		in.close();
+		return response.toString();*/
+		return doPost(query, "", "");
+	}
+
+	protected String doPost(String query, String cookie, String value) throws IOException {
+		URL url = new URL("http://localhost:3000/test/test");
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		if (!cookie.equals("") && !value.equals("")) {
+			connection.addRequestProperty("Cookie", cookie + "=" + value);
+			connection.setInstanceFollowRedirects(false);
+
+		}
+
+		connection.setRequestMethod("POST");
+		connection.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+		connection.addRequestProperty("Content-Length", "" + Integer.toString(query.getBytes().length));
+		connection.addRequestProperty("Content-Language", "en-US");
+
+		connection.setUseCaches(false);
+		connection.setDoInput(true);
+		connection.setDoOutput(true);
+
+		// Send request
+		DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+		wr.writeBytes(query);
+		wr.flush();
+		wr.close();
+
+		boolean redirect = false;
+		int status = connection.getResponseCode();
+		if (status != HttpURLConnection.HTTP_OK) {
+			if (status == HttpURLConnection.HTTP_MOVED_TEMP || status == HttpURLConnection.HTTP_MOVED_PERM
+					|| status == HttpURLConnection.HTTP_SEE_OTHER)
+				redirect = true;
+		}
+
+		if (redirect) {
+			String newUrl = "http://" + url.getHost() + ":" + url.getPort() + connection.getHeaderField("Location");
+
+			// get the cookie if need, for login
+			String cookies = connection.getHeaderField("Set-Cookie");
+
+			// open the new connnection again
+			connection = (HttpURLConnection) new URL(newUrl).openConnection();
+			connection.setRequestProperty("Cookie", cookies);
+			connection.addRequestProperty("Accept-Language", "en-US,en;q=0.8");
+			connection.addRequestProperty("User-Agent", "Mozilla");
+			connection.addRequestProperty("Referer", "google.com");
+
+		}
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 		String inputLine;

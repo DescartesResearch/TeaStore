@@ -17,6 +17,9 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import tools.descartes.petsupplystore.persistence.repository.DataGenerator;
 import tools.descartes.petsupplystore.registryclient.RegistryClient;
 
@@ -28,6 +31,8 @@ import tools.descartes.petsupplystore.registryclient.RegistryClient;
 @WebListener
 public class InitialDataGenerationDaemon implements ServletContextListener {
 
+	private static final Logger LOG = LoggerFactory.getLogger(InitialDataGenerationDaemon.class);
+	
     /**
      * Default constructor. 
      */
@@ -49,9 +54,12 @@ public class InitialDataGenerationDaemon implements ServletContextListener {
      */
     public void contextInitialized(ServletContextEvent event)  { 
     	if (DataGenerator.GENERATOR.isDatabaseEmpty()) {
+    		LOG.info("Database is empty. Generating new database content");
     		DataGenerator.GENERATOR.generateDatabaseContent(DataGenerator.SMALL_DB_CATEGORIES,
     				DataGenerator.SMALL_DB_PRODUCTS_PER_CATEGORY, DataGenerator.SMALL_DB_USERS,
     				DataGenerator.SMALL_DB_MAX_ORDERS_PER_USER);
+    	} else {
+    		LOG.info("Populated database found. Skipping data generation");
     	}
     	RegistryClient.getClient().register(event.getServletContext().getContextPath());
     }
