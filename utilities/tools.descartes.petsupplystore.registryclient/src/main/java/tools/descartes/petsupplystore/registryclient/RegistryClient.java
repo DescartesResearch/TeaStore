@@ -54,6 +54,7 @@ public class RegistryClient {
 	 */
 	private static RegistryClient client = new RegistryClient();
 	private String registryRESTURL;
+	private String hostName = null;
 	
 	private Server myServiceInstanceServer = null;
 	private Service myService = null;
@@ -75,6 +76,11 @@ public class RegistryClient {
 		} catch (NamingException e) {
 			LOG.warn("registryURL not set. Falling back to default registry URL.");
 			registryRESTURL = "http://localhost:8080/tools.descartes.petsupplystore.registry/rest/services/";
+		}
+		try {
+			hostName = (String) new InitialContext().lookup("java:comp/env/hostName");
+		} catch (NamingException e) {
+			LOG.warn("hostName not set. Using default OS-provided hostname.");
 		}
 	}
 	
@@ -256,10 +262,13 @@ public class RegistryClient {
     }
     
     private String getHostName() {
+    	if (hostName != null && !hostName.isEmpty()) {
+    		return hostName;
+    	}
     	try {
 			return InetAddress.getLocalHost().getCanonicalHostName();
 		} catch (UnknownHostException e) {
-			throw new IllegalStateException("could not load hostname");
+			throw new IllegalStateException("could not load hostname from OS.");
 		}
     };
     
