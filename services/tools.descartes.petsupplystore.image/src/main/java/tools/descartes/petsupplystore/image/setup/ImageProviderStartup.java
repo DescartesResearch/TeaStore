@@ -57,7 +57,7 @@ public class ImageProviderStartup implements ServletContextListener {
 				SetupController.SETUP.startup();
 				RegistryClient.getClient().register(event.getServletContext().getContextPath());
 			}
-		});
+		}, Service.IMAGE);
     }
     
 }
