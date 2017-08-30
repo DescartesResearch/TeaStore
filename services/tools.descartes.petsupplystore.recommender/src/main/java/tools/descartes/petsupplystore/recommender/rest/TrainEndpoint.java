@@ -46,6 +46,7 @@ import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperat
 public class TrainEndpoint {
 
 	private static final Logger LOG = LoggerFactory.getLogger(TrainEndpoint.class);
+
 	/**
 	 * Triggers the training of the recommendation algorithm. It retrieves all data
 	 * {@link OrderItem}s and all {@link Order}s from the database entity and is
@@ -73,8 +74,7 @@ public class TrainEndpoint {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return Response.status(500)
-				.entity("The (re)trainprocess failed.").build();
+		return Response.status(500).entity("The (re)trainprocess failed.").build();
 	}
 
 	/**
@@ -95,24 +95,26 @@ public class TrainEndpoint {
 	public Response trainAsync() {
 		ScheduledExecutorService asyncTrainExecutor = Executors.newSingleThreadScheduledExecutor();
 		asyncTrainExecutor.scheduleWithFixedDelay(() -> {
-			String finished = ServiceLoadBalancer.loadBalanceRESTOperation(
-					Service.PERSISTENCE, "generatedb", String.class,
-					client -> client.getEndpointTarget().path("finished").request(MediaType.TEXT_PLAIN)
-					.get().readEntity(String.class));
-			if (finished.equals("true")) {
-				long number = retrieveDataAndRetrain();
-				if (number != -1) {
-					asyncTrainExecutor.shutdown();
+			try {
+				String finished = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "generatedb",
+						String.class, client -> client.getEndpointTarget().path("finished")
+								.request(MediaType.TEXT_PLAIN).get().readEntity(String.class));
+				if (finished.equals("true")) {
+					long number = retrieveDataAndRetrain();
+					if (number != -1) {
+						asyncTrainExecutor.shutdown();
+					}
+				} else {
+					LOG.info("Waiting for DB before retraining.");
 				}
-			} else {
-				LOG.info("Waiting for DB before retraining.");
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
 			}
-		}, 0, 3, TimeUnit.SECONDS); 
+		}, 0, 3, TimeUnit.SECONDS);
 		return Response.ok("training").build();
 	}
-	
-	
-	
+
 	/**
 	 * Connects via REST to the database and retrieves all {@link OrderItem}s and
 	 * all {@link Order}s. Then, it triggers the training of the recommender.

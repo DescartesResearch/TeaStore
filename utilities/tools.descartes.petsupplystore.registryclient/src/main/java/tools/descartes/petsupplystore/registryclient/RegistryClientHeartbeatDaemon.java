@@ -38,7 +38,10 @@ public class RegistryClientHeartbeatDaemon implements Runnable {
 	public void run() {
 		try {
 			RegistryClient.getClient().registerOnce(service, server);
-		} catch (javax.ws.rs.ProcessingException e) { }
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 	}
 
 }

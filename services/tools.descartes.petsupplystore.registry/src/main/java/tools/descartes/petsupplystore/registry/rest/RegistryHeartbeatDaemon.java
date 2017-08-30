@@ -18,9 +18,9 @@ import java.util.Iterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * Daemon which sends out heartbeats to the resistered service.
+ * 
  * @author Simon
  */
 public class RegistryHeartbeatDaemon implements Runnable {
@@ -29,18 +29,18 @@ public class RegistryHeartbeatDaemon implements Runnable {
 	@Override
 	public void run() {
 		try {
-		Registry.getRegistryInstance().getMap().entrySet().stream().forEach(entry -> {
-			for (Iterator<String> iter = entry.getValue().iterator(); iter.hasNext();) {
-				String location = iter.next();
-				if (!Registry.getRegistryInstance().isAlive(entry.getKey(), location)) {
-					iter.remove();
-					LOG.warn("Removed " + entry.getKey() + "@" + location 
-							+ " since it failed the heartbeat!");
+			Registry.getRegistryInstance().getMap().entrySet().stream().forEach(entry -> {
+				for (Iterator<String> iter = entry.getValue().iterator(); iter.hasNext();) {
+					String location = iter.next();
+					if (!Registry.getRegistryInstance().isAlive(entry.getKey(), location)) {
+						iter.remove();
+						LOG.warn("Removed " + entry.getKey() + "@" + location + " since it failed the heartbeat!");
+					}
 				}
-			}
-		});
+			});
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 }

@@ -15,6 +15,7 @@ package tools.descartes.petsupplystore.registryclient.loadbalancers;
 
 /**
  * Daemon for updating load balancers using the registry.
+ * 
  * @author Joakim von Kistowski
  *
  */
@@ -25,7 +26,12 @@ public class LoadBalancerUpdaterDaemon implements Runnable {
 	 */
 	@Override
 	public void run() {
-		ServiceLoadBalancer.updateLoadBalancersForKnownServicesUsingRegistry();
+		try {
+			ServiceLoadBalancer.updateLoadBalancersForKnownServicesUsingRegistry();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 	}
 
 }
