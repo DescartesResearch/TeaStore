@@ -1,5 +1,6 @@
 package tools.descartes.petsupplystore.registryclient.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.client.Entity;
@@ -34,7 +35,12 @@ public final class LoadBalancedStoreOperations {
 				"categories", Category.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		return r.readEntity(new GenericType<List<Category>>() { });
+		try {
+			return r.readEntity(new GenericType<List<Category>>() { });
+		} catch (NullPointerException e) {
+			return new ArrayList<>();
+		}
+		
 	}
 	
 	/**
@@ -47,7 +53,11 @@ public final class LoadBalancedStoreOperations {
 				"categories", Category.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("" + cid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		return r.readEntity(Category.class);
+		try {
+			return r.readEntity(Category.class);
+		} catch (NullPointerException e) {
+			return null;
+		}
 	}
 	
 	/**
@@ -60,7 +70,11 @@ public final class LoadBalancedStoreOperations {
 				"products", Product.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("" + pid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		return r.readEntity(Product.class);
+		try{
+			return r.readEntity(Product.class);
+		} catch (NullPointerException e) {
+			return null;
+		}
 	}
 
 	/**
@@ -75,7 +89,11 @@ public final class LoadBalancedStoreOperations {
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob.getOrderItems(), MediaType.APPLICATION_JSON), Response.class));
-		return r.readEntity(new GenericType<List<Product>>() { });
+		try {
+			return r.readEntity(new GenericType<List<Product>>() { });
+		} catch (NullPointerException e) {
+			return new ArrayList<>();
+		}
 	}
 	
 	/**
@@ -91,7 +109,11 @@ public final class LoadBalancedStoreOperations {
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob.getOrderItems(), MediaType.APPLICATION_JSON), Response.class));
-		return r.readEntity(new GenericType<List<Product>>() { });
+		try {
+			return r.readEntity(new GenericType<List<Product>>() { });
+		} catch (NullPointerException e) {
+			return new ArrayList<>();
+		}
 	}
 	
 	/**
@@ -105,7 +127,11 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("category").path("" + cid).path("totalNumber")
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		return r.readEntity(int.class);
+		try {
+			return r.readEntity(int.class);
+		} catch (NullPointerException e) {
+			return 0;
+		}
 	}
 	
 	/**
@@ -121,7 +147,11 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("category").path("" + cid).queryParam("page", page)
 				.queryParam("articlesPerPage", articlesPerPage).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		return r.readEntity(new GenericType<List<Product>>() { });
+		try {
+			return r.readEntity(new GenericType<List<Product>>() { });
+		} catch (NullPointerException e) {
+			return new ArrayList<>();
+		}
 	}
 	
 	/**
@@ -152,7 +182,7 @@ public final class LoadBalancedStoreOperations {
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		if (r.getStatus() == 200)  {
+		if (r != null && r.getStatus() == 200)  {
 			return r.readEntity(SessionBlob.class);
 		} else {
 			return null;
@@ -172,7 +202,11 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("login").queryParam("name", name)
 				.queryParam("password", password).request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		return r.readEntity(SessionBlob.class);
+		try {
+			return r.readEntity(SessionBlob.class);
+		} catch (NullPointerException e) {
+			return new SessionBlob();
+		}
 	}
 	
 	/**
@@ -186,7 +220,11 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("logout").request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		return r.readEntity(SessionBlob.class);
+		try {
+			return r.readEntity(SessionBlob.class);
+		} catch (NullPointerException e) {
+			return new SessionBlob();
+		}
 	}
 	
 	/**
@@ -200,8 +238,15 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("isloggedin").request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		SessionBlob validatedBlob = r.readEntity(SessionBlob.class);
-		return validatedBlob != null;
+		try {
+			SessionBlob validatedBlob = r.readEntity(SessionBlob.class);
+			if (validatedBlob == null) {
+				return false;
+			}
+			return validatedBlob != null;
+		} catch (NullPointerException e) {
+			return false;
+		}
 	}
 	
 	/**
@@ -216,7 +261,7 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("add").path("" + pid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		if (r.getStatus() == 200)  {
+		if (r != null && r.getStatus() == 200)  {
 			return r.readEntity(SessionBlob.class);
 		} else {
 			return null;
@@ -235,7 +280,7 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("remove").path("" + pid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		if (r.getStatus() == 200) {
+		if (r != null && r.getStatus() == 200) {
 			return r.readEntity(SessionBlob.class);
 		} else {
 			return null;
@@ -258,7 +303,7 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("" + pid).queryParam("quantity", quantity)
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.put(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		if (r.getStatus() == 200) {
+		if (r != null && r.getStatus() == 200) {
 			return r.readEntity(SessionBlob.class);
 		} else {
 			return null;
@@ -276,7 +321,12 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("" + uid)
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.get());
-		return r.readEntity(User.class);
+		try {
+			return r.readEntity(User.class);
+		} catch (NullPointerException e) {
+			return null;
+		}
+		
 	}
 	
 	/**
@@ -290,7 +340,11 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("" + uid).path("orders")
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.get());
-		return r.readEntity(new GenericType<List<Order>>() { });
+		try {
+			return r.readEntity(new GenericType<List<Order>>() { });
+		} catch (NullPointerException e) {
+			return new ArrayList<>();
+		}
 	}
 }
 

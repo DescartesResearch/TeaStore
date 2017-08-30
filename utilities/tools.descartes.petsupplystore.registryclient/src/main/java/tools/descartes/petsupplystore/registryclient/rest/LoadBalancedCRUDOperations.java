@@ -14,6 +14,7 @@
 package tools.descartes.petsupplystore.registryclient.rest;
 
 import java.util.List;
+import java.util.Optional;
 
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
@@ -42,8 +43,10 @@ public final class LoadBalancedCRUDOperations {
 	 * 			Returns 0 if creation worked, but ID remains unkown.
 	 */
 	public static <T> long sendEntityForCreation(Service service, String endpointURI, Class<T> entityClass, T entity) {
-		return ServiceLoadBalancer.loadBalanceRESTOperation(service,
-				endpointURI, entityClass, client -> NonBalancedCRUDOperations.sendEntityForCreation(client, entity));
+		return Optional.ofNullable(
+				ServiceLoadBalancer.loadBalanceRESTOperation(service,
+				endpointURI, entityClass, client -> NonBalancedCRUDOperations.sendEntityForCreation(client, entity)))
+				.orElse(-1L);
 	}
 	
 	/**
@@ -60,8 +63,10 @@ public final class LoadBalancedCRUDOperations {
 	 */
 	public static <T> boolean sendEntityForUpdate(Service service, String endpointURI,
 			Class<T> entityClass, long id, T entity) {
-		return ServiceLoadBalancer.loadBalanceRESTOperation(service,
-				endpointURI, entityClass, client -> NonBalancedCRUDOperations.sendEntityForUpdate(client, id, entity));
+		return Optional.ofNullable(
+				ServiceLoadBalancer.loadBalanceRESTOperation(service,
+				endpointURI, entityClass, client -> NonBalancedCRUDOperations.sendEntityForUpdate(client, id, entity)))
+				.orElse(false);
 	}
 	
 	/**
@@ -74,8 +79,10 @@ public final class LoadBalancedCRUDOperations {
 	 * @return True, if deletion succeeded; false otherwise.
 	 */
 	public static <T> boolean deleteEntity(Service service, String endpointURI, Class<T> entityClass, long id) {
-		return ServiceLoadBalancer.loadBalanceRESTOperation(service,
-				endpointURI, entityClass, client -> NonBalancedCRUDOperations.deleteEntity(client, id));
+		return Optional.ofNullable(
+				ServiceLoadBalancer.loadBalanceRESTOperation(service,
+				endpointURI, entityClass, client -> NonBalancedCRUDOperations.deleteEntity(client, id)))
+				.orElse(false);
 	}
 	
 	/**

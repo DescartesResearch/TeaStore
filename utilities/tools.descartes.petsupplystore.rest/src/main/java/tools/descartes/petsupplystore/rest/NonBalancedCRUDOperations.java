@@ -52,16 +52,18 @@ public final class NonBalancedCRUDOperations {
 				post(Entity.entity(entity, MediaType.APPLICATION_JSON), Response.class);
 		long id = -1L;
 		//If resource was created successfully
-		if (response.getStatus() == 201) {
+		if (response != null && response.getStatus() == 201) {
 			 id = 0L;
-			//check if response contained an IdContainer; if yes: return the id
-				try {
-					id = response.readEntity(Long.class);
-				} catch (ProcessingException e) {
-					LOG.warn("Response did not conform to expected message type. Expected a Long ID.");
-				}
+			 //check if response an Id; if yes: return the id
+			try {
+				id = response.readEntity(Long.class);
+			} catch (ProcessingException e) {
+				LOG.warn("Response did not conform to expected message type. Expected a Long ID.");
+			}
 		}
-		response.close();
+		if (response != null) {
+			response.close();
+		}
 		return id;
 	}
 	
@@ -79,10 +81,12 @@ public final class NonBalancedCRUDOperations {
 		Response response = client.getService().path(client.getApplicationURI()).path(client.getEndpointURI()).
 				path(String.valueOf(id)).request(MediaType.APPLICATION_JSON).
 				put(Entity.entity(entity, MediaType.APPLICATION_JSON), Response.class);
-		if (response.getStatus() == 200) {
+		if (response != null && response.getStatus() == 200) {
 			return true;
 		}
-		response.close();
+		if (response != null) {
+			response.close();
+		}
 		return false;
 	}
 	
@@ -96,10 +100,12 @@ public final class NonBalancedCRUDOperations {
 	public static <T> boolean deleteEntity(RESTClient<T> client, long id) {
 		Response response = client.getService().path(client.getApplicationURI()).path(client.getEndpointURI()).
 				path(String.valueOf(id)).request(MediaType.APPLICATION_JSON).delete();
-		if (response.getStatus() == 200) {
+		if (response != null && response.getStatus() == 200) {
 			return true;
 		}
-		response.close();
+		if (response != null) {
+			response.close();
+		}
 		return false;
 	}
 	
@@ -116,10 +122,12 @@ public final class NonBalancedCRUDOperations {
 		T entity = null;
 		try {
 			entity = response.readEntity(client.getEntityClass());
-		} catch (ProcessingException e) {
+		} catch (NullPointerException | ProcessingException e) {
 			LOG.warn("Response did not conform to expected entity type.");
 		}
-		response.close();
+		if (response != null) {
+			response.close();
+		}
 		return entity;
 	}
 	
@@ -142,14 +150,16 @@ public final class NonBalancedCRUDOperations {
 		}
 		Response response = target.request(MediaType.APPLICATION_JSON).get();
 		List<T> entities = new ArrayList<T>();
-		if (response.getStatus() == 200) {
+		if (response != null && response.getStatus() == 200) {
 			try {
 				entities = response.readEntity(client.getGenericListType());
 			} catch (ProcessingException e) {
 				LOG.warn("Response did not conform to expected entity type. List expected.");
 			}
 		}
-		response.close();
+		if (response != null) {
+			response.close();
+		}
 		return entities;
 	}
 	
@@ -179,7 +189,7 @@ public final class NonBalancedCRUDOperations {
 		}
 		Response response = target.request(MediaType.APPLICATION_JSON).get();
 		List<T> entities = new ArrayList<T>();
-		if (response.getStatus() == 200) {
+		if (response != null && response.getStatus() == 200) {
 			try {
 				entities = response.readEntity(client.getGenericListType());
 			} catch (ProcessingException e) {
@@ -187,7 +197,9 @@ public final class NonBalancedCRUDOperations {
 				LOG.warn("Response did not conform to expected entity type. List expected.");
 			}
 		}
-		response.close();
+		if (response != null) {
+			response.close();
+		}
 		return entities;
 	}
 	
@@ -209,10 +221,12 @@ public final class NonBalancedCRUDOperations {
 		T entity = null;
 		try {
 			entity = response.readEntity(client.getEntityClass());
-		} catch (ProcessingException e) {
+		} catch (NullPointerException | ProcessingException e) {
 			//This happens if no entity was found
 		}
-		response.close();
+		if (response != null) {
+			response.close();
+		}
 		return entity;
 	}
 	

@@ -50,8 +50,12 @@ public final class LoadBalancedImageOperations {
 				.path(client.getEndpointURI()).path("getProductImages").request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).post(Entity.entity(img, MediaType.APPLICATION_JSON)));
 		
-		HashMap<Long, String> encoded = r.readEntity(new GenericType<HashMap<Long, String>>() { });
-		return encoded.get(product.getId());	
+		try {
+			HashMap<Long, String> encoded = r.readEntity(new GenericType<HashMap<Long, String>>() { });
+			return encoded.get(product.getId());	
+		} catch (NullPointerException e) {
+			return null;
+		}
 	}
 	
 	/**
@@ -79,7 +83,11 @@ public final class LoadBalancedImageOperations {
 				client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("getProductImages").request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).post(Entity.entity(img, MediaType.APPLICATION_JSON)));
-		return r.readEntity(new GenericType<HashMap<Long, String>>() { });
+		try {
+			return r.readEntity(new GenericType<HashMap<Long, String>>() { });
+		} catch (NullPointerException e) {
+			return null;
+		}
 	}
 	
 	/**
@@ -96,9 +104,12 @@ public final class LoadBalancedImageOperations {
 				client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("getWebImages").request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).post(Entity.entity(img, MediaType.APPLICATION_JSON)));
-		
-		HashMap<String, String> encoded = r.readEntity(new GenericType<HashMap<String, String>>() { });
-		return encoded.get(name);
+		try {
+			HashMap<String, String> encoded = r.readEntity(new GenericType<HashMap<String, String>>() { });
+			return encoded.get(name);
+		} catch (NullPointerException e) {
+			return null;
+		}
 	}
 
 	
@@ -117,8 +128,11 @@ public final class LoadBalancedImageOperations {
 				client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("getWebImages").request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).post(Entity.entity(img, MediaType.APPLICATION_JSON)));
-		
-		return r.readEntity(new GenericType<HashMap<String, String>>() { });	
+		try {
+			return r.readEntity(new GenericType<HashMap<String, String>>() { });
+		} catch (NullPointerException e) {
+			return null;
+		}
 	}
 	
 	/**
