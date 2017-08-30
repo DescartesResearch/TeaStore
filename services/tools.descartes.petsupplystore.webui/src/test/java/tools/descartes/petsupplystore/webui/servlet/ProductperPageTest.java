@@ -19,7 +19,7 @@ import tools.descartes.petsupplystore.entities.Product;
 public class ProductperPageTest extends AbstractUiTest {
 
 	@Test
-	public void TestPagination() throws IOException, ServletException, InterruptedException {
+	public void testProductsperPage() throws IOException, ServletException, InterruptedException {
 		mockCategories(1);
 		mockValidPostRestCall(null, "/tools.descartes.petsupplystore.store/rest/useractions/isloggedin");
 		mockValidGetRestCall(new Category(), "/tools.descartes.petsupplystore.store/rest/categories/0");
@@ -38,16 +38,18 @@ public class ProductperPageTest extends AbstractUiTest {
 		
 		mockProducts(20,1, products);
 
+		String html = doGet();
+		
 		Assert.assertEquals("No category parameter should redirect to home", "Pet Supply Store Home",
-				getWebSiteTitle());
+				getWebSiteTitle(html));
 
-		String html = getResultingHTML("?category=0&page=1");
+		html = doGet("?category=0&page=1");
 
 		Assert.assertEquals("There should be 20 products on page 1", 20, countString("productid", html));
 
 		mockProducts(30,1, products);
 
-		html = getResultingHTML("?category=0&page=1", AbstractUIServlet.PRODUCTCOOKIE, 30 + "");
+		html = doGet("?category=0&page=1", AbstractUIServlet.PRODUCTCOOKIE, 30 + "");
 		Assert.assertEquals("There should be 30 products on page 1", 30, countString("productid", html));
 
 		String[] pagination = getPagination(html);
@@ -57,7 +59,7 @@ public class ProductperPageTest extends AbstractUiTest {
 		
 		mockProducts(30,4, products);
 		
-		html = getResultingHTML("?category=0&page=4", AbstractUIServlet.PRODUCTCOOKIE, 30 + "");
+		html = doGet("?category=0&page=4", AbstractUIServlet.PRODUCTCOOKIE, 30 + "");
 		Assert.assertEquals("There should be 10 products on page 4", 10, countString("productid", html));
 
 	}

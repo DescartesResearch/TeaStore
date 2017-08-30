@@ -31,13 +31,13 @@ import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOpera
  * @author Andre Bauer
  */
 @WebServlet("/error")
-public class ErrorSerlvet extends AbstractUIServlet {
+public class ErrorServlet extends AbstractUIServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public ErrorSerlvet() {
+	public ErrorServlet() {
 		super();
 	}
 

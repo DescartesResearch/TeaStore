@@ -61,4 +61,5 @@ public class ImageProviderEndpoint {
 	public Response getState() {
 		return Response.ok().entity(SetupController.SETUP.getState()).build();
 	}
+	
 }
