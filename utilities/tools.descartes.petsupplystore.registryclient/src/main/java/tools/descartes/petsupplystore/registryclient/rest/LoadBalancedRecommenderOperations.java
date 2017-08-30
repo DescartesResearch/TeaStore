@@ -1,5 +1,6 @@
 package tools.descartes.petsupplystore.registryclient.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.client.Entity;
@@ -32,7 +33,11 @@ public final class LoadBalancedRecommenderOperations {
 				"recommend", Category.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).post(Entity.entity(order, MediaType.APPLICATION_JSON)));
-		return r.readEntity(new GenericType<List<Long>>() { });
+		try {
+			return r.readEntity(new GenericType<List<Long>>() { });
+		} catch (NullPointerException e) {
+			return new ArrayList<>();
+		}
 	}
 }
 
