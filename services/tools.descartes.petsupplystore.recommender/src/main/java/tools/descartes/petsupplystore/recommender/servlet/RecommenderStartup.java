@@ -61,7 +61,7 @@ public class RecommenderStartup implements ServletContextListener {
 				TrainEndpoint.retrieveDataAndRetrain();
 				RegistryClient.getClient().register(event.getServletContext().getContextPath());
 			}
-		});
+		}, Service.RECOMMENDER);
     }
     
 }
