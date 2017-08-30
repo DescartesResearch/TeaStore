@@ -10,7 +10,6 @@ import java.util.List;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 
-import org.antlr.v4.runtime.misc.Array2DHashSet;
 import org.junit.Assert;
 import org.junit.Test;
 
