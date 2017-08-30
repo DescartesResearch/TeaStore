@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+     <!-- Service registration settings, almost always required. -->
+    <Environment name="servicePort" value="8080"
+        type="java.lang.String" override="false"/>
+    <Environment name="registryURL" value="http://10.1.12.208:8080/tools.descartes.petsupplystore.registry/rest/services/"
+        type="java.lang.String" override="false"/>
+</Context>
