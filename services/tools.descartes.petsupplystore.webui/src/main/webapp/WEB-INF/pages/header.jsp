@@ -25,16 +25,16 @@
 
 			<ul class="nav navbar-nav navbar-right headnavbarlist">
 				<c:choose>
-					<c:when test="${login == false}">
-						<li><a href="<c:url value="/login" />" >Sign
-								in</a></li>
-					</c:when>
-					<c:otherwise>
+					<c:when test="${login == true}">
 						<li><form action="loginAction" method="POST">
 								<button type="submit" name="logout" class="logout">Logout</button>
 							</form></li>
 						<li><a href="<c:url value="/profile"/>"><span
 								class="glyphicon glyphicon glyphicon-user" aria-hidden="true"></span></a></li>
+					</c:when>
+					<c:otherwise>
+						<li><a href="<c:url value="/login" />" >Sign
+								in</a></li>
 					</c:otherwise>
 				</c:choose>
 
