@@ -149,7 +149,7 @@ public class RegistryClient {
 		    	List<Server> servers;
 		    	do {
 		    		servers = getServersForService(service);
-		    		if (servers == null || !servers.isEmpty()) {
+		    		if (servers == null || servers.isEmpty()) {
 		    			try {
 		    				if (servers == null) {
 		    					LOG.info("Registry not online. Waiting for it to come online");
