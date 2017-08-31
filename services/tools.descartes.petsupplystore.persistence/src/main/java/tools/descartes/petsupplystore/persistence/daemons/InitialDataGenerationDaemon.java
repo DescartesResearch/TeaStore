@@ -61,6 +61,8 @@ public class InitialDataGenerationDaemon implements ServletContextListener {
     	} else {
     		LOG.info("Populated database found. Skipping data generation");
     	}
+    	LOG.info("Persistence finished initializing database");
     	RegistryClient.getClient().register(event.getServletContext().getContextPath());
+    	LOG.info("Persistence started registration daemon");
     }
 }
