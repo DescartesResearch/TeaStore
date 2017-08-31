@@ -68,7 +68,9 @@ public final class ServiceLoadBalancer {
     
 	private static ServiceLoadBalancer getServiceLoadBalancer(Service targetService) {
 		ServiceLoadBalancer serviceBalancer = serviceMap.get(targetService.getServiceName());
-    	if (serviceBalancer == null) {
+    	if (serviceBalancer == null
+    			|| serviceBalancer.serviceServers == null
+    			|| serviceBalancer.serviceServers.isEmpty()) {
     		serviceMap.putIfAbsent(targetService.getServiceName(), new ServiceLoadBalancer(targetService));
     		updateLoadBalancersForServiceUsingRegistry(targetService);
     	}
@@ -84,7 +86,9 @@ public final class ServiceLoadBalancer {
 	 */
 	static ServiceLoadBalancer getServiceLoadBalancer(Service targetService, List<Server> knownServers) {
 		ServiceLoadBalancer serviceBalancer = ServiceLoadBalancer.serviceMap.get(targetService.getServiceName());
-    	if (serviceBalancer == null) {
+    	if (serviceBalancer == null
+    			|| serviceBalancer.serviceServers == null
+    			|| serviceBalancer.serviceServers.isEmpty()) {
     		serviceMap.putIfAbsent(targetService.getServiceName(), new ServiceLoadBalancer(targetService));
     		updateLoadBalancersForService(targetService, knownServers);
     	}
@@ -133,12 +137,22 @@ public final class ServiceLoadBalancer {
     }
     
     private void updateLoadBalancer(List<Server> newServers) {
+    	if (serviceServers == null) {
+    		serviceServers = new HashSet<Server>();
+    	}
+    	if (newServers == null) {
+    		newServers = new ArrayList<Server>();
+    	}
     	//return if nothing changed
-    	if (newServers.size() == serviceServers.size() && serviceServers.containsAll(newServers)) {
+    	if ((serviceServers.isEmpty() && newServers.isEmpty())
+    		|| (newServers.size() == serviceServers.size() && serviceServers.containsAll(newServers))) {
     		return;
     	}
     	serviceServers = new HashSet<Server>(newServers);
     	loadBalancerModificationLock.writeLock().lock();
+    	if (loadBalancer != null) {
+    		loadBalancer.shutdown();
+    	}
     	loadBalancer = LoadBalancerBuilder.newBuilder().buildFixedServerListLoadBalancer(newServers);
     	for (EndpointClientCollection<?> lb : endpointMap.values()) {
     		lb.updateServers(newServers);
