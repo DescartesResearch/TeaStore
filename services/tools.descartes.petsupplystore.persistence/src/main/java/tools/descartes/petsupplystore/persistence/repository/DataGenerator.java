@@ -64,6 +64,23 @@ public final class DataGenerator {
 	 */
 	public static final int SMALL_DB_MAX_ORDERS_PER_USER = 5;
 	
+	/**
+	 * Default category count for tiny database.
+	 */
+	public static final int TINY_DB_CATEGORIES = 2;
+	/**
+	 * Default product count per category for tiny database.
+	 */
+	public static final int TINY_DB_PRODUCTS_PER_CATEGORY = 20;
+	/**
+	 * Default user count for tiny database.
+	 */
+	public static final int TINY_DB_USERS = 5;
+	/**
+	 * Default max order per user for tiny database.
+	 */
+	public static final int TINY_DB_MAX_ORDERS_PER_USER = 2;
+	
 	private Random random = new Random(5);
 
 	private static final String PASSWORD = "password";
