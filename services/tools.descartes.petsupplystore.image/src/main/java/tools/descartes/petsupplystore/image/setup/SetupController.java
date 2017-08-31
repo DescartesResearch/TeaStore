@@ -219,7 +219,7 @@ public enum SetupController {
 	public void detectCategoryImages() {
 		log.info("Trying to find images that indicate categories in generated images.");
 		
-		String resPath = "categoryimg/dogs.png";
+		String resPath = "categoryimg" + File.separator + "dogs.png";
 		File dir = getPathToResource(resPath).toFile();
 		
 		if (dir != null) {
@@ -288,7 +288,7 @@ public enum SetupController {
 			throw new NullPointerException("The supplied image database is null.");
 		}
 
-		String resPath = "existingimg/front.png";
+		String resPath = "existingimg" + File.separator + "front.png";
 		Path dir = getPathToResource(resPath);
 	
 		if (dir != null) {
