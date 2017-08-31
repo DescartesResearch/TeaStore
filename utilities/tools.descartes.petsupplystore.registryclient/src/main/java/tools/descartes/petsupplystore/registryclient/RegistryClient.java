@@ -139,6 +139,7 @@ public class RegistryClient {
     /**
      * Calls the StartupCallback after the service is available.
      * @param requestedService service to check for
+     * @param myService The Service enum for the waiting service (the service calling this).
      * @param callback StartupCallback to call
      */
     public void runAfterServiceIsAvailable(Service requestedService, StartupCallback callback, Service myService) {
@@ -154,7 +155,8 @@ public class RegistryClient {
 		    				if (servers == null) {
 		    					LOG.info("Registry not online. " + myService + " is waiting for it to come online");
 		    				} else {
-		    					LOG.info(requestedService.getServiceName() + " not online. " + myService + " is waiting for it to come online");
+		    					LOG.info(requestedService.getServiceName() + " not online. "
+		    							+ myService + " is waiting for it to come online");
 		    				}
 							Thread.sleep(1000);
 						} catch (InterruptedException e) {
@@ -221,10 +223,14 @@ public class RegistryClient {
 	protected boolean registerOnce(Service service, Server server) {
 		myService = service;
 		myServiceInstanceServer = server;
-		Response response = getRESTClient(5000).target(registryRESTURL)
-				.path(service.getServiceName()).path(server.toString())
-				.request(MediaType.APPLICATION_JSON).put(Entity.text(""));
-		return (response.getStatus() == Response.Status.OK.getStatusCode());
+		try {
+			Response response = getRESTClient(5000).target(registryRESTURL)
+					.path(service.getServiceName()).path(server.toString())
+					.request(MediaType.APPLICATION_JSON).put(Entity.text(""));
+			return (response.getStatus() == Response.Status.OK.getStatusCode());
+		} catch (ProcessingException e) {
+			return false;
+		}
 	}
 	
 	/**
@@ -234,10 +240,14 @@ public class RegistryClient {
 	 * @return True, if unregistration succeeded.
 	 */
 	private boolean unregisterOnce(Service service, Server server) {
-		Response response = getRESTClient(1000).target(registryRESTURL)
-				.path(service.getServiceName()).path(server.toString())
-				.request(MediaType.APPLICATION_JSON).delete();
-		return (response.getStatus() == Response.Status.OK.getStatusCode());
+		try {
+			Response response = getRESTClient(1000).target(registryRESTURL)
+					.path(service.getServiceName()).path(server.toString())
+					.request(MediaType.APPLICATION_JSON).delete();
+			return (response.getStatus() == Response.Status.OK.getStatusCode());
+		} catch (ProcessingException e) {
+			return false;
+		}
 	}
 	
 	private Client getRESTClient(int timeout) {
