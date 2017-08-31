@@ -243,21 +243,26 @@ public final class ServiceLoadBalancer {
     //exception can be null
     private <T, R> List<R> multicastRESTOperation(String endpointURI, Class<T> entityClass,
     		Function<RESTClient<T>, R> operation, Server exception) {
-    	loadBalancerModificationLock.readLock().lock();
-    	List<Server> servers = new ArrayList<>(loadBalancer.getAllServers());
-    	if (exception != null) {
-    		servers.remove(exception);
-    	}
     	List<R> responses = new ArrayList<>();
-    	responses = servers.parallelStream().map(
-    		server -> {
-    			try {
-    				return operation.apply((RESTClient<T>) getEndpointClientCollection(endpointURI, entityClass)
-            				.getRESTClient(server));
-    			} catch (Exception e) {
-    				return null;
-    			}
-    		}).collect(Collectors.toList());
+    	List<Server> servers = null;
+    	loadBalancerModificationLock.readLock().lock();
+    	if (loadBalancer != null) {
+    		servers = new ArrayList<>(loadBalancer.getAllServers());
+    	}
+    	if (servers != null) {
+    		if (exception != null) {
+        		servers.remove(exception);
+        	}
+        	responses = servers.parallelStream().map(
+        		server -> {
+        			try {
+        				return operation.apply((RESTClient<T>) getEndpointClientCollection(endpointURI, entityClass)
+                				.getRESTClient(server));
+        			} catch (Exception e) {
+        				return null;
+        			}
+        		}).collect(Collectors.toList());
+    	}
     	loadBalancerModificationLock.readLock().unlock();
     	return responses;
     }
