@@ -143,10 +143,11 @@ public class RegistryClient {
      * @param callback StartupCallback to call
      */
     public void runAfterServiceIsAvailable(Service requestedService, StartupCallback callback, Service myService) {
-    	Thread x = new Thread() {
+    	    availabilityScheduler.schedule(new Runnable() {
 			
 			@Override
 			public void run() {
+				try {
 		    	List<Server> servers;
 		    	do {
 		    		servers = getServersForService(requestedService);
@@ -165,9 +166,13 @@ public class RegistryClient {
 		    		}
 		    	} while (servers == null || servers.isEmpty());
 		    	callback.callback();
+				} catch (Exception e) {
+					e.printStackTrace();
+					throw(e);
+				}
 			}
-		};
-		x.run();
+		}, 0, TimeUnit.NANOSECONDS);
+    	availabilityScheduler.shutdown();
     }
     
 	/**
