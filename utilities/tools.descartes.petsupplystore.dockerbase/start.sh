@@ -7,4 +7,4 @@ sed -i "s/%%DB_HOST%%/${DB_HOST}/g" /usr/local/tomcat/conf/context.xml
 sed -i "s/%%DB_PORT%%/${DB_PORT}/g" /usr/local/tomcat/conf/context.xml
 
 # Run tomcat
-exec "$@"
+catalina.sh run
