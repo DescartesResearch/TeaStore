@@ -17,7 +17,8 @@ RUN chmod +x /usr/local/tomcat/bin/start.sh
 # is the IP address or hostname of the host running the docker container
 ENV SERVICE_PORT 8080
 ENV HOST_NAME 127.0.0.1
-ENV REGISTRY_URL http://localhost:8080/tools.descartes.petsupplystore.registry/rest/services
+ENV REGISTRY_HOST 127.0.0.1
+ENV REGISTRY_PORT 8080
 ENV DB_HOST 127.0.0.1
 ENV DB_PORT 3306
 
@@ -26,5 +27,4 @@ ENV JAVA_OPTS $JAVA_OPTS -Dsecurerandom.source=file:/dev/urandom
 
 EXPOSE 8080
 
-ENTRYPOINT ["/usr/local/tomcat/bin/start.sh"]
-CMD ["/usr/local/tomcat/bin/catalina.sh", "run"]
+CMD /usr/local/tomcat/bin/start.sh && /usr/local/tomcat/bin/catalina.sh run

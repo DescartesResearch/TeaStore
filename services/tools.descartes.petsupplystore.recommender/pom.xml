@@ -59,6 +59,11 @@
 	    <version>7.0</version>
 	    <scope>provided</scope>
 	</dependency>
+	<dependency>
+		<groupId>tools.descartes.petsupplystore</groupId>
+		<artifactId>dockerbase</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</dependency>	
 	
 	<!-- Test Dependencies -->
     <dependency>
@@ -102,7 +107,25 @@
   </dependencies>
   <build>
     <finalName>tools.descartes.petsupplystore.recommender</finalName>
-    <plugins>
+	<plugins>  	
+    	<plugin>
+  			<groupId>com.spotify</groupId>
+  			<artifactId>dockerfile-maven-plugin</artifactId>
+  			<version>1.3.5</version>
+  			<executions>
+    			<execution>
+      				<id>default</id>
+      				<goals>
+        				<goal>build</goal>
+        				<goal>push</goal>
+      				</goals>
+    			</execution>
+  			</executions>
+  			<configuration>
+    			<repository>descartesresearch/petsupplystore-recommender</repository>
+    			<tag>${project.version}</tag>
+  			</configuration>
+	  </plugin>
 	  <plugin>
 		    <groupId>org.apache.maven.plugins</groupId>
 		    <artifactId>maven-surefire-plugin</artifactId>
