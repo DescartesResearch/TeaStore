@@ -26,5 +26,5 @@ ENV JAVA_OPTS $JAVA_OPTS -Dsecurerandom.source=file:/dev/urandom
 
 EXPOSE 8080
 
-#ENTRYPOINT ["/usr/local/tomcat/bin/start.sh"]
-CMD ["/usr/local/tomcat/bin/start.sh"]
+ENTRYPOINT ["/usr/local/tomcat/bin/start.sh"]
+CMD ["/usr/local/tomcat/bin/catalina.sh", "run"]
