@@ -6,7 +6,8 @@
     <!-- Service registration settings, almost always required. -->
     <Environment name="servicePort" value="%%SERVICE_PORT%%" type="java.lang.String" override="false"/>
     <Environment name="hostName" value="%%HOST_NAME%%" type="java.lang.String" override="false"/>
-    <Environment name="registryURL" value="%%REGISTRY_URL%%" type="java.lang.String" override="false"/>
+    <Environment name="registryURL" value="http://%%REGISTRY_URL%%/tools.descartes.petsupplystore.registry/rest/service"
+    		type="java.lang.String" override="false"/>
 
     <!-- Database settings, specify if not localhost:3306 -->
     <Environment name="databaseHost" value="%%DB_HOST%%" type="java.lang.String" override="false"/>
