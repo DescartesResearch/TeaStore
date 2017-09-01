@@ -10,8 +10,8 @@ COPY baseContext.xml /usr/local/tomcat/conf/context.xml
 COPY mysql-connector-java-5.1.44-bin.jar /usr/local/tomcat/lib/mysql-connector-java-5.1.44-bin.jar
 
 # Copy script to replace placeholders in context.xml with the environment variables
-COPY setenv.sh /usr/local/tomcat/bin/setenv.sh
-RUN chmod +x /usr/local/tomcat/bin/setenv.sh
+COPY start.sh /usr/local/tomcat/bin/start.sh
+RUN chmod +x /usr/local/tomcat/bin/start.sh
 
 # Service configuration. SERVICE_PORT is the host port, mapped to the exposed docker port. HOST_NAME
 # is the IP address or hostname of the host running the docker container
@@ -25,3 +25,6 @@ ENV DB_PORT 3306
 ENV JAVA_OPTS $JAVA_OPTS -Dsecurerandom.source=file:/dev/urandom
 
 EXPOSE 8080
+
+ENTRYPOINT["/usr/local/tomcat/bin/start.sh"]
+#CMD["/usr/local/tomcat/bin/catalina.sh", "run"]
