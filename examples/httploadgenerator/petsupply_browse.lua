@@ -1,6 +1,6 @@
-prefix = "http://localhost:8080/tools.descartes.petsupplystore.webui/"
+prefix = "http://10.1.12.208:8080/tools.descartes.petsupplystore.webui/"
 productviewcount = 30
-postIndex = {3, 12}
+postIndex = {3, 11}
 
 
 --[[
@@ -14,7 +14,6 @@ function onCycle()
 	"",
 	"login",
 	--[[[POST]--]]"loginAction?username=user"..userpostfix.."&password=password",
-	"",
 	--[[[POST]--]]"category?page=1&category=",
 	"product?id=",
 	--[[[POST]--]]"cartAction?addToCart=&productid=",
@@ -23,7 +22,6 @@ function onCycle()
 	--[[[POST]--]]"cartAction?addToCart=&productid=",
 	"profile",
 	--[[[POST]--]]"loginAction?logout=",
-	"",
 	}
 end
 
@@ -45,29 +43,29 @@ function onCall(callnum)
 	if callnum == 2 then
 		local categoryids = html.extractMatches("href=.*category.*?category=","\\d+","&page=1.")
 		categoryid = categoryids[math.random(#categoryids)]
-	elseif callnum == 6 then
+	elseif callnum == 5 then
 		local productids = html.extractMatches("href=.*product.*?id=","\\d+",". ><img")
 		productid = productids[math.random(#productids)]
 		local pagecount = #html.getMatches(".*href=.*category.*?category=\\d+&page=\\d+.>\\d+</a></li>.*")
 		page = math.random(pagecount)
-	elseif callnum == 10 then
+	elseif callnum == 9 then
 		local productids = html.extractMatches("href=.*product.*?id=","\\d+",". ><img")
 		productid = productids[math.random(#productids)]
 	end
 
 	if calls[callnum] == nil then
 		return nil
-	elseif callnum == 5 then
+	elseif callnum == 4 then
 		return "[POST]"..prefix..calls[callnum]..categoryid.."&number="..productviewcount
-	elseif callnum == 6 then
+	elseif callnum == 5 then
 		return prefix..calls[callnum]..productid
-	elseif callnum == 7 then
+	elseif callnum == 6 then
 		return "[POST]"..prefix..calls[callnum]..productid
-	elseif callnum == 8 then
+	elseif callnum == 7 then
 		return prefix..calls[callnum]..categoryid
-	elseif callnum == 9 then
+	elseif callnum == 8 then
 		return prefix..calls[callnum]..page.."&category="..categoryid
-	elseif callnum == 10 then
+	elseif callnum == 9 then
 		return "[POST]"..prefix..calls[callnum]..productid
 	elseif isPost(callnum) then
 		return "[POST]"..prefix..calls[callnum]
