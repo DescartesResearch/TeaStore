@@ -48,6 +48,11 @@
 	    <artifactId>registryclient</artifactId>
 	    <version>0.0.1-SNAPSHOT</version>
 	</dependency>
+	<dependency>
+		<groupId>tools.descartes.petsupplystore</groupId>
+		<artifactId>dockerbase</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</dependency>
 	
     
     <!-- Dependencies only needed for compilation -->
@@ -181,6 +186,24 @@
 			        <forkCount>1</forkCount>
 			    </configuration>
 			</plugin>
+			<plugin>
+  			<groupId>com.spotify</groupId>
+  			<artifactId>dockerfile-maven-plugin</artifactId>
+  			<version>1.3.5</version>
+  			<executions>
+    			<execution>
+      				<id>default</id>
+      				<goals>
+        				<goal>build</goal>
+        				<goal>push</goal>
+      				</goals>
+    			</execution>
+  			</executions>
+  			<configuration>
+    			<repository>descartesresearch/petsupplystore-persistence</repository>
+    			<tag>${project.version}</tag>
+  			</configuration>
+		</plugin>
 	  	</plugins>
   </build>
 </project>
