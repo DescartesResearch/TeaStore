@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import tools.descartes.petsupplystore.entities.ImageSize;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
+import tools.descartes.petsupplystore.webui.servlet.elhelper.ELHelperUtils;
 
 /**
  * Servlet implementation for the web view of "Profile"
@@ -60,6 +61,7 @@ public class ProfileServlet extends AbstractUIServlet {
 			request.setAttribute("Orders",
 					LoadBalancedStoreOperations.getOrdersForUser(getSessionBlob(request).getUID()));
 			request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
+			request.setAttribute("helper", ELHelperUtils.UTILS);
 
 			request.getRequestDispatcher("WEB-INF/pages/profile.jsp").forward(request, response);
 		}

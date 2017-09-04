@@ -50,15 +50,9 @@
 					<c:forEach items="${Orders}" var="order">
 						<tr>
 							<td>${order.id}</td>
-							<fmt:parseDate value="${order.time}" var="dateObject"
-								pattern="yyyy-MM-dd'T'HH:mm:ss" />
-							<td><fmt:formatDate value="${dateObject}"
-								pattern="dd/MM/yyyy hh:mm a" /></td>
+							<td>${helper.formatToPrettyDate(order.time)}</td>
 							
-
-							
-							<td><fmt:formatNumber value="${order.totalPriceInCents/100}"
-									type="currency" currencySymbol="$" /></td>
+							<td>${helper.formatPriceInCents(order.totalPriceInCents)}</td>
 							<td>${order.addressName}</td>
 							<td>${order.address1}, ${order.address2}</td>
 						</tr>

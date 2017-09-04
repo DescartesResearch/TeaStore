@@ -12,6 +12,9 @@
         <dependent-module archiveName="entities-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.entities/tools.descartes.petsupplystore.entities">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="dockerbase-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.dockerbase/tools.descartes.petsupplystore.dockerbase">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="java-output-path" value="/tools.descartes.petsupplystore.webui/build/classes"/>
         <property name="context-root" value="tools.descartes.petsupplystore.webui"/>
     </wb-module>
