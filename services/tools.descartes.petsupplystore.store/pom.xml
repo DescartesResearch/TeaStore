@@ -125,18 +125,18 @@
       				<phase>package</phase>
     			</execution>
     			<execution>
-    				<id>tag-latest</id>
+    				<id>tag-push-latest</id>
     				<goals>
     					<goal>tag</goal>
     					<goal>push</goal>
     				</goals>
     				<configuration>
-    					<repository>descarteresearch/petsupplystore-store</repository>
+    					<repository>descartesresearch/petsupplystore-store</repository>
     					<tag>latest</tag>
     				</configuration>
     			</execution>
     			<execution>
-    				<id>tag-version</id>
+    				<id>tag-push-version</id>
     				<goals>
     					<goal>tag</goal>
     					<goal>push</goal>
