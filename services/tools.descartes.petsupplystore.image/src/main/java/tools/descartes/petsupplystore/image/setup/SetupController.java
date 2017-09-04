@@ -513,7 +513,7 @@ public enum SetupController {
 	}
 	
 	public void startup() {
-		// Delete all images in case the image provider was not shutdown gracefully last time, leaving images in disk
+		// Delete all images in case the image provider was not shutdown gracefully last time, leaving images on disk
 		deleteImages();
 		deleteWorkingDir();
 		createWorkingDir();
