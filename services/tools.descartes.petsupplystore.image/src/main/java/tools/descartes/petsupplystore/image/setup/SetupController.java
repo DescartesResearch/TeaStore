@@ -85,6 +85,7 @@ public enum SetupController {
 	private ImageDB imgDB = new ImageDB();
 	private List<StoreImage> preCacheImg = new ArrayList<>();
 	private IDataStorage<StoreImage> storage = null;
+	private IDataCache<StoreImage> cache = null;
 	private ScheduledThreadPoolExecutor imgCreationPool = 
 			new ScheduledThreadPoolExecutor(SetupControllerConstants.CREATION_THREAD_POOL_SIZE); 
 	private Logger log = LoggerFactory.getLogger(SetupController.class);
@@ -357,24 +358,16 @@ public enum SetupController {
 				dir.toAbsolutePath().toString(), nrOfImagesPreExisting);
 	}
 	
-	public void setCachingMode(String cachingMode) {
-		this.cachingMode = CachingMode.getCachingModeFromString(cachingMode);
-	}
-	
-	public void setCachingRule(String cachingRule) {
-		this.cachingRule = CachingRule.getCachingRuleFromString(cachingRule);
-	}
-	
-	public void setCacheSize(long cacheSize) {
-		this.cacheSize = cacheSize;
-	}
-	
-	public void setStorageMode(String storageMode) {
-		this.storageMode = StorageMode.getStorageModeFromString(storageMode);
-	}
-	
-	public void setStorageRule(String storageRule) {
-		this.storageRule = StorageRule.getStorageRuleFromString(storageRule);
+	public boolean setCacheSize(long cacheSize) {
+		if (cacheSize < 0) {
+			log.info("Tried to set cache size to a value below zero. Keeping old value");
+			return false;
+		}
+		if (cache == null) {
+			log.info("No cache defined.");
+			return false;
+		}
+		return cache.setMaxCacheSize(cacheSize);
 	}
 	
 	public void deleteImages() {
@@ -428,7 +421,7 @@ public enum SetupController {
 			default: cachePredicate = new CacheAll<StoreImage>(); break;
 		}
 		
-		IDataCache<StoreImage> cache = null;
+		cache = null;
 		switch (cachingMode) {
 			case FIFO: cache = new FirstInFirstOut<StoreImage>(storage, cacheSize, cachePredicate); break;
 			case LIFO: cache = new LastInFirstOut<StoreImage>(storage, cacheSize, cachePredicate); break;
@@ -444,7 +437,6 @@ public enum SetupController {
 			for (StoreImage img : preCacheImg) {
 				cache.cacheData(img);
 			}
-			storage = cache;
 		}
 		
 		log.info("Storage setup done.");
@@ -452,7 +444,7 @@ public enum SetupController {
 	
 	public void configureImageProvider() {
 		ImageProvider.IP.setImageDB(imgDB);
-		ImageProvider.IP.setStorage(storage);
+		ImageProvider.IP.setStorage(cache == null ? storage : cache);
 		
 		log.info("Storage and image database handed over to image provider");
 	}
@@ -492,6 +484,24 @@ public enum SetupController {
 		
 		return sb.toString();
 	}
+	
+	private void stopImageCreation() {
+		// Stop image creation to have sort of a steady state to work on
+		imgCreationPool.shutdownNow();
+		try {
+			if (imgCreationPool.awaitTermination(SetupControllerConstants.CREATION_THREAD_POOL_WAIT, 
+					TimeUnit.MILLISECONDS)) {
+				log.info("Stopped image creation.");
+			} else {
+				log.warn("Image creation thread pool not terminating after {}ms. Stop waiting.", 
+						SetupControllerConstants.CREATION_THREAD_POOL_WAIT);
+			}
+		} catch (InterruptedException interruptedException) {
+			log.warn("Waiting for image creation thread pool to terminate interrupted by exception.", 
+					interruptedException);
+		}
+		imgCreationPool = new ScheduledThreadPoolExecutor(SetupControllerConstants.CREATION_THREAD_POOL_SIZE);	
+	}
 
 	/*
 	 * Convenience methods
@@ -519,22 +529,7 @@ public enum SetupController {
 
 			@Override
 			public void run() {
-				// Stop image creation to have sort of a steady state to work on
-				imgCreationPool.shutdownNow();
-				try {
-					if (imgCreationPool.awaitTermination(SetupControllerConstants.CREATION_THREAD_POOL_WAIT, 
-							TimeUnit.MILLISECONDS)) {
-						log.info("Stopped image creation.");
-					} else {
-						log.warn("Image creation thread pool not terminating after {}ms. Stop waiting.", 
-								SetupControllerConstants.CREATION_THREAD_POOL_WAIT);
-					}
-				} catch (InterruptedException interruptedException) {
-					log.warn("Waiting for image creation thread pool to terminate interrupted by exception.", 
-							interruptedException);
-				}
-				imgCreationPool = new ScheduledThreadPoolExecutor(SetupControllerConstants.CREATION_THREAD_POOL_SIZE);
-				
+				stopImageCreation();
 				imgDB = new ImageDB();
 				
 				deleteImages();

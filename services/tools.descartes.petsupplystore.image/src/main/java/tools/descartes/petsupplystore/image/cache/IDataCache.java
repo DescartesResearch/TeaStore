@@ -38,4 +38,6 @@ public interface IDataCache<T extends ICachable<T>> extends IDataStorage<T> {
 	
 	public void clearCache();
 	
+	public boolean setMaxCacheSize(long cacheSize);
+	
 }

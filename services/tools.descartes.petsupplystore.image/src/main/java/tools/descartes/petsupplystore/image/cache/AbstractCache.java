@@ -57,10 +57,6 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 			log.error("The provided internal storage object is null.");
 			throw new NullPointerException("The provided internal storage object is null.");
 		}
-		if (maxCacheSize < 0) {
-			log.error("The provided cache size is negative. Must be positive.");
-			throw new IllegalArgumentException("The provided cache size is negative. Must be positive.");
-		}
 		if (cachingRule == null) {
 			log.error("The provided caching rule is null.");
 			throw new NullPointerException("The provided caching rule is null.");
@@ -75,6 +71,7 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 		this.entries = entries;
 		this.maxCacheSize = maxCacheSize;
 		this.cachingRule = cachingRule;
+		setMaxCacheSize(maxCacheSize);
 	}
 	
 	private T getData(long id, boolean markUsed) {
@@ -100,6 +97,26 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 	public long getMaxCacheSize() {
 		return maxCacheSize;
 	}
+	
+	@Override
+	public boolean setMaxCacheSize(long maxCacheSize) {
+		if (maxCacheSize < 0) {
+			log.error("The provided cache size is negative. Must be positive.");
+			throw new IllegalArgumentException("The provided cache size is negative. Must be positive.");
+		}
+		
+		lock.writeLock().lock();
+		try {
+			this.maxCacheSize = maxCacheSize;
+			// If the new cache size is smaller than the old one, we might need to evict entries
+			while (getFreeSpace() < 0) {
+				removeEntryByCachingStrategy();
+			}
+		} finally {
+			lock.writeLock().unlock();
+		}
+		return true;
+	}	
 	
 	@Override
 	public long getCurrentCacheSize() {
