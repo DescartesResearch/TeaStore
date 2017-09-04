@@ -47,19 +47,37 @@
   			<groupId>com.spotify</groupId>
   			<artifactId>dockerfile-maven-plugin</artifactId>
   			<version>1.3.5</version>
-  			<executions>
+	<executions>
     			<execution>
-      				<id>default</id>
+      				<id>build-image</id>
       				<goals>
         				<goal>build</goal>
-        				<goal>push</goal>
       				</goals>
+      				<phase>package</phase>
+    			</execution>
+    			<execution>
+    				<id>tag-push-latest</id>
+    				<goals>
+    					<goal>tag</goal>
+    					<goal>push</goal>
+    				</goals>
+    				<configuration>
+    					<repository>descartesresearch/petsupplystore-base</repository>
+    					<tag>latest</tag>
+    				</configuration>
+    			</execution>
+    			<execution>
+    				<id>tag-push-version</id>
+    				<goals>
+    					<goal>tag</goal>
+    					<goal>push</goal>
+    				</goals>
+    				<configuration>
+    					<repository>descartesresearch/petsupplystore-base</repository>
+    					<tag>${project.version}</tag>
+    				</configuration>
     			</execution>
   			</executions>
-  			<configuration>
-    			<repository>descartesresearch/petsupplystore-base</repository>
-    			<tag>latest</tag>
-  			</configuration>
 		</plugin> 
 	</plugins>
     <finalName>tools.descartes.petsupplystore.dockerbase</finalName>
