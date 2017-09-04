@@ -118,17 +118,35 @@
   			<version>1.3.5</version>
   			<executions>
     			<execution>
-      				<id>default</id>
+      				<id>build-image</id>
       				<goals>
         				<goal>build</goal>
-        				<goal>push</goal>
       				</goals>
+      				<phase>package</phase>
+    			</execution>
+    			<execution>
+    				<id>tag-latest</id>
+    				<goals>
+    					<goal>tag</goal>
+    					<goal>push</goal>
+    				</goals>
+    				<configuration>
+    					<repository>descarteresearch/petsupplystore-store</repository>
+    					<tag>latest</tag>
+    				</configuration>
+    			</execution>
+    			<execution>
+    				<id>tag-version</id>
+    				<goals>
+    					<goal>tag</goal>
+    					<goal>push</goal>
+    				</goals>
+    				<configuration>
+    					<repository>descartesresearch/petsupplystore-store</repository>
+    					<tag>${project.version}</tag>
+    				</configuration>
     			</execution>
   			</executions>
-  			<configuration>
-    			<repository>descartesresearch/petsupplystore-store</repository>
-    			<tag>${project.version}</tag>
-  			</configuration>
 	  </plugin> 
 	  <plugin>
 		    <groupId>org.apache.maven.plugins</groupId>
