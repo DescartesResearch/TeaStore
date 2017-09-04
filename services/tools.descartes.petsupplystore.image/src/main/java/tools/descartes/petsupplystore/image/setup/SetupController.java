@@ -110,10 +110,17 @@ public enum SetupController {
 			Response result = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "generatedb", 
 					String.class, client -> client.getService().path(client.getApplicationURI())
 					.path(client.getEndpointURI()).path("finished").request().get());
-			
+		
 			if (result == null ? false : Boolean.parseBoolean(result.readEntity(String.class))) {
+				if (result != null) {
+					result.close();
+				}
 				maxTriesReached = false;
 				break;
+			}
+			
+			if (result != null) {
+				result.close();
 			}
 			
 			try {
@@ -142,8 +149,10 @@ public enum SetupController {
 			} else {
 				List<Long> tmp = convertToIDs(result.readEntity(new GenericType<List<Product>>() { }));
 				products.put(category, tmp);
+				result.close();
 				log.info("Category {} ({}) contains {} products.", category.getName(), category.getId(), tmp.size());
 			}
+			
 		} else {
 			log.warn("Maximum tries to reach persistence service reached. No products fetched.");
 		}
@@ -162,6 +171,7 @@ public enum SetupController {
 				log.warn("No categories found.");
 			} else {
 				categories = result.readEntity(new GenericType<List<Category>>() { });
+				result.close();
 				log.info("{} categories found.", categories.size());
 			}
 		} else {
@@ -171,6 +181,9 @@ public enum SetupController {
 	}
 	
 	private List<Long> convertToIDs(List<Product> products) {
+		if (products == null) {
+			return new ArrayList<>();
+		}
 		return products.stream().map(product -> product.getId()).collect(Collectors.toList());
 	}
 	

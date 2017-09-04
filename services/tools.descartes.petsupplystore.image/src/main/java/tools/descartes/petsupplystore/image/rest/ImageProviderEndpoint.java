@@ -62,4 +62,10 @@ public class ImageProviderEndpoint {
 		return Response.ok().entity(SetupController.SETUP.getState()).build();
 	}
 	
+	@POST
+	@Path("setCacheSize")
+	public Response setCacheSize(long cacheSize) {
+		return null;
+	}
+	
 }
