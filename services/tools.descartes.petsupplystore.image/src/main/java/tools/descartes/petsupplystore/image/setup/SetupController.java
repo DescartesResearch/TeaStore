@@ -334,7 +334,7 @@ public enum SetupController {
 					
 					db.setImageMapping(file.getName().substring(0, 
 							file.getName().length() - StoreImage.STORE_IMAGE_FORMAT.length() - 1), 
-							imageID, ImageSize.Preset.FULL.getSize());	
+							imageID, new ImageSize(buffImg.getWidth(), buffImg.getHeight()));	
 					StoreImage img = new StoreImage(imageID, buffImg, ImageSize.Preset.FULL.getSize());
 					preCacheImg.add(img);
 					

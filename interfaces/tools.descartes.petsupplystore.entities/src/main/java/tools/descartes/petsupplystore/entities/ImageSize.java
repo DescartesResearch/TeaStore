@@ -18,7 +18,9 @@ public class ImageSize {
 		LOGO(new ImageSize(600, 195)),
 		MAIN_IMAGE(new ImageSize(450, 450)),
 		PREVIEW(new ImageSize(125, 125)),
-		FULL(new ImageSize(600, 600));
+		FULL(new ImageSize(600, 600)),
+		ERROR(new ImageSize(600, 400)),
+		INDEX(new ImageSize(600, 450));
 		
 		private final ImageSize size;
 		

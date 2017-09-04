@@ -52,7 +52,7 @@ public class IndexServlet extends AbstractUIServlet {
 		request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
 
 		request.setAttribute("storeMainImage", 
-				LoadBalancedImageOperations.getWebImage("front", ImageSize.Preset.MAIN_IMAGE.getSize()));
+				LoadBalancedImageOperations.getWebImage("front", ImageSize.Preset.INDEX.getSize()));
 		request.setAttribute("storeIcon", 
 				LoadBalancedImageOperations.getWebImage("icon", ImageSize.Preset.ICON.getSize()));
 
