@@ -497,7 +497,7 @@ public enum SetupController {
 						SetupControllerConstants.CREATION_THREAD_POOL_WAIT);
 			}
 		} catch (InterruptedException interruptedException) {
-			log.warn("Waiting for image creation thread pool to terminate interrupted by exception.", 
+			log.warn("Waiting for image creation thread pool termination interrupted by exception.", 
 					interruptedException);
 		}
 		imgCreationPool = new ScheduledThreadPoolExecutor(SetupControllerConstants.CREATION_THREAD_POOL_SIZE);	
