@@ -54,8 +54,10 @@ public class ErrorServlet extends AbstractUIServlet {
 			redirect("/", response);
 		} else {
 			request.setAttribute("CategoryList", LoadBalancedStoreOperations.getCategories());
-			request.setAttribute("storeIcon", LoadBalancedImageOperations.getWebImage("icon", ImageSize.ICON));
-			request.setAttribute("errorImage", LoadBalancedImageOperations.getWebImage("error", ImageSize.MAIN_IMAGE));
+			request.setAttribute("storeIcon", 
+					LoadBalancedImageOperations.getWebImage("icon", ImageSize.Preset.ICON.getSize()));
+			request.setAttribute("errorImage", 
+					LoadBalancedImageOperations.getWebImage("error", ImageSize.Preset.MAIN_IMAGE.getSize()));
 			request.setAttribute("title", "Pet Supply Store Error ");
 			request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
 			request.getRequestDispatcher("WEB-INF/pages/error.jsp").forward(request, response);

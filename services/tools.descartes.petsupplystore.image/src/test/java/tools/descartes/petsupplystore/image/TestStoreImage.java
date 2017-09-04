@@ -81,19 +81,19 @@ public class TestStoreImage {
 	
 	@Test
 	public void testConstructor() {
-		new StoreImage(IMG_ID0, img, ImageSize.ICON);
-		new StoreImage(IMG_ID0, IMG_DATA.getBytes(), ImageSize.ICON);
+		new StoreImage(IMG_ID0, img, ImageSize.Preset.ICON.getSize());
+		new StoreImage(IMG_ID0, IMG_DATA.getBytes(), ImageSize.Preset.ICON.getSize());
 		new StoreImage(mockedImg0);
 	}
 	
 	@Test(expected = NullPointerException.class)
 	public void testByteArrayConstructorNull() {
-		new StoreImage(IMG_ID0, (byte[])null, ImageSize.ICON);
+		new StoreImage(IMG_ID0, (byte[])null, ImageSize.Preset.ICON.getSize());
 	}
 	
 	@Test(expected = NullPointerException.class)
 	public void testImageConstructorNull() {
-		new StoreImage(IMG_ID0, (BufferedImage)null, ImageSize.ICON);
+		new StoreImage(IMG_ID0, (BufferedImage)null, ImageSize.Preset.ICON.getSize());
 	}
 	
 	@Test(expected = NullPointerException.class)
@@ -113,13 +113,13 @@ public class TestStoreImage {
 	
 	@Test
 	public void testGetId() {
-		StoreImage uut = new StoreImage(IMG_ID1, img, ImageSize.ICON);
+		StoreImage uut = new StoreImage(IMG_ID1, img, ImageSize.Preset.ICON.getSize());
 		assertEquals(IMG_ID1, uut.getId());
 	}
 	
 	@Test
 	public void testGetImage() {
-		StoreImage uut = new StoreImage(IMG_ID1, IMG_DATA.getBytes(), ImageSize.ICON);
+		StoreImage uut = new StoreImage(IMG_ID1, IMG_DATA.getBytes(), ImageSize.Preset.ICON.getSize());
 		BufferedImage bi = uut.getImage();
 		if (bi == null)
 			fail();
@@ -129,38 +129,38 @@ public class TestStoreImage {
 	
 	@Test
 	public void testGetSize() {
-		StoreImage uut = new StoreImage(IMG_ID1, IMG_DATA.getBytes(), ImageSize.ICON);
-		assertEquals(ImageSize.ICON, uut.getSize());
+		StoreImage uut = new StoreImage(IMG_ID1, IMG_DATA.getBytes(), ImageSize.Preset.ICON.getSize());
+		assertEquals(ImageSize.Preset.ICON.getSize(), uut.getSize());
 	}
 	
 	@Test
 	public void testGetByteSize() {
-		StoreImage uut = new StoreImage(IMG_ID1, IMG_DATA.getBytes(), ImageSize.ICON);
+		StoreImage uut = new StoreImage(IMG_ID1, IMG_DATA.getBytes(), ImageSize.Preset.ICON.getSize());
 		assertEquals(IMG_DATA.getBytes().length, uut.getByteSize());
 	}
 	
 	@Test
 	public void testGetBase64() {
-		StoreImage uut = new StoreImage(IMG_ID1, IMG_DATA.getBytes(), ImageSize.ICON);
+		StoreImage uut = new StoreImage(IMG_ID1, IMG_DATA.getBytes(), ImageSize.Preset.ICON.getSize());
 		assertEquals(IMG_DATA, uut.getBase64());
 	}
 	
 	@Test
 	public void testGetByteArray() {
-		StoreImage uut = new StoreImage(IMG_ID1, IMG_DATA.getBytes(), ImageSize.ICON);
+		StoreImage uut = new StoreImage(IMG_ID1, IMG_DATA.getBytes(), ImageSize.Preset.ICON.getSize());
 		assertArrayEquals(IMG_DATA.getBytes(), uut.getByteArray());
 	}
 	
 	@Test
 	public void testToString() {
-		StoreImage uut = new StoreImage(IMG_ID1, IMG_DATA.getBytes(), ImageSize.ICON);
+		StoreImage uut = new StoreImage(IMG_ID1, IMG_DATA.getBytes(), ImageSize.Preset.ICON.getSize());
 		assertEquals(IMG_STRING + IMG_DATA, uut.toString());
 	}
 	
 	@SuppressWarnings("unlikely-arg-type")
 	@Test
 	public void testEquals() {
-		StoreImage uut = new StoreImage(IMG_ID1, IMG_DATA.getBytes(), ImageSize.ICON);
+		StoreImage uut = new StoreImage(IMG_ID1, IMG_DATA.getBytes(), ImageSize.Preset.ICON.getSize());
 		StoreImage test = new StoreImage(uut);
 		assertTrue(uut.equals(uut));
 		assertFalse(uut.equals(null));
@@ -171,7 +171,7 @@ public class TestStoreImage {
 	
 	@Test
 	public void testHashCode() {
-		StoreImage uut = new StoreImage(IMG_ID1, IMG_DATA.getBytes(), ImageSize.ICON);
+		StoreImage uut = new StoreImage(IMG_ID1, IMG_DATA.getBytes(), ImageSize.Preset.ICON.getSize());
 		int result = 31 + (int) (IMG_ID1 ^ (IMG_ID1 >>> 32));
 		assertEquals(uut.hashCode(), result);
 	}

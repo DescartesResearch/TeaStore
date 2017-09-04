@@ -51,8 +51,10 @@ public class IndexServlet extends AbstractUIServlet {
 		request.setAttribute("title", "Pet Supply Store Home");
 		request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
 
-		request.setAttribute("storeMainImage", LoadBalancedImageOperations.getWebImage("front", ImageSize.MAIN_IMAGE));
-		request.setAttribute("storeIcon", LoadBalancedImageOperations.getWebImage("icon", ImageSize.ICON));
+		request.setAttribute("storeMainImage", 
+				LoadBalancedImageOperations.getWebImage("front", ImageSize.Preset.MAIN_IMAGE.getSize()));
+		request.setAttribute("storeIcon", 
+				LoadBalancedImageOperations.getWebImage("icon", ImageSize.Preset.ICON.getSize()));
 
 		request.getRequestDispatcher("WEB-INF/pages/index.jsp").forward(request, response);
 	}

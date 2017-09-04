@@ -81,7 +81,8 @@ public class CategoryServlet extends AbstractUIServlet {
 
 			List<Product> productlist = LoadBalancedStoreOperations.getProducts(categoryID, page, numberProducts);
 			request.setAttribute("productImages", LoadBalancedImageOperations.getProductPreviewImages(productlist));
-			request.setAttribute("storeIcon", LoadBalancedImageOperations.getWebImage("icon", ImageSize.ICON));
+			request.setAttribute("storeIcon", 
+					LoadBalancedImageOperations.getWebImage("icon", ImageSize.Preset.ICON.getSize()));
 			request.setAttribute("CategoryList", LoadBalancedStoreOperations.getCategories());
 			request.setAttribute("title", "Pet Supply Store Categorie " + category.getName());
 

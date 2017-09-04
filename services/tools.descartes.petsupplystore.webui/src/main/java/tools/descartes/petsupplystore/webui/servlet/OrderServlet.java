@@ -62,7 +62,8 @@ public class OrderServlet extends AbstractUIServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setAttribute("CategoryList", LoadBalancedStoreOperations.getCategories());
-		request.setAttribute("storeIcon", LoadBalancedImageOperations.getWebImage("icon", ImageSize.ICON));
+		request.setAttribute("storeIcon", 
+				LoadBalancedImageOperations.getWebImage("icon", ImageSize.Preset.ICON.getSize()));
 		request.setAttribute("title", "Pet Supply Store Order");
 		request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
 		request.getRequestDispatcher("WEB-INF/pages/order.jsp").forward(request, response);

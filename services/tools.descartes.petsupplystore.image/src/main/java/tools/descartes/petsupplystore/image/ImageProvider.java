@@ -92,7 +92,7 @@ public enum ImageProvider {
 			return null;
 		}
 	
-		ImageSize biggest = ImageSize.getBiggestSize();
+		ImageSize biggest = ImageSize.getBiggestPreset();
 		StoreImage storedImg = null;
 		
 		// Try to retrieve image from disk or from cache

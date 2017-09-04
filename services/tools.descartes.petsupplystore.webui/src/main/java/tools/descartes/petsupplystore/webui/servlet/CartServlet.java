@@ -69,7 +69,8 @@ public class CartServlet extends AbstractUIServlet {
 			products.put(product.getId(), product);
 		}
 
-		request.setAttribute("storeIcon", LoadBalancedImageOperations.getWebImage("icon", ImageSize.ICON));
+		request.setAttribute("storeIcon", 
+				LoadBalancedImageOperations.getWebImage("icon", ImageSize.Preset.ICON.getSize()));
 		request.setAttribute("title", "Pet Supply Store Cart");
 		request.setAttribute("CategoryList", LoadBalancedStoreOperations.getCategories());
 		request.setAttribute("OrderItems", orderItems);

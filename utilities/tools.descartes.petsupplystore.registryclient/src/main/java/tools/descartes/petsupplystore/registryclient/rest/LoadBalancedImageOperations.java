@@ -32,7 +32,7 @@ public final class LoadBalancedImageOperations {
 	 * @return image for product
 	 */
 	public static String getProductImage(Product product) {
-		return getProductImage(product, ImageSize.FULL);
+		return getProductImage(product, ImageSize.Preset.FULL.getSize());
 	}
 	
 	/**
@@ -64,7 +64,7 @@ public final class LoadBalancedImageOperations {
 	 * @return HashMap containing all preview images
 	 */
 	public static HashMap<Long, String> getProductPreviewImages(List<Product> products) {
-		return getProductImages(products, ImageSize.PREVIEW);
+		return getProductImages(products, ImageSize.Preset.PREVIEW.getSize());
 	}
 	
 	/**

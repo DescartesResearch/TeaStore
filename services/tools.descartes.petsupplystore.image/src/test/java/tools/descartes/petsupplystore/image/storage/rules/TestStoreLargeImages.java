@@ -40,10 +40,10 @@ public class TestStoreLargeImages {
 	@Before
 	public void initialize() {
 		MockitoAnnotations.initMocks(this);
-		when(mockedLargeImg.getSize()).thenReturn(ImageSize.FULL);
-		when(mockedIconImg.getSize()).thenReturn(ImageSize.ICON);
-		when(mockedMainImg.getSize()).thenReturn(ImageSize.MAIN_IMAGE);
-		when(mockedPreviewImg.getSize()).thenReturn(ImageSize.PREVIEW);
+		when(mockedLargeImg.getSize()).thenReturn(ImageSize.Preset.FULL.getSize());
+		when(mockedIconImg.getSize()).thenReturn(ImageSize.Preset.ICON.getSize());
+		when(mockedMainImg.getSize()).thenReturn(ImageSize.Preset.MAIN_IMAGE.getSize());
+		when(mockedPreviewImg.getSize()).thenReturn(ImageSize.Preset.PREVIEW.getSize());
 	}
 	
 	@Test

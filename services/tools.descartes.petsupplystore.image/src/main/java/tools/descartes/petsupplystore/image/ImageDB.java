@@ -36,7 +36,7 @@ public class ImageDB {
 	private HashMap<Long, Map<Long, ImageSize>> products = new HashMap<>();
 	private HashMap<String, Map<Long, ImageSize>> webui = new HashMap<>();
 	private HashMap<Long, ImageSize> sizes = new HashMap<>();
-	private Logger log = LoggerFactory.getLogger(ImageDB.class);
+	private final Logger log = LoggerFactory.getLogger(ImageDB.class);
 	
 	// Locking
 	private final ReadWriteLock lock = new ReentrantReadWriteLock();

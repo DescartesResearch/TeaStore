@@ -58,12 +58,12 @@ public class TestImageScaler {
 	// We can only test that it scales correctly, it is not really feasible to test for the correct content. 
 	@Test
 	public void testScale() {
-		BufferedImage uut = ImageScaler.scale(img, ImageSize.FULL);
-		assertEquals(ImageSize.FULL.getWidth(), uut.getWidth());
-		assertEquals(ImageSize.FULL.getHeight(), uut.getHeight());
-		uut = ImageScaler.scale(img, ImageSize.ICON);
-		assertEquals(ImageSize.ICON.getWidth(), uut.getWidth());
-		assertEquals(ImageSize.ICON.getHeight(), uut.getHeight());
+		BufferedImage uut = ImageScaler.scale(img, ImageSize.Preset.FULL.getSize());
+		assertEquals(ImageSize.Preset.FULL.getSize().getWidth(), uut.getWidth());
+		assertEquals(ImageSize.Preset.FULL.getSize().getHeight(), uut.getHeight());
+		uut = ImageScaler.scale(img, ImageSize.Preset.ICON.getSize());
+		assertEquals(ImageSize.Preset.ICON.getSize().getWidth(), uut.getWidth());
+		assertEquals(ImageSize.Preset.ICON.getSize().getHeight(), uut.getHeight());
 		
 		uut = ImageScaler.scale(img, 2.2);
 		assertEquals((int)(widthBefore * 2.2), uut.getWidth());

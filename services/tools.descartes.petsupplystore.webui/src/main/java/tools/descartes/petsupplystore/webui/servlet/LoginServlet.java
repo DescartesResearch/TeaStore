@@ -48,7 +48,8 @@ public class LoginServlet extends AbstractUIServlet {
 			throws ServletException, IOException {
 		checkforCookie(request, response);
 		request.setAttribute("CategoryList", LoadBalancedStoreOperations.getCategories());
-		request.setAttribute("storeIcon", LoadBalancedImageOperations.getWebImage("icon", ImageSize.ICON));
+		request.setAttribute("storeIcon", 
+				LoadBalancedImageOperations.getWebImage("icon", ImageSize.Preset.ICON.getSize()));
 		request.setAttribute("title", "Pet Supply Store Login");
 		request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
 

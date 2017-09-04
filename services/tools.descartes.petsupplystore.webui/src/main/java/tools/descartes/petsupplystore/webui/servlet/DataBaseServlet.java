@@ -47,7 +47,8 @@ public class DataBaseServlet extends AbstractUIServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		checkforCookie(request, response);
-		request.setAttribute("storeIcon", LoadBalancedImageOperations.getWebImage("icon", ImageSize.ICON));
+		request.setAttribute("storeIcon", 
+				LoadBalancedImageOperations.getWebImage("icon", ImageSize.Preset.ICON.getSize()));
 		request.setAttribute("title", "Pet Supply Store Database");
 		request.getRequestDispatcher("WEB-INF/pages/database.jsp").forward(request, response);
 	}

@@ -54,7 +54,8 @@ public class ProfileServlet extends AbstractUIServlet {
 			redirect("/", response);
 		} else {
 
-			request.setAttribute("storeIcon", LoadBalancedImageOperations.getWebImage("icon", ImageSize.ICON));
+			request.setAttribute("storeIcon", 
+					LoadBalancedImageOperations.getWebImage("icon", ImageSize.Preset.ICON.getSize()));
 			request.setAttribute("CategoryList", LoadBalancedStoreOperations.getCategories());
 			request.setAttribute("title", "Pet Supply Store Home");
 			request.setAttribute("User", LoadBalancedStoreOperations.getUser(getSessionBlob(request).getUID()));

@@ -36,8 +36,8 @@ public class TestImageDB {
 	private final long productImageID = 99;
 	private final long productImageIDLarge = 999;
 	private final long nameImageID = 200;
-	private ImageSize size = ImageSize.ICON;
-	private ImageSize sizeLarge = ImageSize.FULL;
+	private ImageSize size = ImageSize.Preset.ICON.getSize();
+	private ImageSize sizeLarge = ImageSize.Preset.FULL.getSize();
 	private ImageDB uut;
 	
 	@Mock

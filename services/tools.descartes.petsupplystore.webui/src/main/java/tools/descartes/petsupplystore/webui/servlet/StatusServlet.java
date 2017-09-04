@@ -55,7 +55,7 @@ public class StatusServlet extends AbstractUIServlet {
 		checkforCookie(request, response);
 		String iconImage = null;
 		try {
-			iconImage = LoadBalancedImageOperations.getWebImage("icon", ImageSize.ICON);
+			iconImage = LoadBalancedImageOperations.getWebImage("icon", ImageSize.Preset.ICON.getSize());
 		} catch (NullPointerException e) {
 
 		}

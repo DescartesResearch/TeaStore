@@ -52,14 +52,16 @@ public class AboutUsServlet extends AbstractUIServlet {
 		checkforCookie(request, response);
 		HashMap<String, String> portraits = LoadBalancedImageOperations.getWebImages(
 				Arrays.asList("andreBauer", "johannesGrohmann", "joakimKistowski", "simonEismann", "norbertSchmitt"),
-				ImageSize.PORTRAIT);
+				ImageSize.Preset.PORTRAIT.getSize());
 		request.setAttribute("portraitAndre", portraits.get("andreBauer"));
 		request.setAttribute("portraitJohannes", portraits.get("johannesGrohmann"));
 		request.setAttribute("portraitJoakim", portraits.get("joakimKistowski"));
 		request.setAttribute("portraitSimon", portraits.get("simonEismann"));
 		request.setAttribute("portraitNorbert", portraits.get("norbertSchmitt"));
-		request.setAttribute("descartesLogo", LoadBalancedImageOperations.getWebImage("descartesLogo", ImageSize.LOGO));
-		request.setAttribute("storeIcon", LoadBalancedImageOperations.getWebImage("icon", ImageSize.ICON));
+		request.setAttribute("descartesLogo", 
+				LoadBalancedImageOperations.getWebImage("descartesLogo", ImageSize.Preset.LOGO.getSize()));
+		request.setAttribute("storeIcon", 
+				LoadBalancedImageOperations.getWebImage("icon", ImageSize.Preset.ICON.getSize()));
 		request.setAttribute("title", "Pet Supply Store About Us");
 		request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
 
