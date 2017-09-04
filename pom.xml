@@ -44,6 +44,7 @@
 		<module>./utilities/tools.descartes.petsupplystore.rest</module>
 		<module>./utilities/tools.descartes.petsupplystore.registryclient</module>
 		<module>./utilities/tools.descartes.petsupplystore.dockerbase</module>
+		<module>./utilities/tools.descartes.petsupplystore.database</module>
 		<module>./services/tools.descartes.petsupplystore.registry</module>
 		<module>./services/tools.descartes.petsupplystore.persistence</module>
 		<module>./services/tools.descartes.petsupplystore.store</module>

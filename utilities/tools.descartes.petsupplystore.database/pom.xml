@@ -1,0 +1,67 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>tools.descartes.petsupplystore</groupId>
+  <artifactId>database</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>PetSupplyStore Database Docker Container</name>
+  <url>http://descartes.tools</url>
+  
+    <distributionManagement>
+		<repository>
+			<id>se-uw-nexus</id>
+			<name>Releases</name>
+			<url>https://se4.informatik.uni-wuerzburg.de/nexus/content/repositories/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>se-uw-nexus</id>
+			<name>Snapshots</name>
+			<url>https://se4.informatik.uni-wuerzburg.de/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+	
+  <repositories>
+	<repository>
+		<id>se-uw-nexus</id>
+		<name>Public Repositories</name>
+		<url>https://se4.informatik.uni-wuerzburg.de/nexus/content/groups/public/</url>
+		<releases>
+			<enabled>true</enabled>
+		</releases>
+		<snapshots>
+			<enabled>true</enabled>
+		</snapshots>
+	</repository>
+  </repositories>
+ 
+  <dependencies></dependencies> 
+  
+  <properties>  
+  	<maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  
+  <build>
+  	<plugins>
+  		<plugin>
+  			<groupId>com.spotify</groupId>
+  			<artifactId>dockerfile-maven-plugin</artifactId>
+  			<version>1.3.5</version>
+  			<executions>
+    			<execution>
+      				<id>default</id>
+      				<goals>
+        				<goal>build</goal>
+        				<goal>push</goal>
+      				</goals>
+    			</execution>
+  			</executions>
+  			<configuration>
+    			<repository>descartesresearch/petsupplystore-db</repository>
+    			<tag>latest</tag>
+  			</configuration>
+		</plugin> 
+	</plugins>
+    <finalName>tools.descartes.petsupplystore.database</finalName>
+  </build> 
+</project>
