@@ -49,6 +49,11 @@ public class ImageSize {
 		setHeight(height);
 	}
 	
+	public ImageSize(ImageSize size) {
+		setWidth(size.getWidth());
+		setHeight(size.getHeight());
+	}
+	
 	public int getWidth() {
 		return width;
 	}
