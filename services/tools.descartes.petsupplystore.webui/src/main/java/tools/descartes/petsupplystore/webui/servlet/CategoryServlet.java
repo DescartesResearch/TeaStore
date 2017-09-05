@@ -64,8 +64,8 @@ public class CategoryServlet extends AbstractUIServlet {
 			int products = LoadBalancedStoreOperations.getNumberOfProducts(categoryID);
 
 			int numberProducts = INITIAL_PRODUCT_DISPLAY_COUNT;
-			if (request.getSession().getAttribute("numberProducts") != null) {
-				numberProducts = Integer.valueOf(request.getSession().getAttribute("numberProducts").toString());
+			if (request.getAttribute("numberProducts") != null) {
+				numberProducts = Integer.valueOf(request.getAttribute("numberProducts").toString());
 			}
 
 			int page = 1;

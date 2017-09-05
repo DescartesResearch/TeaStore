@@ -154,11 +154,11 @@ public abstract class AbstractUIServlet extends HttpServlet {
 		if (request.getCookies() != null) {
 			for (Cookie cook : request.getCookies()) {
 				if (cook.getName().equals(MESSAGECOOKIE)) {
-					request.getSession().setAttribute("message", cook.getValue().replaceAll("_", " "));
+					request.setAttribute("message", cook.getValue().replaceAll("_", " "));
 					cook.setMaxAge(0);
 					response.addCookie(cook);
 				} else if (cook.getName().equals(PRODUCTCOOKIE)) {
-					request.getSession().setAttribute("numberProducts", cook.getValue());
+					request.setAttribute("numberProducts", cook.getValue());
 				}
 			}
 		}

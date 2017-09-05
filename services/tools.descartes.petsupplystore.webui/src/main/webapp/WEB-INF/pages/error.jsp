@@ -15,10 +15,12 @@
 
 			<h2>Oops, something went wrong!</h2>
 
-			<img height="100%" src="${errorImage}" align="middle" />
+			<img class="titleimage" src="${errorImage}" align="middle" />
 			<div class="row">
-				<input type="button" class="btn" value="Back to Shop"
+				<input type="button" class="btn errorbtn" value="Back to Shop"
 					onclick="location.href = '<c:url value='/' />';">
+				<input type="button" class="btn errorbtn" value="Check Status"
+					onclick="location.href = '<c:url value='/status' />';">	
 			</div>
 		</div>
 

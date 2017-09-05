@@ -204,6 +204,15 @@ blockquote{
 	padding: 26px 0;
 }
 
+.errorbtn {
+	margin: 10px;
+}
+
+.titleimage {
+	max-width: 600px;
+	width: 100%;
+}
+
 .headnavbarlist>.category-item:nth-child(odd) {
 	background-color: white;
 }

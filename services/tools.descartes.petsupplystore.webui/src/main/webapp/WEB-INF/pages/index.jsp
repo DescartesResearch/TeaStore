@@ -8,15 +8,13 @@
 
 	<div class="row">
 
-		<%@include file="categorylist.jsp"%>		
+		<%@include file="categorylist.jsp"%>
 
 		<div id="MainImage" class="col-sm-6 col-lg-8">
 
 
-			<img height="450"
-				src="${storeMainImage}"
-				align="middle" />
-				
+			<img class="titleimage" src="${storeMainImage}" align="middle" />
+
 
 		</div>
 
