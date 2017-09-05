@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ImageSize {
 
-	public enum Preset {
+	public static enum Preset {
 		ICON(new ImageSize(64, 64)),
 		PORTRAIT(new ImageSize(160, 240)),
 		LOGO(new ImageSize(600, 195)),
