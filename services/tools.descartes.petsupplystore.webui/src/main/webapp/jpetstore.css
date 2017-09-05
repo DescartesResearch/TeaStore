@@ -16,7 +16,7 @@ body {
 }
 
 .quantity {
-	width: 50%;
+	width: 75%;
 	color: var(--color-font);
 	float: right;
 }
@@ -114,7 +114,14 @@ body {
 	margin-left: auto;
 }
 
+table {
+	table-layout: fixed;
+    width: 100%;
+}
 
+th,td {
+    word-wrap: break-word;
+}
 
 .thumbnail {
 	margin-right: auto;
