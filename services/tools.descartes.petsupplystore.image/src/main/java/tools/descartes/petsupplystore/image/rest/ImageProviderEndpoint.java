@@ -61,6 +61,7 @@ public class ImageProviderEndpoint {
 	
 	@GET
 	@Path("state")
+	@Produces({ "text/plain" })
 	public Response getState() {
 		return Response.ok().entity(SetupController.SETUP.getState()).build();
 	}
