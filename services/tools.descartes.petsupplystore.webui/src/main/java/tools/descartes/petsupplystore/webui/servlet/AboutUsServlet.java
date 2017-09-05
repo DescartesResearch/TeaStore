@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import tools.descartes.petsupplystore.entities.ImageSize;
+import tools.descartes.petsupplystore.entities.ImageSizePreset;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
 
@@ -52,16 +52,16 @@ public class AboutUsServlet extends AbstractUIServlet {
 		checkforCookie(request, response);
 		HashMap<String, String> portraits = LoadBalancedImageOperations.getWebImages(
 				Arrays.asList("andreBauer", "johannesGrohmann", "joakimKistowski", "simonEismann", "norbertSchmitt"),
-				ImageSize.Preset.PORTRAIT.getSize());
+				ImageSizePreset.PORTRAIT.getSize());
 		request.setAttribute("portraitAndre", portraits.get("andreBauer"));
 		request.setAttribute("portraitJohannes", portraits.get("johannesGrohmann"));
 		request.setAttribute("portraitJoakim", portraits.get("joakimKistowski"));
 		request.setAttribute("portraitSimon", portraits.get("simonEismann"));
 		request.setAttribute("portraitNorbert", portraits.get("norbertSchmitt"));
 		request.setAttribute("descartesLogo", 
-				LoadBalancedImageOperations.getWebImage("descartesLogo", ImageSize.Preset.LOGO.getSize()));
+				LoadBalancedImageOperations.getWebImage("descartesLogo", ImageSizePreset.LOGO.getSize()));
 		request.setAttribute("storeIcon", 
-				LoadBalancedImageOperations.getWebImage("icon", ImageSize.Preset.ICON.getSize()));
+				LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
 		request.setAttribute("title", "Pet Supply Store About Us");
 		request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
 

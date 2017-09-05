@@ -15,14 +15,14 @@ package tools.descartes.petsupplystore.image.storage.rules;
 
 import java.util.function.Predicate;
 
-import tools.descartes.petsupplystore.entities.ImageSize;
+import tools.descartes.petsupplystore.entities.ImageSizePreset;
 import tools.descartes.petsupplystore.image.StoreImage;
 
 public class StoreLargeImages implements Predicate<StoreImage> {
 
 	@Override
 	public boolean test(StoreImage t) {
-		return t.getSize().equals(ImageSize.Preset.FULL.getSize());
+		return t.getSize().equals(ImageSizePreset.FULL.getSize());
 	}
 
 }

@@ -26,6 +26,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import tools.descartes.petsupplystore.entities.ImageSize;
+import tools.descartes.petsupplystore.entities.ImageSizePreset;
 import tools.descartes.petsupplystore.image.ImageDB;
 import tools.descartes.petsupplystore.image.ImageDBKey;
 
@@ -36,8 +37,8 @@ public class TestImageDB {
 	private final long productImageID = 99;
 	private final long productImageIDLarge = 999;
 	private final long nameImageID = 200;
-	private ImageSize size = ImageSize.Preset.ICON.getSize();
-	private ImageSize sizeLarge = ImageSize.Preset.FULL.getSize();
+	private ImageSize size = ImageSizePreset.ICON.getSize();
+	private ImageSize sizeLarge = ImageSizePreset.FULL.getSize();
 	private ImageDB uut;
 	
 	@Mock

@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import tools.descartes.petsupplystore.entities.ImageSize;
+import tools.descartes.petsupplystore.entities.ImageSizePreset;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
 
 /**
@@ -48,7 +48,7 @@ public class DataBaseServlet extends AbstractUIServlet {
 			throws ServletException, IOException {
 		checkforCookie(request, response);
 		request.setAttribute("storeIcon", 
-				LoadBalancedImageOperations.getWebImage("icon", ImageSize.Preset.ICON.getSize()));
+				LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
 		request.setAttribute("title", "Pet Supply Store Database");
 		request.getRequestDispatcher("WEB-INF/pages/database.jsp").forward(request, response);
 	}

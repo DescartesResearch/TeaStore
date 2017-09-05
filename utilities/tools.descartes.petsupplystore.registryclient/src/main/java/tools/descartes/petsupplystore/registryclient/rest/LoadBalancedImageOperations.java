@@ -3,7 +3,9 @@ package tools.descartes.petsupplystore.registryclient.rest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
@@ -11,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import tools.descartes.petsupplystore.entities.ImageSize;
+import tools.descartes.petsupplystore.entities.ImageSizePreset;
 import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
@@ -32,7 +35,7 @@ public final class LoadBalancedImageOperations {
 	 * @return image for product
 	 */
 	public static String getProductImage(Product product) {
-		return getProductImage(product, ImageSize.Preset.FULL.getSize());
+		return getProductImage(product, ImageSizePreset.FULL.getSize());
 	}
 	
 	/**
@@ -42,20 +45,8 @@ public final class LoadBalancedImageOperations {
 	 * @return image for product with target size
 	 */
 	public static String getProductImage(Product product, ImageSize size) {
-		HashMap<Long, ImageSize> img = new HashMap<>();
-		img.put(product.getId(), size);
-		
-		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.IMAGE, "image", HashMap.class,
-				client -> client.getService().path(client.getApplicationURI())
-				.path(client.getEndpointURI()).path("getProductImages").request(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON).post(Entity.entity(img, MediaType.APPLICATION_JSON)));
-		
-		try {
-			HashMap<Long, String> encoded = r.readEntity(new GenericType<HashMap<Long, String>>() { });
-			return encoded.get(product.getId());	
-		} catch (NullPointerException e) {
-			return null;
-		}
+		return getProductImages(Stream.of(product).collect(Collectors.toList()), size)
+				.getOrDefault(product.getId(), "");	
 	}
 	
 	/**
@@ -64,7 +55,7 @@ public final class LoadBalancedImageOperations {
 	 * @return HashMap containing all preview images
 	 */
 	public static HashMap<Long, String> getProductPreviewImages(List<Product> products) {
-		return getProductImages(products, ImageSize.Preset.PREVIEW.getSize());
+		return getProductImages(products, ImageSizePreset.PREVIEW.getSize());
 	}
 	
 	/**
@@ -74,20 +65,25 @@ public final class LoadBalancedImageOperations {
 	 * @return HashMap containing all preview images
 	 */
 	public static HashMap<Long, String> getProductImages(List<Product> products, ImageSize size) {
-		HashMap<Long, ImageSize> img = new HashMap<>();
+		HashMap<Long, String> img = new HashMap<>();
 		for (Product p : products) {
-			img.put(p.getId(), size);
+			img.put(p.getId(), size.toString());
 		}
 		
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.IMAGE, "image", HashMap.class,
 				client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("getProductImages").request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).post(Entity.entity(img, MediaType.APPLICATION_JSON)));
-		try {
-			return r.readEntity(new GenericType<HashMap<Long, String>>() { });
-		} catch (NullPointerException e) {
-			return null;
+		
+		if (r == null) {
+			return new HashMap<Long, String>();
 		}
+		
+		HashMap<Long, String> result = r.readEntity(new GenericType<HashMap<Long, String>>() { });
+		if (result == null) {
+			return new HashMap<Long, String>();
+		}
+		return result;
 	}
 	
 	/**
@@ -97,19 +93,7 @@ public final class LoadBalancedImageOperations {
 	 * @return image
 	 */
 	public static String getWebImage(String name, ImageSize size) {
-		HashMap<String, ImageSize> img = new HashMap<>();
-		img.put(name, size);
-		
-		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.IMAGE, "image", HashMap.class,
-				client -> client.getService().path(client.getApplicationURI())
-				.path(client.getEndpointURI()).path("getWebImages").request(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON).post(Entity.entity(img, MediaType.APPLICATION_JSON)));
-		try {
-			HashMap<String, String> encoded = r.readEntity(new GenericType<HashMap<String, String>>() { });
-			return encoded.get(name);
-		} catch (NullPointerException e) {
-			return null;
-		}
+		return getWebImages(Stream.of(name).collect(Collectors.toList()), size).getOrDefault(name, "");	
 	}
 
 	
@@ -120,19 +104,25 @@ public final class LoadBalancedImageOperations {
 	 * @return HashMap containing requested images.
 	 */
 	public static HashMap<String, String> getWebImages(List<String> names, ImageSize size) {
-		HashMap<String, ImageSize> img = new HashMap<>();
+		HashMap<String, String> img = new HashMap<>();
 		for (String name : names) {
-			img.put(name, size);
+			img.put(name, size.toString());
 		}
+		
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.IMAGE, "image", HashMap.class,
 				client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("getWebImages").request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).post(Entity.entity(img, MediaType.APPLICATION_JSON)));
-		try {
-			return r.readEntity(new GenericType<HashMap<String, String>>() { });
-		} catch (NullPointerException e) {
-			return null;
+		
+		if (r == null) {
+			return new HashMap<String, String>();
 		}
+		
+		HashMap<String, String> result = r.readEntity(new GenericType<HashMap<String, String>>() { });
+		if (result == null) {
+			return new HashMap<String, String>();
+		}
+		return result;
 	}
 	
 	/**

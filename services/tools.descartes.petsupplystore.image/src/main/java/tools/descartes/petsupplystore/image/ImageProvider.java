@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import tools.descartes.petsupplystore.entities.ImageSize;
+import tools.descartes.petsupplystore.entities.ImageSizePreset;
 import tools.descartes.petsupplystore.image.setup.ImageIDFactory;
 import tools.descartes.petsupplystore.image.storage.IDataStorage;
 
@@ -92,7 +93,7 @@ public enum ImageProvider {
 			return null;
 		}
 	
-		ImageSize biggest = ImageSize.getBiggestPreset();
+		ImageSize biggest = ImageSizePreset.getBiggestPreset();
 		StoreImage storedImg = null;
 		
 		// Try to retrieve image from disk or from cache

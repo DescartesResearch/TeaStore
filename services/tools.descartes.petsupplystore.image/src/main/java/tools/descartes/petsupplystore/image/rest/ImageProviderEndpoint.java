@@ -13,7 +13,8 @@
  */
 package tools.descartes.petsupplystore.image.rest;
 
-import java.util.Map;
+import java.util.HashMap;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -33,14 +34,16 @@ public class ImageProviderEndpoint {
 
 	@POST
 	@Path("getProductImages")
-	public Response getProductImages(Map<Long, ImageSize> images) {
-		return Response.ok().entity(ImageProvider.IP.getProductImages(images)).build();
+	public Response getProductImages(HashMap<Long, String> images) {
+		return Response.ok().entity(ImageProvider.IP.getProductImages(images.entrySet().parallelStream()
+				.collect(Collectors.toMap(e -> e.getKey(), e -> ImageSize.parseImageSize(e.getValue()))))).build();
 	}
 	
 	@POST
 	@Path("getWebImages")
-	public Response getWebUIImages(Map<String, ImageSize> images) {
-		return Response.ok().entity(ImageProvider.IP.getWebUIImages(images)).build();
+	public Response getWebUIImages(HashMap<String, String> images) {
+		return Response.ok().entity(ImageProvider.IP.getWebUIImages(images.entrySet().parallelStream()
+				.collect(Collectors.toMap(e -> e.getKey(), e -> ImageSize.parseImageSize(e.getValue()))))).build();
 	}
 	
 	@GET

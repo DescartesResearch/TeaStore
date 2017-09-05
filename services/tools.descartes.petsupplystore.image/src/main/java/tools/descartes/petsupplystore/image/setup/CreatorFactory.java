@@ -11,12 +11,13 @@ import org.slf4j.LoggerFactory;
 
 import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.ImageSize;
+import tools.descartes.petsupplystore.entities.ImageSizePreset;
 import tools.descartes.petsupplystore.image.ImageDB;
 
 public class CreatorFactory {
 
 	private int shapesPerImage = 0;
-	private ImageSize imgSize = ImageSize.STD_IMAGE_SIZE;
+	private ImageSize imgSize = ImageSizePreset.STD_IMAGE_SIZE;
 	private Path workingDir = SetupController.SETUP.getWorkingDir();
 	private Map<Category, BufferedImage> categoryImages;
 	private List<Long> products;
@@ -46,7 +47,7 @@ public class CreatorFactory {
 			this.categoryImages = categoryImages;
 		}
 		if (imgSize == null) {
-			log.info("Supplied image size is null. Defaulting to standard size of {}.", ImageSize.STD_IMAGE_SIZE);
+			log.info("Supplied image size is null. Defaulting to standard size of {}.", ImageSizePreset.STD_IMAGE_SIZE);
 		} else {
 			this.imgSize = imgSize;
 		}

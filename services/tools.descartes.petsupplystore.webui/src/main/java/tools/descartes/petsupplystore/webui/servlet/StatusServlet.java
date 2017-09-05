@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
 
-import tools.descartes.petsupplystore.entities.ImageSize;
+import tools.descartes.petsupplystore.entities.ImageSizePreset;
 import tools.descartes.petsupplystore.registryclient.RegistryClient;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
@@ -55,7 +55,7 @@ public class StatusServlet extends AbstractUIServlet {
 		checkforCookie(request, response);
 		String iconImage = null;
 		try {
-			iconImage = LoadBalancedImageOperations.getWebImage("icon", ImageSize.Preset.ICON.getSize());
+			iconImage = LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize());
 		} catch (NullPointerException e) {
 
 		}

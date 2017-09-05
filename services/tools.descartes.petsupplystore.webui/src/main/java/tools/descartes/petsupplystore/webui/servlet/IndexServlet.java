@@ -19,7 +19,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import tools.descartes.petsupplystore.entities.ImageSize;
+import tools.descartes.petsupplystore.entities.ImageSizePreset;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
 
@@ -52,9 +52,9 @@ public class IndexServlet extends AbstractUIServlet {
 		request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
 
 		request.setAttribute("storeMainImage", 
-				LoadBalancedImageOperations.getWebImage("front", ImageSize.Preset.INDEX.getSize()));
+				LoadBalancedImageOperations.getWebImage("front", ImageSizePreset.INDEX.getSize()));
 		request.setAttribute("storeIcon", 
-				LoadBalancedImageOperations.getWebImage("icon", ImageSize.Preset.ICON.getSize()));
+				LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
 
 		request.getRequestDispatcher("WEB-INF/pages/index.jsp").forward(request, response);
 	}

@@ -26,6 +26,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import tools.descartes.petsupplystore.entities.ImageSize;
+import tools.descartes.petsupplystore.entities.ImageSizePreset;
 import tools.descartes.petsupplystore.image.ImageScaler;
 
 public class TestImageScaler {
@@ -58,12 +59,12 @@ public class TestImageScaler {
 	// We can only test that it scales correctly, it is not really feasible to test for the correct content. 
 	@Test
 	public void testScale() {
-		BufferedImage uut = ImageScaler.scale(img, ImageSize.Preset.FULL.getSize());
-		assertEquals(ImageSize.Preset.FULL.getSize().getWidth(), uut.getWidth());
-		assertEquals(ImageSize.Preset.FULL.getSize().getHeight(), uut.getHeight());
-		uut = ImageScaler.scale(img, ImageSize.Preset.ICON.getSize());
-		assertEquals(ImageSize.Preset.ICON.getSize().getWidth(), uut.getWidth());
-		assertEquals(ImageSize.Preset.ICON.getSize().getHeight(), uut.getHeight());
+		BufferedImage uut = ImageScaler.scale(img, ImageSizePreset.FULL.getSize());
+		assertEquals(ImageSizePreset.FULL.getSize().getWidth(), uut.getWidth());
+		assertEquals(ImageSizePreset.FULL.getSize().getHeight(), uut.getHeight());
+		uut = ImageScaler.scale(img, ImageSizePreset.ICON.getSize());
+		assertEquals(ImageSizePreset.ICON.getSize().getWidth(), uut.getWidth());
+		assertEquals(ImageSizePreset.ICON.getSize().getHeight(), uut.getHeight());
 		
 		uut = ImageScaler.scale(img, 2.2);
 		assertEquals((int)(widthBefore * 2.2), uut.getWidth());

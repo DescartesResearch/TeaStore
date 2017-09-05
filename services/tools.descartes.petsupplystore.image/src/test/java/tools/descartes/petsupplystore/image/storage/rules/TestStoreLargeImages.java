@@ -22,7 +22,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import tools.descartes.petsupplystore.entities.ImageSize;
+import tools.descartes.petsupplystore.entities.ImageSizePreset;
 import tools.descartes.petsupplystore.image.StoreImage;
 import tools.descartes.petsupplystore.image.storage.rules.StoreLargeImages;
 
@@ -40,10 +40,10 @@ public class TestStoreLargeImages {
 	@Before
 	public void initialize() {
 		MockitoAnnotations.initMocks(this);
-		when(mockedLargeImg.getSize()).thenReturn(ImageSize.Preset.FULL.getSize());
-		when(mockedIconImg.getSize()).thenReturn(ImageSize.Preset.ICON.getSize());
-		when(mockedMainImg.getSize()).thenReturn(ImageSize.Preset.MAIN_IMAGE.getSize());
-		when(mockedPreviewImg.getSize()).thenReturn(ImageSize.Preset.PREVIEW.getSize());
+		when(mockedLargeImg.getSize()).thenReturn(ImageSizePreset.FULL.getSize());
+		when(mockedIconImg.getSize()).thenReturn(ImageSizePreset.ICON.getSize());
+		when(mockedMainImg.getSize()).thenReturn(ImageSizePreset.MAIN_IMAGE.getSize());
+		when(mockedPreviewImg.getSize()).thenReturn(ImageSizePreset.PREVIEW.getSize());
 	}
 	
 	@Test

@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import tools.descartes.petsupplystore.entities.ImageSize;
+import tools.descartes.petsupplystore.entities.ImageSizePreset;
 import tools.descartes.petsupplystore.image.ImageDB;
 import tools.descartes.petsupplystore.image.StoreImage;
 
@@ -23,7 +24,7 @@ public class CreatorRunner implements Runnable {
 
 	long productID;
 	ImageDB imgDB;
-	ImageSize size = ImageSize.STD_IMAGE_SIZE;
+	ImageSize size = ImageSizePreset.STD_IMAGE_SIZE;
 	Path workingDir;
 	int shapesPerImage;
 	BufferedImage categoryImage;
