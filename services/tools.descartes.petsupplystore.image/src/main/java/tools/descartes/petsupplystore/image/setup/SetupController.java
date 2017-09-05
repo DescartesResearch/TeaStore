@@ -58,6 +58,7 @@ import tools.descartes.petsupplystore.image.storage.DriveStorage;
 import tools.descartes.petsupplystore.image.storage.IDataStorage;
 import tools.descartes.petsupplystore.image.storage.rules.StoreAll;
 import tools.descartes.petsupplystore.image.storage.rules.StoreLargeImages;
+import tools.descartes.petsupplystore.registryclient.RegistryClient;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
 
@@ -67,10 +68,17 @@ public enum SetupController {
 
 	private interface SetupControllerConstants {
 		public final static Path STD_WORKING_DIR = Paths.get("images");
+		// Wait time in ms before checking again for an existing persistence service
 		public final static int PERSISTENCE_CREATION_WAIT_TIME = 1000;
+		// Number of tries to check persistence before giving up
 		public final static int PERSISTENCE_CREATION_TRIES = 100;
+		// Nubmer of available logical cpus for image creation
 		public final static int CREATION_THREAD_POOL_SIZE = Runtime.getRuntime().availableProcessors();
+		// Wait time in ms for the image creation thread pool to terminate all threads.
 		public final static long CREATION_THREAD_POOL_WAIT = 500;
+		// Wait time in ms (per image to generate) before an image provider service is registered if there is another
+		// image provider service registered.
+		public final static long CREATION_THREAD_POOL_WAIT_PER_IMG_NR = 70;
 	}
 	
 	private StorageRule storageRule = StorageRule.STD_STORAGE_RULE;
@@ -80,7 +88,7 @@ public enum SetupController {
 	private StorageMode storageMode = StorageMode.STD_STORAGE_MODE;
 	private CachingMode cachingMode = CachingMode.STD_CACHING_MODE;
 	private long nrOfImagesToGenerate = 0;
-	private long nrOfImagesPreExisting = 0;
+	private long nrOfImagesExisting = 0;
 	private long nrOfImagesForCategory = 0;
 	private HashMap<String, BufferedImage> categoryImages = new HashMap<>();
 	private ImageDB imgDB = new ImageDB();
@@ -215,7 +223,7 @@ public enum SetupController {
 	}
 
 	public void generateImages(Map<Category, List<Long>> products, Map<Category, BufferedImage> categoryImages) {
-		long nrOfImagesToGenerate = products.entrySet().stream()
+		nrOfImagesToGenerate = products.entrySet().stream()
 				.flatMap(e -> e.getValue().stream())
 				.count();
 		
@@ -244,13 +252,13 @@ public enum SetupController {
 			return;
 		}
 	
-		int nr = 0;
+		nrOfImagesForCategory = 0;
 		if (dir != null && dir.exists() && dir.isDirectory()) {
 			for (File file : dir.listFiles()) {
 				if (file.isFile() && file.getName().endsWith(StoreImage.STORE_IMAGE_FORMAT)) {
 					try {
 						categoryImages.put(file.getName().substring(0, file.getName().length() - 4), ImageIO.read(file));
-						nr++;
+						nrOfImagesForCategory++;
 					} catch (IOException ioException) {
 						log.warn("An IOException occured while reading image file "
 								+ file.getAbsolutePath() + ".", ioException);
@@ -258,7 +266,7 @@ public enum SetupController {
 				}
 			}
 		}
-		log.info("Found {} images for categories.", nr);	
+		log.info("Found {} images for categories.", nrOfImagesForCategory);	
 	}
 	
 	public void createWorkingDir() {
@@ -293,11 +301,11 @@ public enum SetupController {
 		return dir;
 	}
 	
-	public void detectPreExistingImages() {
-		detectPreExistingImages(imgDB);
+	public void detectExistingImages() {
+		detectExistingImages(imgDB);
 	}	
 	
-	public void detectPreExistingImages(ImageDB db) {
+	public void detectExistingImages(ImageDB db) {
 		if (db == null) {
 			log.error("The supplied image database is null.");
 			throw new NullPointerException("The supplied image database is null.");
@@ -350,13 +358,13 @@ public enum SetupController {
 								+ ".", ioException.getMessage());
 					}
 					// Increment to have correct number of images for the limited drive storage
-					nrOfImagesPreExisting++; 
+					nrOfImagesExisting++; 
 				}
 			}
 		}
 		
 		log.info("Scanned path {} for existing images. {} images found.", 
-				dir.toAbsolutePath().toString(), nrOfImagesPreExisting);
+				dir.toAbsolutePath().toString(), nrOfImagesExisting);
 	}
 	
 	public boolean setCacheSize(long cacheSize) {
@@ -478,7 +486,7 @@ public enum SetupController {
 				.append(System.lineSeparator());
 		sb.append("Images Created: ").append(String.valueOf(imgCreationPool.getCompletedTaskCount()))
 				.append(" / ").append(String.valueOf(nrOfImagesToGenerate)).append(System.lineSeparator());
-		sb.append("Pre-Existing Images Found: ").append(String.valueOf(nrOfImagesPreExisting))
+		sb.append("Pre-Existing Images Found: ").append(String.valueOf(nrOfImagesExisting))
 				.append(System.lineSeparator());
 		sb.append("Category Images Found: ").append(String.valueOf(nrOfImagesForCategory))
 				.append(System.lineSeparator());
@@ -486,22 +494,33 @@ public enum SetupController {
 		return sb.toString();
 	}
 	
-	private void stopImageCreation() {
+	private void stopImageCreation(boolean terminate, long waitTime) {
 		// Stop image creation to have sort of a steady state to work on
-		imgCreationPool.shutdownNow();
+		// Shutdown now will finish all running tasks and not schedule new threads
+		// Shutdown does allow the thread pool to finish all available tasks but no new ones
+		if (terminate) {
+			imgCreationPool.shutdownNow();
+			log.info("Send termination signal to image creation thread pool.");
+		} else {
+			imgCreationPool.shutdown();
+			log.info("Send shutdown signal to image creation thread pool.");
+		}
 		try {
-			if (imgCreationPool.awaitTermination(SetupControllerConstants.CREATION_THREAD_POOL_WAIT, 
-					TimeUnit.MILLISECONDS)) {
-				log.info("Stopped image creation.");
+			if (imgCreationPool.awaitTermination(waitTime, TimeUnit.MILLISECONDS)) {
+				log.info("Image creation stopped.");
 			} else {
-				log.warn("Image creation thread pool not terminating after {}ms. Stop waiting.", 
-						SetupControllerConstants.CREATION_THREAD_POOL_WAIT);
+				log.warn("Image creation thread pool not terminating after {}ms. Stop waiting.", waitTime);
 			}
 		} catch (InterruptedException interruptedException) {
 			log.warn("Waiting for image creation thread pool termination interrupted by exception.", 
 					interruptedException);
 		}
+		// Maybe we need to keep a reference to the old thread pool if it has not finished properly yet.
 		imgCreationPool = new ScheduledThreadPoolExecutor(SetupControllerConstants.CREATION_THREAD_POOL_SIZE);	
+	}
+	
+	private boolean isFirstImageProvider() {
+		return RegistryClient.getClient().getServersForService(Service.IMAGE).size() == 0;
 	}
 
 	/*
@@ -518,11 +537,18 @@ public enum SetupController {
 		deleteImages();
 		deleteWorkingDir();
 		createWorkingDir();
-		detectPreExistingImages();
+		detectExistingImages();
 		detectCategoryImages();
 		generateImages();
 		setupStorage();
 		configureImageProvider();
+		// Check if this is the first image provider. If not, wait for termination of
+		// the image creation before registering
+		if (!isFirstImageProvider()) {
+			stopImageCreation(false, ((nrOfImagesToGenerate - imgCreationPool.getCompletedTaskCount()) 
+					/ SetupControllerConstants.CREATION_THREAD_POOL_SIZE) 
+					* SetupControllerConstants.CREATION_THREAD_POOL_WAIT_PER_IMG_NR);
+		} 
 	}
 	
 	public void reconfiguration() {
@@ -530,11 +556,11 @@ public enum SetupController {
 
 			@Override
 			public void run() {
-				stopImageCreation();
+				stopImageCreation(true, SetupControllerConstants.CREATION_THREAD_POOL_WAIT);
 				imgDB = new ImageDB();
 				
 				deleteImages();
-				detectPreExistingImages();
+				detectExistingImages();
 				detectCategoryImages();
 				generateImages();
 				setupStorage();
