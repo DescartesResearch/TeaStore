@@ -84,16 +84,16 @@ public final class DataGenerator {
 	private Random random = new Random(5);
 
 	private static final String PASSWORD = "password";
-	private static final String[] CATEGORYNAMES = { "Unicorns", "Fish", "Dogs", "Cats", "Reptiles", "Birds", "Hamsters",
-			"Guinea pigs", "Ferrets" };
-	private static final String[] CATEGORYDESCRIPTIONS = { "Rainbow, Fairytale", "Saltwater, Freshwater",
+	private static final String[] CATEGORYNAMES = { "Red Pandas", "Fish", "Dogs", "Cats", "Reptiles", "Birds", 
+			"Hamsters", "Guinea pigs", "Ferrets" };
+	private static final String[] CATEGORYDESCRIPTIONS = { "Exotic animals from asia", "Saltwater, Freshwater",
 			"Man's best friend", "Various Breeds, Exotic Varieties", "Lizards, Turtles Snakes", "Exotic Varieties",
 			"Nocturnal little things", "Not for eating, except for the Peruvians", "Fluffies" };
 
 	private static final String[][] PRODUCTNAMES = {
-			{ "Replacement horn", "Glitter (gold)", "Glitter (silver)", "Glitter (mixed color)", "Saddle (leather)",
-					"Saddle (cloth)", "Irons (basic)", "Irons (guilded)", "Mane comb", "Mane replacement",
-					"Food: Roses", "Food: High quality hey" },
+			{ "Bamboo", "Premium Bamboo", "Climbing Tree 2x4m", "Climbing Tree 3x6m", "Climbing Tree 4x8m", 
+					"Nest (grass)", "Nest (leaves)", "Food eggs (7 pieces)", "Food eggs (14 pieces)", 
+					"Cage 50x100m", "Cage 100x200m", "Cage 200x400m"}, 
 			{ "Aquarium 1x2m", "Aquarium 1x3m", "Aquarium 2x3m", "Aquarium 2x4m", "Pump (up to 200 l)",
 					"Pump (up to 4000 l)", "Small net", "Medium Net", "Decorative Rocks", "Decorative Plants",
 					"Food: Plankton", "Food: Small Fish" },
