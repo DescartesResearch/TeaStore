@@ -494,7 +494,7 @@ public enum SetupController {
 		return sb.toString();
 	}
 	
-	private void stopImageCreation(boolean terminate, long waitTime) {
+	private void waitAndStopImageCreation(boolean terminate, long waitTime) {
 		// Stop image creation to have sort of a steady state to work on
 		// Shutdown now will finish all running tasks and not schedule new threads
 		// Shutdown does allow the thread pool to finish all available tasks but no new ones
@@ -545,7 +545,7 @@ public enum SetupController {
 		// Check if this is the first image provider. If not, wait for termination of
 		// the image creation before registering
 		if (!isFirstImageProvider()) {
-			stopImageCreation(false, ((nrOfImagesToGenerate - imgCreationPool.getCompletedTaskCount()) 
+			waitAndStopImageCreation(false, ((nrOfImagesToGenerate - imgCreationPool.getCompletedTaskCount()) 
 					/ SetupControllerConstants.CREATION_THREAD_POOL_SIZE) 
 					* SetupControllerConstants.CREATION_THREAD_POOL_WAIT_PER_IMG_NR);
 		} 
@@ -556,7 +556,7 @@ public enum SetupController {
 
 			@Override
 			public void run() {
-				stopImageCreation(true, SetupControllerConstants.CREATION_THREAD_POOL_WAIT);
+				waitAndStopImageCreation(true, SetupControllerConstants.CREATION_THREAD_POOL_WAIT);
 				imgDB = new ImageDB();
 				
 				deleteImages();
