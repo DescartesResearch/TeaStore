@@ -112,11 +112,6 @@
 		<!-- Kieker dependency -->
 		<!-- https://mvnrepository.com/artifact/net.kieker-monitoring/kieker -->
 		<dependency>
-			<groupId>net.kieker-monitoring</groupId>
-			<artifactId>kieker</artifactId>
-			<version>1.12</version>
-		</dependency>
-		<dependency>
 			<groupId>org.fusesource</groupId>
 			<artifactId>sigar</artifactId>
 			<version>1.6.4</version>
