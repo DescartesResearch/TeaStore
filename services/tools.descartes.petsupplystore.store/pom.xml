@@ -108,6 +108,14 @@
 		<classifier>classes</classifier>
 		<scope>test</scope>
     </dependency>
+    
+    <!-- Kieker dependency -->
+<!-- https://mvnrepository.com/artifact/net.kieker-monitoring/kieker -->
+<dependency>
+    <groupId>net.kieker-monitoring</groupId>
+    <artifactId>kieker</artifactId>
+    <version>1.12</version>
+</dependency>
   </dependencies>
   <build>
     <finalName>tools.descartes.petsupplystore.store</finalName>
