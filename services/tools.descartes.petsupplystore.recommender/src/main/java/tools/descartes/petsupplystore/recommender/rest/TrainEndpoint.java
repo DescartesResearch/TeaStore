@@ -13,27 +13,15 @@
  */
 package tools.descartes.petsupplystore.recommender.rest;
 
-import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import tools.descartes.petsupplystore.entities.Order;
 import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.recommender.IRecommender;
-import tools.descartes.petsupplystore.recommender.RecommenderSelector;
-import tools.descartes.petsupplystore.registryclient.Service;
-import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
-import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;
+import tools.descartes.petsupplystore.recommender.servlet.ServiceSynchronizer;
 
 /**
  * REST endpoint to trigger the (re)training of the Recommender.
@@ -45,7 +33,7 @@ import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperat
 @Produces({ "text/plain", "application/json" })
 public class TrainEndpoint {
 
-	private static final Logger LOG = LoggerFactory.getLogger(TrainEndpoint.class);
+
 
 	/**
 	 * Triggers the training of the recommendation algorithm. It retrieves all data
@@ -65,7 +53,7 @@ public class TrainEndpoint {
 	public Response train() {
 		try {
 			long start = System.currentTimeMillis();
-			long number = retrieveDataAndRetrain();
+			long number = ServiceSynchronizer.retrieveDataAndRetrain();
 			long time = System.currentTimeMillis() - start;
 			if (number != -1) {
 				return Response.ok("The (re)train was succesfully done. It took " + time + "ms and " + number
@@ -77,69 +65,64 @@ public class TrainEndpoint {
 		return Response.status(500).entity("The (re)trainprocess failed.").build();
 	}
 
+	// I HAVE NO IDEA WHAT THIS IS FOR? IF ANYONE DOES, JUST PUT IT BACK IN
+//	/**
+//	 * Triggers the training of the recommendation algorithm. It retrieves all data
+//	 * {@link OrderItem}s and all {@link Order}s from the database entity and is
+//	 * therefore both very network and computation time intensive. <br>
+//	 * This method must be called before the {@link RecommendEndpoint} is usable, as
+//	 * the {@link IRecommender} will throw an
+//	 * {@link UnsupportedOperationException}.<br/>
+//	 * Waits for the Database to be ready before training but returns immediately.
+//	 * Calling this method twice will trigger a retraining.
+//	 * 
+//	 * @return Returns a {@link Response} with
+//	 *         {@link javax.servlet.http.HttpServletResponse#SC_OK}.
+//	 */
+//	@GET
+//	@Path("async")
+//	public Response trainAsync() {
+//		ScheduledExecutorService asyncTrainExecutor = Executors.newSingleThreadScheduledExecutor();
+//		asyncTrainExecutor.scheduleWithFixedDelay(() -> {
+//			try {
+//				String finished = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "generatedb",
+//						String.class, client -> client.getEndpointTarget().path("finished")
+//								.request(MediaType.TEXT_PLAIN).get().readEntity(String.class));
+//				if (finished.equals("true")) {
+//					long number = retrieveDataAndRetrain();
+//					if (number != -1) {
+//						asyncTrainExecutor.shutdown();
+//					}
+//				} else {
+//					LOG.info("Waiting for DB before retraining.");
+//				}
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//				throw new RuntimeException(e);
+//			}
+//		}, 0, 3, TimeUnit.SECONDS);
+//		return Response.ok("training").build();
+//	}
+
+
+	
 	/**
-	 * Triggers the training of the recommendation algorithm. It retrieves all data
-	 * {@link OrderItem}s and all {@link Order}s from the database entity and is
-	 * therefore both very network and computation time intensive. <br>
-	 * This method must be called before the {@link RecommendEndpoint} is usable, as
-	 * the {@link IRecommender} will throw an
-	 * {@link UnsupportedOperationException}.<br/>
-	 * Waits for the Database to be ready before training but returns immediately.
-	 * Calling this method twice will trigger a retraining.
+	 * Returns the last time stamp, which was considered at the training of this
+	 * instance.
 	 * 
 	 * @return Returns a {@link Response} with
-	 *         {@link javax.servlet.http.HttpServletResponse#SC_OK}.
+	 *         {@link javax.servlet.http.HttpServletResponse#SC_OK} containing the
+	 *         maximum considered time as String or with
+	 *         {@link javax.servlet.http.HttpServletResponse#SC_INTERNAL_SERVER_ERROR},
+	 *         if the operation failed.
 	 */
 	@GET
-	@Path("async")
-	public Response trainAsync() {
-		ScheduledExecutorService asyncTrainExecutor = Executors.newSingleThreadScheduledExecutor();
-		asyncTrainExecutor.scheduleWithFixedDelay(() -> {
-			try {
-				String finished = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "generatedb",
-						String.class, client -> client.getEndpointTarget().path("finished")
-								.request(MediaType.TEXT_PLAIN).get().readEntity(String.class));
-				if (finished.equals("true")) {
-					long number = retrieveDataAndRetrain();
-					if (number != -1) {
-						asyncTrainExecutor.shutdown();
-					}
-				} else {
-					LOG.info("Waiting for DB before retraining.");
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
-			}
-		}, 0, 3, TimeUnit.SECONDS);
-		return Response.ok("training").build();
-	}
-
-	/**
-	 * Connects via REST to the database and retrieves all {@link OrderItem}s and
-	 * all {@link Order}s. Then, it triggers the training of the recommender.
-	 * 
-	 * @return The number of elements retrieved from the database or -1 if the
-	 *         process failed.
-	 */
-	public static long retrieveDataAndRetrain() {
-		List<OrderItem> items = null;
-		List<Order> orders = null;
-		try {
-			items = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "orderitems", OrderItem.class, -1, -1);
-			if (items == null || items.isEmpty()) {
-				return -1;
-			}
-			orders = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "orders", Order.class, -1, -1);
-			if (orders == null || orders.isEmpty()) {
-				return -1;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return -1;
+	@Path("timestamp")
+	public Response getTimeStamp() {
+		if (ServiceSynchronizer.getMaxTime() != -1) {
+			return Response.status(org.apache.catalina.connector.Response.SC_PRECONDITION_FAILED)
+					.entity("The collection of the current maxTime was not possible.").build();
 		}
-		RecommenderSelector.getInstance().train(items, orders);
-		return items.size() + orders.size();
-
+		return Response.ok(ServiceSynchronizer.getMaxTime()).build();
 	}
 }

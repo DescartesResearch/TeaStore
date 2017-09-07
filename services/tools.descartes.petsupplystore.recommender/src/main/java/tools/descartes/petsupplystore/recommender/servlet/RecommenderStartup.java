@@ -24,44 +24,47 @@ import tools.descartes.petsupplystore.registryclient.StartupCallback;
 
 /**
  * Application Lifecycle Listener implementation class Registry Client Startup.
+ * 
  * @author Simon Eismann
  *
  */
 @WebListener
 public class RecommenderStartup implements ServletContextListener {
-	
+
 	/**
 	 * Also set this accordingly in RegistryClientStartup.
 	 */
-	
+
 	/**
 	 * Empty constructor.
 	 */
-    public RecommenderStartup() {
-    	
-    }
+	public RecommenderStartup() {
+
+	}
 
 	/**
-     * @see ServletContextListener#contextDestroyed(ServletContextEvent)
-     * @param event The servlet context event at destruction.
-     */
-    public void contextDestroyed(ServletContextEvent event)  { 
+	 * @see ServletContextListener#contextDestroyed(ServletContextEvent)
+	 * @param event
+	 *            The servlet context event at destruction.
+	 */
+	public void contextDestroyed(ServletContextEvent event) {
 		RegistryClient.getClient().unregister(event.getServletContext().getContextPath());
-    }
+	}
 
 	/**
-     * @see ServletContextListener#contextInitialized(ServletContextEvent)
-     * @param event The servlet context event at initialization.
-     */
-    public void contextInitialized(ServletContextEvent event)  {
-    	RegistryClient.getClient().runAfterServiceIsAvailable(Service.PERSISTENCE, new StartupCallback() {
-			
+	 * @see ServletContextListener#contextInitialized(ServletContextEvent)
+	 * @param event
+	 *            The servlet context event at initialization.
+	 */
+	public void contextInitialized(ServletContextEvent event) {
+		RegistryClient.getClient().runAfterServiceIsAvailable(Service.PERSISTENCE, new StartupCallback() {
+
 			@Override
 			public void callback() {
-				TrainEndpoint.retrieveDataAndRetrain();
+				ServiceSynchronizer.retrieveDataAndRetrain();
 				RegistryClient.getClient().register(event.getServletContext().getContextPath());
 			}
 		}, Service.RECOMMENDER);
-    }
-    
+	}
+
 }
