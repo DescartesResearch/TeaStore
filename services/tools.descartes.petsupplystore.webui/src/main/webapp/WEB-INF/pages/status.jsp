@@ -119,6 +119,8 @@
       			</c:if>
 			</div>
 		</div>
+		<input type="button" class="btn errorbtn" value="Back to Shop"
+					onclick="location.href = '<c:url value='/' />';">
 </div>
 
 
