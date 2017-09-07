@@ -112,42 +112,6 @@
   <build>
     <finalName>tools.descartes.petsupplystore.registry</finalName>
 	<plugins>
-  		<plugin>
-  			<groupId>com.spotify</groupId>
-  			<artifactId>dockerfile-maven-plugin</artifactId>
-  			<version>1.3.5</version>
-  				<executions>
-    			<execution>
-      				<id>build-image</id>
-      				<goals>
-        				<goal>build</goal>
-      				</goals>
-      				<phase>package</phase>
-    			</execution>
-    			<execution>
-    				<id>tag-push-latest</id>
-    				<goals>
-    					<goal>tag</goal>
-    					<goal>push</goal>
-    				</goals>
-    				<configuration>
-    					<repository>descartesresearch/petsupplystore-registry</repository>
-    					<tag>latest</tag>
-    				</configuration>
-    			</execution>
-    			<execution>
-    				<id>tag-push-version</id>
-    				<goals>
-    					<goal>tag</goal>
-    					<goal>push</goal>
-    				</goals>
-    				<configuration>
-    					<repository>descartesresearch/petsupplystore-registry</repository>
-    					<tag>${project.version}</tag>
-    				</configuration>
-    			</execution>
-  			</executions>
-		</plugin>	
 		<plugin>
 			<!-- Attach classes so that registryclient can import registry for testing. -->
 			<artifactId>maven-war-plugin</artifactId>
@@ -159,4 +123,54 @@
 		</plugin>
 	</plugins>
   </build>
+  
+  <profiles>
+	    <profile>
+	        <id>docker</id>
+	        <activation>
+            	<activeByDefault>false</activeByDefault>
+        	</activation>
+	        <build>
+	            <plugins>
+			  		<plugin>
+			  			<groupId>com.spotify</groupId>
+			  			<artifactId>dockerfile-maven-plugin</artifactId>
+			  			<version>1.3.5</version>
+			  				<executions>
+			    			<execution>
+			      				<id>build-image</id>
+			      				<goals>
+			        				<goal>build</goal>
+			      				</goals>
+			      				<phase>package</phase>
+			    			</execution>
+			    			<execution>
+			    				<id>tag-push-latest</id>
+			    				<goals>
+			    					<goal>tag</goal>
+			    					<goal>push</goal>
+			    				</goals>
+			    				<configuration>
+			    					<repository>descartesresearch/petsupplystore-registry</repository>
+			    					<tag>latest</tag>
+			    				</configuration>
+			    			</execution>
+			    			<execution>
+			    				<id>tag-push-version</id>
+			    				<goals>
+			    					<goal>tag</goal>
+			    					<goal>push</goal>
+			    				</goals>
+			    				<configuration>
+			    					<repository>descartesresearch/petsupplystore-registry</repository>
+			    					<tag>${project.version}</tag>
+			    				</configuration>
+			    			</execution>
+			  			</executions>
+					</plugin>	
+				</plugins>
+	        </build>
+	    </profile>
+	</profiles>
+  
 </project>
