@@ -6,11 +6,52 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>PetSupplyStore Kieker Instrumentation</name>
+	<url>http://descartes.tools</url>
 
-	<dependency>
-		<groupId>net.kieker-monitoring</groupId>
-		<artifactId>kieker</artifactId>
-		<version>1.12</version>
-		<classifier>aspectj</classifier>
-	</dependency>
+	<distributionManagement>
+		<repository>
+			<id>se-uw-nexus</id>
+			<name>Releases</name>
+			<url>https://se4.informatik.uni-wuerzburg.de/nexus/content/repositories/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>se-uw-nexus</id>
+			<name>Snapshots</name>
+			<url>https://se4.informatik.uni-wuerzburg.de/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<repositories>
+		<repository>
+			<id>se-uw-nexus</id>
+			<name>Public Repositories</name>
+			<url>https://se4.informatik.uni-wuerzburg.de/nexus/content/groups/public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>kieker</artifactId>
+			<version>1.12</version>
+			<classifier>aspectj</classifier>
+		</dependency>
+	</dependencies>
+	
+	<build>
+		<finalName>tools.descartes.petsupplystore.kieker</finalName>
+	</build>
+
 </project>
