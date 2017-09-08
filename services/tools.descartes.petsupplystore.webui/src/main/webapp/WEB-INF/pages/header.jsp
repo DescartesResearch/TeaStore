@@ -48,7 +48,6 @@
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			<strong>Success!</strong> ${message}
 		</div>
-		<c:remove var="message" scope="session" />
 	</c:if>
 	<!--/.container-fluid -->
 </nav>

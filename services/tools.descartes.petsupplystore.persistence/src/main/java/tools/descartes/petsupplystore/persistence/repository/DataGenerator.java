@@ -86,9 +86,10 @@ public final class DataGenerator {
 	private static final String PASSWORD = "password";
 	private static final String[] CATEGORYNAMES = { "Red Pandas", "Fish", "Dogs", "Cats", "Reptiles", "Birds", 
 			"Hamsters", "Guinea pigs", "Ferrets" };
-	private static final String[] CATEGORYDESCRIPTIONS = { "Exotic animals from asia", "Saltwater, Freshwater",
-			"Man's best friend", "Various Breeds, Exotic Varieties", "Lizards, Turtles Snakes", "Exotic Varieties",
-			"Nocturnal little things", "Not for eating, except for the Peruvians", "Fluffies" };
+	private static final String[] CATEGORYDESCRIPTIONS = { "Exotic animals from Asia", "Saltwater and Freshwater",
+			"Man's best friend", "They don't serve you, you serve them", "Lizards, Turtles, Snakes",
+			"Producers of feathers everywhere", "Nocturnal little things", "Not for eating, exceptions apply",
+			"Cute fluffies" };
 
 	private static final String[][] PRODUCTNAMES = {
 			{ "Bamboo", "Premium Bamboo", "Climbing Tree 2x4m", "Climbing Tree 3x6m", "Climbing Tree 4x8m", 
