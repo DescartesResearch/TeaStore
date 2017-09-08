@@ -48,8 +48,13 @@
 			<version>1.12</version>
 			<classifier>aspectj</classifier>
 		</dependency>
+		<dependency>
+			<groupId>org.fusesource</groupId>
+			<artifactId>sigar</artifactId>
+			<version>1.6.4</version>
+		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<finalName>tools.descartes.petsupplystore.kieker</finalName>
 	</build>
