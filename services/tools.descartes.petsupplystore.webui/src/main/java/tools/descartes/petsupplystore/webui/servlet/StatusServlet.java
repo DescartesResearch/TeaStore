@@ -24,11 +24,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
 
-import com.netflix.client.ClientException;
-
 import tools.descartes.petsupplystore.entities.ImageSizePreset;
 import tools.descartes.petsupplystore.registryclient.RegistryClient;
 import tools.descartes.petsupplystore.registryclient.Service;
+import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
 
@@ -53,7 +52,7 @@ public class StatusServlet extends AbstractUIServlet {
 	 */
 	@Override
 	protected void doGetInternal(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, ClientException {
+			throws ServletException, IOException, LoadBalancerTimeoutException {
 		checkforCookie(request, response);
 		String iconImage = null;
 		try {

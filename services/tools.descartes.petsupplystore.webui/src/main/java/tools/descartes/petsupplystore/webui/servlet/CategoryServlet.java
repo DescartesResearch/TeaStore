@@ -24,11 +24,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.netflix.client.ClientException;
-
 import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.ImageSizePreset;
 import tools.descartes.petsupplystore.entities.Product;
+import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
 
@@ -56,7 +55,7 @@ public class CategoryServlet extends AbstractUIServlet {
 	 */
 	@Override
 	protected void doGetInternal(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, ClientException {
+			throws ServletException, IOException, LoadBalancerTimeoutException {
 		if (request.getParameter("category") != null) {
 			checkforCookie(request, response);
 			long categoryID = Long.valueOf(request.getParameter("category"));
@@ -108,7 +107,7 @@ public class CategoryServlet extends AbstractUIServlet {
 	 */
 	@Override
 	protected void doPostInternal(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, ClientException {
+			throws ServletException, IOException, LoadBalancerTimeoutException {
 		if (request.getParameter("number") != null && request.getParameter("page") != null
 				&& request.getParameter("category") != null) {
 			redirect("/category?category=" + request.getParameter("category") + "&page=" + request.getParameter("page"),

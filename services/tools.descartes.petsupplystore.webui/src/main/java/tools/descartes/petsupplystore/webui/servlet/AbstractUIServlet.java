@@ -27,10 +27,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.netflix.client.ClientException;
-
 import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.message.SessionBlob;
+import tools.descartes.petsupplystore.registryclient.Service;
+import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 
 /**
  * Abstract servlet for the webUI
@@ -176,8 +176,8 @@ public abstract class AbstractUIServlet extends HttpServlet {
 			throws ServletException, IOException {
 		try {
 			doGetInternal(request, response);
-		} catch (ClientException e) {
-			serveTimoutResponse(request, response);
+		} catch (LoadBalancerTimeoutException e) {
+			serveTimoutResponse(request, response, e.getTargetService());
 		}
 		
 	}
@@ -190,8 +190,8 @@ public abstract class AbstractUIServlet extends HttpServlet {
 			throws ServletException, IOException {
 		try {
 			doPostInternal(request, response);
-		} catch (ClientException e) {
-			serveTimoutResponse(request, response);
+		} catch (LoadBalancerTimeoutException e) {
+			serveTimoutResponse(request, response, e.getTargetService());
 		}
 		
 	}
@@ -202,10 +202,10 @@ public abstract class AbstractUIServlet extends HttpServlet {
 	 * @param response The response to write to.
 	 * @throws ServletException ServletException on error.
 	 * @throws IOException IOException on error.
-	 * @throws ClientException Exception on timeouts and load balancer errors.
+	 * @throws LoadBalancerTimeoutException Exception on timeouts and load balancer errors.
 	 */
 	protected void doPostInternal(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, ClientException {
+			throws ServletException, IOException, LoadBalancerTimeoutException {
 		doGetInternal(request, response);
 	}
 	
@@ -215,17 +215,20 @@ public abstract class AbstractUIServlet extends HttpServlet {
 	 * @param response The response to write to.
 	 * @throws ServletException ServletException on error.
 	 * @throws IOException IOException on error.
-	 * @throws ClientException Exception on timeouts and load balancer errors.
+	 * @throws LoadBalancerTimeoutException Exception on timeouts and load balancer errors.
 	 */
 	protected abstract void doGetInternal(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, ClientException;
+			throws ServletException, IOException, LoadBalancerTimeoutException;
 	
-	private void serveTimoutResponse(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private void serveTimoutResponse(HttpServletRequest request, HttpServletResponse response, Service service) throws ServletException, IOException {
 		response.setStatus(408);
 		request.setAttribute("CategoryList", new ArrayList<Category>());
 		request.setAttribute("storeIcon", "");
 		request.setAttribute("errorImage", "");
-		request.setAttribute("title", "408 : Pet Supply Store Timout");
+		request.setAttribute("title", "Pet Supply Store Timeout");
+		request.setAttribute("messagetitle", "408: Timout waiting for Service: " + service.getServiceName());
+		request.setAttribute("messageparagraph", "WebUI got a timeout waiting for service \"" + service.getServiceName()
+			+ "\" to respond. Note the that service may itself have been waiting for another service.");
 		request.setAttribute("login", false);
 		request.getRequestDispatcher("WEB-INF/pages/error.jsp").forward(request, response);
 	}

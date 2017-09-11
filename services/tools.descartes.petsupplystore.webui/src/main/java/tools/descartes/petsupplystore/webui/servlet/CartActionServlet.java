@@ -25,10 +25,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.netflix.client.ClientException;
-
 import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.entities.message.SessionBlob;
+import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
 
 /**
@@ -53,7 +52,7 @@ public class CartActionServlet extends AbstractUIServlet {
 	 */
 	@Override
 	protected void doGetInternal(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, ClientException {
+			throws ServletException, IOException, LoadBalancerTimeoutException {
 		for (Object paramo : request.getParameterMap().keySet()) {
 			String param = (String) paramo;
 			if (param.contains("addToCart")) {

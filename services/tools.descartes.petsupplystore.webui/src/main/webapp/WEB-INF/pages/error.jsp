@@ -13,8 +13,15 @@
 
 		<div id="MainImage" class="col-sm-6 col-lg-8">
 
-			<h2>Oops, something went wrong!</h2>
-
+			<h2>
+				<c:choose>
+					<c:when test="${not empty messagetitle}">${messagetitle}</c:when>
+					<c:otherwise>Oops, something went wrong!</c:otherwise>
+				</c:choose>
+			</h2>
+			
+			<c:if test="${not empty messageparagraph}"><p>${messageparagraph}</p></c:if>
+			
 			<img class="titleimage" src="${errorImage}" align="middle" />
 			<div class="row">
 				<input type="button" class="btn errorbtn" value="Back to Shop"
