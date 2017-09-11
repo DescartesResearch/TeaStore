@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.netflix.client.ClientException;
+
 import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.entities.message.SessionBlob;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
@@ -47,11 +49,11 @@ public class CartActionServlet extends AbstractUIServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * {@inheritDoc}
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	@Override
+	protected void doGetInternal(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, ClientException {
 		for (Object paramo : request.getParameterMap().keySet()) {
 			String param = (String) paramo;
 			if (param.contains("addToCart")) {
@@ -156,15 +158,6 @@ public class CartActionServlet extends AbstractUIServlet {
 			}
 		}
 		saveSessionBlob(blob, response);
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
 	}
 
 }

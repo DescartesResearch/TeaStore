@@ -28,6 +28,8 @@ import javax.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.netflix.client.ClientException;
+
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
@@ -49,11 +51,11 @@ public class DataBaseActionServlet extends AbstractUIServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * {@inheritDoc}
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	@Override
+	protected void doGetInternal(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, ClientException {
 
 		if (request.getParameter("confirm") != null) {
 
@@ -88,15 +90,6 @@ public class DataBaseActionServlet extends AbstractUIServlet {
 		} else {
 			redirect("/", response);
 		}
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
 	}
 
 	/**

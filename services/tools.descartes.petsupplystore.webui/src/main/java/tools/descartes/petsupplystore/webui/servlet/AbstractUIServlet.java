@@ -17,7 +17,9 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +27,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.netflix.client.ClientException;
 
+import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.message.SessionBlob;
 
 /**
@@ -162,5 +166,67 @@ public abstract class AbstractUIServlet extends HttpServlet {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		try {
+			doGetInternal(request, response);
+		} catch (ClientException e) {
+			serveTimoutResponse(request, response);
+		}
+		
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		try {
+			doPostInternal(request, response);
+		} catch (ClientException e) {
+			serveTimoutResponse(request, response);
+		}
+		
+	}
+	
+	/**
+	 * Handles a http POST request internally.
+	 * @param request The request.
+	 * @param response The response to write to.
+	 * @throws ServletException ServletException on error.
+	 * @throws IOException IOException on error.
+	 * @throws ClientException Exception on timeouts and load balancer errors.
+	 */
+	protected void doPostInternal(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, ClientException {
+		doGetInternal(request, response);
+	}
+	
+	/**
+	 * Handles a http GET request internally.
+	 * @param request The request.
+	 * @param response The response to write to.
+	 * @throws ServletException ServletException on error.
+	 * @throws IOException IOException on error.
+	 * @throws ClientException Exception on timeouts and load balancer errors.
+	 */
+	protected abstract void doGetInternal(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, ClientException;
+	
+	private void serveTimoutResponse(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setStatus(408);
+		request.setAttribute("CategoryList", new ArrayList<Category>());
+		request.setAttribute("storeIcon", "");
+		request.setAttribute("errorImage", "");
+		request.setAttribute("title", "408 : Pet Supply Store Timout");
+		request.setAttribute("login", false);
+		request.getRequestDispatcher("WEB-INF/pages/error.jsp").forward(request, response);
 	}
 }

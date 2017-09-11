@@ -19,6 +19,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.netflix.client.ClientException;
+
 import tools.descartes.petsupplystore.entities.ImageSizePreset;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
@@ -41,11 +44,11 @@ public class IndexServlet extends AbstractUIServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * {@inheritDoc}
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	@Override
+	protected void doGetInternal(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, ClientException {
 		checkforCookie(request, response);
 		request.setAttribute("CategoryList", LoadBalancedStoreOperations.getCategories());
 		request.setAttribute("title", "Pet Supply Store Home");
@@ -57,15 +60,6 @@ public class IndexServlet extends AbstractUIServlet {
 				LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
 
 		request.getRequestDispatcher("WEB-INF/pages/index.jsp").forward(request, response);
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
 	}
 
 }
