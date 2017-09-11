@@ -21,9 +21,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.netflix.client.ClientException;
-
 import tools.descartes.petsupplystore.entities.ImageSizePreset;
+import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
 import tools.descartes.petsupplystore.webui.servlet.elhelper.ELHelperUtils;
@@ -50,7 +49,7 @@ public class ProfileServlet extends AbstractUIServlet {
 	 */
 	@Override
 	protected void doGetInternal(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, ClientException {
+			throws ServletException, IOException, LoadBalancerTimeoutException {
 		checkforCookie(request,response);
 		if (!LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request))) {
 			redirect("/", response);
