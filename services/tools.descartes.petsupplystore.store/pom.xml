@@ -48,6 +48,11 @@
 			<artifactId>registryclient</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>tools.descartes.petsupplystore</groupId>
+			<artifactId>dockerbase</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 
 		<!-- WebApp Dependencies -->
 		<dependency>
