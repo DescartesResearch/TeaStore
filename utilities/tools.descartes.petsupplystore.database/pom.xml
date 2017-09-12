@@ -5,6 +5,7 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>PetSupplyStore Database Docker Container</name>
   <url>http://descartes.tools</url>
+  <packaging>pom</packaging>
   
     <distributionManagement>
 		<repository>

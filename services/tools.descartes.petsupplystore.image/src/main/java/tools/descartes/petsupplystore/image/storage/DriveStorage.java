@@ -162,17 +162,18 @@ public class DriveStorage implements IDataStorage<StoreImage> {
 		ReadWriteLock l = getIDLock(data.getId());
 		l.writeLock().lock();
 		try {
-			imgFile.toFile().delete();
+			result = imgFile.toFile().delete();
 		} finally {
 			l.writeLock().unlock();
 		}
-		
-		mapLock.writeLock().lock();
-		try {
-			lockedIDs.remove(data.getId());
-		} finally {
-			mapLock.writeLock().unlock();
-		}
+
+		// Deliberately do not delete the locks from the map
+//		mapLock.writeLock().lock();
+//		try {
+//			lockedIDs.remove(data.getId());
+//		} finally {
+//			mapLock.writeLock().unlock();
+//		}
 		
 		return result;
 	}

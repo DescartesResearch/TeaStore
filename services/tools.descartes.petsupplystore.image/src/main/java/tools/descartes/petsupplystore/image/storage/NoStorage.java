@@ -6,7 +6,7 @@ public class NoStorage<T extends ICachable<T>> implements IDataStorage<T> {
 
 	@Override
 	public boolean dataExists(long id) {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -16,17 +16,17 @@ public class NoStorage<T extends ICachable<T>> implements IDataStorage<T> {
 
 	@Override
 	public boolean saveData(T data) {
-		return true;
+		return false;
 	}
 
 	@Override
 	public boolean dataIsStorable(T data) {
-		return true;
+		return false;
 	}
 
 	@Override
 	public boolean deleteData(T data) {
-		return true;
+		return false;
 	}
 	
 }
