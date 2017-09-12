@@ -13,6 +13,8 @@
  */
 package tools.descartes.petsupplystore.image.cache.entry;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * Wrapper class for caches with a replacement strategy that relies on counting how often the entry was retrieved
  * from cache. For example the {@link tools.descartes.petsupplystore.image.cache.LeastFrequentlyUsed}.
@@ -22,7 +24,7 @@ package tools.descartes.petsupplystore.image.cache.entry;
  */
 public class CountedEntry<D extends ICachable<D>> extends AbstractEntry<D> {
 	
-	private int useCount = 0;
+	private AtomicInteger useCount = new AtomicInteger();
 	
 	/**
 	 * Basic constructor storing the cachable data. If the cachable data supplied is null, a 
@@ -38,12 +40,12 @@ public class CountedEntry<D extends ICachable<D>> extends AbstractEntry<D> {
 	 * @return Number of times this entry was retrieved from cache
 	 */
 	public int getUseCount() {
-		return useCount;
+		return useCount.get();
 	}
 	
 	@Override
 	public void wasUsed() {
-		this.useCount++;
+		useCount.incrementAndGet();
 	}
 
 }

@@ -280,8 +280,9 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 	protected abstract F createEntry(T data);
 	
 	protected void addEntry(F data) {
-		entries.add(data);
-		dataAddedToCache(data.getByteSize());
+		if (entries.add(data)) {
+			dataAddedToCache(data.getByteSize());
+		}
 	}
 
 	protected abstract void removeEntryByCachingStrategy();
