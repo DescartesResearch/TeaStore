@@ -79,8 +79,6 @@ public enum SetupController {
 		// Wait time in ms (per image to generate) before an image provider service is registered if there is another
 		// image provider service registered.
 		public final static long CREATION_THREAD_POOL_WAIT_PER_IMG_NR = 70;
-		
-		public final static String EXISTING_IMG_FORMAT = "png";
 	}
 	
 	private StorageRule storageRule = StorageRule.STD_STORAGE_RULE;
@@ -208,7 +206,7 @@ public enum SetupController {
 				String[] tmp = category.getName().split(",");
 				if (tmp[0].toLowerCase().equals(name)) {
 					log.info("Found matching category {} ({}) for image {}.", category.getName(), category.getId(), 
-							name + "." + SetupControllerConstants.EXISTING_IMG_FORMAT);
+							name + "." + StoreImage.STORE_IMAGE_FORMAT);
 					result.put(category, categoryImages.get(name));
 				}
 			}
@@ -237,8 +235,8 @@ public enum SetupController {
 			imgCreationPool.execute(factory.newRunnable());
 		}
 		
-		log.info("Image creator thread started. {} images to generate using {} threads.", nrOfImagesToGenerate, 
-				SetupControllerConstants.CREATION_THREAD_POOL_SIZE);
+		log.info("Image creator thread started. {} {} sized images to generate using {} threads.", nrOfImagesToGenerate, 
+				ImageSizePreset.STD_IMAGE_SIZE.toString(), SetupControllerConstants.CREATION_THREAD_POOL_SIZE);
 	}
 	
 	public void detectCategoryImages() {
@@ -257,7 +255,7 @@ public enum SetupController {
 		nrOfImagesForCategory = 0;
 		if (dir != null && dir.exists() && dir.isDirectory()) {
 			for (File file : dir.listFiles()) {
-				if (file.isFile() && file.getName().endsWith(SetupControllerConstants.EXISTING_IMG_FORMAT)) {
+				if (file.isFile() && file.getName().endsWith(StoreImage.STORE_IMAGE_FORMAT)) {
 					try {
 						categoryImages.put(file.getName().substring(0, file.getName().length() - 4), ImageIO.read(file));
 						nrOfImagesForCategory++;
@@ -327,7 +325,7 @@ public enum SetupController {
 
 		if (currentDir.exists() && currentDir.isDirectory()) {
 			for (File file : currentDir.listFiles()) {
-				if (file.isFile() && file.getName().endsWith(SetupControllerConstants.EXISTING_IMG_FORMAT)) {
+				if (file.isFile() && file.getName().endsWith(StoreImage.STORE_IMAGE_FORMAT)) {
 					long imageID = ImageIDFactory.ID.getNextImageID();
 					
 					BufferedImage buffImg = null;

@@ -67,7 +67,8 @@ public class ProductServlet extends AbstractUIServlet {
 			}
 			request.setAttribute("Advertisment", ad);
 
-			request.setAttribute("productImages", LoadBalancedImageOperations.getProductPreviewImages(ad));
+			request.setAttribute("productImages", LoadBalancedImageOperations.getProductImages(ad, 
+					ImageSizePreset.RECOMMENDATION.getSize()));
 			request.setAttribute("productImage", LoadBalancedImageOperations.getProductImage(p));
 			request.setAttribute("storeIcon", 
 					LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));

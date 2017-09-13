@@ -93,7 +93,7 @@ public enum ImageProvider {
 			return null;
 		}
 	
-		ImageSize biggest = ImageSizePreset.getBiggestPreset();
+		ImageSize stdSize = ImageSizePreset.STD_IMAGE_SIZE;
 		StoreImage storedImg = null;
 		
 		// Try to retrieve image from disk or from cache
@@ -104,13 +104,13 @@ public enum ImageProvider {
 		
 		// If we dont have the image in the right size, get the biggest one and scale it
 		if (storedImg == null) {
-			storedImg = storage.loadData(db.getImageID(key, biggest));
+			storedImg = storage.loadData(db.getImageID(key, stdSize));
 			if (storedImg != null) {
 				storedImg = scaleAndRegisterImg(storedImg.getImage(), key, size);
 			} else {
 				storedImg = storage.loadData(db.getImageID(IMAGE_NOT_FOUND, size));
 				if (storedImg == null) {
-					storedImg = storage.loadData(db.getImageID(IMAGE_NOT_FOUND, biggest));
+					storedImg = storage.loadData(db.getImageID(IMAGE_NOT_FOUND, stdSize));
 					if (storedImg == null) {
 						return null;
 					}
