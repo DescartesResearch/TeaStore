@@ -52,4 +52,5 @@
 		<finalName>tools.descartes.petsupplystore.kieker</finalName>
 	</build>
 
+	<packaging>pom</packaging>
 </project>

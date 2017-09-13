@@ -270,7 +270,7 @@
 										var Files = Java.type('java.nio.file.Files');
 										var Paths = Java.type('java.nio.file.Paths');
 										var content = new java.lang.String(Files.readAllBytes(Paths.get($basedir+'/src/main/webapp/WEB-INF/web.xml')));
-										var insert = new java.lang.String(Files.readAllBytes(Paths.get($basedir+'/../../utilities/src/main/webapp/WEB-INF/web_kieker.txt')));
+										var insert = new java.lang.String(Files.readAllBytes(Paths.get($basedir+'/../../utilities/tools.descartes.petsupplystore.kieker/src/main/webapp/WEB-INF/web_kieker.txt')));
 										
 										content = content.replace('*/web-app>', '') + insert;
 										Files.write(Paths.get($basedir + '/src/main/webapp/WEB-INF/web.xml'), content.getBytes());
