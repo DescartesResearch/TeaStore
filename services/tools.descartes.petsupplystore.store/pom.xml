@@ -169,11 +169,6 @@
 									<goal>build</goal>
 								</goals>
 								<phase>package</phase>
-								<configuration>
-									<buildArgs>
-										<file>StandardDocker</file>
-									</buildArgs>
-								</configuration>
 							</execution>
 							<execution>
 								<id>tag-push-latest</id>
