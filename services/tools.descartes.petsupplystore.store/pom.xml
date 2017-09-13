@@ -108,6 +108,11 @@
 			<classifier>classes</classifier>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.fusesource</groupId>
+			<artifactId>sigar</artifactId>
+			<version>1.6.4</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>tools.descartes.petsupplystore.store</finalName>
@@ -268,12 +273,16 @@
 								<configuration>
 									<script>
 										var Files = Java.type('java.nio.file.Files');
-										var Paths = Java.type('java.nio.file.Paths');
-										var content = new java.lang.String(Files.readAllBytes(Paths.get($basedir+'/src/main/webapp/WEB-INF/web.xml')));
-										var insert = new java.lang.String(Files.readAllBytes(Paths.get($basedir+'/../../utilities/tools.descartes.petsupplystore.kieker/src/main/webapp/WEB-INF/web_kieker.txt')));
-										
+										var Paths
+										= Java.type('java.nio.file.Paths');
+										var content = new
+										java.lang.String(Files.readAllBytes(Paths.get($basedir+'/src/main/webapp/WEB-INF/web.xml')));
+										var insert = new
+										java.lang.String(Files.readAllBytes(Paths.get($basedir+'/../../utilities/tools.descartes.petsupplystore.kieker/src/main/webapp/WEB-INF/web_kieker.txt')));
+
 										content = content.replaceAll("./web-app>", '') + insert;
-										Files.write(Paths.get($basedir + '/src/main/webapp/WEB-INF/web.xml'), content.getBytes());
+										Files.write(Paths.get($basedir +
+										'/src/main/webapp/WEB-INF/web.xml'), content.getBytes());
 									</script>
 								</configuration>
 								<goals>
@@ -282,7 +291,7 @@
 							</execution>
 						</executions>
 					</plugin>
-					
+
 					<!-- BUILD DOCKER -->
 					<plugin>
 						<groupId>com.spotify</groupId>

@@ -40,14 +40,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.fusesource</groupId>
-			<artifactId>sigar</artifactId>
-			<version>1.6.4</version>
-		</dependency>
-	</dependencies>
-
 	<build>
 		<finalName>tools.descartes.petsupplystore.kieker</finalName>
 	</build>
