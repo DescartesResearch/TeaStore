@@ -14,6 +14,7 @@ import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
+import javax.imageio.stream.MemoryCacheImageOutputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +63,7 @@ public class CreatorRunner implements Runnable {
 		ImageWriteParam jpgWriteParam = writer.getDefaultWriteParam();
 		jpgWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
 		jpgWriteParam.setCompressionQuality(StoreImage.STORE_IMAGE_COMPRESSION_RATIO);
-		writer.setOutput(stream);
+		writer.setOutput(new MemoryCacheImageOutputStream(stream));
 		
 		try {
 			writer.write(null, new IIOImage(img, null, null), jpgWriteParam);
