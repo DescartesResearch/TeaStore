@@ -74,6 +74,8 @@ public class CreatorRunner implements Runnable {
 				log.warn("An IOException occured while writing image with ID " + String.valueOf(imgID) + " to file "
 						+ imgFile.toAbsolutePath() + ".", ioException);
 			}
+		} finally {
+			writer.dispose();
 		}
 	}
 
