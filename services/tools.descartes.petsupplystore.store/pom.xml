@@ -53,11 +53,6 @@
 			<artifactId>dockerbase</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-			<groupId>tools.descartes.petsupplystore</groupId>
-			<artifactId>kieker</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
 
 		<!-- WebApp Dependencies -->
 		<dependency>
@@ -226,6 +221,32 @@
 											<directory>../../utilities/tools.descartes.petsupplystore.kieker/</directory>
 											<includes>
 												<include>kieker.monitoring.properties</include>
+											</includes>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<artifactId>maven-resources-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>copy-appCtx</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.basedir}/src/main/webapp/WEB-INF/lib</outputDirectory>
+									<overwrite>true</overwrite>
+									<resources>
+										<resource>
+											<directory>../../utilities/tools.descartes.petsupplystore.kieker/src/main/webapp/WEB-INF/lib</directory>
+											<includes>
+												<include>libsigar-amd64-linux.so</include>
+												<include>libsigar-x86-linux.so</include>
+												<include>sigar-1.6.4.LICENSE</include>
 											</includes>
 										</resource>
 									</resources>
