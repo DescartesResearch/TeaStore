@@ -255,6 +255,7 @@
 												<include>libsigar-amd64-linux.so</include>
 												<include>libsigar-x86-linux.so</include>
 												<include>sigar-1.6.4.LICENSE</include>
+												<include>kieker-1.13-SNAPSHOT-aspectj.jar</include>
 											</includes>
 										</resource>
 									</resources>
