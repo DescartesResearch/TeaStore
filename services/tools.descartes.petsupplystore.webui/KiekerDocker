@@ -1,0 +1,34 @@
+FROM descartesresearch/petsupplystore-base:latest
+MAINTAINER Chair of Software Engineering <se2-it@informatik.uni-wuerzburg.de>
+
+EXPOSE 8080
+
+WORKDIR /opt
+
+ENV KIEKER_AGENT_JAR_SRC "https://build.se.informatik.uni-kiel.de/jenkins/job/kieker-monitoring/job/kieker/job/master/lastSuccessfulBuild/artifact/build/libs/kieker-1.13-SNAPSHOT-aspectj.jar" 
+
+RUN mkdir /opt/kieker && mkdir /opt/kieker/tmp-config
+
+COPY kieker.monitoring.properties /opt/kieker/tmp-config/kieker.monitoring.properties
+COPY target/tools.descartes.petsupplystore.webui.war /usr/local/tomcat/webapps/tools.descartes.petsupplystore.webui.war
+
+RUN \
+  mkdir -p /opt/kieker/agent && \
+  mkdir -p /opt/kieker/logs && \
+  wget -q "${KIEKER_AGENT_JAR_SRC}" -O "/opt/kieker/agent/agent.jar" && \
+  ln -s /usr/local/tomcat/webapps /opt/kieker/webapps && \
+  sed -i '250i\'"export KIEKER_JAVA_OPTS=\" \
+    -javaagent:/opt/kieker/agent/agent.jar \
+    -Dkieker.monitoring.configuration=/opt/kieker/config/kieker.monitoring.properties \
+    -Dkieker.monitoring.writer.filesystem.AsciiFileWriter.customStoragePath=/opt/kieker/logs \
+    -Daj.weaving.verbose=true \
+    -Dkieker.monitoring.skipDefaultAOPConfiguration=true \
+    \"" /usr/local/tomcat/bin/catalina.sh && \
+  sed -i '251i\'"export JAVA_OPTS=\"\${KIEKER_JAVA_OPTS} \${JAVA_OPTS}\"" /usr/local/tomcat/bin/catalina.sh
+  
+  
+CMD \
+  /usr/local/tomcat/bin/start.sh && \
+  /usr/local/tomcat/bin/catalina.sh run
+
+VOLUME ["/opt/kieker"]
