@@ -210,10 +210,10 @@
 							</execution>
 						</executions>
 					</plugin>
-					<!-- COPY MONITORING.PROPERTIES -->
 					<plugin>
 						<artifactId>maven-resources-plugin</artifactId>
 						<executions>
+							<!-- COPY MONITORING.PROPERTIES -->
 							<execution>
 								<id>copy-appCtx</id>
 								<phase>generate-resources</phase>
@@ -233,12 +233,7 @@
 									</resources>
 								</configuration>
 							</execution>
-						</executions>
-					</plugin>
-					<!-- COPY KIEKER LIBRARIES -->
-					<plugin>
-						<artifactId>maven-resources-plugin</artifactId>
-						<executions>
+							<!-- COPY KIEKER LIBRARIES -->
 							<execution>
 								<id>copy-appCtx</id>
 								<phase>generate-resources</phase>
