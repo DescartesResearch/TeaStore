@@ -220,11 +220,6 @@
 									<goal>build</goal>
 								</goals>
 								<phase>package</phase>
-								<configuration>
-									<buildArgs>
-										<file>KiekerDocker</file>
-									</buildArgs>
-								</configuration>
 							</execution>
 							<execution>
 								<id>tag-push-latest</id>
