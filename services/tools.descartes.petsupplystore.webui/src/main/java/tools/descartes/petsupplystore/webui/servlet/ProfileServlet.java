@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import tools.descartes.petsupplystore.entities.ImageSizePreset;
+import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
 import tools.descartes.petsupplystore.webui.servlet.elhelper.ELHelperUtils;
@@ -44,11 +45,11 @@ public class ProfileServlet extends AbstractUIServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * {@inheritDoc}
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	@Override
+	protected void doGetInternal(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, LoadBalancerTimeoutException {
 		checkforCookie(request,response);
 		if (!LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request))) {
 			redirect("/", response);
@@ -66,15 +67,6 @@ public class ProfileServlet extends AbstractUIServlet {
 
 			request.getRequestDispatcher("WEB-INF/pages/profile.jsp").forward(request, response);
 		}
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
 	}
 
 }

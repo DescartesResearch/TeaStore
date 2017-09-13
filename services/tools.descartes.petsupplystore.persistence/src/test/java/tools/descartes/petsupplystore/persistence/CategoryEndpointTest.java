@@ -92,7 +92,7 @@ public class CategoryEndpointTest {
 		NonBalancedCRUDOperations.sendEntityForCreation(client, cat);
 		
 		//get some categories
-		Assert.assertEquals(NonBalancedCRUDOperations.getEntities(client, 1, 1).size(), 1 + initialSize);
+		Assert.assertEquals(NonBalancedCRUDOperations.getEntities(client, 1, 1).size(), 1);
 		Assert.assertEquals(NonBalancedCRUDOperations.getEntities(client, -1, -1).size(), 2 + initialSize);
 		
 		//delete category

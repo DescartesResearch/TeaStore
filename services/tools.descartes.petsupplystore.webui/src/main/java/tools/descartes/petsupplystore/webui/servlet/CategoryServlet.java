@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.ImageSizePreset;
 import tools.descartes.petsupplystore.entities.Product;
+import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
 
@@ -50,11 +51,11 @@ public class CategoryServlet extends AbstractUIServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * {@inheritDoc}
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	@Override
+	protected void doGetInternal(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, LoadBalancerTimeoutException {
 		if (request.getParameter("category") != null) {
 			checkforCookie(request, response);
 			long categoryID = Long.valueOf(request.getParameter("category"));
@@ -102,17 +103,17 @@ public class CategoryServlet extends AbstractUIServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * {@inheritDoc}
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	@Override
+	protected void doPostInternal(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, LoadBalancerTimeoutException {
 		if (request.getParameter("number") != null && request.getParameter("page") != null
 				&& request.getParameter("category") != null) {
 			redirect("/category?category=" + request.getParameter("category") + "&page=" + request.getParameter("page"),
 					response, PRODUCTCOOKIE, request.getParameter("number"));
 		} else {
-			doGet(request, response);
+			doGetInternal(request, response);
 		}
 	}
 

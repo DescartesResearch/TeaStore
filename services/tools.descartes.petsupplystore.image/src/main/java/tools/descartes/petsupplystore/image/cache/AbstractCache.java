@@ -69,7 +69,6 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 			this.cachedStorage = cachedStorage;
 		}
 		this.entries = entries;
-		this.maxCacheSize = maxCacheSize;
 		this.cachingRule = cachingRule;
 		setMaxCacheSize(maxCacheSize);
 	}
@@ -82,8 +81,10 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 		} finally {
 			lock.readLock().unlock();
 		}
-		if (data != null && markUsed) {
-			data.wasUsed();
+		if (data != null) {
+			if (markUsed) {
+				data.wasUsed();
+			}
 			return data.getData();
 		}
 		return null;
@@ -251,13 +252,13 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 	 */
 	
 	protected void dataRemovedFromCache(long size) {
-		// This case should not happen
 		lock.writeLock().lock();
 		try {
 			if (size > currentCacheSize) {
 				currentCacheSize = 0;
+			} else {
+				currentCacheSize -= size;
 			}
-			currentCacheSize -= size;
 		} finally {
 			lock.writeLock().unlock();
 		}
@@ -279,8 +280,9 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 	protected abstract F createEntry(T data);
 	
 	protected void addEntry(F data) {
-		entries.add(data);
-		dataAddedToCache(data.getByteSize());
+		if (entries.add(data)) {
+			dataAddedToCache(data.getByteSize());
+		}
 	}
 
 	protected abstract void removeEntryByCachingStrategy();

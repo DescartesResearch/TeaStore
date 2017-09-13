@@ -13,6 +13,8 @@
  */
 package tools.descartes.petsupplystore.image.cache.entry;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 /**
  * Wrapper class for caches with a replacement strategy that relies on a timestamp when the entry was retrieved
  * from cache. For example the {@link tools.descartes.petsupplystore.image.cache.LeastRecentlyUsed} or 
@@ -23,7 +25,7 @@ package tools.descartes.petsupplystore.image.cache.entry;
  */
 public class TimedEntry<D extends ICachable<D>> extends AbstractEntry<D> {
 
-	private long time = 0;
+	private AtomicLong time = new AtomicLong();
 	
 	/**
 	 * Basic constructor storing the cachable data. If the cachable data supplied is null, a 
@@ -40,12 +42,12 @@ public class TimedEntry<D extends ICachable<D>> extends AbstractEntry<D> {
 	 * @return The last time in nanoseconds
 	 */
 	public long getTime() {
-		return time;
+		return time.get();
 	}
 
 	@Override
 	public void wasUsed() {
-		time = System.nanoTime();
+		time.set(System.nanoTime());
 	}
 	
 }

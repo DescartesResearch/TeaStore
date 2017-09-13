@@ -57,7 +57,7 @@ public final class ServiceLoadBalancer {
 	
 	private BaseLoadBalancer loadBalancer;
     // retry handler that does not retry on same server, but on a different server
-    private final RetryHandler retryHandler = new DefaultLoadBalancerRetryHandler(1, 2, true);
+    private final RetryHandler retryHandler = new DefaultLoadBalancerRetryHandler(0, 2, true);
 	
     private ReadWriteLock loadBalancerModificationLock = new ReentrantReadWriteLock();
     
@@ -178,28 +178,36 @@ public final class ServiceLoadBalancer {
 	}
     
     private <T, R> R loadBalanceRESTOperation(String endpointURI,
-    		Class<T> entityClass, Function<RESTClient<T>, R> operation) {
+    		Class<T> entityClass, Function<RESTClient<T>, R> operation) throws LoadBalancerTimeoutException {
     	R r = null;
     	loadBalancerModificationLock.readLock().lock();
-    	if (loadBalancer == null) {
-    		LOG.warn("Load Balancer was not initialized for service: " + targetService.getServiceName()
-    			+ ". Is Registry up?");
-    		updateLoadBalancersForServiceUsingRegistry(targetService);
+    	try {
+    		if (loadBalancer == null) {
+        		LOG.warn("Load Balancer was not initialized for service: " + targetService.getServiceName()
+        			+ ". Is Registry up?");
+        		updateLoadBalancersForServiceUsingRegistry(targetService);
+        	}
+        	if (loadBalancer == null || loadBalancer.getAllServers().isEmpty()) {
+        		LOG.warn("No Server registered for Service: " + targetService.getServiceName());
+        	} else {
+        		r = LoadBalancerCommand.<R>builder()
+                        .withLoadBalancer(loadBalancer)
+                        .withRetryHandler(retryHandler)
+                        .build()
+                        .submit(server -> Observable.just(
+                        		operation.apply(
+                        				(RESTClient<T>) getEndpointClientCollection(endpointURI, entityClass)
+                        				.getRESTClient(server))))
+                        .onErrorReturn((Throwable e) -> null).toBlocking().first();
+        		if (r == null) {
+        			throw new LoadBalancerTimeoutException("Timout at endpoint: "
+        					+ endpointURI + ", with target service: " + targetService.getServiceName(),
+        					targetService);
+        		}
+        	}
+    	} finally {
+    		loadBalancerModificationLock.readLock().unlock();
     	}
-    	if (loadBalancer == null || loadBalancer.getAllServers().isEmpty()) {
-    		LOG.warn("No Server registered for Service: " + targetService.getServiceName());
-    	} else {
-    		r = LoadBalancerCommand.<R>builder()
-                    .withLoadBalancer(loadBalancer)
-                    .withRetryHandler(retryHandler)
-                    .build()
-                    .submit(server -> Observable.just(
-                    		operation.apply(
-                    				(RESTClient<T>) getEndpointClientCollection(endpointURI, entityClass)
-                    				.getRESTClient(server))))
-                    .toBlocking().first();
-    	}
-		loadBalancerModificationLock.readLock().unlock();
 		return r;
 	}
     
