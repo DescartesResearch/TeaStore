@@ -38,7 +38,9 @@ public class StoreImage implements ICachable<StoreImage> {
 	/**
 	 * Standard image format for storage (reading and writing).
 	 */
-	public static final String STORE_IMAGE_FORMAT = "png";
+	public static final String STORE_IMAGE_FORMAT = "jpeg";
+	
+	public static final float STORE_IMAGE_COMPRESSION_RATIO = 0.05f;
 	
 	/**
 	 * String prepended in the <pre>src</pre> attribute of an image tag for embedding the image data.

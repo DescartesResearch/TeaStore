@@ -79,6 +79,8 @@ public enum SetupController {
 		// Wait time in ms (per image to generate) before an image provider service is registered if there is another
 		// image provider service registered.
 		public final static long CREATION_THREAD_POOL_WAIT_PER_IMG_NR = 70;
+		
+		public final static String EXISTING_IMG_FORMAT = "png";
 	}
 	
 	private StorageRule storageRule = StorageRule.STD_STORAGE_RULE;
@@ -206,7 +208,7 @@ public enum SetupController {
 				String[] tmp = category.getName().split(",");
 				if (tmp[0].toLowerCase().equals(name)) {
 					log.info("Found matching category {} ({}) for image {}.", category.getName(), category.getId(), 
-							name + "." + StoreImage.STORE_IMAGE_FORMAT);
+							name + "." + SetupControllerConstants.EXISTING_IMG_FORMAT);
 					result.put(category, categoryImages.get(name));
 				}
 			}
@@ -255,7 +257,7 @@ public enum SetupController {
 		nrOfImagesForCategory = 0;
 		if (dir != null && dir.exists() && dir.isDirectory()) {
 			for (File file : dir.listFiles()) {
-				if (file.isFile() && file.getName().endsWith(StoreImage.STORE_IMAGE_FORMAT)) {
+				if (file.isFile() && file.getName().endsWith(SetupControllerConstants.EXISTING_IMG_FORMAT)) {
 					try {
 						categoryImages.put(file.getName().substring(0, file.getName().length() - 4), ImageIO.read(file));
 						nrOfImagesForCategory++;
@@ -325,7 +327,7 @@ public enum SetupController {
 
 		if (currentDir.exists() && currentDir.isDirectory()) {
 			for (File file : currentDir.listFiles()) {
-				if (file.isFile() && file.getName().endsWith(StoreImage.STORE_IMAGE_FORMAT)) {
+				if (file.isFile() && file.getName().endsWith(SetupControllerConstants.EXISTING_IMG_FORMAT)) {
 					long imageID = ImageIDFactory.ID.getNextImageID();
 					
 					BufferedImage buffImg = null;

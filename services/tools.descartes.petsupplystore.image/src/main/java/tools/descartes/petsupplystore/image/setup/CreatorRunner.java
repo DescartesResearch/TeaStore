@@ -10,7 +10,10 @@ import java.nio.file.StandardOpenOption;
 import java.util.Base64;
 import java.util.Random;
 
+import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,8 +57,16 @@ public class CreatorRunner implements Runnable {
 		BufferedImage img = ImageCreator.createImage(shapesPerImage, categoryImage, size, rand);
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		
+		// Jpeg compression settings and writer
+		ImageWriter writer = ImageIO.getImageWritersByFormatName(StoreImage.STORE_IMAGE_FORMAT).next();
+		ImageWriteParam jpgWriteParam = writer.getDefaultWriteParam();
+		jpgWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+		jpgWriteParam.setCompressionQuality(StoreImage.STORE_IMAGE_COMPRESSION_RATIO);
+		writer.setOutput(stream);
+		
 		try {
-			ImageIO.write(img, StoreImage.STORE_IMAGE_FORMAT, stream);
+			writer.write(null, new IIOImage(img, null, null), jpgWriteParam);
+			//ImageIO.write(img, StoreImage.STORE_IMAGE_FORMAT, stream);
 			Files.write(imgFile, Base64.getEncoder().encode(stream.toByteArray()), 
 					StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
 		} catch (IOException ioException) {
