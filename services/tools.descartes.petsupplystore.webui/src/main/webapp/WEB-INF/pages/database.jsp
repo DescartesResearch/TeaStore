@@ -1,11 +1,5 @@
-<%@include file="head.jsp"%>
-
-
-<%@include file="header.jsp"%>
-
+<%@include file="head.jsp"%><%@include file="header.jsp"%>
 <div class="container" id="main">
-
-
 	<form action="dataBaseAction" method="POST">
 		<div class="row">
 			<div class="col-sm-9">
@@ -44,17 +38,9 @@
 							value="5" min="0" required>
 					</div>
 				</div>
-				
-				
-				
 			</div>
 		</div>
 		<input class="btn" name="confirm" value="Confirm" type="submit">
 	</form>
-
 </div>
-
-
 <%@include file="footer.jsp"%>
-
-

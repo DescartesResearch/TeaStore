@@ -28,6 +28,7 @@ import tools.descartes.petsupplystore.entities.message.SessionBlob;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
+import tools.descartes.petsupplystore.webui.servlet.elhelper.ELHelperUtils;
 
 /**
  * Servlet implementation for the web view of "Product"
@@ -72,6 +73,7 @@ public class ProductServlet extends AbstractUIServlet {
 			request.setAttribute("productImage", LoadBalancedImageOperations.getProductImage(p));
 			request.setAttribute("storeIcon", 
 					LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
+			request.setAttribute("helper", ELHelperUtils.UTILS);
 
 			request.getRequestDispatcher("WEB-INF/pages/product.jsp").forward(request, response);
 		} else {

@@ -128,7 +128,7 @@ th,td {
 	margin-left: auto;
 }
 
-.thumbnail>form>span, .thumbnail>form>b {
+.thumbnail>form>table span, .thumbnail>form>table b {
 	white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -136,12 +136,40 @@ th,td {
     max-width: 100%;
 }
 
-.thumbnail>form>a>img {
+.thumbnail>form>table a>img {
 	margin-right: auto;
 	margin-left: auto;
 	display: block;	
 	border-radius: 4px;
 	border: 1px solid black;
+}
+.thumbnail .productthumb {
+	width: 72px;
+	padding-right: 4px;
+}
+.thumbnail>form>table {
+	margin-bottom: 6px;
+	padding: 0;
+	border: none;
+}
+.thumbnail>form>table td.divider {
+	background-color: #CDCDCD;
+	width: 0px;
+}
+.thumbnail>form>table td.description {
+	padding-left: 4px;
+}
+
+.showcase {
+	text-align: center;
+}
+.showcase>div {
+	margin: auto;
+	display: inline-block;
+	text-align: left;
+}
+.showcase>div>input {
+	margin-top: 1em;
 }
 
 @media all and (min-width: 768px) {
