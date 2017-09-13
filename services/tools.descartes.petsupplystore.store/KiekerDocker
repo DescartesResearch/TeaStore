@@ -28,7 +28,6 @@ RUN \
   
   
 CMD \
-  cp -nr /opt/kieker/tmp-config/* /opt/kieker/config/ && \
   /usr/local/tomcat/bin/start.sh && \
   /usr/local/tomcat/bin/catalina.sh run
 
