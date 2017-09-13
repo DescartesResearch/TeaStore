@@ -215,7 +215,7 @@
 						<executions>
 							<!-- COPY MONITORING.PROPERTIES -->
 							<execution>
-								<id>copy-appCtx</id>
+								<id>copy-monitoring</id>
 								<phase>generate-resources</phase>
 								<goals>
 									<goal>copy-resources</goal>
