@@ -62,7 +62,7 @@ public class CreatorRunner implements Runnable {
 		ImageWriteParam jpgWriteParam = writer.getDefaultWriteParam();
 		jpgWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
 		jpgWriteParam.setCompressionQuality(StoreImage.STORE_IMAGE_COMPRESSION_RATIO);
-		writer.setOutput(stream);
+		writer.setOutput(new MemoryCacheImageOutputStream(stream));
 		
 		try {
 			writer.write(null, new IIOImage(img, null, null), jpgWriteParam);
