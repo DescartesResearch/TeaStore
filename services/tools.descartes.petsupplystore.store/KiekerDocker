@@ -1,4 +1,4 @@
-FROM descartesresearch/petsupplystore-store:latest
+FROM descartesresearch/petsupplystore-base:latest
 MAINTAINER Chair of Software Engineering <se2-it@informatik.uni-wuerzburg.de>
 
 EXPOSE 8080
@@ -10,6 +10,7 @@ ENV KIEKER_AGENT_JAR_SRC "https://build.se.informatik.uni-kiel.de/jenkins/job/ki
 RUN mkdir /opt/kieker && mkdir /opt/kieker/tmp-config
 
 COPY kieker.monitoring.properties /opt/kieker/tmp-config/kieker.monitoring.properties
+COPY target/tools.descartes.petsupplystore.store.war /usr/local/tomcat/webapps/tools.descartes.petsupplystore.store.war
 
 RUN \
   mkdir -p /opt/kieker/agent && \
