@@ -1,37 +1,48 @@
 --[[
-	petsupply_browse profile. Sends cyclical requests to webui instance or front-end loadbalancer.
-	Browses store and updates shopping carts.
-	Does not perform any actions that would change the database.
+	Load Balancing version of the petsupply_browse profile.
+	Use in case of multiple WebUI instances in the absense of front-end load balancers.
 --]]
 
 --[[
 	Global Variables. Initialized at load driver startup.
 --]]
-prefix = "http://10.1.1.1:8080/tools.descartes.petsupplystore.webui/"
+
+	--[[
+		URLS of all WebUI instances. Used as prefix for further requests.
+	--]]
+webuis = {
+	"http://10.1.1.1:8080/tools.descartes.petsupplystore.webui/",
+	"http://10.1.1.2:8080/tools.descartes.petsupplystore.webui/",
+}
 productviewcount = 30
 postIndex = {3, 11}
-
 
 --[[
 	Gets called at the beginning of each "call cycle", perform as much work as possible here.
 	Initialize all global variables here.
-	Note that math.random is already initialized using a fixed seed (5) for reproducibility.
+	Note that math.random is already initialized using fixed seed for reproducibility.
 --]]
 function onCycle()
 	userpostfix = 1 + math.random(90)
+	--[[
+		Calls that can be initialized at cycle start.
+		They are either complete or serve as prefixes to dynamic calls.
+		They are appended to the WebUI address prefix.
+	--]]
 	calls = {
-	"",
-	"login",
-	--[[[POST]--]]"loginAction?username=user"..userpostfix.."&password=password",
-	--[[[POST]--]]"category?page=1&category=",
-	"product?id=",
-	--[[[POST]--]]"cartAction?addToCart=&productid=",
-	"category?page=1&category=",
-	"category?page=",
-	--[[[POST]--]]"cartAction?addToCart=&productid=",
-	"profile",
-	--[[[POST]--]]"loginAction?logout=",
+		"",
+		"login",
+		--[[[POST]--]]"loginAction?username=user"..userpostfix.."&password=password",
+		--[[[POST]--]]"category?page=1&category=",
+		"product?id=",
+		--[[[POST]--]]"cartAction?addToCart=&productid=",
+		"category?page=1&category=",
+		"category?page=",
+		--[[[POST]--]]"cartAction?addToCart=&productid=",
+		"profile",
+		--[[[POST]--]]"loginAction?logout=",
 	}
+	prefix = nextWebUI()
 end
 
 --[[
@@ -90,4 +101,14 @@ function isPost(index)
 		end
 	end
 	return false
+end
+
+webuiindex = math.random(#webuis);
+
+function nextWebUI()
+	webuiindex = webuiindex + 1;
+	if webuiindex > #webuis then
+		webuiindex = 1
+	end
+	return webuis[webuiindex]
 end
