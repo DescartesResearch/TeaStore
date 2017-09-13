@@ -1,17 +1,9 @@
-<%@include file="head.jsp"%>
-
-
-<%@include file="header.jsp"%>
-
+<%@include file="head.jsp"%><%@include file="header.jsp"%>
 <div class="container" id="main">
-
-
 	<div class="row">
-
 		<div class="col-sm-12 col-md-12">
 		<h3>Developer Team</h3>
 		</div>
-
 		<div class="col-sm-4 col-md-4">
 			<img
 				src="http://thetransformedmale.files.wordpress.com/2011/06/bruce-wayne-armani.jpg"
@@ -21,7 +13,6 @@
 				<small><cite title="Source Title">Batman </cite></small>
 			</blockquote>
 		</div>
-
 		<div class="col-sm-4 col-md-4">
 			<img src="${portraitAndre}" alt="André Bauer" class="img-rounded img-responsive" />
 			<blockquote>
@@ -29,7 +20,6 @@
 				<small><cite title="Source Title">WebUI </cite></small>
 			</blockquote>
 		</div>
-
 		<div class="col-sm-4 col-md-4">
 			<img src="${portraitSimon}" alt="Simon Eismann" class="img-rounded img-responsive" />
 			<blockquote>
@@ -37,8 +27,6 @@
 				<small><cite title="Source Title">Blob </cite></small>
 			</blockquote>
 		</div>
-
-
 		<div class="col-sm-4 col-md-4">
 			<img src="${portraitJoakim}" alt="Jóakim v. Kistowski"
 				class="img-rounded img-responsive" />
@@ -47,7 +35,6 @@
 				<small><cite title="Source Title">Brain </cite></small>
 			</blockquote>
 		</div>
-
 		<div class="col-sm-4 col-md-4">
 			<img src="${portraitJohannes}" alt="Johannes Grohmann"
 				class="img-rounded img-responsive" />
@@ -56,7 +43,6 @@
 				<small><cite title="Source Title">Recommender </cite></small>
 			</blockquote>
 		</div>
-
 		<div class="col-sm-4 col-md-4">
 			<img src="${portraitNorbert}" alt="Norbert Schmitt"
 				class="img-rounded img-responsive" />
@@ -79,12 +65,6 @@
 						systems. </cite></small>
 			</blockquote>
 		</div>
-
 	</div>
-
 </div>
-
-
 <%@include file="footer.jsp"%>
-
-
