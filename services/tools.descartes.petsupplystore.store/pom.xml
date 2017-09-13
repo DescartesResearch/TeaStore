@@ -185,6 +185,7 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<build>
+				<!-- RENAME DOCKER FILE -->
 				<plugins>
 					<plugin>
 						<groupId>com.coderplus.maven.plugins</groupId>
@@ -204,6 +205,7 @@
 							</execution>
 						</executions>
 					</plugin>
+					<!-- COPY MONITORING.PROPERTIES -->
 					<plugin>
 						<artifactId>maven-resources-plugin</artifactId>
 						<executions>
@@ -228,6 +230,7 @@
 							</execution>
 						</executions>
 					</plugin>
+					<!-- COPY KIEKER LIBRARIES -->
 					<plugin>
 						<artifactId>maven-resources-plugin</artifactId>
 						<executions>
@@ -254,6 +257,33 @@
 							</execution>
 						</executions>
 					</plugin>
+					<!-- EDIT WEB.XML -->
+					<plugin>
+						<groupId>io.github.michaldo</groupId>
+						<artifactId>nashorn-maven-plugin</artifactId>
+						<version>0.0.1</version>
+						<executions>
+							<execution>
+								<phase>process-resources</phase>
+								<configuration>
+									<script>
+										var Files = Java.type('java.nio.file.Files');
+										var Paths = Java.type('java.nio.file.Paths');
+										var content = new java.lang.String(Files.readAllBytes(Paths.get($basedir+'/src/main/webapp/WEB-INF/web.xml')));
+										var insert = new java.lang.String(Files.readAllBytes(Paths.get($basedir+'../../utilities/src/main/webapp/WEB-INF/web_kieker.txt')));
+										
+										content = content.replace('*/web-app>', '') + insert;
+										Files.write(Paths.get($basedir + '/src/main/webapp/WEB-INF/web.xml'), content.getBytes());
+									</script>
+								</configuration>
+								<goals>
+									<goal>eval</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					
+					<!-- BUILD DOCKER -->
 					<plugin>
 						<groupId>com.spotify</groupId>
 						<artifactId>dockerfile-maven-plugin</artifactId>
