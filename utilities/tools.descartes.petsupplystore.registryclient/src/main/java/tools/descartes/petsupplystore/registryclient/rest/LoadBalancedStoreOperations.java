@@ -204,7 +204,7 @@ public final class LoadBalancedStoreOperations {
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
 		try {
 			return r.readEntity(SessionBlob.class);
-		} catch (NullPointerException e) {
+		} catch (Exception e) {
 			return new SessionBlob();
 		}
 	}

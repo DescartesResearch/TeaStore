@@ -23,8 +23,10 @@ public class ProductInformationTest extends AbstractStoreRestTest {
 		Product  product = LoadBalancedStoreOperations.getProduct(106);
 		Assert.assertTrue(product != null);
 		
-		Product product2 = LoadBalancedStoreOperations.getProduct(-1);
-		Assert.assertTrue(product2 == null);
+		try {
+			LoadBalancedStoreOperations.getProduct(-1);
+			Assert.fail();
+		} catch (Exception e) {}
 		
 		List<Product> products = LoadBalancedStoreOperations.getProducts(3, 1, 10);
 		Assert.assertEquals(10, products.size());
