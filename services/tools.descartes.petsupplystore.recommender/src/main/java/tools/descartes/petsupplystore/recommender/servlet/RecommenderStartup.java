@@ -21,6 +21,7 @@ import tools.descartes.petsupplystore.recommender.rest.TrainEndpoint;
 import tools.descartes.petsupplystore.registryclient.RegistryClient;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.StartupCallback;
+import tools.descartes.petsupplystore.rest.RESTClient;
 
 /**
  * Application Lifecycle Listener implementation class Registry Client Startup.
@@ -29,6 +30,8 @@ import tools.descartes.petsupplystore.registryclient.StartupCallback;
  */
 @WebListener
 public class RecommenderStartup implements ServletContextListener {
+	
+	private static final int REST_READ_TIMOUT = 1750;
 	
 	/**
 	 * Also set this accordingly in RegistryClientStartup.
@@ -54,6 +57,7 @@ public class RecommenderStartup implements ServletContextListener {
      * @param event The servlet context event at initialization.
      */
     public void contextInitialized(ServletContextEvent event)  {
+    	RESTClient.setGlobalReadTimeout(REST_READ_TIMOUT);
     	RegistryClient.getClient().runAfterServiceIsAvailable(Service.PERSISTENCE, new StartupCallback() {
 			
 			@Override

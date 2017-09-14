@@ -18,6 +18,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import tools.descartes.petsupplystore.registryclient.RegistryClient;
+import tools.descartes.petsupplystore.rest.RESTClient;
 
 /**
  * Application Lifecycle Listener implementation class Registry Client Startup.
@@ -26,6 +27,8 @@ import tools.descartes.petsupplystore.registryclient.RegistryClient;
  */
 @WebListener
 public class StoreStartup implements ServletContextListener {
+	
+	private static final int REST_READ_TIMOUT = 1750;
 	
 	/**
 	 * Also set this accordingly in RegistryClientStartup.
@@ -51,6 +54,7 @@ public class StoreStartup implements ServletContextListener {
      * @param arg0 The servlet context event at initialization.
      */
     public void contextInitialized(ServletContextEvent event)  {
+    	RESTClient.setGlobalReadTimeout(REST_READ_TIMOUT);
     	RegistryClient.getClient().register(event.getServletContext().getContextPath());
     }
     
