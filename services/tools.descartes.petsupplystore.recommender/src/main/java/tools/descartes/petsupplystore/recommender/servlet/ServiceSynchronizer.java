@@ -117,7 +117,7 @@ public final class ServiceSynchronizer {
 				client -> client.getService().path(client.getApplicationURI()).path(client.getEndpointURI())
 						.request(MediaType.TEXT_PLAIN).accept(MediaType.TEXT_PLAIN).get());
 		for (Response response : maxTimeResponses) {
-			if (response != null && response.getStatus() == org.apache.catalina.connector.Response.SC_OK) {
+			if (response != null && response.getStatus() == Response.Status.OK.getStatusCode()) {
 				// only consider if status was fine
 				long milliTS = response.readEntity(Long.class);
 				if (maxTime != Long.MAX_VALUE && maxTime != milliTS) {

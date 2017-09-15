@@ -62,7 +62,7 @@ public class TrainEndpoint {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return Response.status(500).entity("The (re)trainprocess failed.").build();
+		return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()).entity("The (re)trainprocess failed.").build();
 	}
 
 	// I HAVE NO IDEA WHAT THIS IS FOR? IF ANYONE DOES, JUST PUT IT BACK IN
@@ -120,7 +120,7 @@ public class TrainEndpoint {
 	@Path("timestamp")
 	public Response getTimeStamp() {
 		if (ServiceSynchronizer.getMaxTime() != -1) {
-			return Response.status(org.apache.catalina.connector.Response.SC_PRECONDITION_FAILED)
+			return Response.status(Response.Status.PRECONDITION_FAILED.getStatusCode())
 					.entity("The collection of the current maxTime was not possible.").build();
 		}
 		return Response.ok(ServiceSynchronizer.getMaxTime()).build();
