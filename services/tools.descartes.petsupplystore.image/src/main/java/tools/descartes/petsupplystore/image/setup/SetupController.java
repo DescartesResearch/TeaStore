@@ -60,6 +60,7 @@ import tools.descartes.petsupplystore.image.storage.rules.StoreAll;
 import tools.descartes.petsupplystore.image.storage.rules.StoreLargeImages;
 import tools.descartes.petsupplystore.registryclient.RegistryClient;
 import tools.descartes.petsupplystore.registryclient.Service;
+import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
 
 public enum SetupController {
@@ -117,12 +118,18 @@ public enum SetupController {
 		// generating images (which queries persistence)
 		boolean maxTriesReached = true;
 		for (int i = 0; i < SetupControllerConstants.PERSISTENCE_CREATION_TRIES; i++) {
-			Response result = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "generatedb", 
-					String.class, client -> client.getService().path(client.getApplicationURI())
-					.path(client.getEndpointURI()).path("finished").request().get());
+			Response result = null;
+			try {
+				result = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "generatedb", 
+						String.class, client -> client.getService().path(client.getApplicationURI())
+						.path(client.getEndpointURI()).path("finished").request().get());
+			} catch (LoadBalancerTimeoutException timeout) {
+				log.warn("Timeout while trying to reach persistence service.", timeout);
+				break;
+			}
 		
 			if (result == null ? false : Boolean.parseBoolean(result.readEntity(String.class))) {
-				if (result != null) {
+				if (result != null)  {
 					result.close();
 				}
 				maxTriesReached = false;
@@ -164,7 +171,7 @@ public enum SetupController {
 			}
 			
 		} else {
-			log.warn("Maximum tries to reach persistence service reached. No products fetched.");
+			log.warn("Maximum tries reached or timeout to query persistence service. No products fetched.");
 		}
 	}
 	
