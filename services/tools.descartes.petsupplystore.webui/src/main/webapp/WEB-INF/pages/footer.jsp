@@ -17,20 +17,12 @@
 						class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a></li>
 			</ul>
 		</div>
-	</div>
-	<!--/.container-fluid -->
-</nav>
-
-
-<!-- Bootstrap core JavaScript
-    ================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	</div><%--/.container-fluid --%>
+</nav><%-- Bootstrap core JavaScript
+    ==================================================
+Placed at the end of the document so the pages load faster --%>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="<c:url value="/resizingscript.js"/>"></script>
-
 </body>
 </html>
-

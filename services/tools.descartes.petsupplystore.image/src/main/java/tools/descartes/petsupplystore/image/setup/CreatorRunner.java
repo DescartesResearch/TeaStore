@@ -11,7 +11,6 @@ import java.util.Base64;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +43,7 @@ public class CreatorRunner implements Runnable {
 	public void run() {
 		long imgID = ImageIDFactory.ID.getNextImageID();
 		Random rand = new Random(productID);
-	
+		
 		// All products must be added to the database
 		imgDB.setImageMapping(productID, imgID, size);
 
@@ -61,6 +60,9 @@ public class CreatorRunner implements Runnable {
 		} catch (IOException ioException) {
 			if (!(ioException instanceof ClosedByInterruptException)) {
 				log.warn("An IOException occured while writing image with ID " + String.valueOf(imgID) + " to file "
+						+ imgFile.toAbsolutePath() + ".", ioException);
+			} else {
+				log.warn("An exception was thrown during image creation with ID " + String.valueOf(imgID) + " to file "
 						+ imgFile.toAbsolutePath() + ".", ioException);
 			}
 		}

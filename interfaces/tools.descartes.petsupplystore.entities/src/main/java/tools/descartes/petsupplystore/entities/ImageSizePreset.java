@@ -1,14 +1,14 @@
 package tools.descartes.petsupplystore.entities;
 
-import java.util.Arrays;
 
 public enum ImageSizePreset {
 	ICON(new ImageSize(64, 64)),
 	PORTRAIT(new ImageSize(160, 240)),
 	LOGO(new ImageSize(600, 195)),
 	MAIN_IMAGE(new ImageSize(450, 450)),
-	PREVIEW(new ImageSize(125, 125)),
-	FULL(new ImageSize(600, 600)),
+	PREVIEW(new ImageSize(64, 64)),
+	RECOMMENDATION(new ImageSize(125, 125)),
+	FULL(new ImageSize(300, 300)),
 	ERROR(new ImageSize(600, 400)),
 	INDEX(new ImageSize(600, 450));
 
@@ -24,9 +24,9 @@ public enum ImageSizePreset {
 		return size;
 	}
 	
-	public static ImageSize getBiggestPreset() {
-		return Arrays.asList(ImageSizePreset.values()).stream()
-				.map(i -> i.getSize())
-				.max((a, b) -> a.getPixelCount() - b.getPixelCount()).orElse(STD_IMAGE_SIZE);
-	}
+//	public static ImageSize getBiggestPreset() {
+//		return Arrays.asList(ImageSizePreset.values()).stream()
+//				.map(i -> i.getSize())
+//				.max((a, b) -> a.getPixelCount() - b.getPixelCount()).orElse(STD_IMAGE_SIZE);
+//	}
 }

@@ -235,8 +235,8 @@ public enum SetupController {
 			imgCreationPool.execute(factory.newRunnable());
 		}
 		
-		log.info("Image creator thread started. {} images to generate using {} threads.", nrOfImagesToGenerate, 
-				SetupControllerConstants.CREATION_THREAD_POOL_SIZE);
+		log.info("Image creator thread started. {} {} sized images to generate using {} threads.", nrOfImagesToGenerate, 
+				ImageSizePreset.STD_IMAGE_SIZE.toString(), SetupControllerConstants.CREATION_THREAD_POOL_SIZE);
 	}
 	
 	public void detectCategoryImages() {

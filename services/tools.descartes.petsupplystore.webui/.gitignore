@@ -1,3 +1,4 @@
 /build/
 /target/
 /src/main/webapp/META-INF/context.xml
+*.xcf

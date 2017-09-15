@@ -1,12 +1,6 @@
-<%@include file="head.jsp"%>
-
-<%@include file="header.jsp"%>
-
+<%@include file="head.jsp"%><%@include file="header.jsp"%>
 <div class="container" id="main">
-
 	<div class="row">
-
-
 		<%@include file="categorylist.jsp"%>
 		<div class="col-sm-6 col-lg-8">
 			<h2 class="minipage-title">Order</h2>
@@ -97,12 +91,6 @@
 				<input class="btn" name="confirm" value="Confirm" type="submit">
 			</form>
 		</div>
-
 	</div>
-
 </div>
-
-
-
 <%@include file="footer.jsp"%>
-

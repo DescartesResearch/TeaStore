@@ -114,13 +114,9 @@
 						</c:choose>
 					</tr>
 				</table>
-				<c:if test = "${dbfinished}">
-         			
-      			</c:if>
+				<input type="button" class="btn errorbtn" value="Back to Shop" onclick="location.href = '<c:url value='/' />';">
 			</div>
 		</div>
-		<input type="button" class="btn errorbtn" value="Back to Shop"
-					onclick="location.href = '<c:url value='/' />';">
 </div>
 
 

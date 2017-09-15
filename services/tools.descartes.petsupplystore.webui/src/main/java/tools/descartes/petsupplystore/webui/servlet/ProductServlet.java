@@ -25,8 +25,10 @@ import javax.servlet.http.HttpServletResponse;
 import tools.descartes.petsupplystore.entities.ImageSizePreset;
 import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.entities.message.SessionBlob;
+import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
+import tools.descartes.petsupplystore.webui.servlet.elhelper.ELHelperUtils;
 
 /**
  * Servlet implementation for the web view of "Product"
@@ -45,11 +47,11 @@ public class ProductServlet extends AbstractUIServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * {@inheritDoc}
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	@Override
+	protected void doGetInternal(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, LoadBalancerTimeoutException {
 		checkforCookie(request, response);
 		if (request.getParameter("id") != null) {
 			long id = Long.valueOf(request.getParameter("id"));
@@ -66,24 +68,17 @@ public class ProductServlet extends AbstractUIServlet {
 			}
 			request.setAttribute("Advertisment", ad);
 
-			request.setAttribute("productImages", LoadBalancedImageOperations.getProductPreviewImages(ad));
+			request.setAttribute("productImages", LoadBalancedImageOperations.getProductImages(ad, 
+					ImageSizePreset.RECOMMENDATION.getSize()));
 			request.setAttribute("productImage", LoadBalancedImageOperations.getProductImage(p));
 			request.setAttribute("storeIcon", 
 					LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
+			request.setAttribute("helper", ELHelperUtils.UTILS);
 
 			request.getRequestDispatcher("WEB-INF/pages/product.jsp").forward(request, response);
 		} else {
 			redirect("/", response);
 		}
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
 	}
 
 }

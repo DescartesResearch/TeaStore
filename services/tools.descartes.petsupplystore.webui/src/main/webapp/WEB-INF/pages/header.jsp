@@ -1,11 +1,6 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<!-- Static navbar -->
-<nav id="headnav" class="navbar navbar-default container">
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%><%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%><%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%-- static navbar --%><nav id="headnav" class="navbar navbar-default container">
 	<div class="container-fluid">
-
 		<div class="navbar-header">
 			<button id="navbarbutton" type="button" class="navbar-toggle collapsed"
 				data-toggle="collapse" data-target="#navbar" aria-controls="navbar">
@@ -15,14 +10,9 @@
 			</button>
 			<a class="navbar-brand" href="<c:url value="/"/>">
     <img src="${storeIcon}" width="30" height="30" class="d-inline-block align-top" alt="">
-    Pet Supply Store
-  </a>
-			
-
+    Pet Supply Store</a>
 		</div>
-
 		<div id="navbar" class="navbar-collapse collapse">
-
 			<ul class="nav navbar-nav navbar-right headnavbarlist">
 				<c:choose>
 					<c:when test="${login == true}">
@@ -37,7 +27,6 @@
 								in</a></li>
 					</c:otherwise>
 				</c:choose>
-
 				<li><a href="<c:url value="/cart"/>"><span
 						class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></a></li>
 			</ul>
@@ -48,6 +37,5 @@
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			<strong>Success!</strong> ${message}
 		</div>
-	</c:if>
-	<!--/.container-fluid -->
+	</c:if><%--/.container-fluid --%>
 </nav>

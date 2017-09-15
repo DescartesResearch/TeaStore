@@ -33,13 +33,15 @@ import org.glassfish.jersey.client.ClientProperties;
  */
 public class RESTClient<T> {
 	
-	private static final int CONNECT_TIMEOUT = 750;
-	private static final int READ_TIMEOUT = 4000;
+	private static final int CONNECT_TIMEOUT = 400;
+	private static final int DEFAULT_READ_TIMEOUT = 3000;
 	
 	/**
 	 * Default REST application path.
 	 */
 	public static final String DEFAULT_REST_APPLICATION = "rest";
+	
+	private static int readTimeout = DEFAULT_READ_TIMEOUT;
 	
 	private String applicationURI;
 	private String endpointURI;
@@ -70,7 +72,7 @@ public class RESTClient<T> {
 		}
 		ClientConfig config = new ClientConfig();
 		config.property(ClientProperties.CONNECT_TIMEOUT, CONNECT_TIMEOUT);
-		config.property(ClientProperties.READ_TIMEOUT, READ_TIMEOUT);
+		config.property(ClientProperties.READ_TIMEOUT, readTimeout);
 		client = ClientBuilder.newClient(config);
 		service = client.target(UriBuilder.fromUri(hostURL).build());
 		applicationURI = application;
@@ -93,6 +95,14 @@ public class RESTClient<T> {
 		    genericListType = new GenericType<List<T>>(parameterizedGenericType) { };
 	}
 
+	/**
+	 * Sets the global read timeout for all REST clients of this service.
+	 * @param readTimeout The read timeout in ms.
+	 */
+	public static void setGlobalReadTimeout(int readTimeout) {
+		RESTClient.readTimeout = readTimeout;
+	}
+	
 	/**
 	 * Generic type of return lists.
 	 * @return Generic List type.

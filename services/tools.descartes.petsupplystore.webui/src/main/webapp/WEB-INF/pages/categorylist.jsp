@@ -1,6 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%><%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%><%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <div class="col-sm-3 col-md-3 col-lg-2 sidebar">
 	<h3>Categories</h3>
 	<ul class="nav-sidebar">
@@ -11,5 +9,4 @@
 					<span>${category.description}</span></a></li>
 		</c:forEach>
 	</ul>
-
 </div>

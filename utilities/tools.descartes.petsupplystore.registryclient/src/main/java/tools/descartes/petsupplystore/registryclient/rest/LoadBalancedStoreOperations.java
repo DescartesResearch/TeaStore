@@ -70,7 +70,7 @@ public final class LoadBalancedStoreOperations {
 				"products", Product.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("" + pid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		try{
+		try {
 			return r.readEntity(Product.class);
 		} catch (NullPointerException e) {
 			return null;
@@ -204,7 +204,7 @@ public final class LoadBalancedStoreOperations {
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
 		try {
 			return r.readEntity(SessionBlob.class);
-		} catch (NullPointerException e) {
+		} catch (Exception e) {
 			return new SessionBlob();
 		}
 	}

@@ -1,4 +1,13 @@
-prefix = "http://10.1.12.208:8080/tools.descartes.petsupplystore.webui/"
+--[[
+	petsupply_browse profile. Sends cyclical requests to webui instance or front-end loadbalancer.
+	Browses store and updates shopping carts.
+	Does not perform any actions that would change the database.
+--]]
+
+--[[
+	Global Variables. Initialized at load driver startup.
+--]]
+prefix = "http://10.1.1.1:8080/tools.descartes.petsupplystore.webui/"
 productviewcount = 30
 postIndex = {3, 11}
 

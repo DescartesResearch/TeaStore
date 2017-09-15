@@ -24,8 +24,10 @@ public class UserInformationTest extends AbstractStoreRestTest {
 		User u = LoadBalancedStoreOperations.getUser(509);
 		Assert.assertTrue(u != null);
 		
-		User u2 = LoadBalancedStoreOperations.getUser(-1);
-		Assert.assertTrue(u2 == null);
+		try {
+			LoadBalancedStoreOperations.getUser(-1);
+			Assert.fail();
+		} catch (Exception e) {}
 		
 		List<Order> categories = LoadBalancedStoreOperations.getOrdersForUser(509);
 		Assert.assertTrue(categories != null && categories.size() != 0);

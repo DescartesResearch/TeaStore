@@ -27,6 +27,7 @@ import javax.ws.rs.core.MediaType;
 import tools.descartes.petsupplystore.entities.ImageSizePreset;
 import tools.descartes.petsupplystore.registryclient.RegistryClient;
 import tools.descartes.petsupplystore.registryclient.Service;
+import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
 
@@ -47,11 +48,11 @@ public class StatusServlet extends AbstractUIServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * {@inheritDoc}
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	@Override
+	protected void doGetInternal(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, LoadBalancerTimeoutException {
 		checkforCookie(request, response);
 		String iconImage = null;
 		try {
@@ -113,15 +114,6 @@ public class StatusServlet extends AbstractUIServlet {
 			return finished;
 		}
 		return false;
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
 	}
 
 }
