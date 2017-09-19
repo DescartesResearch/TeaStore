@@ -14,6 +14,8 @@
 package tools.descartes.petsupplystore.webui.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -175,9 +177,13 @@ public abstract class AbstractUIServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			doGetInternal(request, response);
-		} catch (LoadBalancerTimeoutException e) {
-			serveTimoutResponse(request, response, e.getTargetService());
+			try {
+				doGetInternal(request, response);
+			} catch (LoadBalancerTimeoutException e) {
+				serveTimoutResponse(request, response, e.getTargetService());
+			}
+		} catch (Exception e) {
+			serveExceptionResponse(request, response, e);
 		}
 		
 	}
@@ -189,11 +195,14 @@ public abstract class AbstractUIServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			doPostInternal(request, response);
-		} catch (LoadBalancerTimeoutException e) {
-			serveTimoutResponse(request, response, e.getTargetService());
+			try {
+				doPostInternal(request, response);
+			} catch (LoadBalancerTimeoutException e) {
+				serveTimoutResponse(request, response, e.getTargetService());
+			}
+		} catch (Exception e) {
+			serveExceptionResponse(request, response, e);
 		}
-		
 	}
 	
 	/**
@@ -229,6 +238,21 @@ public abstract class AbstractUIServlet extends HttpServlet {
 		request.setAttribute("messagetitle", "408: Timout waiting for Service: " + service.getServiceName());
 		request.setAttribute("messageparagraph", "WebUI got a timeout waiting for service \"" + service.getServiceName()
 			+ "\" to respond. Note the that service may itself have been waiting for another service.");
+		request.setAttribute("login", false);
+		request.getRequestDispatcher("WEB-INF/pages/error.jsp").forward(request, response);
+	}
+	
+	private void serveExceptionResponse(HttpServletRequest request, HttpServletResponse response, Exception e) throws ServletException, IOException {
+		StringWriter sw = new StringWriter();
+		e.printStackTrace(new PrintWriter(sw));
+		String exceptionAsString = sw.toString();
+		response.setStatus(500);
+		request.setAttribute("CategoryList", new ArrayList<Category>());
+		request.setAttribute("storeIcon", "");
+		request.setAttribute("errorImage", "");
+		request.setAttribute("title", "Pet Supply Store Timeout");
+		request.setAttribute("messagetitle", "500: Internal Exception: " + e.getMessage());
+		request.setAttribute("messageparagraph", exceptionAsString);
 		request.setAttribute("login", false);
 		request.getRequestDispatcher("WEB-INF/pages/error.jsp").forward(request, response);
 	}
