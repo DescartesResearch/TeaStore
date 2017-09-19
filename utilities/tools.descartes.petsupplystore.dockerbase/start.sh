@@ -6,3 +6,4 @@ sed -i "s/%%REGISTRY_HOST%%/${REGISTRY_HOST}/g" /usr/local/tomcat/conf/context.x
 sed -i "s/%%REGISTRY_PORT%%/${REGISTRY_PORT}/g" /usr/local/tomcat/conf/context.xml
 sed -i "s/%%DB_HOST%%/${DB_HOST}/g" /usr/local/tomcat/conf/context.xml
 sed -i "s/%%DB_PORT%%/${DB_PORT}/g" /usr/local/tomcat/conf/context.xml
+sed -i 's/securerandom.source=file:\/dev\/random/securerandom.source=file:\/dev\/urandom/g' /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security

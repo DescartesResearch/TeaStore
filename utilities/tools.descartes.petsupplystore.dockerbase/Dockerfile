@@ -23,7 +23,8 @@ ENV DB_HOST 127.0.0.1
 ENV DB_PORT 3306
 
 # Setting secure random number generation to urandom. This increases the startup speed.
-ENV JAVA_OPTS $JAVA_OPTS -Dsecurerandom.source=file:/dev/urandom
+# Environment variable no longer needed. Replaced by sed in start.sh
+# ENV JAVA_OPTS $JAVA_OPTS -Dsecurerandom.source=file:/dev/urandom
 
 EXPOSE 8080
 
