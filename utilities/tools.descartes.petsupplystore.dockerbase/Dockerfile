@@ -21,6 +21,8 @@ ENV REGISTRY_HOST 127.0.0.1
 ENV REGISTRY_PORT 8080
 ENV DB_HOST 127.0.0.1
 ENV DB_PORT 3306
+ENV PROXY_NAME unset
+ENV PROXY_PORT unset
 
 # Setting secure random number generation to urandom. This increases the startup speed.
 # Environment variable no longer needed. Replaced by sed in start.sh
