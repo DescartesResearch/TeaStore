@@ -35,12 +35,9 @@ public final class LoadBalancedStoreOperations {
 				"categories", Category.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		try {
-			return r.readEntity(new GenericType<List<Category>>() { });
-		} catch (NullPointerException e) {
-			return new ArrayList<>();
-		}
-		
+		if (r == null || r.getStatus() != 200)
+			return null;
+		return r.readEntity(new GenericType<List<Category>>() { });
 	}
 	
 	/**
@@ -53,11 +50,9 @@ public final class LoadBalancedStoreOperations {
 				"categories", Category.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("" + cid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		try {
-			return r.readEntity(Category.class);
-		} catch (NullPointerException e) {
+		if (r == null || r.getStatus() != 200)
 			return null;
-		}
+		return r.readEntity(Category.class);
 	}
 	
 	/**
@@ -70,11 +65,9 @@ public final class LoadBalancedStoreOperations {
 				"products", Product.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("" + pid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		try {
-			return r.readEntity(Product.class);
-		} catch (NullPointerException e) {
+		if (r == null || r.getStatus() != 200)
 			return null;
-		}
+		return r.readEntity(Product.class);
 	}
 
 	/**
@@ -89,11 +82,9 @@ public final class LoadBalancedStoreOperations {
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob.getOrderItems(), MediaType.APPLICATION_JSON), Response.class));
-		try {
-			return r.readEntity(new GenericType<List<Product>>() { });
-		} catch (NullPointerException e) {
+		if (r == null || r.getStatus() != 200)
 			return new ArrayList<>();
-		}
+		return r.readEntity(new GenericType<List<Product>>() { });
 	}
 	
 	/**
@@ -109,11 +100,9 @@ public final class LoadBalancedStoreOperations {
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob.getOrderItems(), MediaType.APPLICATION_JSON), Response.class));
-		try {
-			return r.readEntity(new GenericType<List<Product>>() { });
-		} catch (NullPointerException e) {
+		if (r == null || r.getStatus() != 200)
 			return new ArrayList<>();
-		}
+		return r.readEntity(new GenericType<List<Product>>() { });
 	}
 	
 	/**
@@ -127,11 +116,9 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("category").path("" + cid).path("totalNumber")
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		try {
-			return r.readEntity(int.class);
-		} catch (NullPointerException e) {
+		if (r == null || r.getStatus() != 200)
 			return 0;
-		}
+		return r.readEntity(int.class);
 	}
 	
 	/**
@@ -147,11 +134,9 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("category").path("" + cid).queryParam("page", page)
 				.queryParam("articlesPerPage", articlesPerPage).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		try {
-			return r.readEntity(new GenericType<List<Product>>() { });
-		} catch (NullPointerException e) {
+		if (r == null || r.getStatus() != 200)
 			return new ArrayList<>();
-		}
+		return r.readEntity(new GenericType<List<Product>>() { });
 	}
 	
 	/**
@@ -182,11 +167,9 @@ public final class LoadBalancedStoreOperations {
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		if (r != null && r.getStatus() == 200)  {
-			return r.readEntity(SessionBlob.class);
-		} else {
+		if (r == null || r.getStatus() != 200)
 			return null;
-		}
+		return r.readEntity(SessionBlob.class);
 	}
 	
 	/**
@@ -202,11 +185,9 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("login").queryParam("name", name)
 				.queryParam("password", password).request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		try {
-			return r.readEntity(SessionBlob.class);
-		} catch (Exception e) {
+		if (r == null || r.getStatus() != 200)
 			return new SessionBlob();
-		}
+		return r.readEntity(SessionBlob.class);
 	}
 	
 	/**
@@ -220,11 +201,9 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("logout").request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		try {
-			return r.readEntity(SessionBlob.class);
-		} catch (NullPointerException e) {
+		if (r == null || r.getStatus() != 200)
 			return new SessionBlob();
-		}
+		return r.readEntity(SessionBlob.class);
 	}
 	
 	/**
@@ -238,15 +217,10 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("isloggedin").request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		try {
-			SessionBlob validatedBlob = r.readEntity(SessionBlob.class);
-			if (validatedBlob == null) {
-				return false;
-			}
-			return validatedBlob != null;
-		} catch (NullPointerException e) {
+		if (r == null || r.getStatus() != 200)
 			return false;
-		}
+		SessionBlob validatedBlob = r.readEntity(SessionBlob.class);
+		return validatedBlob != null;
 	}
 	
 	/**
@@ -261,11 +235,9 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("add").path("" + pid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		if (r != null && r.getStatus() == 200)  {
-			return r.readEntity(SessionBlob.class);
-		} else {
+		if (r == null || r.getStatus() != 200)
 			return null;
-		}
+		return r.readEntity(SessionBlob.class);
 	}
 	
 	/**
@@ -280,11 +252,9 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("remove").path("" + pid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		if (r != null && r.getStatus() == 200) {
-			return r.readEntity(SessionBlob.class);
-		} else {
+		if (r == null || r.getStatus() != 200)
 			return null;
-		}
+		return r.readEntity(SessionBlob.class);
 	}
 	
 	/**
@@ -303,11 +273,9 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("" + pid).queryParam("quantity", quantity)
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.put(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		if (r != null && r.getStatus() == 200) {
-			return r.readEntity(SessionBlob.class);
-		} else {
+		if (r == null || r.getStatus() != 200)
 			return null;
-		}
+		return r.readEntity(SessionBlob.class);
 	}
 	
 	/**
@@ -321,11 +289,9 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("" + uid)
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.get());
-		try {
-			return r.readEntity(User.class);
-		} catch (NullPointerException e) {
+		if (r == null || r.getStatus() != 200)
 			return null;
-		}
+		return r.readEntity(User.class);
 		
 	}
 	
@@ -340,11 +306,9 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("" + uid).path("orders")
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.get());
-		try {
-			return r.readEntity(new GenericType<List<Order>>() { });
-		} catch (NullPointerException e) {
+		if (r == null || r.getStatus() != 200)
 			return new ArrayList<>();
-		}
+		return r.readEntity(new GenericType<List<Order>>() { });
 	}
 }
 
