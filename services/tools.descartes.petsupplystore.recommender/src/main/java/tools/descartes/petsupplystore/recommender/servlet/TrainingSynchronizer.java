@@ -42,13 +42,13 @@ import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperat
  * @author Johannes Grohmann
  *
  */
-public final class ServiceSynchronizer {
+public final class TrainingSynchronizer {
 
-	private ServiceSynchronizer() {
+	private TrainingSynchronizer() {
 
 	}
 
-	private static final Logger LOG = LoggerFactory.getLogger(ServiceSynchronizer.class);
+	private static final Logger LOG = LoggerFactory.getLogger(TrainingSynchronizer.class);
 
 	/**
 	 * The maximum considered time in milliseconds. Long.MAX_VALUE signals no entry,
@@ -60,7 +60,7 @@ public final class ServiceSynchronizer {
 	 * @return the maxTime
 	 */
 	public static long getMaxTime() {
-		return ServiceSynchronizer.maxTime;
+		return TrainingSynchronizer.maxTime;
 	}
 
 	/**
@@ -68,7 +68,7 @@ public final class ServiceSynchronizer {
 	 *            the maxTime to set
 	 */
 	public static void setMaxTime(String maxTime) {
-		ServiceSynchronizer.maxTime = toMillis(maxTime);
+		TrainingSynchronizer.maxTime = toMillis(maxTime);
 	}
 
 	/**
@@ -76,7 +76,7 @@ public final class ServiceSynchronizer {
 	 *            the maxTime to set
 	 */
 	public static void setMaxTime(long maxTime) {
-		ServiceSynchronizer.maxTime = maxTime;
+		TrainingSynchronizer.maxTime = maxTime;
 	}
 
 	/**

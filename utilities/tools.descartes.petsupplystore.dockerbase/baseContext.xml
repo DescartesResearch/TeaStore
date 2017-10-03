@@ -12,6 +12,9 @@
     <!-- Database settings, specify if not localhost:3306 -->
     <Environment name="databaseHost" value="%%DB_HOST%%" type="java.lang.String" override="false"/>
     <Environment name="databasePort" value="%%DB_PORT%%" type="java.lang.String" override="false"/>
+    
+    <!-- Recommender settings, specify loop time in ms if periodic retraining is required -->
+    <Environment name="recommenderLoopTime" value="0" type="java.lang.Long" override="false"/>
 
     <!-- General Tomcat setting: disable session persistence; improves startup times. -->
     <Manager pathname="" />

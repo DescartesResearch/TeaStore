@@ -13,44 +13,52 @@
  */
 package tools.descartes.petsupplystore.recommender.servlet;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
-import tools.descartes.petsupplystore.recommender.rest.TrainEndpoint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import tools.descartes.petsupplystore.registryclient.RegistryClient;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.StartupCallback;
 import tools.descartes.petsupplystore.rest.RESTClient;
 
 /**
- * Application Lifecycle Listener implementation class Registry Client Startup.
- * @author Simon Eismann
+ * Startup Handler for the Recommender Service.
+ * 
+ * @author Simon Eismann, Johannes Grohmann
  *
  */
 @WebListener
 public class RecommenderStartup implements ServletContextListener {
-	
+
 	private static final int REST_READ_TIMOUT = 1750;
-	
+
+	private static final Logger LOG = LoggerFactory.getLogger(RecommenderStartup.class);
+
 	/**
 	 * Also set this accordingly in RegistryClientStartup.
 	 */
-	
+
 	/**
 	 * Empty constructor.
 	 */
-    public RecommenderStartup() {
-    	
-    }
+	public RecommenderStartup() {
+
+	}
 
 	/**
-     * @see ServletContextListener#contextDestroyed(ServletContextEvent)
-     * @param event The servlet context event at destruction.
-     */
-    public void contextDestroyed(ServletContextEvent event)  { 
+	 * @see ServletContextListener#contextDestroyed(ServletContextEvent)
+	 * @param event
+	 *            The servlet context event at destruction.
+	 */
+	public void contextDestroyed(ServletContextEvent event) {
 		RegistryClient.getClient().unregister(event.getServletContext().getContextPath());
-    }
+	}
 
 	/**
 	 * @see ServletContextListener#contextInitialized(ServletContextEvent)
@@ -58,15 +66,25 @@ public class RecommenderStartup implements ServletContextListener {
 	 *            The servlet context event at initialization.
 	 */
 	public void contextInitialized(ServletContextEvent event) {
-	    RESTClient.setGlobalReadTimeout(REST_READ_TIMOUT);
+		RESTClient.setGlobalReadTimeout(REST_READ_TIMOUT);
 		RegistryClient.getClient().runAfterServiceIsAvailable(Service.PERSISTENCE, new StartupCallback() {
 
 			@Override
 			public void callback() {
-				ServiceSynchronizer.retrieveDataAndRetrain();
+				TrainingSynchronizer.retrieveDataAndRetrain();
 				RegistryClient.getClient().register(event.getServletContext().getContextPath());
 			}
 		}, Service.RECOMMENDER);
-    }
-    
+		try {
+			long looptime = (Long) new InitialContext().lookup("java:comp/env/recommenderLoopTime");
+			// if a looptime is specified, a retraining daemon is started
+			if (looptime > 0) {
+				new RetrainDaemon(looptime).start();
+			}
+		} catch (NamingException e) {
+			LOG.info("Recommender loop time not set. Disabling periodic retraining.");
+		}
+
+	}
+
 }
