@@ -20,7 +20,7 @@ import javax.ws.rs.core.Response;
 
 import tools.descartes.petsupplystore.entities.Order;
 import tools.descartes.petsupplystore.entities.OrderItem;
-import tools.descartes.petsupplystore.recommender.IRecommender;
+import tools.descartes.petsupplystore.recommender.algorithm.IRecommender;
 import tools.descartes.petsupplystore.recommender.servlet.ServiceSynchronizer;
 
 /**

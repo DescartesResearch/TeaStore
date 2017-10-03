@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import tools.descartes.petsupplystore.entities.Order;
 import tools.descartes.petsupplystore.entities.OrderItem;
-import tools.descartes.petsupplystore.recommender.RecommenderSelector;
+import tools.descartes.petsupplystore.recommender.algorithm.RecommenderSelector;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;

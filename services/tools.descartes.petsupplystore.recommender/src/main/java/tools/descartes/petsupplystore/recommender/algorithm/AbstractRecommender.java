@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import tools.descartes.petsupplystore.entities.Order;
 import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.entities.Product;
-import tools.descartes.petsupplystore.recommender.IRecommender;
 
 /**
  * Abstract class for basic recommendation functionality.
