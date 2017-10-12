@@ -13,6 +13,7 @@ COPY mysql-connector-java-5.1.44-bin.jar /usr/local/tomcat/lib/mysql-connector-j
 COPY start.sh /usr/local/tomcat/bin/start.sh
 COPY configurememory /usr/local/tomcat/bin/configurememory
 RUN chmod +x /usr/local/tomcat/bin/start.sh
+RUN chmod +x /usr/local/tomcat/bin/configurememory
 
 # Service configuration. SERVICE_PORT is the host port, mapped to the exposed docker port. HOST_NAME
 # is the IP address or hostname of the host running the docker container
