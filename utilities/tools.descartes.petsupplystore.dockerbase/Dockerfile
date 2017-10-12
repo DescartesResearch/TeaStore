@@ -11,12 +11,13 @@ COPY mysql-connector-java-5.1.44-bin.jar /usr/local/tomcat/lib/mysql-connector-j
 
 # Copy script to replace placeholders in context.xml with the environment variables
 COPY start.sh /usr/local/tomcat/bin/start.sh
+COPY configurememory /usr/local/tomcat/bin/configurememory
 RUN chmod +x /usr/local/tomcat/bin/start.sh
 
 # Service configuration. SERVICE_PORT is the host port, mapped to the exposed docker port. HOST_NAME
 # is the IP address or hostname of the host running the docker container
 ENV SERVICE_PORT 8080
-ENV HOST_NAME 127.0.0.1
+ENV HOST_NAME unset
 ENV REGISTRY_HOST 127.0.0.1
 ENV REGISTRY_PORT 8080
 ENV DB_HOST 127.0.0.1
@@ -30,4 +31,4 @@ ENV PROXY_PORT unset
 
 EXPOSE 8080
 
-CMD /usr/local/tomcat/bin/start.sh && /usr/local/tomcat/bin/catalina.sh run
+CMD /usr/local/tomcat/bin/configurememory && /usr/local/tomcat/bin/start.sh && /usr/local/tomcat/bin/catalina.sh run
