@@ -1,9 +1,10 @@
 #!/bin/bash
+# This script calculates and sets the Java heap space for Tomcat within the container
 
 totalcontainermemory=$(($(grep MemTotal /proc/meminfo | awk '{print $2}') * 1024))
 containercgrouplimit=$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes)
 
 if (( $totalcontainermemory > $containercgrouplimit )); then
-	targetm=$(((($containercgrouplimit * 10) /8) / 1024))
+	targetm=$(((($containercgrouplimit / 1024) * 10) / 8))
 	sed -i "s/CATALINA_OPTS=\"/CATALINA_OPTS=\"-Xmx${targetm}m /g" /usr/local/tomcat/bin/catalina.sh
 fi

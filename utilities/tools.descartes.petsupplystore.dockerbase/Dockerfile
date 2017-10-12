@@ -31,4 +31,4 @@ ENV PROXY_PORT unset
 
 EXPOSE 8080
 
-CMD /usr/local/tomcat/bin/configurememory && /usr/local/tomcat/bin/start.sh && /usr/local/tomcat/bin/catalina.sh run
+CMD /usr/local/tomcat/bin/configurememory; /usr/local/tomcat/bin/start.sh && /usr/local/tomcat/bin/catalina.sh run
