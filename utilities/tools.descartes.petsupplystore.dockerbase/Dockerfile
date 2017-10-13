@@ -24,6 +24,7 @@ ENV DB_HOST 127.0.0.1
 ENV DB_PORT 3306
 ENV PROXY_NAME unset
 ENV PROXY_PORT unset
+ENV TOMCAT_HEAP_MEM_PERCENTAGE 75
 
 # Setting secure random number generation to urandom. This increases the startup speed.
 # Environment variable no longer needed. Replaced by sed in start.sh
@@ -31,4 +32,4 @@ ENV PROXY_PORT unset
 
 EXPOSE 8080
 
-CMD java -jar /usr/local/tomcat/bin/dockermemoryconfigurator.jar; /usr/local/tomcat/bin/start.sh && /usr/local/tomcat/bin/catalina.sh run
+CMD java -jar /usr/local/tomcat/bin/dockermemoryconfigurator.jar ${TOMCAT_HEAP_MEM_PERCENTAGE}; /usr/local/tomcat/bin/start.sh && /usr/local/tomcat/bin/catalina.sh run
