@@ -139,9 +139,9 @@ public final class Configurator {
 			catalinain.delete();
 			catalinaout.renameTo(catalinain);
 			try {
-				Runtime.getRuntime().exec("chmod +x " + catalinaout.getAbsolutePath());
+				Runtime.getRuntime().exec("chmod +x " + CATALINA_SH_PATH);
 			} catch (IOException e) {
-				System.out.println("Cannot chmod " + catalinaout.getAbsolutePath());
+				System.out.println("Cannot chmod " + CATALINA_SH_PATH);
 			}
 		}
 	}
