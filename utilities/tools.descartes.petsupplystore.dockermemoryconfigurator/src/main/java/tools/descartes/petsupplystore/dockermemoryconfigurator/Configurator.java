@@ -123,7 +123,7 @@ public final class Configurator {
 				while (in.hasNextLine()) {
 					String line = in.nextLine();
 					if (line.contains("CATALINA_OPTS=\"")) {
-						line.replaceFirst("CATALINA_OPTS=\"", "CATALINA_OPTS=\"-Xmx" + heapkb + "k ");
+						line = line.replaceFirst("CATALINA_OPTS=\"", "CATALINA_OPTS=\"-Xmx" + heapkb + "k ");
 					}
 					out.write(line + "\n");
 				}
