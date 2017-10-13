@@ -38,7 +38,7 @@ public final class Configurator {
         System.out.println("Container CGroup Limit = " + cgroupkb + " KiB");
         
         if (cgroupkb != 0 && totalkb != 0 && cgroupkb < totalkb) {
-        	long heapkb = (cgroupkb * 100L) / percentage;
+        	long heapkb = (cgroupkb * percentage) / 100L;
         	System.out.println("Setting heap space to " + heapkb + " KiB");
         	modifyCatalinash(heapkb);
         	
