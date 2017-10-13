@@ -5,7 +5,7 @@ if [ "$HOST_NAME" != "unset" ]
 then
 	sed -i "s/%%HOST_NAME%%/${HOST_NAME}/g" /usr/local/tomcat/conf/context.xml
 else
-	sed "/Environment name=\"hostName\"/d" /usr/local/tomcat/conf/context.xml
+	sed -i "/Environment name=\"hostName\"/d" /usr/local/tomcat/conf/context.xml
 fi
 sed -i "s/%%REGISTRY_HOST%%/${REGISTRY_HOST}/g" /usr/local/tomcat/conf/context.xml
 sed -i "s/%%REGISTRY_PORT%%/${REGISTRY_PORT}/g" /usr/local/tomcat/conf/context.xml

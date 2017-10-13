@@ -1,15 +1,12 @@
 package tools.descartes.petsupplystore.dockermemoryconfigurator;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -19,22 +16,26 @@ import java.util.Scanner;
  * @author Joakim von Kistowski
  *
  */
-public class Configurator {
+public final class Configurator {
     
 	private static final long DEFAULT_PERCENTAGE = 80;
 	private static final String CATALINA_SH_PATH = "/usr/local/tomcat/bin/catalina.sh";
+	
+	private Configurator() {
+		
+	}
 	
 	/**
 	 * Runs the configurator.
 	 * @param args Percentage of total memory to be used for heap as the only parameter.
 	 */
-	public static void main( String[] args ) {
+	public static void main(String[] args) {
         long percentage = readPercentage(args);
         long totalkb = readTotalMemoryInKB();
         long cgroupkb = readCGroupMemoryInKB();
         
         System.out.println("Total Host Memory = " + totalkb + " KiB");
-        System.out.println("Container CGroup Limit = " + cgroupkb + "KiB");
+        System.out.println("Container CGroup Limit = " + cgroupkb + " KiB");
         
         if (cgroupkb != 0 && totalkb != 0 && cgroupkb < totalkb) {
         	long heapkb = (cgroupkb * 100L) / percentage;
@@ -104,7 +105,7 @@ public class Configurator {
 			try {
 				//use double, number may be too large
 				double bytes = Double.parseDouble(br.readLine().trim());
-				return (long)(bytes / 1024.0);
+				return (long) (bytes / 1024.0);
 			} catch (NumberFormatException e) {
 				return 0;
 			}
@@ -137,6 +138,11 @@ public class Configurator {
 		if (catalinain.exists() && catalinaout.exists()) {
 			catalinain.delete();
 			catalinaout.renameTo(catalinain);
+			try {
+				Runtime.getRuntime().exec("chmod +x " + catalinaout.getAbsolutePath());
+			} catch (IOException e) {
+				System.out.println("Cannot chmod " + catalinaout.getAbsolutePath());
+			}
 		}
 	}
 }
