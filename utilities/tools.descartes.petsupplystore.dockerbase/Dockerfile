@@ -24,7 +24,7 @@ ENV DB_HOST 127.0.0.1
 ENV DB_PORT 3306
 ENV PROXY_NAME unset
 ENV PROXY_PORT unset
-ENV TOMCAT_HEAP_MEM_PERCENTAGE 55
+ENV TOMCAT_HEAP_MEM_PERCENTAGE 50
 
 # Setting secure random number generation to urandom. This increases the startup speed.
 # Environment variable no longer needed. Replaced by sed in start.sh
