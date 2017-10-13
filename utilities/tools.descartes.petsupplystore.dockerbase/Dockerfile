@@ -8,12 +8,11 @@ RUN mkdir /usr/local/tomcat/webapps
 # Copy config, database connector library and script for environment variables into container
 COPY baseContext.xml /usr/local/tomcat/conf/context.xml
 COPY mysql-connector-java-5.1.44-bin.jar /usr/local/tomcat/lib/mysql-connector-java-5.1.44-bin.jar
+COPY ./../tools.descartes.petsupplystore.dockermemoryconfigurator/target/dockermemoryconfigurator.jar /usr/local/tomcat/bin/dockermemoryconfigurator.jar
 
 # Copy script to replace placeholders in context.xml with the environment variables
 COPY start.sh /usr/local/tomcat/bin/start.sh
-COPY configurememory /usr/local/tomcat/bin/configurememory
 RUN chmod +x /usr/local/tomcat/bin/start.sh
-RUN chmod +x /usr/local/tomcat/bin/configurememory
 
 # Service configuration. SERVICE_PORT is the host port, mapped to the exposed docker port. HOST_NAME
 # is the IP address or hostname of the host running the docker container
@@ -32,4 +31,4 @@ ENV PROXY_PORT unset
 
 EXPOSE 8080
 
-CMD bash /usr/local/tomcat/bin/configurememory; /usr/local/tomcat/bin/start.sh && /usr/local/tomcat/bin/catalina.sh run
+CMD java -jar /usr/local/tomcat/bin/dockermemoryconfigurator.jar; /usr/local/tomcat/bin/start.sh && /usr/local/tomcat/bin/catalina.sh run

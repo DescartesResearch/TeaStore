@@ -1,8 +1,12 @@
 package tools.descartes.petsupplystore.dockermemoryconfigurator;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.InputMismatchException;
@@ -96,20 +100,17 @@ public class Configurator {
 			return 0;
 		}
 		
-		try (Scanner scan = new Scanner(cgroupbytes)) {
-			if (scan.hasNextLine()) {
-				try {
-					long bytes = scan.nextLong();
-					return bytes / 1024L;
-				} catch (InputMismatchException e) {
-					return 0;
-				}
-	        }
+		try (BufferedReader br = new BufferedReader(new FileReader(cgroupbytes))) {
+			try {
+				//use double, number may be too large
+				double bytes = Double.parseDouble(br.readLine().trim());
+				return (long)(bytes / 1024.0);
+			} catch (NumberFormatException e) {
+				return 0;
+			}
 		} catch (IOException e) {
 			return 0;
 		}
-		
-		return 0;
 	}
 	
 	private static void modifyCatalinash(long heapkb) {
