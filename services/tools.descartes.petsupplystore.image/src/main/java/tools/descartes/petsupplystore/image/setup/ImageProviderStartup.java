@@ -20,6 +20,7 @@ import javax.servlet.annotation.WebListener;
 import tools.descartes.petsupplystore.registryclient.RegistryClient;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.StartupCallback;
+import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
 
 /**
  * Application Lifecycle Listener implementation class Registry Client Startup.
@@ -50,6 +51,7 @@ public class ImageProviderStartup implements ServletContextListener {
      * @param event The servlet context event at initialization.
      */
     public void contextInitialized(ServletContextEvent event)  {
+    	ServiceLoadBalancer.preInitializeServiceLoadBalancers(Service.PERSISTENCE);
     	RegistryClient.getClient().runAfterServiceIsAvailable(Service.PERSISTENCE, new StartupCallback() {
 			
 			@Override

@@ -2,7 +2,7 @@ package tools.descartes.petsupplystore.registryclient;
 
 /**
  * Interface for callback at startup.
- * @author Simon
+ * @author Simon Eismann
  *
  */
 public interface StartupCallback {

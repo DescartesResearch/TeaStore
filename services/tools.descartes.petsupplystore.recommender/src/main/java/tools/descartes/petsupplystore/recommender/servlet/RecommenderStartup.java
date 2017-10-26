@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import tools.descartes.petsupplystore.registryclient.RegistryClient;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.StartupCallback;
+import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
 import tools.descartes.petsupplystore.rest.RESTClient;
 
 /**
@@ -67,6 +68,7 @@ public class RecommenderStartup implements ServletContextListener {
 	 */
 	public void contextInitialized(ServletContextEvent event) {
 		RESTClient.setGlobalReadTimeout(REST_READ_TIMOUT);
+		ServiceLoadBalancer.preInitializeServiceLoadBalancers(Service.PERSISTENCE);
 		RegistryClient.getClient().runAfterServiceIsAvailable(Service.PERSISTENCE, new StartupCallback() {
 
 			@Override
