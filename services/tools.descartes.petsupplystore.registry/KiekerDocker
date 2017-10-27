@@ -12,19 +12,18 @@ RUN mkdir /opt/kieker && mkdir /opt/kieker/tmp-config
 COPY kieker.monitoring.properties /opt/kieker/tmp-config/kieker.monitoring.properties
 COPY target/tools.descartes.petsupplystore.registry.war /usr/local/tomcat/webapps/tools.descartes.petsupplystore.registry.war
 
-RUN \
-  mkdir -p /opt/kieker/agent && \
-  mkdir -p /opt/kieker/logs && \
-  wget -q "${KIEKER_AGENT_JAR_SRC}" -O "/opt/kieker/agent/agent.jar" && \
-  ln -s /usr/local/tomcat/webapps /opt/kieker/webapps && \
-  sed -i '250i\'"export KIEKER_JAVA_OPTS=\" \
+RUN  mkdir -p /opt/kieker/agent
+RUN  mkdir -p /opt/kieker/logs
+RUN  wget -q "${KIEKER_AGENT_JAR_SRC}" -O "/opt/kieker/agent/agent.jar"
+RUN  ln -s /usr/local/tomcat/webapps /opt/kieker/webapps
+RUN  sed -i '250i\'"export KIEKER_JAVA_OPTS=\" \
     -javaagent:/opt/kieker/agent/agent.jar \
     -Dkieker.monitoring.configuration=/opt/kieker/config/kieker.monitoring.properties \
     -Dkieker.monitoring.writer.filesystem.AsciiFileWriter.customStoragePath=/opt/kieker/logs \
     -Daj.weaving.verbose=true \
     -Dkieker.monitoring.skipDefaultAOPConfiguration=true \
-    \"" /usr/local/tomcat/bin/catalina.sh && \
-  sed -i '251i\'"export JAVA_OPTS=\"\${KIEKER_JAVA_OPTS} \${JAVA_OPTS}\"" /usr/local/tomcat/bin/catalina.sh
+    \"" /usr/local/tomcat/bin/catalina.sh
+RUN  sed -i '251i\'"export JAVA_OPTS=\"\${KIEKER_JAVA_OPTS} \${JAVA_OPTS}\"" /usr/local/tomcat/bin/catalina.sh
   
   
 CMD \
