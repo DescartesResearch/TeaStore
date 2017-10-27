@@ -5,7 +5,7 @@ EXPOSE 8080
 
 WORKDIR /opt
 
-ENV KIEKER_AGENT_JAR_SRC "https://build.se.informatik.uni-kiel.de/jenkins/job/kieker-monitoring/job/kieker/job/master/lastSuccessfulBuild/artifact/build/libs/kieker-1.13-SNAPSHOT-aspectj.jar" 
+ENV KIEKER_AGENT_JAR_SRC "https://build.se.informatik.uni-kiel.de/jenkins/job/kieker-monitoring/job/kieker/job/master/lastSuccessfulBuild/artifact/build/libs/kieker-1.14-SNAPSHOT-aspectj.jar" 
 
 RUN mkdir /opt/kieker && mkdir /opt/kieker/tmp-config
 
