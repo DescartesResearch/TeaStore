@@ -18,6 +18,8 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import tools.descartes.petsupplystore.registryclient.RegistryClient;
+import tools.descartes.petsupplystore.registryclient.Service;
+import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
 
 /**
  * Application Lifecycle Listener implementation class Registry Client Startup.
@@ -46,6 +48,7 @@ public class WebuiStartup implements ServletContextListener {
      * @param arg0 The servlet context event at initialization.
      */
     public void contextInitialized(ServletContextEvent event)  {
+    	ServiceLoadBalancer.preInitializeServiceLoadBalancers(Service.STORE, Service.IMAGE);
     	RegistryClient.getClient().register(event.getServletContext().getContextPath());
     }
     

@@ -18,6 +18,8 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import tools.descartes.petsupplystore.registryclient.RegistryClient;
+import tools.descartes.petsupplystore.registryclient.Service;
+import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
 import tools.descartes.petsupplystore.rest.RESTClient;
 
 /**
@@ -55,6 +57,7 @@ public class StoreStartup implements ServletContextListener {
      */
     public void contextInitialized(ServletContextEvent event)  {
     	RESTClient.setGlobalReadTimeout(REST_READ_TIMOUT);
+    	ServiceLoadBalancer.preInitializeServiceLoadBalancers(Service.PERSISTENCE, Service.RECOMMENDER);
     	RegistryClient.getClient().register(event.getServletContext().getContextPath());
     }
     

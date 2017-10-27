@@ -62,6 +62,7 @@
 	</profiles>
 
 	<modules>
+		<module>./utilities/tools.descartes.petsupplystore.dockermemoryconfigurator</module>
 		<module>./interfaces/tools.descartes.petsupplystore.entities</module>
 		<module>./utilities/tools.descartes.petsupplystore.rest</module>
 		<module>./utilities/tools.descartes.petsupplystore.registryclient</module>

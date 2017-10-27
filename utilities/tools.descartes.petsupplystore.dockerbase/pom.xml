@@ -34,7 +34,13 @@
 	</repository>
   </repositories>
  
-  <dependencies></dependencies> 
+  <dependencies>
+  	<dependency>
+		<groupId>tools.descartes.petsupplystore</groupId>
+		<artifactId>dockermemoryconfigurator</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</dependency>
+  </dependencies> 
   
   <properties>  
   	<maven.compiler.source>1.8</maven.compiler.source>
@@ -44,6 +50,26 @@
   
   <build>
   	<plugins>
+  		<plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.0.2</version>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/jars</outputDirectory>
+              <overWriteReleases>false</overWriteReleases>
+              <overWriteSnapshots>false</overWriteSnapshots>
+              <overWriteIfNewer>true</overWriteIfNewer>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
   		<plugin>
   			<groupId>com.spotify</groupId>
   			<artifactId>dockerfile-maven-plugin</artifactId>

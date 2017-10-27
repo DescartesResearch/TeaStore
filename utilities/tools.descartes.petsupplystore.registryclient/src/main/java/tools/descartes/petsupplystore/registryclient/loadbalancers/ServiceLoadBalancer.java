@@ -66,6 +66,17 @@ public final class ServiceLoadBalancer {
     	this.targetService = targetService;
     }    
     
+    /**
+     * Initializes load balancers for the target services.
+     * Queries target service instances from the registry.
+     * @param targetServices The services to pre-initialize.
+     */
+    public static void preInitializeServiceLoadBalancers(Service... targetServices) {
+    	for (Service service : targetServices) {
+    		updateLoadBalancersForServiceUsingRegistry(service);
+    	}
+    }
+    
 	private static ServiceLoadBalancer getServiceLoadBalancer(Service targetService) {
 		ServiceLoadBalancer serviceBalancer = serviceMap.get(targetService.getServiceName());
     	if (serviceBalancer == null

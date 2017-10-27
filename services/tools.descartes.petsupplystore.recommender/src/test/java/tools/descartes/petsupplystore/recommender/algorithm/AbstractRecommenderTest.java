@@ -22,7 +22,6 @@ import org.junit.Test;
 
 import tools.descartes.petsupplystore.entities.Order;
 import tools.descartes.petsupplystore.entities.OrderItem;
-import tools.descartes.petsupplystore.recommender.IRecommender;
 
 /**
  * Abstract Recommender Test.

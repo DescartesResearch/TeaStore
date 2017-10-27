@@ -24,7 +24,7 @@ import javax.ws.rs.core.Response;
 
 import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.entities.Product;
-import tools.descartes.petsupplystore.recommender.RecommenderSelector;
+import tools.descartes.petsupplystore.recommender.algorithm.RecommenderSelector;
 
 /**
  * Recommender REST endpoint for single recommendation.
