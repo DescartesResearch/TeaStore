@@ -24,4 +24,7 @@
 	<filter-name>sessionAndTraceRegistrationFilter</filter-name>
 	<url-pattern>/*</url-pattern>
 </filter-mapping>
+	<listener>
+		<listener-class>org.iobserve.monitoring.probe.servlet.DeploymentContextListener</listener-class>
+	</listener>
 </web-app>
