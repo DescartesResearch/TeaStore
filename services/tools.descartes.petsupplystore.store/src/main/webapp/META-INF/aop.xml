@@ -1,5 +1,5 @@
 <!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.aspectj.org/dtd/aspectj_1_5_0.dtd">
-<aspectj>sadad
+<aspectj>
 	<weaver options="">
 		<include within="tools.descartes.petsupplystore..*"/>
 	</weaver>
@@ -24,5 +24,5 @@
 				|| execution(* com.netflix.recipes.rss.impl.CassandraStoreImpl.*(..))" />-->
 				<pointcut name="monitoredOperation" expression="execution(* tools.descartes.petsupplystore..*(..))" />
 		</concrete-aspect>
-	</aspects>vcxyycxvyxcvyxcv
+	</aspects>
 </aspectj>
