@@ -7,8 +7,9 @@ WORKDIR /opt
 
 ENV KIEKER_AGENT_JAR_SRC "https://build.se.informatik.uni-kiel.de/jenkins/job/kieker-monitoring/job/kieker/job/master/lastSuccessfulBuild/artifact/build/libs/kieker-1.14-SNAPSHOT-aspectj.jar" 
 
-RUN mkdir /opt/kieker && mkdir /opt/kieker/config
+RUN mkdir /opt/kieker && mkdir /opt/kieker/config && mkdir /opt/kieker/aop
 
+COPY aop.xml /opt/kieker/aop/aop.xml
 COPY kieker.monitoring.properties /opt/kieker/config/kieker.monitoring.properties
 COPY target/tools.descartes.petsupplystore.webui.war /usr/local/tomcat/webapps/tools.descartes.petsupplystore.webui.war
 
