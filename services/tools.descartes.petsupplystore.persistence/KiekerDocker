@@ -23,6 +23,7 @@ RUN \
     -Dkieker.monitoring.configuration=/opt/kieker/config/kieker.monitoring.properties \
     -Dkieker.monitoring.writer.filesystem.AsciiFileWriter.customStoragePath=/opt/kieker/logs \
     -Daj.weaving.verbose=true \
+    -Dorg.aspectj.weaver.loadtime.configuration=/opt/kieker/aop/aop.xml \
     -Dkieker.monitoring.skipDefaultAOPConfiguration=true \
     \"" /usr/local/tomcat/bin/catalina.sh && \
   sed -i '251i\'"export JAVA_OPTS=\"\${KIEKER_JAVA_OPTS} \${JAVA_OPTS}\"" /usr/local/tomcat/bin/catalina.sh
