@@ -267,6 +267,26 @@
 									</resources>
 								</configuration>
 							</execution>
+							<!-- COPY aop.xml -->
+							<execution>
+								<id>copy-aop2</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>deploy</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.basedir}/src/main/webapp/WEB-INF/classes/META-INF</outputDirectory>
+									<overwrite>true</overwrite>
+									<resources>
+										<resource>
+											<directory>../../utilities/tools.descartes.petsupplystore.kieker/</directory>
+											<includes>
+												<include>aop.xml</include>
+											</includes>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
 							<!-- COPY KIEKER LIBRARIES -->
 							<execution>
 								<id>copy-appCtx</id>
