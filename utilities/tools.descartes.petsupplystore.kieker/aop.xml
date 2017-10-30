@@ -13,16 +13,16 @@
 		<!--<aspect name="kieker.monitoring.probe.aspectj.jersey.OperationExecutionJerseyClientInterceptor"/>
 		<aspect name="kieker.monitoring.probe.aspectj.jersey.OperationExecutionJerseyServerInterceptor"/>-->
 		<!--<aspect name="kieker.monitoring.probe.aspectj.netty.NettyInterceptor"/>-->
-		<!--<concrete-aspect name="kieker.monitoring.probe.aspectj.operationExecution.TargetedAspect" extends="kieker.monitoring.probe.aspectj.operationExecution.AbstractOperationExecutionAspect">
-			<pointcut name="monitoredOperation" expression="execution(* com.netflix.recipes.rss.jersey.resources.MiddleTierResource.*(..))
+		<concrete-aspect name="kieker.monitoring.probe.aspectj.operationExecution.TargetedAspect" extends="kieker.monitoring.probe.aspectj.operationExecution.AbstractOperationExecutionAspect">
+			<!-- <pointcut name="monitoredOperation" expression="execution(* com.netflix.recipes.rss.jersey.resources.MiddleTierResource.*(..))
 				|| execution(* com.netflix.recipes.rss.manager.RSSManager.getSubscriptions(..))
 				|| execution(* com.netflix.recipes.rss.manager.RSSManager.addSubscription(..))
 				|| execution(* com.netflix.recipes.rss.manager.RSSManager.deleteSubscription(..))
 				|| execution(* com.netflix.recipes.rss.manager.RSSManager.fetchRSSFeed(..))
 				|| execution(* com.netflix.discovery.DiscoveryManager.*(..))
 				|| execution(* com.netflix.karyon.server.KaryonServer.start(..))
-				|| execution(* com.netflix.recipes.rss.impl.CassandraStoreImpl.*(..))" />
-				<!--<pointcut name="monitoredOperation" expression="execution(* com.netflix.recipes..*(..))" />-->
-		<!--</concrete-aspect>-->
+				|| execution(* com.netflix.recipes.rss.impl.CassandraStoreImpl.*(..))" />-->
+				<pointcut name="monitoredOperation" expression="execution(* tools.descartes.petsupplystore..*(..))" />
+		</concrete-aspect>
 	</aspects>
 </aspectj>
