@@ -272,7 +272,7 @@
 								<id>copy-aop2</id>
 								<phase>deploy</phase>
 								<goals>
-									<goal>deploy</goal>
+									<goal>copy-resources</goal>
 								</goals>
 								<configuration>
 									<outputDirectory>${project.basedir}/src/main/webapp/WEB-INF/classes/META-INF</outputDirectory>
