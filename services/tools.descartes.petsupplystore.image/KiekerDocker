@@ -19,7 +19,7 @@ RUN \
   ln -s /usr/local/tomcat/webapps /opt/kieker/webapps && \
   sed -i '250i\'"export KIEKER_JAVA_OPTS=\" \
     -javaagent:/opt/kieker/agent/agent.jar \
-    -Dkieker.monitoring.configuration=/opt/kieker/config/kieker.monitoring.properties \
+    -Dkieker.monitoring.configuration=/opt/kieker/tmp-config/kieker.monitoring.properties \
     -Dkieker.monitoring.writer.filesystem.AsciiFileWriter.customStoragePath=/opt/kieker/logs \
     -Daj.weaving.verbose=true \
     -Dkieker.monitoring.skipDefaultAOPConfiguration=true \
