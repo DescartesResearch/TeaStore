@@ -22,7 +22,7 @@
 				|| execution(* com.netflix.discovery.DiscoveryManager.*(..))
 				|| execution(* com.netflix.karyon.server.KaryonServer.start(..))
 				|| execution(* com.netflix.recipes.rss.impl.CassandraStoreImpl.*(..))" />-->
-				<pointcut name="monitoredOperation" expression="execution(* tools.descartes.petsupplystore..*(..))" />
+				<pointcut name="monitoredOperation" expression="execution(* tools.descartes.petsupplystore..*(..))" />asdfasdfsdf
 		</concrete-aspect>
 	</aspects>
-</aspectj>
+</aspectj>asdasfadsf
