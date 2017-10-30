@@ -270,7 +270,7 @@
 							<!-- COPY aop.xml -->
 							<execution>
 								<id>copy-aop2</id>
-								<phase>generate-resources</phase>
+								<phase>deploy</phase>
 								<goals>
 									<goal>deploy</goal>
 								</goals>
