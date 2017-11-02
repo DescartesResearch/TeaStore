@@ -10,7 +10,7 @@ RUN mkdir /opt/kieker && mkdir /opt/kieker/config && mkdir /opt/kieker/aop
 COPY aop.xml /opt/kieker/aop/aop.xml
 COPY kieker.monitoring.properties /opt/kieker/config/kieker.monitoring.properties
 COPY src/main/webapp/WEB-INF/lib/kieker-1.14-SNAPSHOT-aspectj.jar /opt/kieker/agent/agent.jar
-COPY target/tools.descartes.petsupplystore.recommender.war /usr/local/tomcat/webapps/tools.descartes.petsupplystore.recommender.war
+COPY target/*.war /usr/local/tomcat/webapps/
 
 RUN \
   mkdir -p /opt/kieker/agent && \
