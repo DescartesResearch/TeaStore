@@ -8,6 +8,8 @@ WORKDIR /opt
 RUN mkdir /opt/kieker && mkdir /opt/kieker/config && mkdir /opt/kieker/aop
 
 COPY aop.xml /opt/kieker/aop/aop.xml
+RUN  mkdir -p /usr/local/tomcat/lib/META-INF
+COPY aop.xml /usr/local/tomcat/lib/META-INF/
 COPY kieker.monitoring.properties /opt/kieker/config/kieker.monitoring.properties
 COPY src/main/webapp/WEB-INF/lib/kieker-1.14-SNAPSHOT-aspectj.jar /opt/kieker/agent/agent.jar
 COPY target/*.war /usr/local/tomcat/webapps/
