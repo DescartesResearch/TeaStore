@@ -142,7 +142,7 @@
 				<plugins>
 					<plugin>
 						<artifactId>maven-resources-plugin</artifactId>
-  						<version>3.0.2</version>
+						<version>3.0.2</version>
 						<executions>
 							<execution>
 								<id>copy-dockerfile</id>
@@ -213,7 +213,7 @@
 				<plugins>
 					<plugin>
 						<artifactId>maven-resources-plugin</artifactId>
-  						<version>3.0.2</version>
+						<version>3.0.2</version>
 						<executions>
 							<!-- COPY MONITORING.PROPERTIES -->
 							<execution>

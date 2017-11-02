@@ -87,14 +87,14 @@
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
 			<version>7.0</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>javax.servlet.jsp.jstl</groupId>
 			<artifactId>jstl-api</artifactId>
@@ -131,8 +131,8 @@
 			</plugin>
 		</plugins>
 	</build>
-	
-	
+
+
 
 	<profiles>
 		<profile>
@@ -147,7 +147,7 @@
 				<plugins>
 					<plugin>
 						<artifactId>maven-resources-plugin</artifactId>
-  						<version>3.0.2</version>
+						<version>3.0.2</version>
 						<executions>
 							<execution>
 								<id>copy-dockerfile</id>
@@ -219,7 +219,7 @@
 				<plugins>
 					<plugin>
 						<artifactId>maven-resources-plugin</artifactId>
-  						<version>3.0.2</version>
+						<version>3.0.2</version>
 						<executions>
 							<!-- COPY MONITORING.PROPERTIES -->
 							<execution>
@@ -339,5 +339,5 @@
 			</build>
 		</profile>
 	</profiles>
-	
+
 </project>
