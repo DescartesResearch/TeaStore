@@ -141,19 +141,26 @@
 			<build>
 				<plugins>
 					<plugin>
-						<groupId>com.coderplus.maven.plugins</groupId>
-						<artifactId>copy-rename-maven-plugin</artifactId>
-						<version>1.0.1</version>
+						<artifactId>maven-resources-plugin</artifactId>
+  						<version>3.0.2</version>
 						<executions>
 							<execution>
-								<id>rename-file</id>
-								<phase>compile</phase>
+								<id>copy-dockerfile</id>
+								<phase>generate-resources</phase>
 								<goals>
-									<goal>rename</goal>
+									<goal>copy-resources</goal>
 								</goals>
 								<configuration>
-									<sourceFile>${project.basedir}/StandardDocker</sourceFile>
-									<destinationFile>${project.basedir}/Dockerfile</destinationFile>
+									<outputDirectory>${project.basedir}</outputDirectory>
+									<overwrite>true</overwrite>
+									<resources>
+										<resource>
+											<directory>../../utilities/tools.descartes.petsupplystore.dockerbase/ServiceDockerfile/</directory>
+											<includes>
+												<include>Dockerfile</include>
+											</includes>
+										</resource>
+									</resources>
 								</configuration>
 							</execution>
 						</executions>
