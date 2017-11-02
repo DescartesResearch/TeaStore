@@ -1,6 +1,6 @@
 <!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.aspectj.org/dtd/aspectj_1_5_0.dtd">
 <aspectj>
-	<weaver options="">asdfasdhgsdhjhsdahsd
+	<weaver options="-verbose -showWeaveInfo">
 		<include within="tools.descartes.petsupplystore..*"/>
 	</weaver>
 	<aspects>
