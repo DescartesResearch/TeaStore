@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
 
 import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.ImageSize;
+import tools.descartes.petsupplystore.entities.ImageSizePreset;
 import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.image.ImageDB;
 import tools.descartes.petsupplystore.image.ImageProvider;
@@ -214,7 +215,7 @@ public enum SetupController {
 		nrOfImagesToGenerate = products.entrySet().stream().flatMap(e -> e.getValue().stream()).count();
 
 		CreatorFactory factory = new CreatorFactory(ImageCreator.STD_NR_OF_SHAPES_PER_IMAGE, imgDB,
-				ImageSize.Preset.STD_IMAGE_SIZE, workingDir, products, categoryImages, nrOfImagesGenerated);
+				ImageSizePreset.STD_IMAGE_SIZE, workingDir, products, categoryImages, nrOfImagesGenerated);
 
 		// Schedule all image creation tasks
 		for (long i = 0; i < nrOfImagesToGenerate; i++) {
@@ -222,7 +223,7 @@ public enum SetupController {
 		}
 
 		log.info("Image creator thread started. {} {} sized images to generate using {} threads.", nrOfImagesToGenerate,
-				ImageSize.Preset.STD_IMAGE_SIZE.toString(), SetupControllerConstants.CREATION_THREAD_POOL_SIZE);
+				ImageSizePreset.STD_IMAGE_SIZE.toString(), SetupControllerConstants.CREATION_THREAD_POOL_SIZE);
 	}
 
 	public void detectCategoryImages() {
@@ -333,7 +334,7 @@ public enum SetupController {
 							file.getName().substring(0,
 									file.getName().length() - StoreImage.STORE_IMAGE_FORMAT.length() - 1),
 							imageID, new ImageSize(buffImg.getWidth(), buffImg.getHeight()));
-					StoreImage img = new StoreImage(imageID, buffImg, ImageSize.Preset.FULL.getSize());
+					StoreImage img = new StoreImage(imageID, buffImg, ImageSizePreset.FULL.getSize());
 					preCacheImg.add(img);
 
 					try {

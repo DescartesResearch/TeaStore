@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -23,10 +24,13 @@ public class CreatorFactory {
 	private List<Long> products;
 	private List<Category> categories;
 	private ImageDB imgDB;
+	private AtomicLong nrOfImagesGenerated;	
+	
 	private final Logger log = LoggerFactory.getLogger(CreatorFactory.class);
 	
 	public CreatorFactory(int shapesPerImage, ImageDB imgDB, ImageSize imgSize, Path workingDir, 
-			Map<Category, List<Long>> products, Map<Category, BufferedImage> categoryImages) {
+			Map<Category, List<Long>> products, Map<Category, BufferedImage> categoryImages,
+			AtomicLong nrOfImagesGenerated) {
 		if (imgDB == null) {
 			log.error("Supplied image database is null.");
 			throw new NullPointerException("Supplied image database is null.");
@@ -34,6 +38,10 @@ public class CreatorFactory {
 		if (products == null) {
 			log.error("Supplied product map is null.");
 			throw new NullPointerException("Supplied product map is null.");
+		}
+		if (nrOfImagesGenerated == null) {
+			log.error("Supplied counter for images generated is null.");
+			throw new NullPointerException("Supplied counter for images generated is null.");
 		}
 		
 		if (workingDir == null) {
@@ -63,11 +71,12 @@ public class CreatorFactory {
 				.flatMap(e -> e.getValue().stream().map(x -> e.getKey()))
 				.collect(Collectors.toList());
 		this.imgDB = imgDB;
+		this.nrOfImagesGenerated = nrOfImagesGenerated;
 	}
 	
 	public Runnable newRunnable() {
 		return new CreatorRunner(imgDB, imgSize, products.remove(0), shapesPerImage, 
-				categoryImages.getOrDefault(categories.remove(0), null), workingDir);
+				categoryImages.getOrDefault(categories.remove(0), null), workingDir, nrOfImagesGenerated);
 	}
 
 }

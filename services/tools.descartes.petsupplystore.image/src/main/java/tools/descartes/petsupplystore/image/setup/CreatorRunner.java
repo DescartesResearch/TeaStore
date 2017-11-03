@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Base64;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.imageio.ImageIO;
 import org.slf4j.Logger;
@@ -21,22 +22,29 @@ import tools.descartes.petsupplystore.image.StoreImage;
 
 public class CreatorRunner implements Runnable {
 
-	long productID;
-	ImageDB imgDB;
-	ImageSize size = ImageSizePreset.STD_IMAGE_SIZE;
-	Path workingDir;
-	int shapesPerImage;
-	BufferedImage categoryImage;
-	Logger log = LoggerFactory.getLogger(CreatorRunner.class);
+	private final long productID;
+	private final ImageDB imgDB;
+	private final ImageSize size;
+	private final Path workingDir;
+	private final int shapesPerImage;
+	private final BufferedImage categoryImage;
+	private final AtomicLong nrOfImagesGenerated;	
+	
+	private final Logger log = LoggerFactory.getLogger(CreatorRunner.class);
 	
 	public CreatorRunner(ImageDB imgDB, ImageSize size, long productID, int shapesPerImage, 
-			BufferedImage categoryImage, Path workingDir) {
+			BufferedImage categoryImage, Path workingDir, AtomicLong nrOfImagesGenerated) {
 		this.imgDB = imgDB;
-		this.size = size;
 		this.productID = productID;
 		this.shapesPerImage = shapesPerImage;
 		this.categoryImage = categoryImage;
 		this.workingDir = workingDir;
+		this.nrOfImagesGenerated = nrOfImagesGenerated;
+		if (size != null) {
+			this.size = size;
+		} else {
+			this.size = ImageSizePreset.STD_IMAGE_SIZE;
+		} 
 	}
 	
 	@Override
@@ -66,6 +74,8 @@ public class CreatorRunner implements Runnable {
 						+ imgFile.toAbsolutePath() + ".", ioException);
 			}
 		}
+		
+		nrOfImagesGenerated.incrementAndGet();
 	}
 
 }
