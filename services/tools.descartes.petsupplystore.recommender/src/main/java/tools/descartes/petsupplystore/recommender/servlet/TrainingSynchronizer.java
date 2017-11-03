@@ -21,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -44,6 +45,14 @@ import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperat
  */
 public final class TrainingSynchronizer {
 
+	// Longest wait period before querying the persistence again if it is finished
+	// creating entries
+	private final static int PERSISTENCE_CREATION_MAX_WAIT_TIME = 120000;
+	// Wait time in ms before checking again for an existing persistence service
+	private final static IntStream PERSISTENCE_CREATION_WAIT_TIME = IntStream.concat(
+			IntStream.of(1000, 2000, 5000, 10000, 30000, 60000),
+			IntStream.generate(() -> PERSISTENCE_CREATION_MAX_WAIT_TIME));
+	
 	private TrainingSynchronizer() {
 
 	}
@@ -78,6 +87,38 @@ public final class TrainingSynchronizer {
 	public static void setMaxTime(long maxTime) {
 		TrainingSynchronizer.maxTime = maxTime;
 	}
+	
+	private static void waitForPersistence() {
+		// We have to wait for the database that all entries are created before
+		// generating images (which queries persistence). Yes we want to wait forever in
+		// case the persistence is
+		// not answering.
+		while (true) {
+			Response result = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "generatedb",
+					String.class, client -> client.getService().path(client.getApplicationURI())
+							.path(client.getEndpointURI()).path("finished").request().get());
+
+			if (result == null ? false : Boolean.parseBoolean(result.readEntity(String.class))) {
+				if (result != null) {
+					result.close();
+				}
+				break;
+			}
+
+			if (result != null) {
+				result.close();
+			}
+
+			try {
+				int nextWaitTime = PERSISTENCE_CREATION_WAIT_TIME.findFirst()
+						.orElseGet(() -> PERSISTENCE_CREATION_MAX_WAIT_TIME);
+				LOG.info("Persistence not reachable. Waiting for {}ms.", nextWaitTime);
+				Thread.sleep(nextWaitTime);
+			} catch (InterruptedException interrupted) {
+				LOG.warn("Thread interrupted while waiting for persistence to be available.", interrupted);
+			}
+		}
+	}
 
 	/**
 	 * Connects via REST to the database and retrieves all {@link OrderItem}s and
@@ -88,6 +129,9 @@ public final class TrainingSynchronizer {
 	 */
 	public static long retrieveDataAndRetrain() {
 		LOG.trace("Retrieving data objects from database...");
+		
+		waitForPersistence();
+		
 		List<OrderItem> items = null;
 		List<Order> orders = null;
 		// retrieve
