@@ -195,33 +195,6 @@ public abstract class AbstractUiTest {
 	}
 
 	protected String doPost(String query) throws IOException {
-		/*URL url = new URL("http://localhost:3000/test/test");
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-		connection.setRequestMethod("POST");
-		connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
-		connection.setRequestProperty("Content-Length", "" + Integer.toString(query.getBytes().length));
-		connection.setRequestProperty("Content-Language", "en-US");
-
-		connection.setUseCaches(false);
-		connection.setDoInput(true);
-		connection.setDoOutput(true);
-
-		// Send request
-		DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-		wr.writeBytes(query);
-		wr.flush();
-		wr.close();
-
-		BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-		String inputLine;
-		StringBuffer response = new StringBuffer();
-
-		while ((inputLine = in.readLine()) != null) {
-			response.append(inputLine + "\n");
-		}
-		in.close();
-		return response.toString();*/
 		return doPost(query, "", "");
 	}
 

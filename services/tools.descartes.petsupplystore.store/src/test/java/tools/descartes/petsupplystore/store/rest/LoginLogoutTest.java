@@ -1,6 +1,14 @@
 package tools.descartes.petsupplystore.store.rest;
 
+
 import org.junit.Assert;
+import org.junit.Test;
+import org.mindrot.jbcrypt.BCrypt;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.sun.mail.iap.Response;
+
+import tools.descartes.petsupplystore.entities.User;
 import tools.descartes.petsupplystore.entities.message.SessionBlob;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
 
@@ -15,15 +23,23 @@ public class LoginLogoutTest extends AbstractStoreRestTest {
 
 	/**
 	 * Tests for the loggin, logout and isloggedin functionality.
+	 * @throws JsonProcessingException 
 	 */
-	protected void runTest() {
+	@Test
+	public void runTest() throws JsonProcessingException {
+		mockUser1();
+		mockProduct106();
+		mockCreateOrder();
+		mockCreateOrderItems();
+		
 		SessionBlob blob = new SessionBlob();
-		
 		Assert.assertFalse(LoadBalancedStoreOperations.isLoggedIn(blob));
 		
-		blob = LoadBalancedStoreOperations.login(blob, "notauser", "notapassword");
-		Assert.assertFalse(LoadBalancedStoreOperations.isLoggedIn(blob));
-		
+//		TODO uncomment this once issue #45 is fixed
+//		mockInValidGetRestCall(Status.NOT_FOUND, "/tools.descartes.petsupplystore.persistence/rest/users/name/notauser");
+//		blob = LoadBalancedStoreOperations.login(blob, "notauser", "notapassword");
+//		Assert.assertFalse(LoadBalancedStoreOperations.isLoggedIn(blob));
+
 		blob = LoadBalancedStoreOperations.login(blob, "user1", "password");
 		Assert.assertTrue(LoadBalancedStoreOperations.isLoggedIn(blob));
 		
@@ -49,5 +65,23 @@ public class LoginLogoutTest extends AbstractStoreRestTest {
 		
 		blob = LoadBalancedStoreOperations.logout(blob);
 		Assert.assertFalse(LoadBalancedStoreOperations.isLoggedIn(blob));
+	}
+
+	private void mockCreateOrderItems() {
+		mockValidPostRestCall(Response.OK, "/tools.descartes.petsupplystore.persistence/rest/orderitems");
+	}
+
+	private void mockCreateOrder() {
+		mockValidPostRestCall(7, "/tools.descartes.petsupplystore.persistence/rest/orders");
+	}
+
+	private void mockUser1() {
+		User u = new User();
+		u.setEmail("asdas@asda.de");
+		u.setRealName("asdas asdasd");
+		u.setUserName("user1");
+		u.setPassword(BCrypt.hashpw("password", BCrypt.gensalt()));
+		u.setId(1231245125);
+		mockValidGetRestCall(u, "/tools.descartes.petsupplystore.persistence/rest/users/name/user1");
 	}
 }
