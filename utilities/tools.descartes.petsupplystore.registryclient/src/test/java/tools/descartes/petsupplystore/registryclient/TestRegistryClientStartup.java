@@ -39,6 +39,8 @@ public class TestRegistryClientStartup implements ServletContextListener {
      * @param event The servlet context event at destruction.
      */
     public void contextDestroyed(ServletContextEvent event)  { 
+    	TestRegistryClient.getClient().getHeartbeatScheduler().shutdown();
+    	TestRegistryClient.getClient().getLoadBalancerUpdateScheduler().shutdown();
     	TestRegistryClient.getClient().unregister(event.getServletContext().getContextPath());
     }
 
