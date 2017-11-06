@@ -13,11 +13,6 @@
  */
 package tools.descartes.petsupplystore.persistence;
 
-import org.apache.catalina.Context;
-import org.apache.catalina.LifecycleState;
-import org.apache.catalina.startup.Tomcat;
-import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.servlet.ServletContainer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +21,6 @@ import org.junit.Assert;
 
 import tools.descartes.petsupplystore.entities.User;
 import tools.descartes.petsupplystore.persistence.rest.UserEndpoint;
-import tools.descartes.petsupplystore.persistence.domain.CategoryRepository;
 import tools.descartes.petsupplystore.rest.NonBalancedCRUDOperations;
 import tools.descartes.petsupplystore.rest.RESTClient;
 
@@ -37,10 +31,7 @@ import tools.descartes.petsupplystore.rest.RESTClient;
  */
 public class UserEndpointTest {
 	
-	private static final String CONTEXT = "/test";
-	
-	private Tomcat testTomcat;
-	private String testWorkingDir = System.getProperty("java.io.tmpdir");
+	private TomcatTestHandler handler;
 	
 	/**
 	 * Setup the test by deploying an embedded tomcat and adding the rest endpoints.
@@ -48,17 +39,7 @@ public class UserEndpointTest {
 	 */
 	@Before
 	public void setup() throws Throwable {
-		testTomcat = new Tomcat();
-		testTomcat.setPort(0);
-		testTomcat.setBaseDir(testWorkingDir);
-		Context context = testTomcat.addWebapp(CONTEXT, testWorkingDir);
-		ResourceConfig restServletConfig = new ResourceConfig();
-		restServletConfig.register(UserEndpoint.class);
-		ServletContainer restServlet = new ServletContainer(restServletConfig);
-		testTomcat.addServlet(CONTEXT, "restServlet", restServlet);
-		context.addServletMappingDecoded("/rest/*", "restServlet");
-		testTomcat.start();
-		System.out.println("Initializing Database with size " + CategoryRepository.REPOSITORY.getAllEntities().size());
+		handler = new TomcatTestHandler(UserEndpoint.class);
 	}
 	
 	/**
@@ -68,7 +49,7 @@ public class UserEndpointTest {
 	public void testEndpoint() {	
 		//open connection
 		RESTClient<User> client = new RESTClient<User>("http://localhost:"
-				+ getTomcatPort() + CONTEXT + "/", "rest", "users", User.class);
+				+ handler.getTomcatPort() + TomcatTestHandler.CONTEXT + "/", "rest", "users", User.class);
 		int initialSize = NonBalancedCRUDOperations.getEntities(client, -1, -1).size();
 		
 		//create user
@@ -116,16 +97,7 @@ public class UserEndpointTest {
 	 */
 	@After
 	public void dismantle() throws Throwable {
-		if (testTomcat.getServer() != null && testTomcat.getServer().getState() != LifecycleState.DESTROYED) {
-	        if (testTomcat.getServer().getState() != LifecycleState.STOPPED) {
-	        	testTomcat.stop();
-	        }
-	        testTomcat.destroy();
-	    }
-	}
-	
-	private int getTomcatPort() {
-		return testTomcat.getConnector().getLocalPort();
+		handler.dismantleAll();
 	}
 	
 }

@@ -17,11 +17,6 @@ import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 
-import org.apache.catalina.Context;
-import org.apache.catalina.LifecycleState;
-import org.apache.catalina.startup.Tomcat;
-import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.servlet.ServletContainer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,7 +27,6 @@ import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.persistence.rest.CategoryEndpoint;
 import tools.descartes.petsupplystore.persistence.rest.ProductEndpoint;
-import tools.descartes.petsupplystore.persistence.domain.CategoryRepository;
 import tools.descartes.petsupplystore.rest.NonBalancedCRUDOperations;
 import tools.descartes.petsupplystore.rest.RESTClient;
 
@@ -43,10 +37,7 @@ import tools.descartes.petsupplystore.rest.RESTClient;
  */
 public class ProductEndpointTest {
 	
-	private static final String CONTEXT = "/test";
-	
-	private Tomcat testTomcat;
-	private String testWorkingDir = System.getProperty("java.io.tmpdir");
+	private TomcatTestHandler handler;
 	
 	/**
 	 * Setup the test by deploying an embedded tomcat and adding the rest endpoints.
@@ -54,18 +45,7 @@ public class ProductEndpointTest {
 	 */
 	@Before
 	public void setup() throws Throwable {
-		testTomcat = new Tomcat();
-		testTomcat.setPort(0);
-		testTomcat.setBaseDir(testWorkingDir);
-		Context context = testTomcat.addWebapp(CONTEXT, testWorkingDir);
-		ResourceConfig restServletConfig = new ResourceConfig();
-		restServletConfig.register(ProductEndpoint.class);
-		restServletConfig.register(CategoryEndpoint.class);
-		ServletContainer restServlet = new ServletContainer(restServletConfig);
-		testTomcat.addServlet(CONTEXT, "restServlet", restServlet);
-		context.addServletMappingDecoded("/rest/*", "restServlet");
-		testTomcat.start();
-		System.out.println("Initializing Database with size " + CategoryRepository.REPOSITORY.getAllEntities().size());
+		handler = new TomcatTestHandler(ProductEndpoint.class, CategoryEndpoint.class);
 	}
 	
 	/**
@@ -75,7 +55,7 @@ public class ProductEndpointTest {
 	public void testEndpoint() {
 		//create category, replace with category endpoint once it is there
 		RESTClient<Category> categoryClient = new RESTClient<Category>("http://localhost:"
-		+ getTomcatPort() + CONTEXT + "/", "rest", "categories", Category.class);
+		+ handler.getTomcatPort() + TomcatTestHandler.CONTEXT + "/", "rest", "categories", Category.class);
 		Category cat = new Category();
 		cat.setName("Category");
 		cat.setDescription("Category Description");
@@ -83,7 +63,7 @@ public class ProductEndpointTest {
 		
 		//open connection
 		RESTClient<Product> client = new RESTClient<Product>("http://localhost:"
-		+ getTomcatPort() + CONTEXT + "/", "rest", "products", Product.class);
+		+ handler.getTomcatPort() + TomcatTestHandler.CONTEXT + "/", "rest", "products", Product.class);
 		//get initial product table size
 		int initialProducts = NonBalancedCRUDOperations.getEntities(client, -1, -1).size();
 		
@@ -144,16 +124,7 @@ public class ProductEndpointTest {
 	 */
 	@After
 	public void dismantle() throws Throwable {
-		if (testTomcat.getServer() != null && testTomcat.getServer().getState() != LifecycleState.DESTROYED) {
-	        if (testTomcat.getServer().getState() != LifecycleState.STOPPED) {
-	        	testTomcat.stop();
-	        }
-	        testTomcat.destroy();
-	    }
-	}
-	
-	private int getTomcatPort() {
-		return testTomcat.getConnector().getLocalPort();
+		handler.dismantleAll();
 	}
 	
 }

@@ -38,7 +38,6 @@ import tools.descartes.petsupplystore.persistence.rest.DatabaseGenerationEndpoin
 import tools.descartes.petsupplystore.persistence.rest.ProductEndpoint;
 import tools.descartes.petsupplystore.registry.rest.Registry;
 import tools.descartes.petsupplystore.registry.rest.RegistryREST;
-import tools.descartes.petsupplystore.registry.rest.RegistryStartup;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.rest.NonBalancedCRUDOperations;
 import tools.descartes.petsupplystore.rest.RESTClient;
@@ -50,12 +49,11 @@ import tools.descartes.petsupplystore.rest.RESTClient;
  *
  */
 public class CacheTest {
-
-private static final String CONTEXT = "/test";
 	
 	private static int testport = 43001;
 
-	private Tomcat registryTomcat;
+	private TomcatTestHandler registryTomcatHandler;
+	
 	private String testWorkingDir = System.getProperty("java.io.tmpdir");
 	
 	/**
@@ -64,19 +62,7 @@ private static final String CONTEXT = "/test";
 	 */
 	@Before
 	public void setup() throws Throwable {
-		registryTomcat = new Tomcat();
-		registryTomcat.setPort(0);
-		registryTomcat.setBaseDir(testWorkingDir);
-		Context context = registryTomcat.addWebapp(CONTEXT, testWorkingDir);
-		context.addApplicationListener(RegistryStartup.class.getName());
-		ResourceConfig restServletConfig = new ResourceConfig();
-		restServletConfig.register(RegistryREST.class);
-		restServletConfig.register(Registry.class);
-		ServletContainer restServlet = new ServletContainer(restServletConfig);
-		registryTomcat.addServlet(CONTEXT, "restServlet", restServlet);
-		context.addServletMappingDecoded("/rest/*", "restServlet");
-		registryTomcat.start();
-		System.out.println("Initializing Database with size " + CategoryRepository.REPOSITORY.getAllEntities().size());
+		registryTomcatHandler = new TomcatTestHandler(RegistryREST.class, Registry.class);
 	}
 	
 	private Tomcat createClientTomcat(Service service, Tomcat tomcat) throws ServletException, LifecycleException {
@@ -91,7 +77,7 @@ private static final String CONTEXT = "/test";
 		registryURL.setOverride(false);
 		registryURL.setType("java.lang.String");
 		registryURL.setName("registryURL");
-		registryURL.setValue("http://localhost:" + getRegistryPort() + "/test/rest/services/");
+		registryURL.setValue("http://localhost:" + registryTomcatHandler.getTomcatPort() + "/test/rest/services/");
 		context.getNamingResources().addEnvironment(registryURL);
 		ContextEnvironment servicePort = new ContextEnvironment();
 		servicePort.setDescription("");
@@ -184,11 +170,11 @@ private static final String CONTEXT = "/test";
 	 */
 	@After
 	public void dismantle() throws Throwable {
-		destroy(registryTomcat);
+		registryTomcatHandler.dismantleAll();
 	}
 	
 	private void destroy(Tomcat tomcat) {
-		if (tomcat.getServer() != null && registryTomcat.getServer().getState() != LifecycleState.DESTROYED) {
+		if (tomcat.getServer() != null && tomcat.getServer().getState() != LifecycleState.DESTROYED) {
 	        if (tomcat.getServer().getState() != LifecycleState.STOPPED) {
 	        	try {
 					tomcat.stop();
@@ -206,10 +192,6 @@ private static final String CONTEXT = "/test";
 	
 	private int getNextClientPort() {
 		return testport++;
-	}
-	
-	private int getRegistryPort() {
-		return registryTomcat.getConnector().getLocalPort();
 	}
 	
 	private int getPort(Tomcat tomcat) {

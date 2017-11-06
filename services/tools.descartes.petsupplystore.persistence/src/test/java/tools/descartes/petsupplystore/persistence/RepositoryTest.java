@@ -33,6 +33,7 @@ import tools.descartes.petsupplystore.persistence.domain.PersistenceOrderItem;
 import tools.descartes.petsupplystore.persistence.domain.PersistenceProduct;
 import tools.descartes.petsupplystore.persistence.domain.ProductRepository;
 import tools.descartes.petsupplystore.persistence.domain.UserRepository;
+import tools.descartes.petsupplystore.persistence.repository.EMFManagerInitializer;
 
 /**
  * Test for the ProductEndpoint.
@@ -53,6 +54,7 @@ public class RepositoryTest {
 	 */
 	@Before
 	public void setup() throws Throwable {
+		EMFManagerInitializer.initializeEMF();
 		catRepo = CategoryRepository.REPOSITORY;
 		prodRepo = ProductRepository.REPOSITORY;
 		orderItemRepo = OrderItemRepository.REPOSITORY;

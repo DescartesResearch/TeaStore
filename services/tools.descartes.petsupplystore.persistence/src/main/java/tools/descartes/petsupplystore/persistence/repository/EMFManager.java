@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 final class EMFManager {
 
 	private static EntityManagerFactory emf = null; 
+	private static HashMap<String, String> persistenceProperties = null;
 	
 	private static final Logger LOG = LoggerFactory.getLogger(EMFManager.class);
 	
@@ -44,14 +45,28 @@ final class EMFManager {
 	}
 	
 	/**
+	 * (Re-)configure the entity manager factory using a set of persistence properties.
+	 * Use to change database/user at run-time.
+	 * Properties are kept, even if the database is reset.
+	 * @param persistenceProperties The persistence properties.
+	 */
+	static void configureEMFWithProperties(HashMap<String, String> persistenceProperties) {
+		EMFManager.persistenceProperties = persistenceProperties;
+		clearEMF();
+	}
+	
+	/**
 	 * Get the entity manager factory.
 	 * @return The entity manager factory.
 	 */
 	static EntityManagerFactory getEMF() {
 		if (emf == null) {
-			
-			HashMap<String, String> persistenceProperties = createPersistencePropertiesFromJavaEnv();
-			emf = Persistence.createEntityManagerFactory("tools.descartes.petsupplystore.persistence", persistenceProperties);
+			HashMap<String, String> persistenceProperties = EMFManager.persistenceProperties;
+			if (persistenceProperties == null) {
+				persistenceProperties = createPersistencePropertiesFromJavaEnv();
+			}
+			emf = Persistence.createEntityManagerFactory("tools.descartes.petsupplystore.persistence",
+					persistenceProperties);
 			
 		}
 		return emf;

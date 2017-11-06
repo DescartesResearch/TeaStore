@@ -16,6 +16,7 @@ package tools.descartes.petsupplystore.persistence;
 import java.util.regex.Pattern;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import tools.descartes.petsupplystore.persistence.domain.CategoryRepository;
@@ -25,6 +26,7 @@ import tools.descartes.petsupplystore.persistence.domain.PersistenceCategory;
 import tools.descartes.petsupplystore.persistence.domain.ProductRepository;
 import tools.descartes.petsupplystore.persistence.domain.UserRepository;
 import tools.descartes.petsupplystore.persistence.repository.DataGenerator;
+import tools.descartes.petsupplystore.persistence.repository.EMFManagerInitializer;
 
 /**
  * Test for the DataGenerator.
@@ -38,6 +40,15 @@ public class DataGeneratorTest {
 	private static final int USERS = 20;
 	private static final int MAX_ORDERS = 10;
 
+	/**
+	 * Setup the test.
+	 * @throws Throwable On failure.
+	 */
+	@Before
+	public void setup() throws Throwable {
+		EMFManagerInitializer.initializeEMF();
+	}
+	
 	/**
 	 * Run the test.
 	 */
