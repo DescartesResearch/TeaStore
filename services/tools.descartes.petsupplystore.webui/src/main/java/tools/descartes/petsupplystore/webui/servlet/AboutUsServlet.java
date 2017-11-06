@@ -52,13 +52,14 @@ public class AboutUsServlet extends AbstractUIServlet {
 			throws ServletException, IOException, LoadBalancerTimeoutException {
 		checkforCookie(request, response);
 		HashMap<String, String> portraits = LoadBalancedImageOperations.getWebImages(
-				Arrays.asList("andreBauer", "johannesGrohmann", "joakimKistowski", "simonEismann", "norbertSchmitt"),
+				Arrays.asList("andreBauer", "johannesGrohmann", "joakimKistowski", "simonEismann", "norbertSchmitt", "samuelKounev"),
 				ImageSizePreset.PORTRAIT.getSize());
 		request.setAttribute("portraitAndre", portraits.get("andreBauer"));
 		request.setAttribute("portraitJohannes", portraits.get("johannesGrohmann"));
 		request.setAttribute("portraitJoakim", portraits.get("joakimKistowski"));
 		request.setAttribute("portraitSimon", portraits.get("simonEismann"));
 		request.setAttribute("portraitNorbert", portraits.get("norbertSchmitt"));
+		request.setAttribute("portraitKounev", portraits.get("samuelKounev"));
 		request.setAttribute("descartesLogo", 
 				LoadBalancedImageOperations.getWebImage("descartesLogo", ImageSizePreset.LOGO.getSize()));
 		request.setAttribute("storeIcon", 

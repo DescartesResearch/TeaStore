@@ -137,7 +137,7 @@ public enum SetupController {
 				log.info("Persistence not reachable. Waiting for {}ms.", nextWaitTime);
 				Thread.sleep(nextWaitTime);
 			} catch (InterruptedException interrupted) {
-				log.info("Thread interrupted while waiting for persistence to be available.", interrupted);
+				log.warn("Thread interrupted while waiting for persistence to be available.", interrupted);
 			}
 		}
 	}

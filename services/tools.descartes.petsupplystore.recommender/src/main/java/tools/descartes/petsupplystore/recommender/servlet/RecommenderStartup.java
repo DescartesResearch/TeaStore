@@ -13,11 +13,14 @@
  */
 package tools.descartes.petsupplystore.recommender.servlet;
 
+import java.util.stream.IntStream;
+
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
