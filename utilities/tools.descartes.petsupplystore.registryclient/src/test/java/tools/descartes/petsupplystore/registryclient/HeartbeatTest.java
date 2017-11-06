@@ -126,7 +126,7 @@ public class HeartbeatTest {
 	    servicePort.setName("servicePort");
 	    servicePort.setValue("" + clientPort);
 		context.getNamingResources().addEnvironment(servicePort);		
-		context.addApplicationListener(TestRegistryClientStartup2.class.getName());
+		context.addApplicationListener(TestRegistryClientStartup.class.getName());
 //		HeartbeatServlet heartbeatServlet = new HeartbeatServlet();
 //		tomcat.addServlet("/" + service.getServiceName(), "heartbeatServlet", heartbeatServlet);
 //		context.addServletMappingDecoded("/heartbeat", "heartbeatServlet");
