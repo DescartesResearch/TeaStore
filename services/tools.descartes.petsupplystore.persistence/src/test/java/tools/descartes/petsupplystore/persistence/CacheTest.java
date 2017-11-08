@@ -49,6 +49,13 @@ public class CacheTest {
 	public void setup() throws Throwable {
 		clientTomcatHandler = new TomcatTestHandler(2, TomcatTestHandler.DEFAULT_TEST_TOMCAT_PORT,
 				CacheManagerEndpoint.class, DatabaseGenerationEndpoint.class, ProductEndpoint.class);
+		
+		//debuggging response 
+		Response response0 = ClientBuilder.newBuilder().build()
+				.target("http://localhost:" + TomcatTestHandler.DEFAULT_TEST_TOMCAT_PORT
+				+ "/tools.descartes.petsupplystore.registry/rest/services/" + Service.PERSISTENCE.getServiceName())
+				.request(MediaType.APPLICATION_JSON).get();
+		System.out.println("Got status response: " + response0.getStatus());
 	}
 	
 	/**

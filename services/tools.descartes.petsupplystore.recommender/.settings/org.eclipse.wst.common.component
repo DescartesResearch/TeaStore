@@ -9,10 +9,10 @@
         <dependent-module archiveName="rest-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.rest/tools.descartes.petsupplystore.rest">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="dockermemoryconfigurator-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.dockermemoryconfigurator/tools.descartes.petsupplystore.dockermemoryconfigurator">
+        <dependent-module archiveName="entities-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.entities/tools.descartes.petsupplystore.entities">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="entities-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.entities/tools.descartes.petsupplystore.entities">
+        <dependent-module archiveName="dockermemoryconfigurator-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.dockermemoryconfigurator/tools.descartes.petsupplystore.dockermemoryconfigurator">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="context-root" value="tools.descartes.petsupplystore.recommender"/>
