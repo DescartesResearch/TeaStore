@@ -13,18 +13,10 @@
  */
 package tools.descartes.petsupplystore.persistence;
 
-import javax.servlet.ServletException;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.catalina.Context;
-import org.apache.catalina.LifecycleException;
-import org.apache.catalina.LifecycleState;
-import org.apache.catalina.startup.Tomcat;
-import org.apache.tomcat.util.descriptor.web.ContextEnvironment;
-import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.servlet.ServletContainer;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -32,12 +24,9 @@ import org.junit.Test;
 
 import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.Product;
-import tools.descartes.petsupplystore.persistence.domain.CategoryRepository;
 import tools.descartes.petsupplystore.persistence.rest.CacheManagerEndpoint;
 import tools.descartes.petsupplystore.persistence.rest.DatabaseGenerationEndpoint;
 import tools.descartes.petsupplystore.persistence.rest.ProductEndpoint;
-import tools.descartes.petsupplystore.registry.rest.Registry;
-import tools.descartes.petsupplystore.registry.rest.RegistryREST;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.rest.NonBalancedCRUDOperations;
 import tools.descartes.petsupplystore.rest.RESTClient;
@@ -50,11 +39,7 @@ import tools.descartes.petsupplystore.rest.RESTClient;
  */
 public class CacheTest {
 	
-	private static int testport = 43001;
-
 	private TomcatTestHandler clientTomcatHandler;
-	
-	private String testWorkingDir = System.getProperty("java.io.tmpdir");
 	
 	/**
 	 * Setup the test by deploying an embedded tomcat and adding the rest endpoints.
@@ -66,39 +51,6 @@ public class CacheTest {
 				CacheManagerEndpoint.class, DatabaseGenerationEndpoint.class, ProductEndpoint.class);
 	}
 	
-//	private Tomcat createClientTomcat(Service service, Tomcat tomcat) throws ServletException, LifecycleException {
-//		int clientPort = getNextClientPort();
-//		tomcat.getEngine().setName("Catalina" + clientPort);
-//		tomcat.setPort(clientPort);
-//		tomcat.setBaseDir(testWorkingDir);
-//		tomcat.enableNaming();
-//		Context context = tomcat.addWebapp("/" + service.getServiceName(), testWorkingDir);
-//		ContextEnvironment registryURL = new ContextEnvironment();
-//		registryURL.setDescription("");
-//		registryURL.setOverride(false);
-//		registryURL.setType("java.lang.String");
-//		registryURL.setName("registryURL");
-//		registryURL.setValue("http://localhost:" + registryTomcatHandler.getTomcatPort() + "/test/rest/services/");
-//		context.getNamingResources().addEnvironment(registryURL);
-//		ContextEnvironment servicePort = new ContextEnvironment();
-//		servicePort.setDescription("");
-//		servicePort.setOverride(false);
-//		servicePort.setType("java.lang.String");
-//	    servicePort.setName("servicePort");
-//	    servicePort.setValue("" + clientPort);
-//		context.getNamingResources().addEnvironment(servicePort);	
-//		ResourceConfig restServletConfig = new ResourceConfig();
-//		restServletConfig.register(CacheManagerEndpoint.class);
-//		restServletConfig.register(DatabaseGenerationEndpoint.class);
-//		restServletConfig.register(ProductEndpoint.class);
-//		ServletContainer restServlet = new ServletContainer(restServletConfig);
-//		tomcat.addServlet("/" + service.getServiceName(), "restServlet", restServlet);
-//		context.addServletMappingDecoded("/rest/*", "restServlet");
-//		context.addApplicationListener(TestRegistryClientStartup.class.getName());
-//		tomcat.start();
-//		return tomcat;
-//	}
-	
 	/**
 	 * Run the test.
 	 * @throws Throwable on failure.
@@ -107,10 +59,7 @@ public class CacheTest {
 	public void testEndpoint() throws Throwable {
 		int client0Port = clientTomcatHandler.getTomcatPort(0);
 		int client1Port = clientTomcatHandler.getTomcatPort(1);
-//		Tomcat client1 = createClientTomcat(Service.PERSISTENCE, new Tomcat());
-//		Tomcat client2 = createClientTomcat(Service.PERSISTENCE, new Tomcat());
-		//wait for clients to register
-		//Thread.sleep(6000);
+
 		RESTClient<Product> p1c = new RESTClient<>("http://localhost:" 
 				 + client0Port + "/" + Service.PERSISTENCE.getServiceName(),
 				 "rest", "products", Product.class);
@@ -163,41 +112,14 @@ public class CacheTest {
 		gone = NonBalancedCRUDOperations.getEntity(p2c, id);
 		Assert.assertNull(gone);
 		
-//		destroy(client1);
-//		destroy(client2);
 	}
 	
 	/**
-	 * Dismantles the embedded Tomcat.
+	 * Dismantles the embedded Tomcats.
 	 * @throws Throwable Throws uncaught throwables for test to fail.
 	 */
 	@After
 	public void dismantle() throws Throwable {
 		clientTomcatHandler.dismantleAll();
 	}
-	
-//	private void destroy(Tomcat tomcat) {
-//		if (tomcat.getServer() != null && tomcat.getServer().getState() != LifecycleState.DESTROYED) {
-//	        if (tomcat.getServer().getState() != LifecycleState.STOPPED) {
-//	        	try {
-//					tomcat.stop();
-//				} catch (Exception e) {
-//					
-//				}
-//	        }
-//	        try {
-//				tomcat.destroy();
-//			} catch (Exception e) {
-//
-//			}
-//	    }
-//	}
-//	
-//	private int getNextClientPort() {
-//		return testport++;
-//	}
-//	
-//	private int getPort(Tomcat tomcat) {
-//		return tomcat.getConnector().getLocalPort();
-//	}
 }

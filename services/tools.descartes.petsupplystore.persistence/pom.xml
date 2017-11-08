@@ -112,13 +112,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>tools.descartes.petsupplystore</groupId>
-			<artifactId>registry</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<classifier>classes</classifier>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.fusesource</groupId>
 			<artifactId>sigar</artifactId>
 			<version>1.6.4</version>
@@ -131,86 +124,12 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>copy-test-persistence</id>
-						<phase>test</phase>
-						<goals>
-							<goal>war</goal>
-						</goals>
-						<configuration>
-							<attachClasses>true</attachClasses>
-							<classesClassifier>classes</classesClassifier>
-							<packagingExcludes>**/WEB-INF/lib/testing-*.jar</packagingExcludes>
-						</configuration>
-					</execution>
-					<execution>
-						<id>copy2-test-persistence</id>
-						<phase>package</phase>
-						<goals>
-							<goal>war</goal>
-						</goals>
-					</execution>
-				</executions>
-				<version>3.1.0</version>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.20</version>
 				<configuration>
 					<reuseForks>false</reuseForks>
 					<forkCount>1</forkCount>
 				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.8</version>
-				<executions>
-					<execution>
-						<id>copy-test-persistence</id>
-						<phase>process-test-resources</phase>
-						<configuration>
-							<tasks>
-								<!--backup the "proper" persistence.xml -->
-								<move
-									file="${project.build.outputDirectory}/META-INF/persistence.xml"
-									tofile="${project.build.outputDirectory}/META-INF/persistence.xml.proper" />
-								<!--replace the "proper" persistence.xml with the "test" version -->
-								<copy
-									file="${project.build.testOutputDirectory}/META-INF/persistence.xml"
-									tofile="${project.build.outputDirectory}/META-INF/persistence.xml" />
-								<!--rename the original "test" version, so that it is not found -->
-								<move
-									file="${project.build.testOutputDirectory}/META-INF/persistence.xml"
-									tofile="${project.build.testOutputDirectory}/META-INF/persistence.xml.bak" />
-							</tasks>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>restore-persistence</id>
-						<phase>prepare-package</phase>
-						<configuration>
-							<tasks>
-								<!--restore the "proper" persistence.xml -->
-								<move
-									file="${project.build.outputDirectory}/META-INF/persistence.xml.proper"
-									tofile="${project.build.outputDirectory}/META-INF/persistence.xml" />
-								<!--restore the "test" persistence.xml -->
-								<move
-									file="${project.build.testOutputDirectory}/META-INF/persistence.xml.bak"
-									tofile="${project.build.testOutputDirectory}/META-INF/persistence.xml" />
-							</tasks>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
