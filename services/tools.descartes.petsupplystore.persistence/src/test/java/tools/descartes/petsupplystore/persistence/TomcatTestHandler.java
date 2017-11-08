@@ -60,7 +60,7 @@ public class TomcatTestHandler {
 	public static final int DEFAULT_TEST_TOMCAT_PORT = 43001;
 	
 	@Rule
-	private WireMockRule wireMockRule = new WireMockRule(MOCK_REGISTRY_PORT);
+	private WireMockRule wireMockRule = new WireMockRule(400);
 	
 	private String testWorkingDir = System.getProperty("java.io.tmpdir");
 	
@@ -132,7 +132,7 @@ public class TomcatTestHandler {
 		}
 		String json = new ObjectMapper().writeValueAsString(strings);
 		wireMockRule.stubFor(get(urlEqualTo(
-				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.PERSISTENCE.getServiceName()))
+				"/test/rest/services/" + Service.PERSISTENCE.getServiceName()))
 						.willReturn(okJson(json)));
 	}
 	

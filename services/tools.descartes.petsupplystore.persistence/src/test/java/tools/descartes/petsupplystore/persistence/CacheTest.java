@@ -20,7 +20,10 @@ import javax.ws.rs.core.Response;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+
+import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
 import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.Product;
@@ -40,6 +43,9 @@ import tools.descartes.petsupplystore.rest.RESTClient;
 public class CacheTest {
 	
 	private TomcatTestHandler clientTomcatHandler;
+	
+	@Rule
+	public WireMockRule wireMockRule = new WireMockRule(8080);
 	
 	/**
 	 * Setup the test by deploying an embedded tomcat and adding the rest endpoints.
