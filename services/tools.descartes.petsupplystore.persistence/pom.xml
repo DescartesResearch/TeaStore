@@ -106,6 +106,12 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>com.github.tomakehurst</groupId>
+			<artifactId>wiremock</artifactId>
+			<version>2.7.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>tools.descartes.petsupplystore</groupId>
 			<artifactId>registry</artifactId>
 			<version>0.0.1-SNAPSHOT</version>

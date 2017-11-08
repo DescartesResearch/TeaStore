@@ -52,7 +52,7 @@ public class CacheTest {
 	
 	private static int testport = 43001;
 
-	private TomcatTestHandler registryTomcatHandler;
+	private TomcatTestHandler clientTomcatHandler;
 	
 	private String testWorkingDir = System.getProperty("java.io.tmpdir");
 	
@@ -62,41 +62,42 @@ public class CacheTest {
 	 */
 	@Before
 	public void setup() throws Throwable {
-		registryTomcatHandler = new TomcatTestHandler(RegistryREST.class, Registry.class);
+		clientTomcatHandler = new TomcatTestHandler(2, TomcatTestHandler.DEFAULT_TEST_TOMCAT_PORT,
+				CacheManagerEndpoint.class, DatabaseGenerationEndpoint.class, ProductEndpoint.class);
 	}
 	
-	private Tomcat createClientTomcat(Service service, Tomcat tomcat) throws ServletException, LifecycleException {
-		int clientPort = getNextClientPort();
-		tomcat.getEngine().setName("Catalina" + clientPort);
-		tomcat.setPort(clientPort);
-		tomcat.setBaseDir(testWorkingDir);
-		tomcat.enableNaming();
-		Context context = tomcat.addWebapp("/" + service.getServiceName(), testWorkingDir);
-		ContextEnvironment registryURL = new ContextEnvironment();
-		registryURL.setDescription("");
-		registryURL.setOverride(false);
-		registryURL.setType("java.lang.String");
-		registryURL.setName("registryURL");
-		registryURL.setValue("http://localhost:" + registryTomcatHandler.getTomcatPort() + "/test/rest/services/");
-		context.getNamingResources().addEnvironment(registryURL);
-		ContextEnvironment servicePort = new ContextEnvironment();
-		servicePort.setDescription("");
-		servicePort.setOverride(false);
-		servicePort.setType("java.lang.String");
-	    servicePort.setName("servicePort");
-	    servicePort.setValue("" + clientPort);
-		context.getNamingResources().addEnvironment(servicePort);	
-		ResourceConfig restServletConfig = new ResourceConfig();
-		restServletConfig.register(CacheManagerEndpoint.class);
-		restServletConfig.register(DatabaseGenerationEndpoint.class);
-		restServletConfig.register(ProductEndpoint.class);
-		ServletContainer restServlet = new ServletContainer(restServletConfig);
-		tomcat.addServlet("/" + service.getServiceName(), "restServlet", restServlet);
-		context.addServletMappingDecoded("/rest/*", "restServlet");
-		context.addApplicationListener(TestRegistryClientStartup.class.getName());
-		tomcat.start();
-		return tomcat;
-	}
+//	private Tomcat createClientTomcat(Service service, Tomcat tomcat) throws ServletException, LifecycleException {
+//		int clientPort = getNextClientPort();
+//		tomcat.getEngine().setName("Catalina" + clientPort);
+//		tomcat.setPort(clientPort);
+//		tomcat.setBaseDir(testWorkingDir);
+//		tomcat.enableNaming();
+//		Context context = tomcat.addWebapp("/" + service.getServiceName(), testWorkingDir);
+//		ContextEnvironment registryURL = new ContextEnvironment();
+//		registryURL.setDescription("");
+//		registryURL.setOverride(false);
+//		registryURL.setType("java.lang.String");
+//		registryURL.setName("registryURL");
+//		registryURL.setValue("http://localhost:" + registryTomcatHandler.getTomcatPort() + "/test/rest/services/");
+//		context.getNamingResources().addEnvironment(registryURL);
+//		ContextEnvironment servicePort = new ContextEnvironment();
+//		servicePort.setDescription("");
+//		servicePort.setOverride(false);
+//		servicePort.setType("java.lang.String");
+//	    servicePort.setName("servicePort");
+//	    servicePort.setValue("" + clientPort);
+//		context.getNamingResources().addEnvironment(servicePort);	
+//		ResourceConfig restServletConfig = new ResourceConfig();
+//		restServletConfig.register(CacheManagerEndpoint.class);
+//		restServletConfig.register(DatabaseGenerationEndpoint.class);
+//		restServletConfig.register(ProductEndpoint.class);
+//		ServletContainer restServlet = new ServletContainer(restServletConfig);
+//		tomcat.addServlet("/" + service.getServiceName(), "restServlet", restServlet);
+//		context.addServletMappingDecoded("/rest/*", "restServlet");
+//		context.addApplicationListener(TestRegistryClientStartup.class.getName());
+//		tomcat.start();
+//		return tomcat;
+//	}
 	
 	/**
 	 * Run the test.
@@ -104,21 +105,23 @@ public class CacheTest {
 	 */
 	@Test
 	public void testEndpoint() throws Throwable {
-		Tomcat client1 = createClientTomcat(Service.PERSISTENCE, new Tomcat());
-		Tomcat client2 = createClientTomcat(Service.PERSISTENCE, new Tomcat());
+		int client0Port = clientTomcatHandler.getTomcatPort(0);
+		int client1Port = clientTomcatHandler.getTomcatPort(1);
+//		Tomcat client1 = createClientTomcat(Service.PERSISTENCE, new Tomcat());
+//		Tomcat client2 = createClientTomcat(Service.PERSISTENCE, new Tomcat());
 		//wait for clients to register
-		Thread.sleep(6000);
+		//Thread.sleep(6000);
 		RESTClient<Product> p1c = new RESTClient<>("http://localhost:" 
-				 + getPort(client1) + "/" + Service.PERSISTENCE.getServiceName(),
+				 + client0Port + "/" + Service.PERSISTENCE.getServiceName(),
 				 "rest", "products", Product.class);
 		RESTClient<Product> p2c = new RESTClient<>("http://localhost:" 
-				 + getPort(client2) + "/" + Service.PERSISTENCE.getServiceName(),
+				 + client1Port + "/" + Service.PERSISTENCE.getServiceName(),
 				 "rest", "products", Product.class);
 		
 		
 		//create initial database
 		RESTClient<String> dbc = new RESTClient<>("http://localhost:" 
-				 + getPort(client1) + "/" + Service.PERSISTENCE.getServiceName(),
+				 + client0Port + "/" + Service.PERSISTENCE.getServiceName(),
 				 "rest", "generatedb", String.class);
 		Response response = dbc.getService()
 				.path(dbc.getApplicationURI()).path(dbc.getEndpointURI())
@@ -143,12 +146,12 @@ public class CacheTest {
 		
 		//clear cache for Categories
 		Response response2 = ClientBuilder.newBuilder().build().target("http://localhost:" 
-				 + getPort(client1) + "/" + Service.PERSISTENCE.getServiceName() + "/rest/cache/class")
+				 + client0Port + "/" + Service.PERSISTENCE.getServiceName() + "/rest/cache/class")
 				.path(Category.class.getName()).request(MediaType.TEXT_PLAIN).delete();
 		Assert.assertEquals(Category.class.getName(), response2.readEntity(String.class));
 		
 		Response response3 = ClientBuilder.newBuilder().build().target("http://localhost:" 
-				 + getPort(client2) + "/" + Service.PERSISTENCE.getServiceName() + "/rest/cache/cache")
+				 + client1Port + "/" + Service.PERSISTENCE.getServiceName() + "/rest/cache/cache")
 				.request(MediaType.TEXT_PLAIN).delete();
 		Assert.assertEquals("cleared", response3.readEntity(String.class));
 		
@@ -160,8 +163,8 @@ public class CacheTest {
 		gone = NonBalancedCRUDOperations.getEntity(p2c, id);
 		Assert.assertNull(gone);
 		
-		destroy(client1);
-		destroy(client2);
+//		destroy(client1);
+//		destroy(client2);
 	}
 	
 	/**
@@ -170,31 +173,31 @@ public class CacheTest {
 	 */
 	@After
 	public void dismantle() throws Throwable {
-		registryTomcatHandler.dismantleAll();
+		clientTomcatHandler.dismantleAll();
 	}
 	
-	private void destroy(Tomcat tomcat) {
-		if (tomcat.getServer() != null && tomcat.getServer().getState() != LifecycleState.DESTROYED) {
-	        if (tomcat.getServer().getState() != LifecycleState.STOPPED) {
-	        	try {
-					tomcat.stop();
-				} catch (Exception e) {
-					
-				}
-	        }
-	        try {
-				tomcat.destroy();
-			} catch (Exception e) {
-
-			}
-	    }
-	}
-	
-	private int getNextClientPort() {
-		return testport++;
-	}
-	
-	private int getPort(Tomcat tomcat) {
-		return tomcat.getConnector().getLocalPort();
-	}
+//	private void destroy(Tomcat tomcat) {
+//		if (tomcat.getServer() != null && tomcat.getServer().getState() != LifecycleState.DESTROYED) {
+//	        if (tomcat.getServer().getState() != LifecycleState.STOPPED) {
+//	        	try {
+//					tomcat.stop();
+//				} catch (Exception e) {
+//					
+//				}
+//	        }
+//	        try {
+//				tomcat.destroy();
+//			} catch (Exception e) {
+//
+//			}
+//	    }
+//	}
+//	
+//	private int getNextClientPort() {
+//		return testport++;
+//	}
+//	
+//	private int getPort(Tomcat tomcat) {
+//		return tomcat.getConnector().getLocalPort();
+//	}
 }
