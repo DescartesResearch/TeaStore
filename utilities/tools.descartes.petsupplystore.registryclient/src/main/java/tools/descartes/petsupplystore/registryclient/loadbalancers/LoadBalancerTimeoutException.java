@@ -22,9 +22,6 @@ import tools.descartes.petsupplystore.registryclient.Service;
  */
 public class LoadBalancerTimeoutException extends RuntimeException {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 5101941775644953394L;
 
 	private Service targetService;

@@ -14,7 +14,6 @@
 package tools.descartes.petsupplystore.registryclient.test;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,41 +21,28 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Returns a single hard-coded product.
+ * Test servlet that always returns 408.
  * @author Joakim von Kistowski
  */
-@WebServlet("/test")
-public class TestServlet extends HttpServlet {
-	
-	private long id = 0;
+@WebServlet("/test3")
+public class TimeoutStatusServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public TestServlet() {
+    public TimeoutStatusServlet() {
         super();
-    }
-    
-    /**
-     * Set servlet id, used to identify servlets in testing.
-     * @param id The id to set.
-     */
-    public void setId(long id) {
-    	this.id = id;
     }
 
 	/**
 	 * {@inheritDoc}
-	 * Returns a single hard-coded product.
+	 * Returns 408.
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		response.setContentType("application/json");    
-		PrintWriter out = response.getWriter();
-		out.print("{\"id\":" + id + ",\"name\":\"Dog Products\",\"description\":\"Products for Dogs.\"}");
-		out.flush();
+		response.setStatus(408);
 	}
 
 	/**

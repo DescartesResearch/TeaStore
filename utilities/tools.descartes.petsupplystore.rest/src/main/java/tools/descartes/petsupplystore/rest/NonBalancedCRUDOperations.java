@@ -21,6 +21,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,14 +43,22 @@ public final class NonBalancedCRUDOperations {
 	 * @param entity The new entity to create. ID may remain unset, it will be ignored by target service.
 	 * @param client The REST client to use.
 	 * @param <T> Type of entity to handle.
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws TimeoutException If 408 was returned.
 	 * @return The new ID of the created entity. Target service creates a new ID, any passed ID is ignored.
 	 * 			Returns -1L if creation failed.
 	 * 			Returns 0 if creation worked, but ID remains unkown.
 	 */
-	public static <T> long sendEntityForCreation(RESTClient<T> client, T entity) {
+	public static <T> long sendEntityForCreation(RESTClient<T> client, T entity)
+			throws NotFoundException, TimeoutException {
 		Response response = client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).request(MediaType.APPLICATION_JSON).
 				post(Entity.entity(entity, MediaType.APPLICATION_JSON), Response.class);
+		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+			throw new NotFoundException();
+		} else if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
+			throw new TimeoutException();
+		}
 		long id = -1L;
 		//If resource was created successfully
 		if (response != null && response.getStatus() == 201) {
@@ -75,12 +84,20 @@ public final class NonBalancedCRUDOperations {
 	 * @param entity The entity to be updated. Entity is matched using its ID.
 	 * @param client The REST client to use.
 	 * @param <T> Type of entity to handle.
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws TimeoutException If 408 was returned.
 	 * @return True, if update succeeded. False, otherwise.
 	 */
-	public static <T> boolean sendEntityForUpdate(RESTClient<T> client, long id, T entity) {
+	public static <T> boolean sendEntityForUpdate(RESTClient<T> client, long id, T entity)
+			throws NotFoundException, TimeoutException {
 		Response response = client.getService().path(client.getApplicationURI()).path(client.getEndpointURI()).
 				path(String.valueOf(id)).request(MediaType.APPLICATION_JSON).
 				put(Entity.entity(entity, MediaType.APPLICATION_JSON), Response.class);
+		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+			throw new NotFoundException();
+		} else if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
+			throw new TimeoutException();
+		}
 		if (response != null && response.getStatus() == 200) {
 			return true;
 		}
@@ -95,13 +112,20 @@ public final class NonBalancedCRUDOperations {
 	 * @param id The ID of the entity to delete.
 	 * @param client The REST client to use.
 	 * @param <T> Type of entity to handle.
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws TimeoutException If 408 was returned.
 	 * @return True, if deletion succeeded; false otherwise.
 	 */
-	public static <T> boolean deleteEntity(RESTClient<T> client, long id) {
+	public static <T> boolean deleteEntity(RESTClient<T> client, long id) throws NotFoundException, TimeoutException {
 		Response response = client.getService().path(client.getApplicationURI()).path(client.getEndpointURI()).
 				path(String.valueOf(id)).request(MediaType.APPLICATION_JSON).delete();
 		if (response != null && response.getStatus() == 200) {
 			return true;
+		}
+		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+			throw new NotFoundException();
+		} else if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
+			throw new TimeoutException();
 		}
 		if (response != null) {
 			response.close();
@@ -114,11 +138,18 @@ public final class NonBalancedCRUDOperations {
 	 * @param id Id of the entity to find.
 	 * @param client The REST client to use.
 	 * @param <T> Type of entity to handle.
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws TimeoutException If 408 was returned.
 	 * @return The entity; null if it does not exist.
 	 */
-	public static <T> T getEntity(RESTClient<T> client, long id) {
+	public static <T> T getEntity(RESTClient<T> client, long id) throws NotFoundException, TimeoutException {
 		Response response = client.getService().path(client.getApplicationURI()).path(client.getEndpointURI()).
 				path(String.valueOf(id)).request(MediaType.APPLICATION_JSON).get();
+		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+			throw new NotFoundException();
+		} else if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
+			throw new TimeoutException();
+		}
 		T entity = null;
 		try {
 			entity = response.readEntity(client.getEntityClass());
@@ -138,9 +169,12 @@ public final class NonBalancedCRUDOperations {
 	 * if you don't want to set an index.
 	 * @param limit Maximum amount of entities to return. -1, for no max.
 	 * @param <T> Type of entity to handle.
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws TimeoutException If 408 was returned.
 	 * @return List of entities; empty list if non were found.
 	 */
-	public static <T> List<T> getEntities(RESTClient<T> client, int startIndex, int limit) {
+	public static <T> List<T> getEntities(RESTClient<T> client, int startIndex, int limit)
+			throws NotFoundException, TimeoutException {
 		WebTarget target = client.getService().path(client.getApplicationURI()).path(client.getEndpointURI());
 		if (startIndex >= 0) {
 			target = target.queryParam("start", startIndex);
@@ -149,6 +183,11 @@ public final class NonBalancedCRUDOperations {
 			target = target.queryParam("max", limit);
 		}
 		Response response = target.request(MediaType.APPLICATION_JSON).get();
+		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+			throw new NotFoundException();
+		} else if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
+			throw new TimeoutException();
+		}
 		List<T> entities = new ArrayList<T>();
 		if (response != null && response.getStatus() == 200) {
 			try {
@@ -175,10 +214,12 @@ public final class NonBalancedCRUDOperations {
 	 * if you don't want to set an index.
 	 * @param limit Maximum amount of entities to return. -1, for no max.
 	 * @param <T> Type of entity to handle.
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws TimeoutException If 408 was returned.
 	 * @return List of entities; empty list if non were found.
 	 */
 	public static <T> List<T> getEntities(RESTClient<T> client, String filterURI,
-			long filterId, int startIndex, int limit) {
+			long filterId, int startIndex, int limit) throws NotFoundException, TimeoutException {
 		WebTarget target = client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path(filterURI).path(String.valueOf(filterId));
 		if (startIndex >= 0) {
@@ -188,6 +229,11 @@ public final class NonBalancedCRUDOperations {
 			target = target.queryParam("max", limit);
 		}
 		Response response = target.request(MediaType.APPLICATION_JSON).get();
+		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+			throw new NotFoundException();
+		} else if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
+			throw new TimeoutException();
+		}
 		List<T> entities = new ArrayList<T>();
 		if (response != null && response.getStatus() == 200) {
 			try {
@@ -211,13 +257,20 @@ public final class NonBalancedCRUDOperations {
 	 * @param propertyURI Name of the property. E.g., "name".
 	 * @param propertyValue Value of the property, e.g., "user1".
 	 * @param <T> Type of entity to handle.
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws TimeoutException If 408 was returned.
 	 * @return The entity; null if it does not exist.
 	 */
 	public static <T> T getEntityWithProperty(RESTClient<T> client, String propertyURI,
-			String propertyValue) {
+			String propertyValue) throws NotFoundException, TimeoutException {
 		WebTarget target = client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path(propertyURI).path(propertyValue);
 		Response response = target.request(MediaType.APPLICATION_JSON).get();
+		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+			throw new NotFoundException();
+		} else if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
+			throw new TimeoutException();
+		}
 		T entity = null;
 		try {
 			entity = response.readEntity(client.getEntityClass());

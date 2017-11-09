@@ -29,11 +29,15 @@ import com.netflix.loadbalancer.Server;
 
 import org.junit.Assert;
 
+import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.registryclient.Service;
-import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
+import tools.descartes.petsupplystore.registryclient.test.NotFoundServlet;
+import tools.descartes.petsupplystore.registryclient.test.SlowTimeoutingServlet;
 import tools.descartes.petsupplystore.registryclient.test.TestServlet;
+import tools.descartes.petsupplystore.registryclient.test.TimeoutStatusServlet;
 import tools.descartes.petsupplystore.rest.NonBalancedCRUDOperations;
+import tools.descartes.petsupplystore.rest.NotFoundException;
 
 /**
  * Test the load balancer.
@@ -46,6 +50,9 @@ public class LoadBalancerTest {
 	private static final Service SERVICE = Service.STORE;
 	private static final String CONTEXT = "/" + SERVICE.getServiceName();
 	private static final String ENDPOINT = "products";
+	private static final String NOT_FOUND_ENDPOINT = "categories";
+	private static final String TIMEOUT_STATUS_ENDPOINT = "statustimeouts";
+	private static final String TIMEOUTING_ENDPOINT = "actualtimeouts";
 	
 	private List<Tomcat> testTomcats;
 	private String testWorkingDir = System.getProperty("java.io.tmpdir");
@@ -60,8 +67,18 @@ public class LoadBalancerTest {
 			testTomcat.getEngine().setName("Catalina" + i);
 			TestServlet testServlet = new TestServlet();
 			testServlet.setId(i);
+			testTomcat.addServlet(CONTEXT, "notFoundServlet", new NotFoundServlet());
+			testTomcat.addServlet(CONTEXT, "timeoutStatusServlet", new TimeoutStatusServlet());
+			testTomcat.addServlet(CONTEXT, "timeoutingServlet", new SlowTimeoutingServlet());
 			testTomcat.addServlet(CONTEXT, "restServlet", testServlet);
-			context.addServletMappingDecoded("/rest/*", "restServlet");
+			context.addServletMappingDecoded("/rest/" + ENDPOINT, "restServlet");
+			context.addServletMappingDecoded("/rest/" + ENDPOINT + "/*", "restServlet");
+			context.addServletMappingDecoded("/rest/" + NOT_FOUND_ENDPOINT, "notFoundServlet");
+			context.addServletMappingDecoded("/rest/" + NOT_FOUND_ENDPOINT + "/*", "notFoundServlet");
+			context.addServletMappingDecoded("/rest/" + TIMEOUT_STATUS_ENDPOINT, "timeoutStatusServlet");
+			context.addServletMappingDecoded("/rest/" + TIMEOUT_STATUS_ENDPOINT + "/*", "timeoutStatusServlet");
+			context.addServletMappingDecoded("/rest/" + TIMEOUTING_ENDPOINT, "timeoutStatusServlet");
+			context.addServletMappingDecoded("/rest/" + TIMEOUTING_ENDPOINT + "/*", "timeoutStatusServlet");
 			testTomcats.add(testTomcat);
 		} catch (ServletException e) {
 			e.printStackTrace();
@@ -102,9 +119,28 @@ public class LoadBalancerTest {
 			ids.add(id);
 		}
 		Assert.assertEquals(NUM_SERVERS * 4, ids.size());
-		for (long i = 0; i < NUM_SERVERS; i++) {
-			Assert.assertTrue(ids.contains(i));
+		//send error call that receives a 404 response to all servers
+		int notFoundExceptionCount = 0;
+		for (int i = 0; i < NUM_SERVERS * 4; i++) {
+			try {
+				ServiceLoadBalancer.loadBalanceRESTOperation(SERVICE, NOT_FOUND_ENDPOINT,
+						Category.class, client -> NonBalancedCRUDOperations.getEntity(client, 0)).getId();
+			} catch (NotFoundException e) {
+				notFoundExceptionCount++;
+			}
 		}
+		Assert.assertEquals(NUM_SERVERS * 4, notFoundExceptionCount);
+		//send error call that receives a 408 response to all servers
+		int timoutExceptionCount = 0;
+		for (int i = 0; i < NUM_SERVERS * 4; i++) {
+			try {
+				ServiceLoadBalancer.loadBalanceRESTOperation(SERVICE, TIMEOUT_STATUS_ENDPOINT,
+						Category.class, client -> NonBalancedCRUDOperations.getEntity(client, 0)).getId();
+			} catch (LoadBalancerTimeoutException e) {
+				timoutExceptionCount++;
+			}
+		}
+		Assert.assertEquals(NUM_SERVERS * 4, timoutExceptionCount);
 		//send multicast
 		List<Product> products = ServiceLoadBalancer.multicastRESTOperation(SERVICE, ENDPOINT, Product.class,
 				client -> NonBalancedCRUDOperations.getEntity(client, 0));
@@ -175,6 +211,16 @@ public class LoadBalancerTest {
 				Assert.assertTrue(ids.contains(i));
 			}
 		}
+		
+		//send request to super slow servlet and expect the rst client and load balancer to time out
+		boolean isTimeout = false;
+		try {
+			ServiceLoadBalancer.loadBalanceRESTOperation(SERVICE, TIMEOUTING_ENDPOINT,
+					Product.class, client -> NonBalancedCRUDOperations.getEntity(client, 0)).getId();
+		} catch (LoadBalancerTimeoutException e) {
+			isTimeout = true;
+		}
+		Assert.assertTrue(isTimeout);
 	}
 	
 	private List<Server> tomcatsToServers() {

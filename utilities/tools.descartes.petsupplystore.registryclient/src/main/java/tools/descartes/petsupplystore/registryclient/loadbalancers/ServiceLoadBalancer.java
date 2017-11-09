@@ -23,6 +23,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import javax.ws.rs.core.Response.Status;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +38,7 @@ import com.netflix.loadbalancer.reactive.LoadBalancerCommand;
 import rx.Observable;
 import tools.descartes.petsupplystore.registryclient.RegistryClient;
 import tools.descartes.petsupplystore.registryclient.Service;
+import tools.descartes.petsupplystore.rest.NotFoundException;
 import tools.descartes.petsupplystore.rest.RESTClient;
 
 /**
@@ -180,16 +183,20 @@ public final class ServiceLoadBalancer {
      * 				E.g.: "client -> CRUDOperations.getEntity(client, id)".
      * @param <R> The expected return type.
      * @param <T> The entity type of the entity to send/receive.
+     * @throws LoadBalancerTimeoutException On receiving the 408 status code
+     * and on repeated load balancer socket timeouts.
+	 * @throws NotFoundException On receiving the 404 status code.
      * @return Returns the return value of the load balanced operation.
      */
     public static <T, R> R loadBalanceRESTOperation(Service targetService,
     		String endpointURI, Class<T> entityClass,
-    		Function<RESTClient<T>, R> operation) {
+    		Function<RESTClient<T>, R> operation) throws NotFoundException, LoadBalancerTimeoutException {
     	return getServiceLoadBalancer(targetService).loadBalanceRESTOperation(endpointURI, entityClass, operation);
 	}
     
     private <T, R> R loadBalanceRESTOperation(String endpointURI,
-    		Class<T> entityClass, Function<RESTClient<T>, R> operation) throws LoadBalancerTimeoutException {
+    		Class<T> entityClass, Function<RESTClient<T>, R> operation)
+    				throws NotFoundException, LoadBalancerTimeoutException {
     	R r = null;
     	loadBalancerModificationLock.readLock().lock();
     	try {
@@ -201,20 +208,24 @@ public final class ServiceLoadBalancer {
         	if (loadBalancer == null || loadBalancer.getAllServers().isEmpty()) {
         		LOG.warn("No Server registered for Service: " + targetService.getServiceName());
         	} else {
-        		r = LoadBalancerCommand.<R>builder()
+        		ServiceLoadBalancerResult<R> slbr = LoadBalancerCommand.<ServiceLoadBalancerResult<R>>builder()
                         .withLoadBalancer(loadBalancer)
                         .withRetryHandler(retryHandler)
                         .build()
                         .submit(server -> Observable.just(
-                        		operation.apply(
+                        		ServiceLoadBalancerResult.fromRESTOperation(
                         				(RESTClient<T>) getEndpointClientCollection(endpointURI, entityClass)
-                        				.getRESTClient(server))))
+                				.getRESTClient(server), operation)
+                        		))
                         .onErrorReturn((Throwable e) -> null).toBlocking().first();
-        		if (r == null) {
+        		if (slbr == null || slbr.getStatusCode() == Status.REQUEST_TIMEOUT.getStatusCode()) {
         			throw new LoadBalancerTimeoutException("Timout at endpoint: "
         					+ endpointURI + ", with target service: " + targetService.getServiceName(),
         					targetService);
+        		} else if (slbr.getStatusCode() == Status.NOT_FOUND.getStatusCode() || slbr.getEntity() == null) {
+        			throw new NotFoundException();
         		}
+        		r = slbr.getEntity();
         	}
     	} finally {
     		loadBalancerModificationLock.readLock().unlock();

@@ -15,6 +15,7 @@ package tools.descartes.petsupplystore.registryclient.test;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,40 +23,36 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Returns a single hard-coded product.
+ * Test servlet that waits 6 seconds before responding with a hard coded product.
  * @author Joakim von Kistowski
  */
-@WebServlet("/test")
-public class TestServlet extends HttpServlet {
-	
-	private long id = 0;
+@WebServlet("/test4")
+public class SlowTimeoutingServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public TestServlet() {
+    public SlowTimeoutingServlet() {
         super();
-    }
-    
-    /**
-     * Set servlet id, used to identify servlets in testing.
-     * @param id The id to set.
-     */
-    public void setId(long id) {
-    	this.id = id;
     }
 
 	/**
 	 * {@inheritDoc}
-	 * Returns a single hard-coded product.
+	 * Waits 6 seconds before responding with a hard coded product
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		try {
+			Thread.sleep(6000);
+		} catch (InterruptedException e) {
+			System.out.println("Interrupted sleeping in the slow responding servlet.");
+		}
+		
 		response.setContentType("application/json");    
 		PrintWriter out = response.getWriter();
-		out.print("{\"id\":" + id + ",\"name\":\"Dog Products\",\"description\":\"Products for Dogs.\"}");
+		out.print("{\"id\":18,\"name\":\"Dog Products\",\"description\":\"Products for Dogs.\"}");
 		out.flush();
 	}
 
