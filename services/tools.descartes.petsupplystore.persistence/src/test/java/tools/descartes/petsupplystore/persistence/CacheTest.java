@@ -20,7 +20,10 @@ import javax.ws.rs.core.Response;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+
+import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
 import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.Product;
@@ -39,7 +42,15 @@ import tools.descartes.petsupplystore.rest.RESTClient;
  */
 public class CacheTest {
 	
+	private static final int MOCK_REGISTRY_PORT = 42999;
+	
+	
 	private TomcatTestHandler clientTomcatHandler;
+	/**
+	 * Wiremock Rule for the local mock registry.
+	 */
+	@Rule
+	public WireMockRule wireMockRule = new WireMockRule(MOCK_REGISTRY_PORT);
 	
 	/**
 	 * Setup the test by deploying an embedded tomcat and adding the rest endpoints.
@@ -48,6 +59,7 @@ public class CacheTest {
 	@Before
 	public void setup() throws Throwable {
 		clientTomcatHandler = new TomcatTestHandler(2, TomcatTestHandler.DEFAULT_TEST_TOMCAT_PORT,
+				wireMockRule,
 				CacheManagerEndpoint.class, DatabaseGenerationEndpoint.class, ProductEndpoint.class);
 	}
 	

@@ -26,6 +26,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import tools.descartes.petsupplystore.entities.OrderItem;
+import tools.descartes.petsupplystore.registryclient.Service;
 
 /**
  * Test for the RecommenderEndpoint.
@@ -34,30 +35,37 @@ import tools.descartes.petsupplystore.entities.OrderItem;
  *
  */
 public class RecommenderEndpointTest extends AbstractRecommenderRestTest {
+	
+	private static final String RECOMMENDER_REST_PREFIX =
+			"http://localhost:" + RECOMMENDER_TEST_PORT + "/" + Service.RECOMMENDER.getServiceName() + "/rest/";
+	private static final String TRAIN_TARGET = RECOMMENDER_REST_PREFIX + "train";
+	private static final String RECOMMEND_TARGET = RECOMMENDER_REST_PREFIX + "recommend";
+	private static final String RECOMMEND_SINGLE_TARGET = RECOMMENDER_REST_PREFIX + "recommendsingle";
+	
 	/**
 	 * Run the access test.
 	 */
 	@Test
-	public void testRecommendEndpoint() {
+	public void testRecommendEndpoint() {	
 		// TEST RECOMMEND ENDPOINT
 		// Assert PUT Method is not allowed
 		Response response = ClientBuilder.newBuilder().build()
-				.target("http://localhost:3002/tools.descartes.petsupplystore.recommender/rest/recommend")
+				.target(RECOMMEND_TARGET)
 				.request(MediaType.APPLICATION_JSON).put(Entity.text(""));
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_METHOD_NOT_ALLOWED, response.getStatus());
 		// Assert GET Method is not allowed
 		response = ClientBuilder.newBuilder().build()
-				.target("http://localhost:3002/tools.descartes.petsupplystore.recommender/rest/recommend")
+				.target(RECOMMEND_TARGET)
 				.request(MediaType.APPLICATION_JSON).get();
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_METHOD_NOT_ALLOWED, response.getStatus());
 		// Assert DELETE Method is not allowed
 		response = ClientBuilder.newBuilder().build()
-				.target("http://localhost:3002/tools.descartes.petsupplystore.recommender/rest/recommend")
+				.target(RECOMMEND_TARGET)
 				.request(MediaType.APPLICATION_JSON).delete();
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_METHOD_NOT_ALLOWED, response.getStatus());
 		// Assert calling recommend with single entity fails
 		response = ClientBuilder.newBuilder().build()
-				.target("http://localhost:3002/tools.descartes.petsupplystore.recommender/rest/recommend")
+				.target(RECOMMEND_TARGET)
 				.request(MediaType.APPLICATION_JSON).post(Entity.entity(new OrderItem(), MediaType.APPLICATION_JSON));
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_BAD_REQUEST, response.getStatus());
 
@@ -66,22 +74,22 @@ public class RecommenderEndpointTest extends AbstractRecommenderRestTest {
 		// TEST RECOMMENDSINGLE ENDPOINT
 		// Assert PUT Method is not allowed
 		response = ClientBuilder.newBuilder().build()
-				.target("http://localhost:3002/tools.descartes.petsupplystore.recommender/rest/recommendsingle")
+				.target(RECOMMEND_SINGLE_TARGET)
 				.request(MediaType.APPLICATION_JSON).put(Entity.text(""));
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_METHOD_NOT_ALLOWED, response.getStatus());
 		// Assert GET Method is not allowed
 		response = ClientBuilder.newBuilder().build()
-				.target("http://localhost:3002/tools.descartes.petsupplystore.recommender/rest/recommendsingle")
+				.target(RECOMMEND_SINGLE_TARGET)
 				.request(MediaType.APPLICATION_JSON).get();
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_METHOD_NOT_ALLOWED, response.getStatus());
 		// Assert DELETE Method is not allowed
 		response = ClientBuilder.newBuilder().build()
-				.target("http://localhost:3002/tools.descartes.petsupplystore.recommender/rest/recommendsingle")
+				.target(RECOMMEND_SINGLE_TARGET)
 				.request(MediaType.APPLICATION_JSON).delete();
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_METHOD_NOT_ALLOWED, response.getStatus());
 		// Assert calling recommend with list entity fails
 		response = ClientBuilder.newBuilder().build()
-				.target("http://localhost:3002/tools.descartes.petsupplystore.recommender/rest/recommendsingle")
+				.target(RECOMMEND_SINGLE_TARGET)
 				.request(MediaType.APPLICATION_JSON).post(Entity.entity(list, MediaType.APPLICATION_JSON));
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_BAD_REQUEST, response.getStatus());
 
@@ -90,29 +98,29 @@ public class RecommenderEndpointTest extends AbstractRecommenderRestTest {
 		// TEST TRAIN ENDPOINT
 		// Assert PUT Method is not allowed
 		response = ClientBuilder.newBuilder().build()
-				.target("http://localhost:3002/tools.descartes.petsupplystore.recommender/rest/train")
+				.target(TRAIN_TARGET)
 				.request(MediaType.TEXT_PLAIN).put(Entity.text(""));
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_METHOD_NOT_ALLOWED, response.getStatus());
 		// Assert POST Method is not allowed
 		response = ClientBuilder.newBuilder().build()
-				.target("http://localhost:3002/tools.descartes.petsupplystore.recommender/rest/train")
+				.target(TRAIN_TARGET)
 				.request(MediaType.TEXT_PLAIN).post(Entity.text(""));
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_METHOD_NOT_ALLOWED, response.getStatus());
 		// Assert DELETE Method is not allowed
 		response = ClientBuilder.newBuilder().build()
-				.target("http://localhost:3002/tools.descartes.petsupplystore.recommender/rest/train")
+				.target(TRAIN_TARGET)
 				.request(MediaType.TEXT_PLAIN).delete();
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_METHOD_NOT_ALLOWED, response.getStatus());
 
 		// Assert calling train via GET is OK
 		response = ClientBuilder.newBuilder().build()
-				.target("http://localhost:3002/tools.descartes.petsupplystore.recommender/rest/train")
+				.target(TRAIN_TARGET)
 				.request(MediaType.TEXT_PLAIN).get();
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
 
 		// test training process finishes
 		response = ClientBuilder.newBuilder().build()
-				.target("http://localhost:3002/tools.descartes.petsupplystore.recommender/rest/train")
+				.target(TRAIN_TARGET)
 				.request(MediaType.TEXT_PLAIN).get();
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
 		String str = response.readEntity(String.class);
@@ -123,7 +131,7 @@ public class RecommenderEndpointTest extends AbstractRecommenderRestTest {
 		// test recommendation process is now available
 		list = new ArrayList<OrderItem>();
 		response = ClientBuilder.newBuilder().build()
-				.target("http://localhost:3002/tools.descartes.petsupplystore.recommender/rest/recommend")
+				.target(RECOMMEND_TARGET)
 				.request(MediaType.APPLICATION_JSON).post(Entity.entity(list, MediaType.APPLICATION_JSON));
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
 		List<Long> recommended = response.readEntity(new GenericType<List<Long>>() {
@@ -141,13 +149,13 @@ public class RecommenderEndpointTest extends AbstractRecommenderRestTest {
 		// TEST RECOMMENDATION SINGLE
 		// checking if sending null fails
 		response = ClientBuilder.newBuilder().build()
-				.target("http://localhost:3002/tools.descartes.petsupplystore.recommender/rest/recommendsingle")
+				.target(RECOMMEND_SINGLE_TARGET)
 				.request(MediaType.APPLICATION_JSON).post(Entity.entity(null, MediaType.APPLICATION_JSON));
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_INTERNAL_SERVER_ERROR, response.getStatus());
 
 		// test recommendation process is now available
 		response = ClientBuilder.newBuilder().build()
-				.target("http://localhost:3002/tools.descartes.petsupplystore.recommender/rest/recommendsingle")
+				.target(RECOMMEND_SINGLE_TARGET)
 				.request(MediaType.APPLICATION_JSON).post(Entity.entity(new OrderItem(), MediaType.APPLICATION_JSON));
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
 		recommended = response.readEntity(new GenericType<List<Long>>() {
