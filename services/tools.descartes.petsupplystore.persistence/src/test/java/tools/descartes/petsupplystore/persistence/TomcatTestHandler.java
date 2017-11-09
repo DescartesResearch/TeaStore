@@ -79,20 +79,22 @@ public class TomcatTestHandler {
 			tomcats[i].setBaseDir(testWorkingDir);
 			Context context = tomcats[i].addWebapp(CONTEXT, testWorkingDir);
 			//Registry
-			ContextEnvironment registryURL = new ContextEnvironment();
-			registryURL.setDescription("");
-			registryURL.setOverride(false);
-			registryURL.setType("java.lang.String");
-			registryURL.setName("registryURL");
-			registryURL.setValue("http://localhost:" + wireMockRule.port() + "/test/rest/services/");
-			context.getNamingResources().addEnvironment(registryURL);
-			ContextEnvironment servicePort = new ContextEnvironment();
-			servicePort.setDescription("");
-			servicePort.setOverride(false);
-			servicePort.setType("java.lang.String");
-		    servicePort.setName("servicePort");
-		    servicePort.setValue("" + startPort + i);
-			context.getNamingResources().addEnvironment(servicePort);	
+			if (wireMockRule != null) {
+				ContextEnvironment registryURL = new ContextEnvironment();
+				registryURL.setDescription("");
+				registryURL.setOverride(false);
+				registryURL.setType("java.lang.String");
+				registryURL.setName("registryURL");
+				registryURL.setValue("http://localhost:" + wireMockRule.port() + "/test/rest/services/");
+				context.getNamingResources().addEnvironment(registryURL);
+				ContextEnvironment servicePort = new ContextEnvironment();
+				servicePort.setDescription("");
+				servicePort.setOverride(false);
+				servicePort.setType("java.lang.String");
+			    servicePort.setName("servicePort");
+			    servicePort.setValue("" + startPort + i);
+				context.getNamingResources().addEnvironment(servicePort);
+			}
 			//REST endpoints
 			ResourceConfig restServletConfig = new ResourceConfig();
 			for (Class<?> endpoint: endpoints) {
