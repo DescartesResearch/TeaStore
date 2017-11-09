@@ -13,12 +13,7 @@
  */
 package tools.descartes.petsupplystore.recommender;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
-
-import org.junit.Rule;
-
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
 import tools.descartes.petsupplystore.registryclient.Service;
@@ -34,23 +29,26 @@ public class MockPersistenceProvider {
 	/**
 	 * Default Port for the mock persistence.
 	 */
-	public static final int MOCK_PERSISTENCE_PORT = 43001;
-
-	@Rule
-	private WireMockRule wireMockRule = new WireMockRule(MOCK_PERSISTENCE_PORT);
+	public static final int DEFAULT_MOCK_PERSISTENCE_PORT = 43001;
+	
+	private int port;
 	
 	/**
-	 * Create a mock persistence operating on on Port
-	 * {@value #DEFAULT_MOCK_PERSISTENCE_PORT}.
-	 * 
+	 * Create a mock persistence using a wire mock rule.
+	 * Recommended: Use {@link #DEFAULT_MOCK_PERSISTENCE_PORT} as port.
+	 * @param rule The wire mock rule to create the mocking stubs for.
 	 */
-	public MockPersistenceProvider() {
-		wireMockRule.stubFor(get(urlEqualTo(
+	public MockPersistenceProvider(WireMockRule rule) {
+		this.port = rule.port();
+		rule.stubFor(WireMock.get(WireMock.urlEqualTo(
 				"/" + Service.PERSISTENCE.getServiceName() + "/rest/orders"))
-						.willReturn(okJson(getOrders())));
-		wireMockRule.stubFor(get(urlEqualTo(
+						.willReturn(WireMock.okJson(getOrders())));
+		rule.stubFor(WireMock.get(WireMock.urlEqualTo(
 				"/" + Service.PERSISTENCE.getServiceName() + "/rest/orderitems"))
-						.willReturn(okJson(getOrderItems())));
+						.willReturn(WireMock.okJson(getOrderItems())));
+		rule.stubFor(WireMock.get(WireMock.urlEqualTo(
+				"/" + Service.PERSISTENCE.getServiceName() + "/rest/generatedb/finished"))
+						.willReturn(WireMock.ok("true")));
 	}
 
 
@@ -59,7 +57,7 @@ public class MockPersistenceProvider {
 	 * @return The port.
 	 */
 	public int getPort() {
-		return MOCK_PERSISTENCE_PORT;
+		return port;
 	}
 
 	/**

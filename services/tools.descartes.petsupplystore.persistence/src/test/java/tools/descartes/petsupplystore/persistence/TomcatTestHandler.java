@@ -29,7 +29,6 @@ import org.apache.catalina.startup.Tomcat;
 import org.apache.tomcat.util.descriptor.web.ContextEnvironment;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
-import org.junit.Rule;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,16 +50,9 @@ public class TomcatTestHandler {
 	 */
 	public static final String CONTEXT = "/" + Service.PERSISTENCE.getServiceName();
 	/**
-	 * Port of the mock registry.
-	 */
-	public static final int MOCK_REGISTRY_PORT = 43000;
-	/**
 	 * Default Port for the Testing Tomcat.
 	 */
 	public static final int DEFAULT_TEST_TOMCAT_PORT = 43001;
-	
-	@Rule
-	private WireMockRule wireMockRule = new WireMockRule(400);
 	
 	private String testWorkingDir = System.getProperty("java.io.tmpdir");
 	
@@ -70,12 +62,14 @@ public class TomcatTestHandler {
 	 * Create a Tomcat test handler for persistence testing.
 	 * @param count Number of testing tomcats.
 	 * @param startPort Port to start with (do not use 0 for auto-assigning).
+	 * @param wireMockRule Wire mock rule for mocking the registry.The test handler will
+	 * add all services with respective stubs to the rule.
 	 * @param endpoints Class objects for the endpoints.
 	 * @throws ServletException Exception on failure.
 	 * @throws LifecycleException Exception on failure.
 	 * @throws JsonProcessingException Exception on failure.
 	 */
-	public TomcatTestHandler(int count, int startPort, Class<?>... endpoints)
+	public TomcatTestHandler(int count, int startPort, WireMockRule wireMockRule, Class<?>... endpoints)
 			throws ServletException, LifecycleException, JsonProcessingException {
 		tomcats = new Tomcat[count];
 		EMFManagerInitializer.initializeEMF();
@@ -90,7 +84,7 @@ public class TomcatTestHandler {
 			registryURL.setOverride(false);
 			registryURL.setType("java.lang.String");
 			registryURL.setName("registryURL");
-			registryURL.setValue("http://localhost:" + MOCK_REGISTRY_PORT + "/test/rest/services/");
+			registryURL.setValue("http://localhost:" + wireMockRule.port() + "/test/rest/services/");
 			context.getNamingResources().addEnvironment(registryURL);
 			ContextEnvironment servicePort = new ContextEnvironment();
 			servicePort.setDescription("");
@@ -109,12 +103,14 @@ public class TomcatTestHandler {
 			context.addServletMappingDecoded("/rest/*", "restServlet");
 			tomcats[i].start();
 		}
-		initializeMockRegistry(count, startPort);
+		if (wireMockRule != null) {
+			initializeMockRegistry(wireMockRule, count, startPort);
+		}
 		System.out.println("Initializing Database with size " + CategoryRepository.REPOSITORY.getAllEntities().size());
 	}
 	
 	/**
-	 * Create a Tomcat test handler.
+	 * Create a Tomcat test handler. Expects no active registry to be mocked.
 	 * @param endpoints Class objects for the endpoints.
 	 * @throws ServletException Exception on failure.
 	 * @throws LifecycleException Exception on failure.
@@ -122,17 +118,18 @@ public class TomcatTestHandler {
 	 */
 	public TomcatTestHandler(Class<?>... endpoints)
 			throws ServletException, LifecycleException, JsonProcessingException {
-		this(1, DEFAULT_TEST_TOMCAT_PORT, endpoints);
+		this(1, DEFAULT_TEST_TOMCAT_PORT, null, endpoints);
 	}
 	
-	private void initializeMockRegistry(int count, int startport) throws JsonProcessingException {
+	private void initializeMockRegistry(WireMockRule wireMockRule, int count, int startport)
+			throws JsonProcessingException {
 		List<String> strings = new LinkedList<String>();
 		for (int i = 0; i < count; i++) {
 			strings.add("localhost:" + (startport + i));
 		}
 		String json = new ObjectMapper().writeValueAsString(strings);
 		wireMockRule.stubFor(get(urlEqualTo(
-				"/test/rest/services/" + Service.PERSISTENCE.getServiceName()))
+				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.PERSISTENCE.getServiceName()))
 						.willReturn(okJson(json)));
 	}
 	

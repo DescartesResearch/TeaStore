@@ -28,6 +28,9 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
+
+import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
 import tools.descartes.petsupplystore.recommender.rest.RecommendEndpoint;
 import tools.descartes.petsupplystore.recommender.rest.RecommendSingleEndpoint;
@@ -47,7 +50,19 @@ public abstract class AbstractRecommenderRestTest {
 	 * Port for testing recommender.
 	 */
 	protected static final int RECOMMENDER_TEST_PORT = 3002;
+	/**
+	 * The wiremock rule for the mock persistence.
+	 */
+	@Rule
+	public WireMockRule persistenceWireMockRule
+		= new WireMockRule(MockPersistenceProvider.DEFAULT_MOCK_PERSISTENCE_PORT);
 	private MockPersistenceProvider persistence;
+	
+	/**
+	 * The wiremock rule for the mock registry.
+	 */
+	@Rule
+	public WireMockRule registryWireMockRule = new WireMockRule(MockRegistry.DEFAULT_MOCK_REGISTRY_PORT);
 	private MockRegistry registry;
 	private Tomcat testTomcat;
 	private String testWorkingDir = System.getProperty("java.io.tmpdir");
@@ -60,16 +75,23 @@ public abstract class AbstractRecommenderRestTest {
 	 */
 	@Before
 	public void setup() throws Throwable {
-		persistence = new MockPersistenceProvider();
-		registry = new MockRegistry(Arrays.asList(persistence.getPort()),
+		persistence = new MockPersistenceProvider(persistenceWireMockRule);
+		registry = new MockRegistry(registryWireMockRule,
+				Arrays.asList(persistence.getPort()),
 				Arrays.asList(RECOMMENDER_TEST_PORT));
 		
 		//debuggging response 
 		Response response0 = ClientBuilder.newBuilder().build()
-				.target("http://localhost:" + MockRegistry.MOCK_REGISTRY_PORT
-				+ "/tools.descartes.petsupplystore.registry/rest/services/" + Service.PERSISTENCE.getServiceName())
+				.target("http://localhost:" + MockRegistry.DEFAULT_MOCK_REGISTRY_PORT
+				+ "/tools.descartes.petsupplystore.registry/rest/services/" + Service.PERSISTENCE.getServiceName() + "/")
 				.request(MediaType.APPLICATION_JSON).get();
-		System.out.println(response0.getStatus());
+		System.out.println(response0.getStatus() + ":" + response0.readEntity(String.class));
+		
+		Response response1 = ClientBuilder.newBuilder().build()
+				.target("http://localhost:" + persistence.getPort()
+				+ "/tools.descartes.petsupplystore.persistence/rest/orderitems")
+				.request(MediaType.APPLICATION_JSON).get();
+		System.out.println(response1.getStatus() + ":" + response1.readEntity(String.class));
 		
 		// Setup registry
 //		registryTomcat = new Tomcat();

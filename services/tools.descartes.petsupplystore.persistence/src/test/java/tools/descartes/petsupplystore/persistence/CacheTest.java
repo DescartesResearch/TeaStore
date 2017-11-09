@@ -42,10 +42,15 @@ import tools.descartes.petsupplystore.rest.RESTClient;
  */
 public class CacheTest {
 	
-	private TomcatTestHandler clientTomcatHandler;
+	private static final int MOCK_REGISTRY_PORT = 42999;
 	
+	
+	private TomcatTestHandler clientTomcatHandler;
+	/**
+	 * Wiremock Rule for the local mock registry.
+	 */
 	@Rule
-	public WireMockRule wireMockRule = new WireMockRule(8080);
+	public WireMockRule wireMockRule = new WireMockRule(MOCK_REGISTRY_PORT);
 	
 	/**
 	 * Setup the test by deploying an embedded tomcat and adding the rest endpoints.
@@ -54,14 +59,8 @@ public class CacheTest {
 	@Before
 	public void setup() throws Throwable {
 		clientTomcatHandler = new TomcatTestHandler(2, TomcatTestHandler.DEFAULT_TEST_TOMCAT_PORT,
+				wireMockRule,
 				CacheManagerEndpoint.class, DatabaseGenerationEndpoint.class, ProductEndpoint.class);
-		
-		//debuggging response 
-		Response response0 = ClientBuilder.newBuilder().build()
-				.target("http://localhost:" + TomcatTestHandler.DEFAULT_TEST_TOMCAT_PORT
-				+ "/tools.descartes.petsupplystore.registry/rest/services/" + Service.PERSISTENCE.getServiceName())
-				.request(MediaType.APPLICATION_JSON).get();
-		System.out.println("Got status response: " + response0.getStatus());
 	}
 	
 	/**

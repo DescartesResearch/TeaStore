@@ -17,8 +17,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.junit.Rule;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.WireMock;
@@ -37,62 +35,64 @@ public class MockRegistry {
 	/**
 	 * Default Port for the mock registry.
 	 */
-	public static final int MOCK_REGISTRY_PORT = 43002;
-
-	@Rule
-	private WireMockRule wireMockRule = new WireMockRule(MOCK_REGISTRY_PORT);
-	
+	public static final int DEFAULT_MOCK_REGISTRY_PORT = 43002;
+	private int port;
 	/**
-	 * Create a mock registry operating on port {@value #MOCK_REGISTRY_PORT}.
-	 * 
+	 * Create a mock registry using a wiremock rule.
+	 * Recommended: Use {@link #DEFAULT_MOCK_REGISTRY_PORT} as port for your rule.
+	 * @param rule The wiremock rule to generate the mock stubs for.
 	 * @param persistencePorts Ports of the (mock) persistence providers. 
 	 * @param recommenderPorts Ports of the recommenders.
 	 * @throws JsonProcessingException Exception on failure.
 	 */
-	public MockRegistry(List<Integer> persistencePorts, List<Integer> recommenderPorts)
+	public MockRegistry(WireMockRule rule, List<Integer> persistencePorts, List<Integer> recommenderPorts)
 			throws JsonProcessingException {
-		initializeServiceQueryStubs(persistencePorts, recommenderPorts);
-		initializeUpdateAndHeartbeatStubs();
+		port = rule.port();
+		initializeServiceQueryStubs(rule, persistencePorts, recommenderPorts);
+		initializeUpdateAndHeartbeatStubs(rule);
 	}
 
-	private void initializeServiceQueryStubs(List<Integer> persistencePorts, List<Integer> recommenderPorts)
+	private void initializeServiceQueryStubs(WireMockRule rule,
+			List<Integer> persistencePorts, List<Integer> recommenderPorts)
 			throws JsonProcessingException {
 		List<String> persistences = new LinkedList<String>();
 		for (int persistencePort: persistencePorts) {
 			persistences.add("localhost:" + persistencePort);
 		}
 		String json = new ObjectMapper().writeValueAsString(persistences);
-		wireMockRule.stubFor(WireMock.get(WireMock.urlEqualTo(
-				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.PERSISTENCE.getServiceName()))
+		rule.stubFor(WireMock.get(WireMock.urlEqualTo(
+				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.PERSISTENCE.getServiceName() + "/"))
 						.willReturn(WireMock.okJson(json)));
 		List<String> recommenders = new LinkedList<String>();
 		for (int recommenderPort: recommenderPorts) {
 			recommenders.add("localhost:" + recommenderPort);
 		}
 		json = new ObjectMapper().writeValueAsString(recommenders);
-		wireMockRule.stubFor(WireMock.get(WireMock.urlEqualTo(
-				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.RECOMMENDER.getServiceName()))
+		rule.stubFor(WireMock.get(WireMock.urlEqualTo(
+				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.RECOMMENDER.getServiceName() + "/"))
 						.willReturn(WireMock.okJson(json)));
 	}
 	
-	private void initializeUpdateAndHeartbeatStubs() {
-		wireMockRule.stubFor(WireMock.put(WireMock.urlEqualTo(
-				"/tools.descartes.petsupplystore.registry/rest/services/*"))
+	private void initializeUpdateAndHeartbeatStubs(WireMockRule rule) {
+		rule.stubFor(WireMock.put(WireMock.urlMatching(
+				"/tools.descartes.petsupplystore.registry/rest/services/.*"))
 						.willReturn(WireMock.ok()));
-		wireMockRule.stubFor(WireMock.delete(WireMock.urlEqualTo(
-				"/tools.descartes.petsupplystore.registry/rest/services/*"))
+		rule.stubFor(WireMock.delete(WireMock.urlMatching(
+				"/tools.descartes.petsupplystore.registry/rest/services/.*"))
 						.willReturn(WireMock.ok()));
 	}
 	
 	/**
-	 * Create a mock persistence operating on Port
-	 * {@value #MOCK_REGISTRY_PORT}.
+	 * Create a mock persistence operating using a wiremock rule.
+	 * Recommended: Use {@link #DEFAULT_MOCK_REGISTRY_PORT} as port for your rule.
 	 * Assumes a persistence at the default {@link MockPersistenceProvider}.
+	 * @param rule The wiremock rule to generate the mock stubs for.
 	 * @param recommenderPorts Ports of the recommenders.
 	 * @throws JsonProcessingException Exception on failure.
 	 */
-	public MockRegistry(List<Integer> recommenderPorts) throws JsonProcessingException {
-		this(Arrays.asList(MockPersistenceProvider.MOCK_PERSISTENCE_PORT),
+	public MockRegistry(WireMockRule rule, List<Integer> recommenderPorts)
+			throws JsonProcessingException {
+		this(rule, Arrays.asList(MockPersistenceProvider.DEFAULT_MOCK_PERSISTENCE_PORT),
 				recommenderPorts);
 	}
 
@@ -101,6 +101,6 @@ public class MockRegistry {
 	 * @return The port.
 	 */
 	public int getPort() {
-		return MOCK_REGISTRY_PORT;
+		return this.port;
 	}
 }
