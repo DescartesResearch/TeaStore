@@ -15,7 +15,9 @@ import tools.descartes.petsupplystore.entities.ImageSize;
 import tools.descartes.petsupplystore.entities.ImageSizePreset;
 import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.registryclient.Service;
+import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
+import tools.descartes.petsupplystore.rest.NotFoundException;
 
 /**
  * Wrapper for rest operations.
@@ -31,9 +33,13 @@ public final class LoadBalancedImageOperations {
 	/**
 	 * Retrieves image for a product.
 	 * @param product product.
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws LoadBalancerTimeoutException On receiving the 408 status code
+     * and on repeated load balancer socket timeouts.
 	 * @return image for product
 	 */
-	public static String getProductImage(Product product) {
+	public static String getProductImage(Product product)
+			throws NotFoundException, LoadBalancerTimeoutException {
 		return getProductImage(product, ImageSizePreset.FULL.getSize());
 	}
 	
@@ -41,9 +47,13 @@ public final class LoadBalancedImageOperations {
 	 * Gets product image.
 	 * @param product product.
 	 * @param size target size
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws LoadBalancerTimeoutException On receiving the 408 status code
+     * and on repeated load balancer socket timeouts.
 	 * @return image for product with target size
 	 */
-	public static String getProductImage(Product product, ImageSize size) {
+	public static String getProductImage(Product product, ImageSize size)
+			throws NotFoundException, LoadBalancerTimeoutException {
 		return getProductImages(Stream.of(product).collect(Collectors.toList()), size)
 				.getOrDefault(product.getId(), "");	
 	}
@@ -51,9 +61,13 @@ public final class LoadBalancedImageOperations {
 	/**
 	 * Gets preview images for a series of products.
 	 * @param products List of products
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws LoadBalancerTimeoutException On receiving the 408 status code
+     * and on repeated load balancer socket timeouts.
 	 * @return HashMap containing all preview images
 	 */
-	public static HashMap<Long, String> getProductPreviewImages(List<Product> products) {
+	public static HashMap<Long, String> getProductPreviewImages(List<Product> products)
+			throws NotFoundException, LoadBalancerTimeoutException {
 		return getProductImages(products, ImageSizePreset.PREVIEW.getSize());
 	}
 	
@@ -61,9 +75,13 @@ public final class LoadBalancedImageOperations {
 	 * Gets preview images for a series of products with target image size.
 	 * @param products list of products
 	 * @param size target size
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws LoadBalancerTimeoutException On receiving the 408 status code
+     * and on repeated load balancer socket timeouts.
 	 * @return HashMap containing all preview images
 	 */
-	public static HashMap<Long, String> getProductImages(List<Product> products, ImageSize size) {
+	public static HashMap<Long, String> getProductImages(List<Product> products, ImageSize size)
+			throws NotFoundException, LoadBalancerTimeoutException {
 		HashMap<Long, String> img = new HashMap<>();
 		for (Product p : products) {
 			img.put(p.getId(), size.toString());
@@ -89,9 +107,13 @@ public final class LoadBalancedImageOperations {
 	 * Retrieves web image.
 	 * @param name name of image.
 	 * @param size target size
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws LoadBalancerTimeoutException On receiving the 408 status code
+     * and on repeated load balancer socket timeouts.
 	 * @return image
 	 */
-	public static String getWebImage(String name, ImageSize size) {
+	public static String getWebImage(String name, ImageSize size)
+			throws NotFoundException, LoadBalancerTimeoutException {
 		return getWebImages(Stream.of(name).collect(Collectors.toList()), size).getOrDefault(name, "");	
 	}
 
@@ -100,9 +122,13 @@ public final class LoadBalancedImageOperations {
 	 * Retrieves a series of web image.
 	 * @param names list of name of image.
 	 * @param size target size
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws LoadBalancerTimeoutException On receiving the 408 status code
+     * and on repeated load balancer socket timeouts.
 	 * @return HashMap containing requested images.
 	 */
-	public static HashMap<String, String> getWebImages(List<String> names, ImageSize size) {
+	public static HashMap<String, String> getWebImages(List<String> names, ImageSize size)
+			throws NotFoundException, LoadBalancerTimeoutException {
 		HashMap<String, String> img = new HashMap<>();
 		for (String name : names) {
 			img.put(name, size.toString());
