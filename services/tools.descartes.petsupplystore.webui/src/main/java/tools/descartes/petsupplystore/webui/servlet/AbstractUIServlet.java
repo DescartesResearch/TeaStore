@@ -33,6 +33,7 @@ import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.message.SessionBlob;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
+import tools.descartes.petsupplystore.rest.NotFoundException;
 
 /**
  * Abstract servlet for the webUI
@@ -146,8 +147,6 @@ public abstract class AbstractUIServlet extends HttpServlet {
 		}
 		response.sendRedirect(getServletContext().getContextPath() + target);
 
-
-
 	}
 
 	/**
@@ -169,7 +168,7 @@ public abstract class AbstractUIServlet extends HttpServlet {
 			}
 		}
 	}
-	
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
@@ -177,15 +176,16 @@ public abstract class AbstractUIServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			try {
-				doGetInternal(request, response);
-			} catch (LoadBalancerTimeoutException e) {
-				serveTimoutResponse(request, response, e.getTargetService());
-			}
+			
+			doGetInternal(request, response);
+		} catch (LoadBalancerTimeoutException e) {
+			serveTimoutResponse(request, response, e.getTargetService());
+		} catch (NotFoundException e) {
+			serveNotFoundException(request, response, e);
 		} catch (Exception e) {
 			serveExceptionResponse(request, response, e);
 		}
-		
+
 	}
 
 	/**
@@ -195,41 +195,55 @@ public abstract class AbstractUIServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			try {
-				doPostInternal(request, response);
-			} catch (LoadBalancerTimeoutException e) {
-				serveTimoutResponse(request, response, e.getTargetService());
-			}
+
+			doPostInternal(request, response);
+		} catch (LoadBalancerTimeoutException e) {
+			serveTimoutResponse(request, response, e.getTargetService());
+		} catch (NotFoundException e) {
+			serveNotFoundException(request, response, e);
 		} catch (Exception e) {
 			serveExceptionResponse(request, response, e);
 		}
 	}
-	
+
 	/**
 	 * Handles a http POST request internally.
-	 * @param request The request.
-	 * @param response The response to write to.
-	 * @throws ServletException ServletException on error.
-	 * @throws IOException IOException on error.
-	 * @throws LoadBalancerTimeoutException Exception on timeouts and load balancer errors.
+	 * 
+	 * @param request
+	 *            The request.
+	 * @param response
+	 *            The response to write to.
+	 * @throws ServletException
+	 *             ServletException on error.
+	 * @throws IOException
+	 *             IOException on error.
+	 * @throws LoadBalancerTimeoutException
+	 *             Exception on timeouts and load balancer errors.
 	 */
 	protected void doPostInternal(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, LoadBalancerTimeoutException {
 		doGetInternal(request, response);
 	}
-	
+
 	/**
 	 * Handles a http GET request internally.
-	 * @param request The request.
-	 * @param response The response to write to.
-	 * @throws ServletException ServletException on error.
-	 * @throws IOException IOException on error.
-	 * @throws LoadBalancerTimeoutException Exception on timeouts and load balancer errors.
+	 * 
+	 * @param request
+	 *            The request.
+	 * @param response
+	 *            The response to write to.
+	 * @throws ServletException
+	 *             ServletException on error.
+	 * @throws IOException
+	 *             IOException on error.
+	 * @throws LoadBalancerTimeoutException
+	 *             Exception on timeouts and load balancer errors.
 	 */
 	protected abstract void doGetInternal(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, LoadBalancerTimeoutException;
-	
-	private void serveTimoutResponse(HttpServletRequest request, HttpServletResponse response, Service service) throws ServletException, IOException {
+
+	private void serveTimoutResponse(HttpServletRequest request, HttpServletResponse response, Service service)
+			throws ServletException, IOException {
 		response.setStatus(408);
 		request.setAttribute("CategoryList", new ArrayList<Category>());
 		request.setAttribute("storeIcon", "");
@@ -237,12 +251,13 @@ public abstract class AbstractUIServlet extends HttpServlet {
 		request.setAttribute("title", "Pet Supply Store Timeout");
 		request.setAttribute("messagetitle", "408: Timout waiting for Service: " + service.getServiceName());
 		request.setAttribute("messageparagraph", "WebUI got a timeout waiting for service \"" + service.getServiceName()
-			+ "\" to respond. Note the that service may itself have been waiting for another service.");
+				+ "\" to respond. Note the that service may itself have been waiting for another service.");
 		request.setAttribute("login", false);
 		request.getRequestDispatcher("WEB-INF/pages/error.jsp").forward(request, response);
 	}
-	
-	private void serveExceptionResponse(HttpServletRequest request, HttpServletResponse response, Exception e) throws ServletException, IOException {
+
+	private void serveExceptionResponse(HttpServletRequest request, HttpServletResponse response, Exception e)
+			throws ServletException, IOException {
 		StringWriter sw = new StringWriter();
 		e.printStackTrace(new PrintWriter(sw));
 		String exceptionAsString = sw.toString();
@@ -252,6 +267,22 @@ public abstract class AbstractUIServlet extends HttpServlet {
 		request.setAttribute("errorImage", "");
 		request.setAttribute("title", "Pet Supply Store Timeout");
 		request.setAttribute("messagetitle", "500: Internal Exception: " + e.getMessage());
+		request.setAttribute("messageparagraph", exceptionAsString);
+		request.setAttribute("login", false);
+		request.getRequestDispatcher("WEB-INF/pages/error.jsp").forward(request, response);
+	}
+
+	private void serveNotFoundException(HttpServletRequest request, HttpServletResponse response, Exception e)
+			throws ServletException, IOException {
+		StringWriter sw = new StringWriter();
+		e.printStackTrace(new PrintWriter(sw));
+		String exceptionAsString = sw.toString();
+		response.setStatus(404);
+		request.setAttribute("CategoryList", new ArrayList<Category>());
+		request.setAttribute("storeIcon", "");
+		request.setAttribute("errorImage", "");
+		request.setAttribute("title", "Pet Supply Store Timeout");
+		request.setAttribute("messagetitle", "404: Not Found Exception: " + e.getMessage());
 		request.setAttribute("messageparagraph", exceptionAsString);
 		request.setAttribute("login", false);
 		request.getRequestDispatcher("WEB-INF/pages/error.jsp").forward(request, response);

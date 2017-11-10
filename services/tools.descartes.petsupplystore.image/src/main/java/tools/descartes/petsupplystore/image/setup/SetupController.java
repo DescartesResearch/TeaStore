@@ -62,7 +62,9 @@ import tools.descartes.petsupplystore.image.storage.rules.StoreAll;
 import tools.descartes.petsupplystore.image.storage.rules.StoreLargeImages;
 import tools.descartes.petsupplystore.registryclient.RegistryClient;
 import tools.descartes.petsupplystore.registryclient.Service;
+import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
+import tools.descartes.petsupplystore.rest.NotFoundException;
 
 public enum SetupController {
 
@@ -116,19 +118,22 @@ public enum SetupController {
 		// case the persistence is
 		// not answering.
 		while (true) {
-			Response result = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "generatedb",
-					String.class, client -> client.getService().path(client.getApplicationURI())
+			Response result = null;
+			try {
+				ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "generatedb", 
+						String.class, client -> client.getService().path(client.getApplicationURI())
 							.path(client.getEndpointURI()).path("finished").request().get());
+			} catch (NotFoundException notFound) {
+				log.info("No persistence found.", notFound);
+			} catch (LoadBalancerTimeoutException timeout) {
+				log.info("Persistence call timed out.", timeout);
+			}
 
 			if (result == null ? false : Boolean.parseBoolean(result.readEntity(String.class))) {
 				if (result != null) {
 					result.close();
 				}
 				break;
-			}
-
-			if (result != null) {
-				result.close();
 			}
 
 			try {
@@ -145,10 +150,19 @@ public enum SetupController {
 	private void fetchProductsForCategory(Category category, HashMap<Category, List<Long>> products) {
 		waitForPersistence();
 
-		Response result = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "products", Product.class,
-				client -> client.getService().path(client.getApplicationURI()).path(client.getEndpointURI())
+		Response result = null;
+		try {
+			result = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "products", Product.class,
+					client -> client.getService().path(client.getApplicationURI()).path(client.getEndpointURI())
 						.path("category").path(String.valueOf(category.getId())).queryParam("start", 0)
 						.queryParam("max", -1).request().get());
+		} catch (NotFoundException notFound) {
+			log.error("No persistence found but should be online.", notFound);
+			throw notFound;
+		} catch (LoadBalancerTimeoutException timeout) {
+			log.error("Persistence call timed out but should be reachable.", timeout);
+			throw timeout;
+		}
 
 		if (result == null) {
 			products.put(category, new ArrayList<>());
@@ -165,9 +179,18 @@ public enum SetupController {
 		waitForPersistence();
 
 		List<Category> categories = null;
-		Response result = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "categories",
-				Category.class, client -> client.getService().path(client.getApplicationURI())
+		Response result = null;
+		try {
+			result = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "categories",
+					Category.class, client -> client.getService().path(client.getApplicationURI())
 						.path(client.getEndpointURI()).request().get());
+		} catch (NotFoundException notFound) {
+			log.error("No persistence found but should be online.", notFound);
+			throw notFound;
+		} catch (LoadBalancerTimeoutException timeout) {
+			log.error("Persistence call timed out but should be reachable.", timeout);
+			throw timeout;
+		}
 
 		if (result == null) {
 			log.warn("No categories found.");

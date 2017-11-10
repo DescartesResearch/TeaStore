@@ -53,6 +53,7 @@ public class TestStoreLargeImages {
 		assertFalse(uut.test(mockedIconImg));
 		assertFalse(uut.test(mockedMainImg));
 		assertFalse(uut.test(mockedPreviewImg));
+		assertFalse(uut.test(null));
 	}
 	
 }

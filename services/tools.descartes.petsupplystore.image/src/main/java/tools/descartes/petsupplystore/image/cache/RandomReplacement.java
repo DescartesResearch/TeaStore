@@ -17,6 +17,7 @@ import java.util.Random;
 import java.util.function.Predicate;
 
 import tools.descartes.petsupplystore.image.cache.entry.ICachable;
+import tools.descartes.petsupplystore.image.cache.rules.CacheAll;
 import tools.descartes.petsupplystore.image.storage.IDataStorage;
 
 public class RandomReplacement<T extends ICachable<T>> extends AbstractQueueCache<T> {
@@ -24,15 +25,15 @@ public class RandomReplacement<T extends ICachable<T>> extends AbstractQueueCach
 	private Random rand = new Random();
 	
 	public RandomReplacement() {
-		super();
+		this(IDataCache.STD_MAX_CACHE_SIZE);
 	}
 	
 	public RandomReplacement(long maxCacheSize) {
-		super(maxCacheSize);
+		this(maxCacheSize, new CacheAll<T>());
 	}
 	
 	public RandomReplacement(long maxCacheSize, Predicate<T> cachingRule) {
-		super(maxCacheSize, cachingRule);
+		this(null, maxCacheSize, cachingRule);
 	}
 	
 	public RandomReplacement(IDataStorage<T> cachedStorage, long maxCacheSize, Predicate<T> cachingRule) {
@@ -50,7 +51,7 @@ public class RandomReplacement<T extends ICachable<T>> extends AbstractQueueCach
 
 	@Override
 	protected void removeEntryByCachingStrategy() {
-		entries.remove(rand.nextInt(entries.size()));
+		dataRemovedFromCache(entries.remove(rand.nextInt(entries.size())).getByteSize());
 	}
 
 }

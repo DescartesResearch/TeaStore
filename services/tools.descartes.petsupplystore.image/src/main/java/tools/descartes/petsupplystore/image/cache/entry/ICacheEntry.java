@@ -13,13 +13,24 @@
  */
 package tools.descartes.petsupplystore.image.cache.entry;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-	TestSimpleEntry.class, TestCountedEntry.class, TestTimedEntry.class
-})
-public class TestSuiteCacheEntries {
-
+/**
+ * Basic wrapper type stored by all cache implementations. It wraps the data stored in a cache.
+ * @author Norbert Schmitt
+ *
+ * @param <T> The data type that should be cached. Must implement 
+ * {@link tools.descartes.petsupplystore.image.cache.entry.ICachable}.
+ */
+public interface ICacheEntry<T extends ICachable<T>> extends ICachable<T> {
+	
+	/**
+	 * Method signaling to the wrapper that this entry was read from the cache.
+	 */
+	public void wasUsed();
+	
+	/**
+	 * Returns the cachable data stored in this wrapper class.
+	 * @return The cachable data
+	 */
+	public T getData();
+	
 }
