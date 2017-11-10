@@ -37,6 +37,7 @@ public class TestStoreAll {
 	public void testRule() {
 		StoreAll<StoreImage> uut = new StoreAll<>();
 		assertTrue(uut.test(mockedImg));
+		assertTrue(uut.test(null));
 	}
 	
 }

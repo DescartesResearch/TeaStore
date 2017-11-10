@@ -16,20 +16,21 @@ package tools.descartes.petsupplystore.image.cache;
 import java.util.function.Predicate;
 
 import tools.descartes.petsupplystore.image.cache.entry.ICachable;
+import tools.descartes.petsupplystore.image.cache.rules.CacheAll;
 import tools.descartes.petsupplystore.image.storage.IDataStorage;
 
 public class FirstInFirstOut<T extends ICachable<T>> extends AbstractQueueCache<T> {
 	
 	public FirstInFirstOut() {
-		super();
+		this(IDataCache.STD_MAX_CACHE_SIZE);
 	}
 	
 	public FirstInFirstOut(long maxCacheSize) {
-		super(maxCacheSize);
+		this(maxCacheSize, new CacheAll<T>());
 	}
 	
 	public FirstInFirstOut(long maxCacheSize, Predicate<T> cachingRule) {
-		super(maxCacheSize, cachingRule);
+		this(null, maxCacheSize, cachingRule);
 	}
 	
 	public FirstInFirstOut(IDataStorage<T> cachedStorage, long maxCacheSize, Predicate<T> cachingRule) {

@@ -22,7 +22,7 @@ public class StoreLargeImages implements Predicate<StoreImage> {
 
 	@Override
 	public boolean test(StoreImage t) {
-		return t.getSize().equals(ImageSizePreset.FULL.getSize());
+		return t == null ? false : t.getSize().equals(ImageSizePreset.FULL.getSize());
 	}
 
 }

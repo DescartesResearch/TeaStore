@@ -140,6 +140,11 @@ public class TestImageScaler {
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
+	public void testScaleFactorTwoSingleBelowZero() {
+		ImageScaler.scale(img,  1.5, -2.0);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
 	public void testScaleFactorTwoBelowZero() {
 		ImageScaler.scale(img, -1.22, -2.22);
 	}
@@ -157,6 +162,11 @@ public class TestImageScaler {
 	@Test(expected = IllegalArgumentException.class)
 	public void testScalePixelTwoZero() {
 		ImageScaler.scale(img, 0, 0);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testScalePixelTwoSIngleBelowZero() {
+		ImageScaler.scale(img, 5, -6);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)

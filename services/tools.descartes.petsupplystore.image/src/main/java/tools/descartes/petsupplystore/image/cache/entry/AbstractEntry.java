@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
  *
  * @param <D> Cachable data that must implement {@link tools.descartes.petsupplystore.image.cache.entry.ICachable}
  */
-public abstract class AbstractEntry<D extends ICachable<D>> {
+public abstract class AbstractEntry<D extends ICachable<D>> implements ICacheEntry<D> {
 	
 	private D data;
 	private Logger log = LoggerFactory.getLogger(AbstractEntry.class);
@@ -41,33 +41,52 @@ public abstract class AbstractEntry<D extends ICachable<D>> {
 		this.data = data;
 	}
 
-	/**
-	 * Returns the cachable data stored in this wrapper class.
-	 * @return The cachable data
-	 */
+	@Override
 	public D getData() {
 		return data;
 	}
-	
-	/**
-	 * Method signaling to the wrapper that this entry was read from the cache.
-	 */
+
+	@Override
 	public abstract void wasUsed();
 	
-	/**
-	 * Returns the unique ID that each cachable data has.
-	 * @return The unique ID for the cachable data
-	 */
+	@Override
 	public long getId() {
 		return data.getId();
 	}
 	
-	/**
-	 * Returns the byte size of the cachable data.
-	 * @return The byte size of the cachable data
-	 */
+	@Override
 	public long getByteSize() {
 		return data.getByteSize();
 	}
-	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((data == null) ? 0 : data.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		AbstractEntry<?> other = (AbstractEntry<?>) obj;
+		if (data == null) {
+			if (other.data != null) {
+				return false;
+			}
+		} else if (!data.equals(other.data)) {
+			return false;
+		}
+		return true;
+	}
+
 }

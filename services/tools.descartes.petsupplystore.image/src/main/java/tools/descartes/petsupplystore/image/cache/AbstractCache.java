@@ -21,13 +21,12 @@ import java.util.function.Predicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tools.descartes.petsupplystore.image.cache.entry.AbstractEntry;
 import tools.descartes.petsupplystore.image.cache.entry.ICachable;
-import tools.descartes.petsupplystore.image.cache.rules.CacheAll;
+import tools.descartes.petsupplystore.image.cache.entry.ICacheEntry;
 import tools.descartes.petsupplystore.image.storage.IDataStorage;
 import tools.descartes.petsupplystore.image.storage.NoStorage;
 
-public abstract class AbstractCache<S extends Collection<F>, T extends ICachable<T>, F extends AbstractEntry<T>> 
+public abstract class AbstractCache<S extends Collection<F>, T extends ICachable<T>, F extends ICacheEntry<T>> 
 		implements IDataCache<T> {
 	
 	protected IDataStorage<T> cachedStorage;
@@ -39,18 +38,6 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 	private Logger log = LoggerFactory.getLogger(AbstractCache.class);
 	
 	private final ReadWriteLock lock = new ReentrantReadWriteLock();
-	
-	public AbstractCache(S entries) {
-		this(entries, IDataCache.STD_MAX_CACHE_SIZE);
-	}
-	
-	public AbstractCache(S entries, long maxCacheSize) {
-		this(entries, maxCacheSize, new CacheAll<T>());
-	}
-	
-	public AbstractCache(S entries, long maxCacheSize, Predicate<T> cachingRule) {
-		this(entries, null, maxCacheSize, cachingRule);
-	}
 	
 	public AbstractCache(S entries, IDataStorage<T> cachedStorage, long maxCacheSize, Predicate<T> cachingRule) {
 		if (entries == null) {
@@ -73,18 +60,32 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 		setMaxCacheSize(maxCacheSize);
 	}
 	
+	private F findInEntries(long id) {
+		return entries.stream().filter(entry -> entry.getId() == id).findFirst().orElse(null);	
+	}
+	
 	private T getData(long id, boolean markUsed) {
 		F data = null;
-		lock.readLock().lock();
-		try {
-			data = entries.stream().filter(entry -> entry.getId() == id).findFirst().orElse(null);
-		} finally {
-			lock.readLock().unlock();
+		if (markUsed) {
+			lock.writeLock().lock();
+			try {
+				data = findInEntries(id);	
+				if (data != null) {
+					// Set entries must be reordered. A change in the object itself will not trigger a reordering
+					reorderAndTag(data);
+				}
+			} finally {
+				lock.writeLock().unlock();
+			}
+		} else {
+			lock.readLock().lock();
+			try {
+				data = findInEntries(id);
+			} finally {
+				lock.readLock().unlock();
+			}
 		}
 		if (data != null) {
-			if (markUsed) {
-				data.wasUsed();
-			}
 			return data.getData();
 		}
 		return null;
@@ -101,7 +102,7 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 	
 	@Override
 	public boolean setMaxCacheSize(long maxCacheSize) {
-		if (maxCacheSize < 0) {
+		if (maxCacheSize <= 0) {
 			log.error("The provided cache size is negative. Must be positive.");
 			throw new IllegalArgumentException("The provided cache size is negative. Must be positive.");
 		}
@@ -138,7 +139,7 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 	
 	@Override
 	public boolean hasStorageFor(long size) {
-		return size < getFreeSpace();
+		return size <= getFreeSpace();
 	}
 
 	@Override
@@ -166,8 +167,9 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 	public void uncacheData(T data) {
 		lock.writeLock().lock();
 		try {
-			entries.remove(createEntry(data));
-			dataRemovedFromCache(data.getByteSize());
+			if (entries.remove(createEntry(data))) {
+				dataRemovedFromCache(data.getByteSize());
+			}
 		} finally {
 			lock.writeLock().unlock();
 		}
@@ -203,7 +205,7 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 		boolean result = false;
 		lock.readLock().lock();
 		try {
-			result = dataIsInCache(id) ? cachedStorage.dataExists(id) : false;
+			result = dataIsInCache(id) ? true : cachedStorage.dataExists(id);
 		} finally {
 			lock.readLock().unlock();
 		}
@@ -220,7 +222,7 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 			if (entry == null) {
 				return null;
 			}
-			// Image found, cache it and return
+			// Data found, cache it and return
 			cacheData(entry);
 		}
 		return entry;
@@ -287,4 +289,8 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
 
 	protected abstract void removeEntryByCachingStrategy();
 	
+	protected void reorderAndTag(F data) {
+		// In the best case, we only have to tag the data as used
+		data.wasUsed();
+	}
 }

@@ -23,18 +23,6 @@ import tools.descartes.petsupplystore.image.storage.IDataStorage;
 public abstract class AbstractQueueCache<T extends ICachable<T>> 
 		extends AbstractCache<LinkedList<SimpleEntry<T>>, T, SimpleEntry<T>> {
 	
-	public AbstractQueueCache() {
-		super(new LinkedList<>());
-	}
-	
-	public AbstractQueueCache(long maxCacheSize) {
-		super(new LinkedList<>(), maxCacheSize);
-	}
-	
-	public AbstractQueueCache(long maxCacheSize, Predicate<T> cachingRule) {
-		super(new LinkedList<>(), maxCacheSize, cachingRule);
-	}
-	
 	public AbstractQueueCache(IDataStorage<T> cachedStorage, long maxCacheSize, Predicate<T> cachingRule) {
 		super(new LinkedList<>(), cachedStorage, maxCacheSize, cachingRule);
 	}

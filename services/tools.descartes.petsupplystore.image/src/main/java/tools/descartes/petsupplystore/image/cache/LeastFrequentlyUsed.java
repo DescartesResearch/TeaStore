@@ -36,8 +36,9 @@ public class LeastFrequentlyUsed<T extends ICachable<T>> extends AbstractTreeCac
 	
 	public LeastFrequentlyUsed(IDataStorage<T> cachedStorage, long maxCacheSize, Predicate<T> cachingRule) {
 		super(cachedStorage, maxCacheSize, cachingRule, 
-				(a,b) -> a.getUseCount() - b.getUseCount() != 0 ? a.getUseCount() - b.getUseCount() 
-						: (a.getId() < b.getId() ? -1 : (a.getId() == b.getId() ? 0 : 1)));
+				(a,b) -> a.getId() == b.getId() ? 0 
+						: (a.getUseCount() - b.getUseCount() != 0 ? a.getUseCount() - b.getUseCount() 
+								: (a.getId() < b.getId() ? -1 : 1)));
 	}
 
 	@Override

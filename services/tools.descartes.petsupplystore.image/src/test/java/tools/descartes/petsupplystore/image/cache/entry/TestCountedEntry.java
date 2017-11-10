@@ -14,7 +14,6 @@
 package tools.descartes.petsupplystore.image.cache.entry;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -25,17 +24,12 @@ import tools.descartes.petsupplystore.image.StoreImage;
 
 public class TestCountedEntry {
 
-	private final long mockedByteSize = 5000;
-	private final long mockedID = 1234567890;
-	
 	@Mock
 	private StoreImage mockedImg; 
 
 	@Before
 	public void initialize() {
 		MockitoAnnotations.initMocks(this);
-		when(mockedImg.getByteSize()).thenReturn(mockedByteSize);
-		when(mockedImg.getId()).thenReturn(mockedID);
 	}
 	
 	@Test
@@ -57,24 +51,6 @@ public class TestCountedEntry {
 		uut.wasUsed();
 		uut.wasUsed();
 		assertEquals(3, uut.getUseCount());
-	}
-	
-	@Test
-	public void testGetData() {
-		CountedEntry<StoreImage> uut = new CountedEntry<>(mockedImg);
-		assertEquals(mockedImg, uut.getData());
-	}
-	
-	@Test
-	public void testGetByteSize() {
-		CountedEntry<StoreImage> uut = new CountedEntry<>(mockedImg);
-		assertEquals(mockedByteSize, uut.getByteSize());
-	}
-	
-	@Test
-	public void testGetID() {
-		CountedEntry<StoreImage> uut = new CountedEntry<>(mockedImg);
-		assertEquals(mockedID, uut.getId());
 	}
 	
 }

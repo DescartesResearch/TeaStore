@@ -36,6 +36,7 @@ public class TestCacheAll {
 	public void testRule() {
 		CacheAll<StoreImage> uut = new CacheAll<>();
 		assertTrue(uut.test(mockedImg));
+		assertTrue(uut.test(null));
 	}
 
 }
