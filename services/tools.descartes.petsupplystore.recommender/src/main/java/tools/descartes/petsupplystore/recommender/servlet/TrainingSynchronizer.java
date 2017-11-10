@@ -20,8 +20,9 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
-import java.util.stream.IntStream;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -51,9 +52,9 @@ public final class TrainingSynchronizer {
 	// creating entries
 	private static final int PERSISTENCE_CREATION_MAX_WAIT_TIME = 120000;
 	// Wait time in ms before checking again for an existing persistence service
-	private static final IntStream PERSISTENCE_CREATION_WAIT_TIME = IntStream.concat(
-			IntStream.of(1000, 2000, 5000, 10000, 30000, 60000),
-			IntStream.generate(() -> PERSISTENCE_CREATION_MAX_WAIT_TIME));
+	private static final List<Integer> PERSISTENCE_CREATION_WAIT_TIME = 
+			Arrays.asList(1000, 2000, 5000, 10000, 30000, 60000);
+
 	
 	private TrainingSynchronizer() {
 
@@ -95,6 +96,7 @@ public final class TrainingSynchronizer {
 		// generating images (which queries persistence). Yes we want to wait forever in
 		// case the persistence is
 		// not answering.
+		Iterator<Integer> waitTimes = PERSISTENCE_CREATION_WAIT_TIME.iterator();
 		while (true) {
 			Response result = null;
 			try {
@@ -113,8 +115,7 @@ public final class TrainingSynchronizer {
 				}
 			}
 			try {
-				int nextWaitTime = PERSISTENCE_CREATION_WAIT_TIME.findFirst()
-						.orElseGet(() -> PERSISTENCE_CREATION_MAX_WAIT_TIME);
+				int nextWaitTime = waitTimes.hasNext() ? waitTimes.next() : PERSISTENCE_CREATION_MAX_WAIT_TIME;
 				LOG.info("Persistence not reachable. Waiting for {}ms.", nextWaitTime);
 				Thread.sleep(nextWaitTime);
 			} catch (InterruptedException interrupted) {

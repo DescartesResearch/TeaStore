@@ -1,6 +1,8 @@
 package tools.descartes.petsupplystore.image.cache.entry;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
@@ -9,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import tools.descartes.petsupplystore.image.StoreImage;
+import tools.descartes.petsupplystore.image.cache.DummyData;
 
 public class TestAbstractEntry {
 
@@ -17,12 +20,19 @@ public class TestAbstractEntry {
 	
 	@Mock
 	private StoreImage mockedImg; 
+	@Mock
+	private StoreImage mockedImgNotEqual;
+	@Mock
+	private AbstractEntry<StoreImage> nullEntry;
 
 	@Before
 	public void initialize() {
 		MockitoAnnotations.initMocks(this);
 		when(mockedImg.getByteSize()).thenReturn(mockedByteSize);
 		when(mockedImg.getId()).thenReturn(mockedID);
+		when(mockedImgNotEqual.getByteSize()).thenReturn(300L);
+		when(mockedImgNotEqual.getId()).thenReturn(9876543210L);
+		when(nullEntry.getData()).thenReturn(null);
 	}
 	
 	@Test
@@ -57,5 +67,15 @@ public class TestAbstractEntry {
 	public void testGetID() {
 		AbstractEntryWrapper uut = new AbstractEntryWrapper(mockedImg);
 		assertEquals(mockedID, uut.getId());
+	}
+	
+	@Test
+	public void testEquals() {
+		AbstractEntryWrapper uut = new AbstractEntryWrapper(mockedImg);
+		AbstractEntryWrapper uut2 = new AbstractEntryWrapper(mockedImgNotEqual);
+		assertTrue(uut.equals(uut));
+		assertFalse(uut.equals(uut2));
+		assertFalse(uut.equals(null));
+		assertFalse(uut.equals(nullEntry));
 	}
 }

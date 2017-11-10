@@ -24,7 +24,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -32,7 +34,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import javax.imageio.ImageIO;
 import javax.ws.rs.core.GenericType;
@@ -76,10 +77,9 @@ public enum SetupController {
 		// creating entries
 		public final static int PERSISTENCE_CREATION_MAX_WAIT_TIME = 120000;
 		// Wait time in ms before checking again for an existing persistence service
-		public final static IntStream PERSISTENCE_CREATION_WAIT_TIME = IntStream.concat(
-				IntStream.of(1000, 2000, 5000, 10000, 30000, 60000),
-				IntStream.generate(() -> PERSISTENCE_CREATION_MAX_WAIT_TIME));
-		// Nubmer of available logical cpus for image creation
+		public final static List<Integer> PERSISTENCE_CREATION_WAIT_TIME = 
+				Arrays.asList(1000, 2000, 5000, 10000, 30000, 60000);
+		// Number of available logical cpus for image creation
 		public final static int CREATION_THREAD_POOL_SIZE = Runtime.getRuntime().availableProcessors();
 		// Wait time in ms for the image creation thread pool to terminate all threads.
 		public final static long CREATION_THREAD_POOL_WAIT = 500;
@@ -117,6 +117,7 @@ public enum SetupController {
 		// generating images (which queries persistence). Yes we want to wait forever in
 		// case the persistence is
 		// not answering.
+		Iterator<Integer> waitTimes = SetupControllerConstants.PERSISTENCE_CREATION_WAIT_TIME.iterator();
 		while (true) {
 			Response result = null;
 			try {
@@ -137,8 +138,8 @@ public enum SetupController {
 			}
 
 			try {
-				int nextWaitTime = SetupControllerConstants.PERSISTENCE_CREATION_WAIT_TIME.findFirst()
-						.orElseGet(() -> SetupControllerConstants.PERSISTENCE_CREATION_MAX_WAIT_TIME);
+				int nextWaitTime = waitTimes.hasNext() ? waitTimes.next() 
+						: SetupControllerConstants.PERSISTENCE_CREATION_MAX_WAIT_TIME;
 				log.info("Persistence not reachable. Waiting for {}ms.", nextWaitTime);
 				Thread.sleep(nextWaitTime);
 			} catch (InterruptedException interrupted) {
