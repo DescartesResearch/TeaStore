@@ -33,8 +33,10 @@ import tools.descartes.petsupplystore.entities.Order;
 import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.recommender.algorithm.RecommenderSelector;
 import tools.descartes.petsupplystore.registryclient.Service;
+import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;
+import tools.descartes.petsupplystore.rest.NotFoundException;
 
 /**
  * This class organizes the communication with the other services and
@@ -47,9 +49,9 @@ public final class TrainingSynchronizer {
 
 	// Longest wait period before querying the persistence again if it is finished
 	// creating entries
-	private final static int PERSISTENCE_CREATION_MAX_WAIT_TIME = 120000;
+	private static final int PERSISTENCE_CREATION_MAX_WAIT_TIME = 120000;
 	// Wait time in ms before checking again for an existing persistence service
-	private final static IntStream PERSISTENCE_CREATION_WAIT_TIME = IntStream.concat(
+	private static final IntStream PERSISTENCE_CREATION_WAIT_TIME = IntStream.concat(
 			IntStream.of(1000, 2000, 5000, 10000, 30000, 60000),
 			IntStream.generate(() -> PERSISTENCE_CREATION_MAX_WAIT_TIME));
 	
@@ -94,21 +96,22 @@ public final class TrainingSynchronizer {
 		// case the persistence is
 		// not answering.
 		while (true) {
-			Response result = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "generatedb",
-					String.class, client -> client.getService().path(client.getApplicationURI())
-							.path(client.getEndpointURI()).path("finished").request().get());
-
-			if (result == null ? false : Boolean.parseBoolean(result.readEntity(String.class))) {
+			Response result = null;
+			try {
+				result = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "generatedb",
+						String.class, client -> client.getService().path(client.getApplicationURI())
+								.path(client.getEndpointURI()).path("finished").request().get());
+				
+				if (result != null && Boolean.parseBoolean(result.readEntity(String.class))) {
+					break;
+				}
+			} catch (NotFoundException | LoadBalancerTimeoutException e) {
+				//continue waiting as usual
+			} finally {
 				if (result != null) {
 					result.close();
 				}
-				break;
 			}
-
-			if (result != null) {
-				result.close();
-			}
-
 			try {
 				int nextWaitTime = PERSISTENCE_CREATION_WAIT_TIME.findFirst()
 						.orElseGet(() -> PERSISTENCE_CREATION_MAX_WAIT_TIME);
