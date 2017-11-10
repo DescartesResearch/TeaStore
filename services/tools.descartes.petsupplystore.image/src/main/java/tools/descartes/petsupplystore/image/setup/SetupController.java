@@ -121,7 +121,7 @@ public enum SetupController {
 		while (true) {
 			Response result = null;
 			try {
-				ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "generatedb", 
+				result = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "generatedb", 
 						String.class, client -> client.getService().path(client.getApplicationURI())
 							.path(client.getEndpointURI()).path("finished").request().get());
 			} catch (NotFoundException notFound) {
