@@ -5,6 +5,7 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/lib" source-path="/src/dev/webapp/WEB-INF/lib"/>
         <wb-resource deploy-path="/WEB-INF/classes/META-INF" source-path="/src/dev/resources/META-INF"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/dev/resources"/>
         <dependent-module archiveName="registryclient-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.registryclient/tools.descartes.petsupplystore.registryclient">
             <dependency-type>uses</dependency-type>
         </dependent-module>

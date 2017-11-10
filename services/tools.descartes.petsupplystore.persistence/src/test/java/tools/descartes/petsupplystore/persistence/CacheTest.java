@@ -120,17 +120,16 @@ public class CacheTest {
 		long id = NonBalancedCRUDOperations.getEntities(p1c, -1, 1).get(0).getId();
 		boolean deleted = NonBalancedCRUDOperations.deleteEntity(p2c, id);
 		Assert.assertTrue(deleted);
-		Product gone = null;
 		boolean notFound = false;
 		try {
-			gone = NonBalancedCRUDOperations.getEntity(p1c, id);
+			NonBalancedCRUDOperations.getEntity(p1c, id);
 		} catch (NotFoundException e) {
 			notFound = true;
 		}
 		Assert.assertTrue(notFound);
 		notFound = false;
 		try {
-			gone = NonBalancedCRUDOperations.getEntity(p2c, id);
+			NonBalancedCRUDOperations.getEntity(p2c, id);
 		} catch (NotFoundException e) {
 			notFound = true;
 		}

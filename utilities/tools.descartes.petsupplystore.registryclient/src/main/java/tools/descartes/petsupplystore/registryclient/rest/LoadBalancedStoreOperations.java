@@ -7,6 +7,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.Order;
@@ -28,6 +29,22 @@ public final class LoadBalancedStoreOperations {
 		
 	}
 	
+	private static void throwCommonExceptions(Response responseWithStatus)
+			throws NotFoundException, LoadBalancerTimeoutException {
+		if (responseWithStatus.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+			throw new NotFoundException();
+		} else if (responseWithStatus.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
+			throw new LoadBalancerTimeoutException("Timout waiting for Store.", Service.STORE);
+		}
+	}
+	
+	private static <T> T readEntityOrNull(Response r, Class<T> entityClass) {
+		if (r == null || r.getStatus() != 200) {
+			return null;
+		}
+		return r.readEntity(entityClass);
+	}
+	
 	/**
 	 * Gets all categories.
 	 * @throws NotFoundException If 404 was returned.
@@ -35,11 +52,12 @@ public final class LoadBalancedStoreOperations {
      * and on repeated load balancer socket timeouts.
 	 * @return List of categories
 	 */
-	public static List<Category> getCategories()throws NotFoundException, LoadBalancerTimeoutException {
+	public static List<Category> getCategories() throws NotFoundException, LoadBalancerTimeoutException {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"categories", Category.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
+		throwCommonExceptions(r);
 		if (r == null || r.getStatus() != 200) {
 			return null;
 		}
@@ -54,15 +72,13 @@ public final class LoadBalancedStoreOperations {
      * and on repeated load balancer socket timeouts.
 	 * @return category
 	 */
-	public static Category getCategory(long cid)throws NotFoundException, LoadBalancerTimeoutException {
+	public static Category getCategory(long cid) throws NotFoundException, LoadBalancerTimeoutException {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"categories", Category.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("" + cid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		if (r == null || r.getStatus() != 200) {
-			return null;
-		}
-		return r.readEntity(Category.class);
+		throwCommonExceptions(r);
+		return readEntityOrNull(r, Category.class);
 	}
 	
 	/**
@@ -78,10 +94,8 @@ public final class LoadBalancedStoreOperations {
 				"products", Product.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("" + pid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		if (r == null || r.getStatus() != 200) {
-			return null;
-		}
-		return r.readEntity(Product.class);
+		throwCommonExceptions(r);
+		return readEntityOrNull(r, Product.class);
 	}
 
 	/**
@@ -100,6 +114,7 @@ public final class LoadBalancedStoreOperations {
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob.getOrderItems(), MediaType.APPLICATION_JSON), Response.class));
+		throwCommonExceptions(r);
 		if (r == null || r.getStatus() != 200) {
 			return new ArrayList<>();
 		}
@@ -123,6 +138,7 @@ public final class LoadBalancedStoreOperations {
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob.getOrderItems(), MediaType.APPLICATION_JSON), Response.class));
+		throwCommonExceptions(r);
 		if (r == null || r.getStatus() != 200) {
 			return new ArrayList<>();
 		}
@@ -143,10 +159,8 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("category").path("" + cid).path("totalNumber")
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		if (r == null || r.getStatus() != 200) {
-			return 0;
-		}
-		return r.readEntity(int.class);
+		throwCommonExceptions(r);
+		return readEntityOrNull(r, int.class);
 	}
 	
 	/**
@@ -166,6 +180,7 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("category").path("" + cid).queryParam("page", page)
 				.queryParam("articlesPerPage", articlesPerPage).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
+		throwCommonExceptions(r);
 		if (r == null || r.getStatus() != 200) {
 			return new ArrayList<>();
 		}
@@ -203,10 +218,8 @@ public final class LoadBalancedStoreOperations {
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		if (r == null || r.getStatus() != 200) {
-			return null;
-		}
-		return r.readEntity(SessionBlob.class);
+		throwCommonExceptions(r);
+		return readEntityOrNull(r, SessionBlob.class);
 	}
 	
 	/**
@@ -226,10 +239,8 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("login").queryParam("name", name)
 				.queryParam("password", password).request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		if (r == null || r.getStatus() != 200) {
-			return new SessionBlob();
-		}
-		return r.readEntity(SessionBlob.class);
+		throwCommonExceptions(r);
+		return readEntityOrNull(r, SessionBlob.class);
 	}
 	
 	/**
@@ -246,10 +257,8 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("logout").request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		if (r == null || r.getStatus() != 200) {
-			return new SessionBlob();
-		}
-		return r.readEntity(SessionBlob.class);
+		throwCommonExceptions(r);
+		return readEntityOrNull(r, SessionBlob.class);
 	}
 	
 	/**
@@ -266,10 +275,9 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("isloggedin").request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		if (r == null || r.getStatus() != 200) {
-			return false;
-		}
-		SessionBlob validatedBlob = r.readEntity(SessionBlob.class);
+		//TODO: should return a corresponding status-code (such as 403) for non-logged users.
+		throwCommonExceptions(r);
+		SessionBlob validatedBlob = readEntityOrNull(r, SessionBlob.class);
 		return validatedBlob != null;
 	}
 	
@@ -289,10 +297,8 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("add").path("" + pid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		if (r == null || r.getStatus() != 200) {
-			return null;
-		}
-		return r.readEntity(SessionBlob.class);
+		throwCommonExceptions(r);
+		return readEntityOrNull(r, SessionBlob.class);
 	}
 	
 	/**
@@ -311,10 +317,8 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("remove").path("" + pid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		if (r == null || r.getStatus() != 200) {
-			return null;
-		}
-		return r.readEntity(SessionBlob.class);
+		throwCommonExceptions(r);
+		return readEntityOrNull(r, SessionBlob.class);
 	}
 	
 	/**
@@ -337,10 +341,8 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("" + pid).queryParam("quantity", quantity)
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.put(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		if (r == null || r.getStatus() != 200) {
-			return null;
-		}
-		return r.readEntity(SessionBlob.class);
+		throwCommonExceptions(r);
+		return readEntityOrNull(r, SessionBlob.class);
 	}
 	
 	/**
@@ -357,10 +359,8 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("" + uid)
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.get());
-		if (r == null || r.getStatus() != 200) {
-			return null;
-		}
-		return r.readEntity(User.class);
+		throwCommonExceptions(r);
+		return readEntityOrNull(r, User.class);
 		
 	}
 	
@@ -378,6 +378,7 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("" + uid).path("orders")
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.get());
+		throwCommonExceptions(r);
 		if (r == null || r.getStatus() != 200) {
 			return new ArrayList<>();
 		}
