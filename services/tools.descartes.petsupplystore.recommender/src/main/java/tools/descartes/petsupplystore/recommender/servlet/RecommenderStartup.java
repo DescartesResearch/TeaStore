@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 
 import tools.descartes.petsupplystore.registryclient.RegistryClient;
 import tools.descartes.petsupplystore.registryclient.Service;
-import tools.descartes.petsupplystore.registryclient.StartupCallback;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
 import tools.descartes.petsupplystore.rest.RESTClient;
 
@@ -68,13 +67,9 @@ public class RecommenderStartup implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent event) {
 		RESTClient.setGlobalReadTimeout(REST_READ_TIMOUT);
 		ServiceLoadBalancer.preInitializeServiceLoadBalancers(Service.PERSISTENCE);
-		RegistryClient.getClient().runAfterServiceIsAvailable(Service.PERSISTENCE, new StartupCallback() {
-
-			@Override
-			public void callback() {
-				TrainingSynchronizer.retrieveDataAndRetrain();
-				RegistryClient.getClient().register(event.getServletContext().getContextPath());
-			}
+		RegistryClient.getClient().runAfterServiceIsAvailable(Service.PERSISTENCE, () -> {
+			TrainingSynchronizer.retrieveDataAndRetrain();
+			RegistryClient.getClient().register(event.getServletContext().getContextPath());
 		}, Service.RECOMMENDER);
 		try {
 			long looptime = (Long) new InitialContext().lookup("java:comp/env/recommenderLoopTime");
