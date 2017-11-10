@@ -32,6 +32,7 @@ import tools.descartes.petsupplystore.persistence.rest.DatabaseGenerationEndpoin
 import tools.descartes.petsupplystore.persistence.rest.ProductEndpoint;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.rest.NonBalancedCRUDOperations;
+import tools.descartes.petsupplystore.rest.NotFoundException;
 import tools.descartes.petsupplystore.rest.RESTClient;
 
 /**
@@ -119,10 +120,21 @@ public class CacheTest {
 		long id = NonBalancedCRUDOperations.getEntities(p1c, -1, 1).get(0).getId();
 		boolean deleted = NonBalancedCRUDOperations.deleteEntity(p2c, id);
 		Assert.assertTrue(deleted);
-		Product gone = NonBalancedCRUDOperations.getEntity(p1c, id);
-		Assert.assertNull(gone);
-		gone = NonBalancedCRUDOperations.getEntity(p2c, id);
-		Assert.assertNull(gone);
+		Product gone = null;
+		boolean notFound = false;
+		try {
+			gone = NonBalancedCRUDOperations.getEntity(p1c, id);
+		} catch (NotFoundException e) {
+			notFound = true;
+		}
+		Assert.assertTrue(notFound);
+		notFound = false;
+		try {
+			gone = NonBalancedCRUDOperations.getEntity(p2c, id);
+		} catch (NotFoundException e) {
+			notFound = true;
+		}
+		Assert.assertTrue(notFound);
 		
 	}
 	

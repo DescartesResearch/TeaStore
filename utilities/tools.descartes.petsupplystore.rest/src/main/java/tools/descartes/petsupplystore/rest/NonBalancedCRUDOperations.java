@@ -84,17 +84,17 @@ public final class NonBalancedCRUDOperations {
 	 * @param entity The entity to be updated. Entity is matched using its ID.
 	 * @param client The REST client to use.
 	 * @param <T> Type of entity to handle.
-	 * @throws NotFoundException If 404 was returned.
 	 * @throws TimeoutException If 408 was returned.
 	 * @return True, if update succeeded. False, otherwise.
 	 */
 	public static <T> boolean sendEntityForUpdate(RESTClient<T> client, long id, T entity)
-			throws NotFoundException, TimeoutException {
+			throws TimeoutException {
 		Response response = client.getService().path(client.getApplicationURI()).path(client.getEndpointURI()).
 				path(String.valueOf(id)).request(MediaType.APPLICATION_JSON).
 				put(Entity.entity(entity, MediaType.APPLICATION_JSON), Response.class);
 		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
-			throw new NotFoundException();
+			//return false instead of throwing the NotFoundException
+			return false;
 		} else if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
 			throw new TimeoutException();
 		}
