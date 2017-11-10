@@ -14,7 +14,9 @@ import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.entities.User;
 import tools.descartes.petsupplystore.entities.message.SessionBlob;
 import tools.descartes.petsupplystore.registryclient.Service;
+import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
+import tools.descartes.petsupplystore.rest.NotFoundException;
 /**
  * Container class for the static calls to the Store service.
  * @author Simon
@@ -28,62 +30,79 @@ public final class LoadBalancedStoreOperations {
 	
 	/**
 	 * Gets all categories.
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws LoadBalancerTimeoutException On receiving the 408 status code
+     * and on repeated load balancer socket timeouts.
 	 * @return List of categories
 	 */
-	public static List<Category> getCategories() {
+	public static List<Category> getCategories()throws NotFoundException, LoadBalancerTimeoutException {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"categories", Category.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		if (r == null || r.getStatus() != 200)
+		if (r == null || r.getStatus() != 200) {
 			return null;
+		}
 		return r.readEntity(new GenericType<List<Category>>() { });
 	}
 	
 	/**
 	 * Gets category by id.
 	 * @param cid categoryid
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws LoadBalancerTimeoutException On receiving the 408 status code
+     * and on repeated load balancer socket timeouts.
 	 * @return category
 	 */
-	public static Category getCategory(long cid) {
+	public static Category getCategory(long cid)throws NotFoundException, LoadBalancerTimeoutException {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"categories", Category.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("" + cid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		if (r == null || r.getStatus() != 200)
+		if (r == null || r.getStatus() != 200) {
 			return null;
+		}
 		return r.readEntity(Category.class);
 	}
 	
 	/**
 	 * Gets product by id.
 	 * @param pid productid
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws LoadBalancerTimeoutException On receiving the 408 status code
+     * and on repeated load balancer socket timeouts.
 	 * @return product
 	 */
-	public static Product getProduct(long pid) {
+	public static Product getProduct(long pid) throws NotFoundException, LoadBalancerTimeoutException {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"products", Product.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("" + pid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		if (r == null || r.getStatus() != 200)
+		if (r == null || r.getStatus() != 200) {
 			return null;
+		}
 		return r.readEntity(Product.class);
 	}
 
 	/**
 	 * Gets ads.
 	 * @param blob SessionBlob
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws LoadBalancerTimeoutException On receiving the 408 status code
+     * and on repeated load balancer socket timeouts.
 	 * @return product
 	 */
-	public static List<Product> getAdvertisements(SessionBlob blob) {
+	public static List<Product> getAdvertisements(SessionBlob blob)
+			throws NotFoundException, LoadBalancerTimeoutException {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"products", Product.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("ads")
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob.getOrderItems(), MediaType.APPLICATION_JSON), Response.class));
-		if (r == null || r.getStatus() != 200)
+		if (r == null || r.getStatus() != 200) {
 			return new ArrayList<>();
+		}
 		return r.readEntity(new GenericType<List<Product>>() { });
 	}
 	
@@ -91,33 +110,42 @@ public final class LoadBalancedStoreOperations {
 	 * Gets ads.
 	 * @param blob SessionBlob
 	 * @param pid pid of currentProduct
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws LoadBalancerTimeoutException On receiving the 408 status code
+     * and on repeated load balancer socket timeouts.
 	 * @return product
 	 */
-	public static List<Product> getAdvertisements(SessionBlob blob, long pid) {
+	public static List<Product> getAdvertisements(SessionBlob blob, long pid)
+			throws NotFoundException, LoadBalancerTimeoutException {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"products", Product.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("ads").queryParam("pid", pid)
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob.getOrderItems(), MediaType.APPLICATION_JSON), Response.class));
-		if (r == null || r.getStatus() != 200)
+		if (r == null || r.getStatus() != 200) {
 			return new ArrayList<>();
+		}
 		return r.readEntity(new GenericType<List<Product>>() { });
 	}
 	
 	/**
 	 * Gets all products from one category on page if every page has X articles per page.
 	 * @param cid categoryid
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws LoadBalancerTimeoutException On receiving the 408 status code
+     * and on repeated load balancer socket timeouts.
 	 * @return Number of products
 	 */
-	public static int getNumberOfProducts(long cid) {
+	public static int getNumberOfProducts(long cid) throws NotFoundException, LoadBalancerTimeoutException {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"products", List.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("category").path("" + cid).path("totalNumber")
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		if (r == null || r.getStatus() != 200)
+		if (r == null || r.getStatus() != 200) {
 			return 0;
+		}
 		return r.readEntity(int.class);
 	}
 	
@@ -126,16 +154,21 @@ public final class LoadBalancedStoreOperations {
 	 * @param cid categoryid
 	 * @param page pagenumber
 	 * @param articlesPerPage number of articles per page
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws LoadBalancerTimeoutException On receiving the 408 status code
+     * and on repeated load balancer socket timeouts.
 	 * @return List of products
 	 */
-	public static List<Product> getProducts(long cid, int page, int articlesPerPage) {
+	public static List<Product> getProducts(long cid, int page, int articlesPerPage)
+			throws NotFoundException, LoadBalancerTimeoutException {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"products", List.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("category").path("" + cid).queryParam("page", page)
 				.queryParam("articlesPerPage", articlesPerPage).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		if (r == null || r.getStatus() != 200)
+		if (r == null || r.getStatus() != 200) {
 			return new ArrayList<>();
+		}
 		return r.readEntity(new GenericType<List<Product>>() { });
 	}
 	
@@ -149,11 +182,14 @@ public final class LoadBalancedStoreOperations {
 	 * @param creditCardExpiryDate creditcard
 	 * @param creditCardNumber creditcard
 	 * @param totalPriceInCents totalPrice
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws LoadBalancerTimeoutException On receiving the 408 status code
+     * and on repeated load balancer socket timeouts.
 	 * @return empty SessionBlob
 	 */
 	public static SessionBlob placeOrder(SessionBlob blob, String addressName, String address1, 
 			String address2, String creditCardCompany, String creditCardExpiryDate, long totalPriceInCents,
-			String creditCardNumber) {
+			String creditCardNumber) throws NotFoundException, LoadBalancerTimeoutException {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"useractions", Product.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("placeorder")
@@ -167,8 +203,9 @@ public final class LoadBalancedStoreOperations {
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		if (r == null || r.getStatus() != 200)
+		if (r == null || r.getStatus() != 200) {
 			return null;
+		}
 		return r.readEntity(SessionBlob.class);
 	}
 	
@@ -177,48 +214,61 @@ public final class LoadBalancedStoreOperations {
 	 * @param blob SessionBlob
 	 * @param name username
 	 * @param password user password
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws LoadBalancerTimeoutException On receiving the 408 status code
+     * and on repeated load balancer socket timeouts.
 	 * @return SessionBlob with login information if login was successful
 	 */
-	public static SessionBlob login(SessionBlob blob, String name, String password) {
+	public static SessionBlob login(SessionBlob blob, String name, String password)
+			throws NotFoundException, LoadBalancerTimeoutException {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"useractions", Product.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("login").queryParam("name", name)
 				.queryParam("password", password).request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		if (r == null || r.getStatus() != 200)
+		if (r == null || r.getStatus() != 200) {
 			return new SessionBlob();
+		}
 		return r.readEntity(SessionBlob.class);
 	}
 	
 	/**
 	 * Logs user out.
 	 * @param blob SessionBlob
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws LoadBalancerTimeoutException On receiving the 408 status code
+     * and on repeated load balancer socket timeouts.
 	 * @return SessionBlob without user information
 	 */
-	public static SessionBlob logout(SessionBlob blob) {
+	public static SessionBlob logout(SessionBlob blob) throws NotFoundException, LoadBalancerTimeoutException {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"useractions", Product.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("logout").request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		if (r == null || r.getStatus() != 200)
+		if (r == null || r.getStatus() != 200) {
 			return new SessionBlob();
+		}
 		return r.readEntity(SessionBlob.class);
 	}
 	
 	/**
 	 * Checks if user is logged in.
 	 * @param blob SessionBlob
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws LoadBalancerTimeoutException On receiving the 408 status code
+     * and on repeated load balancer socket timeouts.
 	 * @return true if user is logged in
 	 */
-	public static boolean isLoggedIn(SessionBlob blob) {
+	public static boolean isLoggedIn(SessionBlob blob) throws NotFoundException, LoadBalancerTimeoutException {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"useractions", Product.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("isloggedin").request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		if (r == null || r.getStatus() != 200)
+		if (r == null || r.getStatus() != 200) {
 			return false;
+		}
 		SessionBlob validatedBlob = r.readEntity(SessionBlob.class);
 		return validatedBlob != null;
 	}
@@ -227,16 +277,21 @@ public final class LoadBalancedStoreOperations {
 	 * Adds product to cart. if the item is already in the cart, the quantity is increased.
 	 * @param blob SessionBlob
 	 * @param pid ProductId
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws LoadBalancerTimeoutException On receiving the 408 status code
+     * and on repeated load balancer socket timeouts.
 	 * @return Sessionblob containing product
 	 */
-	public static SessionBlob addProductToCart(SessionBlob blob, long pid) {
+	public static SessionBlob addProductToCart(SessionBlob blob, long pid)
+			throws NotFoundException, LoadBalancerTimeoutException {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"cart", Product.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("add").path("" + pid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		if (r == null || r.getStatus() != 200)
+		if (r == null || r.getStatus() != 200) {
 			return null;
+		}
 		return r.readEntity(SessionBlob.class);
 	}
 	
@@ -244,16 +299,21 @@ public final class LoadBalancedStoreOperations {
 	 * Removes product from cart.
 	 * @param blob Sessionblob
 	 * @param pid productid
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws LoadBalancerTimeoutException On receiving the 408 status code
+     * and on repeated load balancer socket timeouts.
 	 * @return Sessionblob without product
 	 */
-	public static SessionBlob removeProductFromCart(SessionBlob blob, long pid) {
+	public static SessionBlob removeProductFromCart(SessionBlob blob, long pid)
+			throws NotFoundException, LoadBalancerTimeoutException {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"cart", Product.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("remove").path("" + pid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		if (r == null || r.getStatus() != 200)
+		if (r == null || r.getStatus() != 200) {
 			return null;
+		}
 		return r.readEntity(SessionBlob.class);
 	}
 	
@@ -262,9 +322,13 @@ public final class LoadBalancedStoreOperations {
 	 * @param blob Sessionblob
 	 * @param pid productid of item
 	 * @param quantity target quantity
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws LoadBalancerTimeoutException On receiving the 408 status code
+     * and on repeated load balancer socket timeouts.
 	 * @return Sessionblob with updated quantity
 	 */
-	public static SessionBlob updateQuantity(SessionBlob blob, long pid, int quantity) {
+	public static SessionBlob updateQuantity(SessionBlob blob, long pid, int quantity)
+			throws NotFoundException, LoadBalancerTimeoutException {
 		if (quantity < 1) {
 			throw new IllegalArgumentException("Quantity has to be larger than 1");
 		}
@@ -273,24 +337,29 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("" + pid).queryParam("quantity", quantity)
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.put(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		if (r == null || r.getStatus() != 200)
+		if (r == null || r.getStatus() != 200) {
 			return null;
+		}
 		return r.readEntity(SessionBlob.class);
 	}
 	
 	/**
 	 * Gets user via id.
 	 * @param uid user id
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws LoadBalancerTimeoutException On receiving the 408 status code
+     * and on repeated load balancer socket timeouts.
 	 * @return user
 	 */
-	public static User getUser(long uid) {
+	public static User getUser(long uid) throws NotFoundException, LoadBalancerTimeoutException {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"users", User.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("" + uid)
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.get());
-		if (r == null || r.getStatus() != 200)
+		if (r == null || r.getStatus() != 200) {
 			return null;
+		}
 		return r.readEntity(User.class);
 		
 	}
@@ -298,16 +367,20 @@ public final class LoadBalancedStoreOperations {
 	/**
 	 * Gets all orders for a user.
 	 * @param uid userid
+	 * @throws NotFoundException If 404 was returned.
+	 * @throws LoadBalancerTimeoutException On receiving the 408 status code
+     * and on repeated load balancer socket timeouts.
 	 * @return List of orders
 	 */
-	public static List<Order> getOrdersForUser(long uid) {
+	public static List<Order> getOrdersForUser(long uid) throws NotFoundException, LoadBalancerTimeoutException {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"users", User.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("" + uid).path("orders")
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.get());
-		if (r == null || r.getStatus() != 200)
+		if (r == null || r.getStatus() != 200) {
 			return new ArrayList<>();
+		}
 		return r.readEntity(new GenericType<List<Order>>() { });
 	}
 }
