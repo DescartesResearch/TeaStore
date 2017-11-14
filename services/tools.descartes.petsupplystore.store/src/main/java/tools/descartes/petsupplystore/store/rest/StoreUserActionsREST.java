@@ -96,11 +96,18 @@ public class StoreUserActionsREST {
 		} catch (TimeoutException e) {
 			return Response.status(408).build();
 		} catch (NotFoundException e) {
-			return Response.status(408).build();
+			return Response.status(404).build();
 		}
 		for (OrderItem item : blob.getOrderItems()) {
-			item.setOrderId(orderId);
-			LoadBalancedCRUDOperations.sendEntityForCreation(Service.PERSISTENCE, "orderitems", OrderItem.class, item);
+			try {
+				item.setOrderId(orderId);
+				LoadBalancedCRUDOperations.sendEntityForCreation(Service.PERSISTENCE, "orderitems", OrderItem.class,
+						item);
+			} catch (TimeoutException e) {
+				return Response.status(408).build();
+			} catch (NotFoundException e) {
+				return Response.status(404).build();
+			}
 		}
 		blob.setOrder(new Order());
 		blob.getOrderItems().clear();
@@ -125,11 +132,11 @@ public class StoreUserActionsREST {
 		User user;
 		try {
 			user = LoadBalancedCRUDOperations.getEntityWithProperties(Service.PERSISTENCE, "users", User.class, "name",
-				name);
+					name);
 		} catch (TimeoutException e) {
 			return Response.status(408).build();
 		} catch (NotFoundException e) {
-			return Response.status(408).build();
+			return Response.status(Response.Status.FORBIDDEN).entity(blob).build();
 		}
 		if (user != null && BCrypt.checkpw(password, user.getPassword())) {
 			blob.setUID(user.getId());

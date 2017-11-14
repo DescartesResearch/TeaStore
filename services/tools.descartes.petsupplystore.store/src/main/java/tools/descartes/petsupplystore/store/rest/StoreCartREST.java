@@ -55,7 +55,7 @@ public class StoreCartREST {
 		} catch (TimeoutException e) {
 			return Response.status(408).build();
 		} catch (NotFoundException e) {
-			return Response.status(408).build();
+			return Response.status(404).build();
 		}
 		
 		for (OrderItem oItem: blob.getOrderItems()) {

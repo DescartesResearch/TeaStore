@@ -62,7 +62,7 @@ public class StoreProductREST {
 		} catch (TimeoutException e) {
 			return Response.status(408).build();
 		} catch (NotFoundException e) {
-			return Response.status(408).build();
+			return Response.status(404).build();
 		}
 		return Response.status(Response.Status.OK).entity(product).build();
 	}
@@ -93,7 +93,7 @@ public class StoreProductREST {
 		} catch (TimeoutException e) {
 			return Response.status(408).build();
 		} catch (NotFoundException e) {
-			return Response.status(408).build();
+			return Response.status(404).build();
 		}
 		List<Product> products = new LinkedList<Product>();
 		for (Long productId : productIds) {
@@ -124,7 +124,7 @@ public class StoreProductREST {
 		} catch (TimeoutException e) {
 			return Response.status(408).build();
 		} catch (NotFoundException e) {
-			return Response.status(408).build();
+			return Response.status(404).build();
 		}
 		return Response.status(Response.Status.OK).entity(products).build();
 	}
@@ -147,7 +147,7 @@ public class StoreProductREST {
 		} catch (TimeoutException e) {
 			return Response.status(408).build();
 		} catch (NotFoundException e) {
-			return Response.status(408).build();
+			return Response.status(404).build();
 		}
 		long result = Long.parseLong(s);
 		return Response.status(Response.Status.OK).entity(result).build();

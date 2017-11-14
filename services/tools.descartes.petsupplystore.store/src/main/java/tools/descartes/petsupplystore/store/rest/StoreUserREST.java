@@ -55,7 +55,7 @@ public class StoreUserREST {
 		} catch (TimeoutException e) {
 			return Response.status(408).build();
 		} catch (NotFoundException e) {
-			return Response.status(408).build();
+			return Response.status(404).build();
 		}
 		return Response.status(Response.Status.OK).entity(user).build();
 	}
@@ -77,7 +77,7 @@ public class StoreUserREST {
 		} catch (TimeoutException e) {
 			return Response.status(408).build();
 		} catch (NotFoundException e) {
-			return Response.status(408).build();
+			return Response.status(404).build();
 		}
 		return Response.status(Response.Status.OK).entity(orders).build();
 	}

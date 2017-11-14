@@ -61,10 +61,10 @@ public class LoginActionServlet extends AbstractUIServlet {
 		if (request.getParameter("username") != null && request.getParameter("password") != null) {
 			SessionBlob blob = LoadBalancedStoreOperations.login(getSessionBlob(request),
 					request.getParameter("username"), request.getParameter("password"));
-			saveSessionBlob(blob, response);
-			login = (blob.getSID() != null);
+			login = (blob != null && blob.getSID() != null);
 
 			if (login) {
+				saveSessionBlob(blob, response);
 				if (request.getParameter("referer") != null
 						&& request.getParameter("referer").contains("tools.descartes.petsupplystore.webui/cart")) {
 					redirect("/cart", response, MESSAGECOOKIE, SUCESSLOGIN);

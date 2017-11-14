@@ -52,7 +52,7 @@ public class StoreCategoriesREST {
 		} catch (TimeoutException e) {
 			return Response.status(408).build();
 		} catch (NotFoundException e) {
-			return Response.status(408).build();
+			return Response.status(404).build();
 		}
 		return Response.status(Response.Status.OK).entity(categories).build();
 	}
@@ -74,7 +74,7 @@ public class StoreCategoriesREST {
 		} catch (TimeoutException e) {
 			return Response.status(408).build();
 		} catch (NotFoundException e) {
-			return Response.status(408).build();
+			return Response.status(404).build();
 		}
 		return Response.status(Response.Status.OK).entity(category).build();
 	}
