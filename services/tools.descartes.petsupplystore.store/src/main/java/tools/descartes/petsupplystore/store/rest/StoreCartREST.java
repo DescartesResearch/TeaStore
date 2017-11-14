@@ -27,6 +27,8 @@ import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.entities.message.SessionBlob;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;
+import tools.descartes.petsupplystore.rest.NotFoundException;
+import tools.descartes.petsupplystore.rest.TimeoutException;
 import tools.descartes.petsupplystore.store.security.SHASecurityProvider;
 
 /**
@@ -47,10 +49,15 @@ public class StoreCartREST {
 	@POST
 	@Path("add/{pid}")
 	public Response addProductToCart(SessionBlob blob, @PathParam("pid") final Long pid) {
-		Product product = LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "products", Product.class, pid);
-		if (product == null) {
-			return Response.status(Response.Status.NOT_FOUND).build();
+		Product product;
+		try {
+			product = LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "products", Product.class, pid);
+		} catch (TimeoutException e) {
+			return Response.status(408).build();
+		} catch (NotFoundException e) {
+			return Response.status(408).build();
 		}
+		
 		for (OrderItem oItem: blob.getOrderItems()) {
 			if (oItem.getProductId() == pid) {
 				oItem.setQuantity(oItem.getQuantity() + 1);

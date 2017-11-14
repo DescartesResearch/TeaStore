@@ -33,32 +33,47 @@ import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBa
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedRecommenderOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
+import tools.descartes.petsupplystore.rest.NotFoundException;
+import tools.descartes.petsupplystore.rest.TimeoutException;
 
 /**
  * Rest endpoint for the store product.
+ * 
  * @author Simon
  */
 @Path("products")
 @Produces({ "application/json" })
 @Consumes({ "application/json" })
 public class StoreProductREST {
-	
+
 	/**
 	 * Gets product by product id.
-	 * @param pid product id
+	 * 
+	 * @param pid
+	 *            product id
 	 * @return Response containing product
 	 */
 	@GET
 	@Path("{pid}")
 	public Response getProduct(@PathParam("pid") final Long pid) {
-		Product product = LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "products", Product.class, pid);
+		Product product;
+		try {
+			product = LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "products", Product.class, pid);
+		} catch (TimeoutException e) {
+			return Response.status(408).build();
+		} catch (NotFoundException e) {
+			return Response.status(408).build();
+		}
 		return Response.status(Response.Status.OK).entity(product).build();
 	}
-	
+
 	/**
 	 * Get advertisement.
-	 * @param order current cart state
-	 * @param pid pid
+	 * 
+	 * @param order
+	 *            current cart state
+	 * @param pid
+	 *            pid
 	 * @return Response containing product
 	 */
 	@POST
@@ -72,42 +87,68 @@ public class StoreProductREST {
 			items.add(oi);
 		}
 		items.addAll(orderItems);
-		List<Long> productIds = LoadBalancedRecommenderOperations.getRecommendations(items);
+		List<Long> productIds;
+		try {
+			productIds = LoadBalancedRecommenderOperations.getRecommendations(items);
+		} catch (TimeoutException e) {
+			return Response.status(408).build();
+		} catch (NotFoundException e) {
+			return Response.status(408).build();
+		}
 		List<Product> products = new LinkedList<Product>();
-		for (Long productId: productIds) {
+		for (Long productId : productIds) {
 			products.add(LoadBalancedStoreOperations.getProduct(productId));
 		}
 		return Response.status(Response.Status.OK).entity(products).build();
 	}
-	
+
 	/**
 	 * Gets all products from a category page of a set size.
-	 * @param cid category id
-	 * @param page page number
-	 * @param articlesPerPage number of articles per page
+	 * 
+	 * @param cid
+	 *            category id
+	 * @param page
+	 *            page number
+	 * @param articlesPerPage
+	 *            number of articles per page
 	 * @return Response containing List of products
-	 */ 
+	 */
 	@GET
 	@Path("category/{cid}")
 	public Response getProducts(@PathParam("cid") final Long cid, @QueryParam("page") int page,
 			@QueryParam("articlesPerPage") int articlesPerPage) {
-		List<Product> products = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE,
-				"products", Product.class, "category", cid, (page - 1) * articlesPerPage, articlesPerPage);
+		List<Product> products;
+		try {
+			products = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "products", Product.class,
+					"category", cid, (page - 1) * articlesPerPage, articlesPerPage);
+		} catch (TimeoutException e) {
+			return Response.status(408).build();
+		} catch (NotFoundException e) {
+			return Response.status(408).build();
+		}
 		return Response.status(Response.Status.OK).entity(products).build();
 	}
-	
+
 	/**
 	 * Gets all products from a category page of a set size.
-	 * @param cid category id
+	 * 
+	 * @param cid
+	 *            category id
 	 * @return Response containing List of products
-	 */ 
+	 */
 	@GET
 	@Path("category/{cid}/totalNumber")
 	public Response getNumberOfProducts(@PathParam("cid") final Long cid) {
-		String s = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE,
-				"products", Product.class,
-				client -> client.getEndpointTarget().path("count").path(String.valueOf(cid))
-				.request(MediaType.TEXT_PLAIN).get().readEntity(String.class));
+		String s;
+		try {
+			s = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "products", Product.class,
+					client -> client.getEndpointTarget().path("count").path(String.valueOf(cid))
+							.request(MediaType.TEXT_PLAIN).get().readEntity(String.class));
+		} catch (TimeoutException e) {
+			return Response.status(408).build();
+		} catch (NotFoundException e) {
+			return Response.status(408).build();
+		}
 		long result = Long.parseLong(s);
 		return Response.status(Response.Status.OK).entity(result).build();
 	}

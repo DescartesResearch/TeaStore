@@ -26,38 +26,59 @@ import tools.descartes.petsupplystore.entities.Order;
 import tools.descartes.petsupplystore.entities.User;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;
+import tools.descartes.petsupplystore.rest.NotFoundException;
+import tools.descartes.petsupplystore.rest.TimeoutException;
 
 /**
  * Rest endpoint for the store user.
+ * 
  * @author Simon
  */
 @Path("users")
 @Produces({ "application/json" })
 @Consumes({ "application/json" })
 public class StoreUserREST {
-	
+
 	/**
 	 * Gets user by user id.
-	 * @param uid user id
+	 * 
+	 * @param uid
+	 *            user id
 	 * @return Response containing user
 	 */
 	@GET
 	@Path("{uid}")
 	public Response getUser(@PathParam("uid") final Long uid) {
-		User user = LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "users", User.class, uid);
+		User user;
+		try {
+			user = LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "users", User.class, uid);
+		} catch (TimeoutException e) {
+			return Response.status(408).build();
+		} catch (NotFoundException e) {
+			return Response.status(408).build();
+		}
 		return Response.status(Response.Status.OK).entity(user).build();
-	} 
-	
+	}
+
 	/**
 	 * Gets all orders from a user.
-	 * @param uid user id
+	 * 
+	 * @param uid
+	 *            user id
 	 * @return Response containing List of products
-	 */ 
+	 */
 	@GET
 	@Path("{uid}/orders/")
 	public Response getOrdersForUser(@PathParam("uid") final Long uid) {
-		List<Order> orders = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE,
-				"orders", Order.class, "user", uid, -1, -1);
+		List<Order> orders;
+		try {
+			orders = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "orders", Order.class, "user", uid, -1,
+					-1);
+		} catch (TimeoutException e) {
+			return Response.status(408).build();
+		} catch (NotFoundException e) {
+			return Response.status(408).build();
+		}
 		return Response.status(Response.Status.OK).entity(orders).build();
 	}
 }
