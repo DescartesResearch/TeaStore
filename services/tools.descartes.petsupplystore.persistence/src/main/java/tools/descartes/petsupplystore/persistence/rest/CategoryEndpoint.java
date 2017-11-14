@@ -20,6 +20,7 @@ import javax.ws.rs.Path;
 
 import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.persistence.domain.CategoryRepository;
+import tools.descartes.petsupplystore.persistence.repository.DataGenerator;
 import tools.descartes.petsupplystore.rest.AbstractCRUDEndpoint;
 
 /**
@@ -35,6 +36,9 @@ public class CategoryEndpoint extends AbstractCRUDEndpoint<Category> {
 	 */
 	@Override
 	protected long createEntity(final Category category) {
+		if (DataGenerator.GENERATOR.isMaintenanceMode()) {
+			return -1L;
+		}
 		return CategoryRepository.REPOSITORY.createEntity(category);
 	}
 
@@ -75,6 +79,9 @@ public class CategoryEndpoint extends AbstractCRUDEndpoint<Category> {
 	 */
 	@Override
 	protected boolean deleteEntity(long id) {
+		if (DataGenerator.GENERATOR.isMaintenanceMode()) {
+			return false;
+		}
 		return CategoryRepository.REPOSITORY.removeEntity(id);
 	}
 	

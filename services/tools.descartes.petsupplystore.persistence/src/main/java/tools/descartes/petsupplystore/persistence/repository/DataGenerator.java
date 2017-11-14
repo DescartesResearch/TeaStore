@@ -20,6 +20,9 @@ import java.util.List;
 import java.util.Random;
 
 import javax.persistence.EntityManager;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.eclipse.persistence.sessions.server.ServerSession;
 import org.eclipse.persistence.tools.schemaframework.SchemaManager;
@@ -38,6 +41,8 @@ import tools.descartes.petsupplystore.persistence.domain.PersistenceOrder;
 import tools.descartes.petsupplystore.persistence.domain.PersistenceUser;
 import tools.descartes.petsupplystore.persistence.domain.ProductRepository;
 import tools.descartes.petsupplystore.persistence.domain.UserRepository;
+import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
+import tools.descartes.petsupplystore.rest.RESTClient;
 
 /**
  * Class for generating data in the database.
@@ -47,6 +52,11 @@ import tools.descartes.petsupplystore.persistence.domain.UserRepository;
  */
 public final class DataGenerator {
 
+	/**
+	 * Status code for maintenance mode.
+	 */
+	public static final int MAINTENANCE_STATUS_CODE = 503;
+	
 	/**
 	 * Default category count for small database.
 	 */
@@ -138,6 +148,8 @@ public final class DataGenerator {
 	 */
 	public static final DataGenerator GENERATOR = new DataGenerator();
 
+	private boolean maintenanceMode = false;
+	
 	private DataGenerator() {
 
 	}
@@ -296,7 +308,9 @@ public final class DataGenerator {
 	}
 	
 	/**
-	 * Drops database and recreates all tables.
+	 * Drops database and recreates all tables.<br/>
+	 * Attention: Does not reset foreign persistence contexts.
+	 * Best practice is to call CacheManager.MANAGER.resetAllEMFs() after dropping and then recreating the DB.  
 	 */
 	public void dropAndCreateTables() {
 		CacheManager.MANAGER.clearLocalCacheOnly();
@@ -304,9 +318,9 @@ public final class DataGenerator {
 		SchemaManager schemaManager = new SchemaManager(session);
 		schemaManager.replaceDefaultTables(true, true);
 		CacheManager.MANAGER.clearLocalCacheOnly();
+		CacheManager.MANAGER.resetLocalEMF();
 		setGenerationFinishedFlag(false);
 		CacheManager.MANAGER.clearAllCaches();
-		CacheManager.MANAGER.resetAllEMFs();
 	}
 	
 	private void setGenerationFinishedFlag(boolean flag) {
@@ -338,6 +352,9 @@ public final class DataGenerator {
 	 * @return False if the database is generating.
 	 */
 	public boolean getGenerationFinishedFlag() {
+		if (isMaintenanceMode()) {
+			return false;
+		}
 		boolean finishedGenerating = false;
 		EntityManager em = CategoryRepository.REPOSITORY.getEM();
 		try {
@@ -353,5 +370,45 @@ public final class DataGenerator {
 			em.close();
 		}
 		return finishedGenerating;
+	}
+
+	/**
+	 * Returns if the current persistence is in maintenance mode.
+	 * Will return 503 on pretty much every external call in this mode.
+	 * @return True if in maintenance, false otherwise.
+	 */
+	public boolean isMaintenanceMode() {
+		return maintenanceMode;
+	}
+
+	/**
+	 * Put the current persistence into maintenance mode.
+	 * Will return 503 on pretty much every external call in this mode.
+	 * @param maintenanceMode The maintenance flag.
+	 */
+	public synchronized void setMaintenanceModeInternal(boolean maintenanceMode) {
+		this.maintenanceMode = maintenanceMode;
+	}
+	
+	/**
+	 * Puts all persistences into maintenance mode.
+	 * Will return 503 on pretty much every external call once in this mode.
+	 * @param maintenanceMode The maintenance flag.
+	 */
+	public void setMaintenanceModeGlobal(boolean maintenanceMode) {
+		setMaintenanceModeInternal(maintenanceMode);
+		List<Response> rs = ServiceLoadBalancer.multicastRESTToOtherServiceInstances(
+				"generatedb", String.class, client -> setMaintenanceModeExternal(client, maintenanceMode));
+		rs.forEach(r -> {
+				if (r != null) {
+					r.close();
+				}
+			}); 
+	}
+	
+	private Response setMaintenanceModeExternal(RESTClient<String> client, final Boolean maintenanceMode) {
+		Response r = client.getEndpointTarget().path("maintenance")
+		.request(MediaType.TEXT_PLAIN).post(Entity.entity(String.valueOf(maintenanceMode), MediaType.TEXT_PLAIN));
+		return r;
 	}
 }

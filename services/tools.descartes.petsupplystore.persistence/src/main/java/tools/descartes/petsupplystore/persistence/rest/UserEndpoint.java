@@ -24,6 +24,7 @@ import javax.ws.rs.core.Response.Status;
 
 import tools.descartes.petsupplystore.entities.User;
 import tools.descartes.petsupplystore.persistence.domain.UserRepository;
+import tools.descartes.petsupplystore.persistence.repository.DataGenerator;
 import tools.descartes.petsupplystore.rest.AbstractCRUDEndpoint;
 
 /**
@@ -39,6 +40,9 @@ public class UserEndpoint extends AbstractCRUDEndpoint<User> {
 	 */
 	@Override
 	protected long createEntity(final User category) {
+		if (DataGenerator.GENERATOR.isMaintenanceMode()) {
+			return -1L;
+		}
 		try {
 			return UserRepository.REPOSITORY.createEntity(category);
 		} catch (Exception e) {
@@ -85,6 +89,9 @@ public class UserEndpoint extends AbstractCRUDEndpoint<User> {
 	 */
 	@Override
 	protected boolean deleteEntity(long id) {
+		if (DataGenerator.GENERATOR.isMaintenanceMode()) {
+			return false;
+		}
 		return UserRepository.REPOSITORY.removeEntity(id);
 	}
 	
