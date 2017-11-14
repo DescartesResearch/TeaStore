@@ -25,6 +25,7 @@ import javax.ws.rs.core.Response;
 
 import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.persistence.domain.ProductRepository;
+import tools.descartes.petsupplystore.persistence.repository.DataGenerator;
 import tools.descartes.petsupplystore.rest.AbstractCRUDEndpoint;
 
 /**
@@ -40,6 +41,9 @@ public class ProductEndpoint extends AbstractCRUDEndpoint<Product> {
 	 */
 	@Override
 	protected long createEntity(final Product product) {
+		if (DataGenerator.GENERATOR.isMaintenanceMode()) {
+			return -1L;
+		}
 		return ProductRepository.REPOSITORY.createEntity(product);
 	}
 
@@ -80,6 +84,9 @@ public class ProductEndpoint extends AbstractCRUDEndpoint<Product> {
 	 */
 	@Override
 	protected boolean deleteEntity(long id) {
+		if (DataGenerator.GENERATOR.isMaintenanceMode()) {
+			return false;
+		}
 		return ProductRepository.REPOSITORY.removeEntity(id);
 	}
 	

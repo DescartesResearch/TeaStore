@@ -124,6 +124,14 @@ public final class CacheManager {
 	 */
 	public List<String> resetAllEMFs() {
 		resetLocalEMF();
+		return resetRemoteEMFs();
+	}
+	
+	/**
+	 * Reset all remote EMFs.
+	 * @return List of all responses. Contain the "clearedEMF", or "null" if errors occured.
+	 */
+	public List<String> resetRemoteEMFs() {
 		List<String> responses = null;
 		try {
 			responses = ServiceLoadBalancer.multicastRESTToOtherServiceInstances(ENDPOINTURI, String.class,

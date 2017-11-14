@@ -23,6 +23,7 @@ import javax.ws.rs.QueryParam;
 
 import tools.descartes.petsupplystore.entities.Order;
 import tools.descartes.petsupplystore.persistence.domain.OrderRepository;
+import tools.descartes.petsupplystore.persistence.repository.DataGenerator;
 import tools.descartes.petsupplystore.rest.AbstractCRUDEndpoint;
 
 /**
@@ -38,6 +39,9 @@ public class OrderEndpoint extends AbstractCRUDEndpoint<Order> {
 	 */
 	@Override
 	protected long createEntity(final Order order) {
+		if (DataGenerator.GENERATOR.isMaintenanceMode()) {
+			return -1L;
+		}
 		return OrderRepository.REPOSITORY.createEntity(order);
 	}
 
@@ -78,6 +82,9 @@ public class OrderEndpoint extends AbstractCRUDEndpoint<Order> {
 	 */
 	@Override
 	protected boolean deleteEntity(long id) {
+		if (DataGenerator.GENERATOR.isMaintenanceMode()) {
+			return false;
+		}
 		return OrderRepository.REPOSITORY.removeEntity(id);
 	}
 	
