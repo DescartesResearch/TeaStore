@@ -25,38 +25,58 @@ import javax.ws.rs.core.Response;
 import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;
+import tools.descartes.petsupplystore.rest.NotFoundException;
+import tools.descartes.petsupplystore.rest.TimeoutException;
 
 /**
  * Rest endpoint for the store categories.
+ * 
  * @author Simon
  */
 @Path("categories")
 @Produces({ "application/json" })
 @Consumes({ "application/json" })
 public class StoreCategoriesREST {
-	
+
 	/**
 	 * get all categories.
+	 * 
 	 * @return Response containing all categories
 	 */
 	@GET
 	public Response getCategories() {
-		List<Category> categories = LoadBalancedCRUDOperations.getEntities(
-				Service.PERSISTENCE, "categories", Category.class, -1, -1);
+		List<Category> categories;
+		try {
+			categories = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "categories", Category.class, -1,
+					-1);
+		} catch (TimeoutException e) {
+			return Response.status(408).build();
+		} catch (NotFoundException e) {
+			return Response.status(408).build();
+		}
 		return Response.status(Response.Status.OK).entity(categories).build();
 	}
-	
+
 	/**
 	 * Gets category by category id.
-	 * @param cid category id
+	 * 
+	 * @param cid
+	 *            category id
 	 * @return Response containing category
 	 */
 	@GET
 	@Path("{cid}")
 	public Response getCategory(@PathParam("cid") final long cid) {
-		Category category = LoadBalancedCRUDOperations.getEntity(
-				Service.PERSISTENCE, "categories", Category.class, cid);
+		Category category;
+		try {
+			category = LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "categories", Category.class,
+					cid);
+		} catch (TimeoutException e) {
+			return Response.status(408).build();
+		} catch (NotFoundException e) {
+			return Response.status(408).build();
+		}
 		return Response.status(Response.Status.OK).entity(category).build();
 	}
-	
+
 }

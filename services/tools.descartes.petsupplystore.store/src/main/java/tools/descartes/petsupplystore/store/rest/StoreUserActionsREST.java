@@ -31,11 +31,14 @@ import tools.descartes.petsupplystore.entities.User;
 import tools.descartes.petsupplystore.entities.message.SessionBlob;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;
+import tools.descartes.petsupplystore.rest.NotFoundException;
+import tools.descartes.petsupplystore.rest.TimeoutException;
 import tools.descartes.petsupplystore.store.security.SHASecurityProvider;
 import tools.descartes.petsupplystore.store.security.RandomSessionIdGenerator;
 
 /**
  * Rest endpoint for the store user actions.
+ * 
  * @author Simon
  */
 @Path("useractions")
@@ -46,27 +49,36 @@ public class StoreUserActionsREST {
 	/**
 	 * 
 	 * Persists order in database.
-	 * @param blob SessionBlob
-	 * @param totalPriceInCents totalPrice
-	 * @param addressName address
-	 * @param address1 address
-	 * @param address2 address
-	 * @param creditCardCompany creditcard
-	 * @param creditCardNumber creditcard
-	 * @param creditCardExpiryDate creditcard
+	 * 
+	 * @param blob
+	 *            SessionBlob
+	 * @param totalPriceInCents
+	 *            totalPrice
+	 * @param addressName
+	 *            address
+	 * @param address1
+	 *            address
+	 * @param address2
+	 *            address
+	 * @param creditCardCompany
+	 *            creditcard
+	 * @param creditCardNumber
+	 *            creditcard
+	 * @param creditCardExpiryDate
+	 *            creditcard
 	 * @return Response containing SessionBlob
 	 */
-	@POST 
+	@POST
 	@Path("placeorder")
-	public Response placeOrder(SessionBlob blob, @QueryParam("totalPriceInCents") long totalPriceInCents, 
-			@QueryParam("addressName") String addressName, @QueryParam("address1") String address1, 
+	public Response placeOrder(SessionBlob blob, @QueryParam("totalPriceInCents") long totalPriceInCents,
+			@QueryParam("addressName") String addressName, @QueryParam("address1") String address1,
 			@QueryParam("address2") String address2, @QueryParam("creditCardCompany") String creditCardCompany,
-			@QueryParam("creditCardNumber") String creditCardNumber, 
+			@QueryParam("creditCardNumber") String creditCardNumber,
 			@QueryParam("creditCardExpiryDate") String creditCardExpiryDate) {
 		if (new SHASecurityProvider().validate(blob) == null || blob.getOrderItems().isEmpty()) {
 			return Response.status(Response.Status.NOT_FOUND).build();
 		}
-			
+
 		blob.getOrder().setUserId(blob.getUID());
 		blob.getOrder().setTotalPriceInCents(totalPriceInCents);
 		blob.getOrder().setAddressName(addressName);
@@ -76,9 +88,17 @@ public class StoreUserActionsREST {
 		blob.getOrder().setCreditCardExpiryDate(creditCardExpiryDate);
 		blob.getOrder().setCreditCardNumber(creditCardNumber);
 		blob.getOrder().setTime(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-		long orderId = LoadBalancedCRUDOperations.sendEntityForCreation(
-				Service.PERSISTENCE, "orders", Order.class, blob.getOrder());
-		for (OrderItem item: blob.getOrderItems()) {
+
+		long orderId;
+		try {
+			orderId = LoadBalancedCRUDOperations.sendEntityForCreation(Service.PERSISTENCE, "orders", Order.class,
+					blob.getOrder());
+		} catch (TimeoutException e) {
+			return Response.status(408).build();
+		} catch (NotFoundException e) {
+			return Response.status(408).build();
+		}
+		for (OrderItem item : blob.getOrderItems()) {
 			item.setOrderId(orderId);
 			LoadBalancedCRUDOperations.sendEntityForCreation(Service.PERSISTENCE, "orderitems", OrderItem.class, item);
 		}
@@ -90,16 +110,27 @@ public class StoreUserActionsREST {
 
 	/**
 	 * User login.
-	 * @param blob SessionBlob
-	 * @param name Username
-	 * @param password password
+	 * 
+	 * @param blob
+	 *            SessionBlob
+	 * @param name
+	 *            Username
+	 * @param password
+	 *            password
 	 * @return Response with SessionBlob containing login information.
 	 */
-	@POST 
+	@POST
 	@Path("login")
 	public Response login(SessionBlob blob, @QueryParam("name") String name, @QueryParam("password") String password) {
-		User user = LoadBalancedCRUDOperations.getEntityWithProperties(
-				Service.PERSISTENCE, "users", User.class, "name", name);
+		User user;
+		try {
+			user = LoadBalancedCRUDOperations.getEntityWithProperties(Service.PERSISTENCE, "users", User.class, "name",
+				name);
+		} catch (TimeoutException e) {
+			return Response.status(408).build();
+		} catch (NotFoundException e) {
+			return Response.status(408).build();
+		}
 		if (user != null && BCrypt.checkpw(password, user.getPassword())) {
 			blob.setUID(user.getId());
 			blob.setSID(new RandomSessionIdGenerator().getSessionID());
@@ -111,10 +142,12 @@ public class StoreUserActionsREST {
 
 	/**
 	 * User logout.
-	 * @param blob SessionBlob
+	 * 
+	 * @param blob
+	 *            SessionBlob
 	 * @return Response with SessionBlob
 	 */
-	@POST 
+	@POST
 	@Path("logout")
 	public Response logout(SessionBlob blob) {
 		blob.setUID(null);
@@ -126,13 +159,15 @@ public class StoreUserActionsREST {
 
 	/**
 	 * Checks if user is logged in.
-	 * @param blob Sessionblob
+	 * 
+	 * @param blob
+	 *            Sessionblob
 	 * @return Response with true if logged in
 	 */
-	@POST 
+	@POST
 	@Path("isloggedin")
 	public Response isLoggedIn(SessionBlob blob) {
 		return Response.status(Response.Status.OK).entity(new SHASecurityProvider().validate(blob)).build();
 	}
-	
+
 }
