@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -107,6 +108,7 @@ public enum SetupController {
 	private ScheduledThreadPoolExecutor imgCreationPool = new ScheduledThreadPoolExecutor(
 			SetupControllerConstants.CREATION_THREAD_POOL_SIZE);
 	private Logger log = LoggerFactory.getLogger(SetupController.class);
+	private AtomicBoolean isFinished = new AtomicBoolean();
 
 	private SetupController() {
 
@@ -510,7 +512,7 @@ public enum SetupController {
 		if (imgCreationPool.getQueue().size() != 0) {
 			return false;
 		}
-		return true;
+		return isFinished.get();
 	}
 
 	public String getState() {
@@ -578,6 +580,7 @@ public enum SetupController {
 	public void startup() {
 		// Delete all images in case the image provider was not shutdown gracefully last
 		// time, leaving images on disk
+		isFinished.set(false);
 		deleteImages();
 		deleteWorkingDir();
 		createWorkingDir();
@@ -594,6 +597,7 @@ public enum SetupController {
 							/ SetupControllerConstants.CREATION_THREAD_POOL_SIZE)
 							* SetupControllerConstants.CREATION_THREAD_POOL_WAIT_PER_IMG_NR);
 		}
+		isFinished.set(true);
 	}
 
 	public void reconfiguration() {
@@ -603,13 +607,15 @@ public enum SetupController {
 			public void run() {
 				waitAndStopImageCreation(true, SetupControllerConstants.CREATION_THREAD_POOL_WAIT);
 				imgDB = new ImageDB();
-
+				
+				isFinished.set(false);
 				deleteImages();
 				detectExistingImages();
 				detectCategoryImages();
 				generateImages();
 				setupStorage();
 				configureImageProvider();
+				isFinished.set(true);
 			}
 		};
 		x.start();
