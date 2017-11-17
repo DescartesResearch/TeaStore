@@ -106,6 +106,7 @@
 					<groupId>tools.descartes.petsupplystore</groupId>
 					<artifactId>dockerbase</artifactId>
 					<version>${petsupplystoreversion}</version>
+					<type>pom</type>
 				</dependency>
 			</dependencies>
 			<build>
