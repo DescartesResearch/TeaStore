@@ -158,6 +158,7 @@
 									<repository>descartesresearch/petsupplystore-registry</repository>
 									<tag>latest</tag>
 								</configuration>
+								<phase>package</phase>
 							</execution>
 							<execution>
 								<id>tag-push-version</id>
@@ -169,6 +170,7 @@
 									<repository>descartesresearch/petsupplystore-registry</repository>
 									<tag>${project.version}</tag>
 								</configuration>
+								<phase>package</phase>
 							</execution>
 						</executions>
 					</plugin>
