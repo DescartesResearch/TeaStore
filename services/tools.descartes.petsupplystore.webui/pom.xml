@@ -165,6 +165,7 @@
 									<repository>descartesresearch/petsupplystore-webui</repository>
 									<tag>latest</tag>
 								</configuration>
+								<phase>package</phase>
 							</execution>
 							<execution>
 								<id>tag-push-version</id>
@@ -176,6 +177,7 @@
 									<repository>descartesresearch/petsupplystore-webui</repository>
 									<tag>${project.version}</tag>
 								</configuration>
+								<phase>package</phase>
 							</execution>
 						</executions>
 					</plugin>
