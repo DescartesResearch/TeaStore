@@ -10,21 +10,21 @@
 				class="img-rounded img-responsive" />
 			<blockquote>
 				<p><a class="name" target="_blank" href="https://se.informatik.uni-wuerzburg.de/staff/joakim_kistowski/">Jóakim v. Kistowski</a></p>
-				<small><cite title="Source Title">Team leader, Persistence, API </cite></small>
+				<small><cite title="Source Title">Team leader, Interfaces, Persistence Provider Service</cite></small>
 			</blockquote>
 		</div>
 		<div class="col-sm-4 col-md-4">
 			<img src="${portraitAndre}" alt="André Bauer" class="img-rounded img-responsive" />
 			<blockquote>
 				<p><a class="name" target="_blank" href="https://se.informatik.uni-wuerzburg.de/staff/andre_bauer/">André Bauer</a></p>
-				<small><cite title="Source Title">Web design </cite></small>
+				<small><cite title="Source Title">Web design</cite></small>
 			</blockquote>
 		</div>
 		<div class="col-sm-4 col-md-4">
 			<img src="${portraitSimon}" alt="Simon Eismann" class="img-rounded img-responsive" />
 			<blockquote>
 				<p><a class="name" target="_blank" href="https://se.informatik.uni-wuerzburg.de/staff/simon_eismann/">Simon Eisman</a></p>
-				<small><cite title="Source Title">Store, Docker, Kieker </cite></small>
+				<small><cite title="Source Title">Store Service, Docker, Kieker</cite></small>
 			</blockquote>
 		</div>
 		<div class="col-sm-4 col-md-4">
@@ -32,7 +32,7 @@
 				class="img-rounded img-responsive" />
 			<blockquote>
 				<p><a class="name" target="_blank" href="https://se.informatik.uni-wuerzburg.de/staff/norbert_schmitt/">Norbert Schmitt</a></p>
-				<small><cite title="Source Title">Image Provider, Docker, Kieker </cite></small>
+				<small><cite title="Source Title">Image Provider Service, Docker, Kieker</cite></small>
 			</blockquote>
 		</div>
 		<div class="col-sm-4 col-md-4">
@@ -40,7 +40,7 @@
 				class="img-rounded img-responsive" />
 			<blockquote>
 				<p><a class="name" target="_blank" href="https://se.informatik.uni-wuerzburg.de/staff/johannes_grohmann/">Johannes Grohmann</a></p>
-				<small><cite title="Source Title">Recommender </cite></small>
+				<small><cite title="Source Title">Recommender Service</cite></small>
 			</blockquote>
 		</div>
 		<div class="col-sm-4 col-md-4">
@@ -49,7 +49,7 @@
 				alt="Samuel Kounev" class="img-rounded img-responsive" />
 			<blockquote>
 				<p><a class="name" target="_blank" href="https://se.informatik.uni-wuerzburg.de/staff/samuel_kounev/">Samuel Kounev</a></p>
-				<small><cite title="Source Title">Supervisor </cite></small>
+				<small><cite title="Source Title">Supervisor</cite></small>
 			</blockquote>
 		</div>
 
