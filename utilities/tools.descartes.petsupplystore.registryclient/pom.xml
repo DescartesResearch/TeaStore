@@ -1,40 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>tools.descartes.petsupplystore</groupId>
 	<artifactId>registryclient</artifactId>
 	<packaging>jar</packaging>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>PetSupplyStore Registry Client</name>
 	<url>http://descartes.tools</url>
-
-	<distributionManagement>
-		<repository>
-			<id>se-uw-nexus</id>
-			<name>Releases</name>
-			<url>https://se4.informatik.uni-wuerzburg.de/nexus/content/repositories/releases/</url>
-		</repository>
-		<snapshotRepository>
-			<id>se-uw-nexus</id>
-			<name>Snapshots</name>
-			<url>https://se4.informatik.uni-wuerzburg.de/nexus/content/repositories/snapshots/</url>
-		</snapshotRepository>
-	</distributionManagement>
-
-	<repositories>
-		<repository>
-			<id>se-uw-nexus</id>
-			<name>Public Repositories</name>
-			<url>https://se4.informatik.uni-wuerzburg.de/nexus/content/groups/public/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-
 
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
@@ -47,7 +17,7 @@
 		<dependency>
 			<groupId>tools.descartes.petsupplystore</groupId>
 			<artifactId>rest</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${petsupplystoreversion}</version>
 		</dependency>
 
 		<!-- WebApp Dependencies -->
@@ -115,7 +85,7 @@
 		<dependency>
 			<groupId>tools.descartes.petsupplystore</groupId>
 			<artifactId>registry</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${petsupplystoreversion}</version>
 			<classifier>classes</classifier>
 			<scope>test</scope>
 		</dependency>
@@ -134,4 +104,10 @@
 			</plugin>
 		</plugins>
 	</build>
+	<parent>
+		<groupId>tools.descartes.petsupplystore</groupId>
+		<artifactId>parent</artifactId>
+		<version>${petsupplystoreversion}</version>
+		<relativePath>../..</relativePath>
+	</parent>
 </project>

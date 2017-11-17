@@ -1,39 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>tools.descartes.petsupplystore</groupId>
 	<artifactId>kieker</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>PetSupplyStore Kieker Instrumentation</name>
 	<url>http://descartes.tools</url>
-
-	<distributionManagement>
-		<repository>
-			<id>se-uw-nexus</id>
-			<name>Releases</name>
-			<url>https://se4.informatik.uni-wuerzburg.de/nexus/content/repositories/releases/</url>
-		</repository>
-		<snapshotRepository>
-			<id>se-uw-nexus</id>
-			<name>Snapshots</name>
-			<url>https://se4.informatik.uni-wuerzburg.de/nexus/content/repositories/snapshots/</url>
-		</snapshotRepository>
-	</distributionManagement>
-
-	<repositories>
-		<repository>
-			<id>se-uw-nexus</id>
-			<name>Public Repositories</name>
-			<url>https://se4.informatik.uni-wuerzburg.de/nexus/content/groups/public/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -45,4 +15,10 @@
 	</build>
 
 	<packaging>pom</packaging>
+	<parent>
+		<groupId>tools.descartes.petsupplystore</groupId>
+		<artifactId>parent</artifactId>
+		<version>${petsupplystoreversion}</version>
+		<relativePath>../..</relativePath>
+	</parent>
 </project>
