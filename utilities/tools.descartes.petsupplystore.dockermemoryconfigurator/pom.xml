@@ -1,15 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-  <groupId>tools.descartes.petsupplystore</groupId>
-  <artifactId>dockermemoryconfigurator</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
-  <name>PetSupplyStore Memory Configurator</name>
-  <url>http://descartes.tools</url>
+	<artifactId>dockermemoryconfigurator</artifactId>
+	<packaging>jar</packaging>
+	<name>PetSupplyStore Memory Configurator</name>
+	<url>http://descartes.tools</url>
 
-  <distributionManagement>
+	<distributionManagement>
 		<repository>
 			<id>se-uw-nexus</id>
 			<name>Releases</name>
@@ -36,13 +34,13 @@
 		</repository>
 	</repositories>
 
-  <properties>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
-  
-  <build>
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -60,4 +58,10 @@
 		</plugins>
 		<finalName>dockermemoryconfigurator</finalName>
 	</build>
+	<parent>
+		<groupId>tools.descartes.petsupplystore</groupId>
+		<artifactId>parent</artifactId>
+		<version>${petsupplystoreversion}</version>
+		<relativePath>../..</relativePath>
+	</parent>
 </project>
