@@ -6,33 +6,6 @@
 	<url>http://descartes.tools</url>
 	<packaging>pom</packaging>
 
-	<distributionManagement>
-		<repository>
-			<id>se-uw-nexus</id>
-			<name>Releases</name>
-			<url>https://se4.informatik.uni-wuerzburg.de/nexus/content/repositories/releases/</url>
-		</repository>
-		<snapshotRepository>
-			<id>se-uw-nexus</id>
-			<name>Snapshots</name>
-			<url>https://se4.informatik.uni-wuerzburg.de/nexus/content/repositories/snapshots/</url>
-		</snapshotRepository>
-	</distributionManagement>
-
-	<repositories>
-		<repository>
-			<id>se-uw-nexus</id>
-			<name>Public Repositories</name>
-			<url>https://se4.informatik.uni-wuerzburg.de/nexus/content/groups/public/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-
 	<dependencies>
 		<dependency>
 			<groupId>tools.descartes.petsupplystore</groupId>
