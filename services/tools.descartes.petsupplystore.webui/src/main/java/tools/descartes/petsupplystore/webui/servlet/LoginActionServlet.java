@@ -73,7 +73,7 @@ public class LoginActionServlet extends AbstractUIServlet {
 				}
 
 			} else {
-				redirect("/login", response);
+				redirect("/login", response, ERRORMESSAGECOOKIE, WRONGCREDENTIALS);
 			}
 
 		} else if (request.getParameter("logout") != null) {

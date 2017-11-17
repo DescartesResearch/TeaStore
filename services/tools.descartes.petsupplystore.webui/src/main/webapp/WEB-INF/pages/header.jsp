@@ -37,5 +37,11 @@
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			<strong>Success!</strong> ${message}
 		</div>
+	</c:if>
+	<c:if test="${not empty errormessage}">
+		<div class="alert alert-warning alert-dismissable" role="alert">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong>Warning!</strong> ${errormessage}
+		</div>
 	</c:if><%--/.container-fluid --%>
 </nav>

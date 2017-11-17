@@ -45,8 +45,10 @@ public abstract class AbstractUIServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	protected static final String MESSAGECOOKIE = "petsupplystoreMessageCookie";
+	protected static final String ERRORMESSAGECOOKIE = "petsupplystoreErrorMessageCookie";
 	protected static final String SUCESSLOGIN = "You are logged in!";
 	protected static final String SUCESSLOGOUT = "You are logged out!";
+	protected static final String WRONGCREDENTIALS = "You used wrong credentials!";
 	protected static final String PRODUCTCOOKIE = "petsupplystorenumberProductsCookie";
 	protected static final String BLOB = "sessionBlob";
 	protected static final String ORDERCONFIRMED = "Your order is confirmed!";
@@ -164,6 +166,10 @@ public abstract class AbstractUIServlet extends HttpServlet {
 					response.addCookie(cook);
 				} else if (cook.getName().equals(PRODUCTCOOKIE)) {
 					request.setAttribute("numberProducts", cook.getValue());
+				} else if (cook.getName().equals(ERRORMESSAGECOOKIE)) {
+					request.setAttribute("errormessage", cook.getValue().replaceAll("_", " "));
+					cook.setMaxAge(0);
+					response.addCookie(cook);
 				}
 			}
 		}
