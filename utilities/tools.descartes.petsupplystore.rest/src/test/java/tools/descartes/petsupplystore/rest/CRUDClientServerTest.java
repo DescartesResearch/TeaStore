@@ -73,7 +73,12 @@ public class CRUDClientServerTest {
 		Assert.assertTrue(id >= 0);
 		sendEnt.setAttribute("test0");
 		Assert.assertTrue(NonBalancedCRUDOperations.sendEntityForUpdate(client, id, sendEnt));
-		Assert.assertFalse(NonBalancedCRUDOperations.sendEntityForUpdate(client, -1L, sendEnt));
+		try {
+			NonBalancedCRUDOperations.sendEntityForUpdate(client, -1L, sendEnt);
+			Assert.fail();
+		} catch (NotFoundException e) {
+			//dont't fail
+		}
 		TestEntity recEnt = NonBalancedCRUDOperations.getEntity(client, id);
 		Assert.assertNotNull(recEnt);
 		Assert.assertEquals(recEnt.getAttribute(), "test0");

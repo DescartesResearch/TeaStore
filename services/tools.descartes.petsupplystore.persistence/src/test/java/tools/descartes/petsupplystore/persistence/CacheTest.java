@@ -30,6 +30,7 @@ import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.persistence.rest.CacheManagerEndpoint;
 import tools.descartes.petsupplystore.persistence.rest.DatabaseGenerationEndpoint;
 import tools.descartes.petsupplystore.persistence.rest.ProductEndpoint;
+import tools.descartes.petsupplystore.registryclient.RegistryClient;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.rest.NonBalancedCRUDOperations;
 import tools.descartes.petsupplystore.rest.NotFoundException;
@@ -73,10 +74,10 @@ public class CacheTest {
 		int client0Port = clientTomcatHandler.getTomcatPort(0);
 		int client1Port = clientTomcatHandler.getTomcatPort(1);
 
-		RESTClient<Product> p1c = new RESTClient<>("http://localhost:" 
+		RESTClient<Product> p0c = new RESTClient<>("http://localhost:" 
 				 + client0Port + "/" + Service.PERSISTENCE.getServiceName(),
 				 "rest", "products", Product.class);
-		RESTClient<Product> p2c = new RESTClient<>("http://localhost:" 
+		RESTClient<Product> p1c = new RESTClient<>("http://localhost:" 
 				 + client1Port + "/" + Service.PERSISTENCE.getServiceName(),
 				 "rest", "products", Product.class);
 		
@@ -117,23 +118,9 @@ public class CacheTest {
 				.request(MediaType.TEXT_PLAIN).delete();
 		Assert.assertEquals("cleared", response3.readEntity(String.class));
 		
-		long id = NonBalancedCRUDOperations.getEntities(p1c, -1, 1).get(0).getId();
-		boolean deleted = NonBalancedCRUDOperations.deleteEntity(p2c, id);
-		Assert.assertTrue(deleted);
-		boolean notFound = false;
-		try {
-			NonBalancedCRUDOperations.getEntity(p1c, id);
-		} catch (NotFoundException e) {
-			notFound = true;
-		}
-		Assert.assertTrue(notFound);
-		notFound = false;
-		try {
-			NonBalancedCRUDOperations.getEntity(p2c, id);
-		} catch (NotFoundException e) {
-			notFound = true;
-		}
-		Assert.assertTrue(notFound);
+		long id = NonBalancedCRUDOperations.getEntities(p0c, -1, 1).get(0).getId();
+		long id2 = NonBalancedCRUDOperations.getEntities(p1c, -1, 1).get(0).getId();
+		Assert.assertEquals(id, id2);
 		
 	}
 	

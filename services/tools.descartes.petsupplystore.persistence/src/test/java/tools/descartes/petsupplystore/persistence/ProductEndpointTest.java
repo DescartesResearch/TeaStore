@@ -28,6 +28,7 @@ import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.persistence.rest.CategoryEndpoint;
 import tools.descartes.petsupplystore.persistence.rest.ProductEndpoint;
 import tools.descartes.petsupplystore.rest.NonBalancedCRUDOperations;
+import tools.descartes.petsupplystore.rest.NotFoundException;
 import tools.descartes.petsupplystore.rest.RESTClient;
 
 /**
@@ -85,7 +86,12 @@ public class ProductEndpointTest {
 		//update product
 		creationProduct.setName("updated");
 		Assert.assertTrue(NonBalancedCRUDOperations.sendEntityForUpdate(client, id, creationProduct));
-		Assert.assertFalse(NonBalancedCRUDOperations.sendEntityForUpdate(client, -1L, creationProduct));
+		try {
+			NonBalancedCRUDOperations.sendEntityForUpdate(client, -1L, creationProduct);
+			Assert.fail();
+		} catch (NotFoundException e) {
+			//don't fail
+		}
 		
 		//receive product
 		Product recEnt = NonBalancedCRUDOperations.getEntity(client, id);

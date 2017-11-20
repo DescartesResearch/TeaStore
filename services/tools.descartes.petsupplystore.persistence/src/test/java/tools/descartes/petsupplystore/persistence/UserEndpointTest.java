@@ -22,6 +22,7 @@ import org.junit.Assert;
 import tools.descartes.petsupplystore.entities.User;
 import tools.descartes.petsupplystore.persistence.rest.UserEndpoint;
 import tools.descartes.petsupplystore.rest.NonBalancedCRUDOperations;
+import tools.descartes.petsupplystore.rest.NotFoundException;
 import tools.descartes.petsupplystore.rest.RESTClient;
 
 /**
@@ -64,7 +65,12 @@ public class UserEndpointTest {
 		//update user
 		user.setRealName("updated");
 		Assert.assertTrue(NonBalancedCRUDOperations.sendEntityForUpdate(client, id, user));
-		Assert.assertFalse(NonBalancedCRUDOperations.sendEntityForUpdate(client, 50000L, user));
+		try {
+			NonBalancedCRUDOperations.sendEntityForUpdate(client, 50000L, user);
+			Assert.fail();
+		} catch (NotFoundException e) {
+			//don't fail
+		}
 		
 		//receive user
 		User recEnt = NonBalancedCRUDOperations.getEntity(client, id);

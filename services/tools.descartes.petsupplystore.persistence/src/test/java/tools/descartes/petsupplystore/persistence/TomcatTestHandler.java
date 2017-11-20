@@ -32,6 +32,7 @@ import org.glassfish.jersey.servlet.ServletContainer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
 import tools.descartes.petsupplystore.persistence.domain.CategoryRepository;
@@ -85,7 +86,8 @@ public class TomcatTestHandler {
 				registryURL.setOverride(false);
 				registryURL.setType("java.lang.String");
 				registryURL.setName("registryURL");
-				registryURL.setValue("http://localhost:" + wireMockRule.port() + "/test/rest/services/");
+				registryURL.setValue("http://localhost:" + wireMockRule.port()
+				+ "/tools.descartes.petsupplystore.registry/rest/services/");
 				context.getNamingResources().addEnvironment(registryURL);
 				ContextEnvironment servicePort = new ContextEnvironment();
 				servicePort.setDescription("");
@@ -94,6 +96,7 @@ public class TomcatTestHandler {
 			    servicePort.setName("servicePort");
 			    servicePort.setValue("" + startPort + i);
 				context.getNamingResources().addEnvironment(servicePort);
+				context.addApplicationListener(RegistrationDaemon.class.getName());
 			}
 			//REST endpoints
 			ResourceConfig restServletConfig = new ResourceConfig();
@@ -130,9 +133,13 @@ public class TomcatTestHandler {
 			strings.add("localhost:" + (startport + i));
 		}
 		String json = new ObjectMapper().writeValueAsString(strings);
-		wireMockRule.stubFor(get(urlEqualTo(
+		wireMockRule.stubFor(WireMock.get(WireMock.urlEqualTo(
 				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.PERSISTENCE.getServiceName()))
-						.willReturn(okJson(json)));
+						.willReturn(WireMock.okJson(json)));
+		wireMockRule.stubFor(WireMock.post(WireMock.urlEqualTo(
+				"/tools.descartes.petsupplystore.registry/rest/services/"
+						+ Service.PERSISTENCE.getServiceName() + "/*"))
+		.willReturn(WireMock.ok()));
 	}
 	
 	/**

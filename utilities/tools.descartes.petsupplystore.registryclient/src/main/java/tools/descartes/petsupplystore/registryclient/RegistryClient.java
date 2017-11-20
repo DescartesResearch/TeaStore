@@ -55,6 +55,7 @@ public class RegistryClient {
 	private static RegistryClient client = new RegistryClient();
 	private String registryRESTURL;
 	private String hostName = null;
+	private Integer port = null;
 	
 	private Server myServiceInstanceServer = null;
 	private Service myService = null;
@@ -72,15 +73,21 @@ public class RegistryClient {
 	protected RegistryClient() {
 		System.setProperty("org.slf4j.simpleLogger.logFile", "System.out");
 		try {
-			registryRESTURL = (String) new InitialContext().lookup("java:comp/env/registryURL");
-		} catch (NamingException e) {
-			LOG.warn("registryURL not set. Falling back to default registry URL.");
-			registryRESTURL = "http://localhost:8080/tools.descartes.petsupplystore.registry/rest/services/";
-		}
-		try {
 			hostName = (String) new InitialContext().lookup("java:comp/env/hostName");
 		} catch (NamingException e) {
 			LOG.warn("hostName not set. Using default OS-provided hostname.");
+		}
+		try {
+			port = Integer.parseInt((String) new InitialContext().lookup("java:comp/env/servicePort"));
+		} catch (NamingException | NumberFormatException e) {
+			LOG.warn("Could not read servicePort! Using port 8080 as fallback.");
+			port = 8080;
+		}
+		try {
+			registryRESTURL = (String) new InitialContext().lookup("java:comp/env/registryURL");
+		} catch (NamingException e) {
+			LOG.warn("registryURL not set. Falling back to default registry URL (localhost, port " + port + ").");
+			registryRESTURL = "http://localhost:" + port + "/tools.descartes.petsupplystore.registry/rest/services/";
 		}
 	}
 	
@@ -273,7 +280,7 @@ public class RegistryClient {
     }
     
     private Server getServer() {
-    	return new Server(getHostName(), Integer.valueOf(getPort()));
+    	return new Server(getHostName(), getPort());
     }
     
     private String getHostName() {
@@ -288,12 +295,12 @@ public class RegistryClient {
     };
     
     
-    private String getPort() {
-		try {
-			return (String) new InitialContext().lookup("java:comp/env/servicePort");
-		} catch (NamingException e) {
-			throw new IllegalStateException("Could not read servicePort!");
-		}
+    private int getPort() {
+    	if (port != null) {
+    		return port;
+    	} else {
+    		throw new IllegalStateException("Could not read servicePort!");
+    	}
     }
 
     /**
