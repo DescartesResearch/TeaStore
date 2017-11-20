@@ -41,9 +41,11 @@ public class UserInformationTest extends AbstractStoreRestTest {
 		
 		List<Order> orders = LoadBalancedStoreOperations.getOrdersForUser(509);
 		Assert.assertTrue(orders != null && orders.size() != 0);
-	
-		List<Order> categories2 = LoadBalancedStoreOperations.getOrdersForUser(-1);
-		Assert.assertTrue(categories2.size() == 0);
+
+		try {
+			LoadBalancedStoreOperations.getOrdersForUser(-1);
+			Assert.fail();
+		} catch (Exception e) {}
 	}
 	
 	private void mockOrdersForUser509() {
@@ -51,6 +53,7 @@ public class UserInformationTest extends AbstractStoreRestTest {
 		List<Order> os = new LinkedList<Order>();
 		os.add(o);
  		mockValidGetRestCall(os, "/tools.descartes.petsupplystore.persistence/rest/orders/user/509");
+ 		mockValidGetRestCall(null, "/tools.descartes.petsupplystore.persistence/rest/orders/user/-1");
 	}
 
 	private void mockUser509() {
@@ -61,5 +64,6 @@ public class UserInformationTest extends AbstractStoreRestTest {
 		u.setPassword(BCrypt.hashpw("password", BCrypt.gensalt()));
 		u.setId(1231245125);
 		mockValidGetRestCall(u, "/tools.descartes.petsupplystore.persistence/rest/users/509");
+		mockValidGetRestCall(null, "/tools.descartes.petsupplystore.persistence/rest/users/-1");
 	}
 }

@@ -10,6 +10,7 @@ import com.sun.mail.iap.Response;
 import tools.descartes.petsupplystore.entities.User;
 import tools.descartes.petsupplystore.entities.message.SessionBlob;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
+import tools.descartes.petsupplystore.rest.NotFoundException;
 
 
 
@@ -52,40 +53,49 @@ public class CartTest extends AbstractStoreRestTest {
 		Assert.assertEquals(2, notLoggedIn.getOrderItems().size());
 		Assert.assertEquals(2, notLoggedIn.getOrderItems().get(1).getQuantity());
 		
-		SessionBlob notFound = LoadBalancedStoreOperations.addProductToCart(notLoggedIn, -1L);
-		Assert.assertTrue(notFound == null);
+		try {
+			LoadBalancedStoreOperations.addProductToCart(notLoggedIn, -1L);
+			Assert.fail();
+		} catch (NotFoundException e) {}
 		
 		notLoggedIn = LoadBalancedStoreOperations.updateQuantity(notLoggedIn, 106L, 7);
 		Assert.assertEquals(7, notLoggedIn.getOrderItems().get(0).getQuantity());
 		
 		try {
-			notLoggedIn = LoadBalancedStoreOperations.updateQuantity(notLoggedIn, 106L, -1);
+			LoadBalancedStoreOperations.updateQuantity(notLoggedIn, 106L, -1);
 			Assert.fail();
 		} catch (IllegalArgumentException e) {
 		}
-		
-		notFound = LoadBalancedStoreOperations.updateQuantity(notLoggedIn, -1L, 7);
-		Assert.assertTrue(notFound == null);
-		
-		notFound = LoadBalancedStoreOperations.updateQuantity(notLoggedIn, 108L, 7);
-		Assert.assertTrue(notFound == null);
+
+		try {
+			LoadBalancedStoreOperations.updateQuantity(notLoggedIn, -1L, 7);
+			Assert.fail();
+		} catch (NotFoundException e) {}
+
+		try {
+			LoadBalancedStoreOperations.updateQuantity(notLoggedIn, 108L, 7);
+			Assert.fail();
+		} catch (NotFoundException e) {}
 		
 		notLoggedIn = LoadBalancedStoreOperations.removeProductFromCart(notLoggedIn, 106L);
 		Assert.assertEquals(1, notLoggedIn.getOrderItems().size());
 		Assert.assertEquals(107, notLoggedIn.getOrderItems().get(0).getProductId());
+
+		try {
+			LoadBalancedStoreOperations.removeProductFromCart(notLoggedIn, 106L);
+			Assert.fail();
+		} catch (NotFoundException e) {}
 		
-		notFound = LoadBalancedStoreOperations.removeProductFromCart(notLoggedIn, 106L);
-		Assert.assertTrue(notFound == null);
-//		
 		notLoggedIn = LoadBalancedStoreOperations.removeProductFromCart(notLoggedIn, 107L);
 		Assert.assertEquals(0, notLoggedIn.getOrderItems().size());
 
 		
 		notLoggedIn = LoadBalancedStoreOperations.addProductToCart(notLoggedIn, 107L);
-		notFound = LoadBalancedStoreOperations.placeOrder(notLoggedIn, "", "", "", "", "2015-12-12", -1L, "");
-		Assert.assertTrue(notFound == null);
 		
-		
+		try {
+			LoadBalancedStoreOperations.placeOrder(notLoggedIn, "", "", "", "", "2015-12-12", -1L, "");
+			Assert.fail();
+		} catch (NotFoundException e) {}
 		
 		SessionBlob loggedIn = new SessionBlob();
 		loggedIn = LoadBalancedStoreOperations.login(loggedIn, "user1", "password");
@@ -107,9 +117,11 @@ public class CartTest extends AbstractStoreRestTest {
 		loggedIn = LoadBalancedStoreOperations.addProductToCart(loggedIn, 107L);
 		Assert.assertEquals(2, loggedIn.getOrderItems().size());
 		Assert.assertEquals(2, loggedIn.getOrderItems().get(1).getQuantity());
-		
-		notFound = LoadBalancedStoreOperations.addProductToCart(loggedIn, -1L);
-		Assert.assertTrue(notFound == null);
+
+		try {
+			LoadBalancedStoreOperations.addProductToCart(loggedIn, -1L);
+			Assert.fail();
+		} catch (NotFoundException e) {}
 		
 		loggedIn = LoadBalancedStoreOperations.updateQuantity(loggedIn, 106L, 7);
 		Assert.assertEquals(7, loggedIn.getOrderItems().get(0).getQuantity());
@@ -119,25 +131,33 @@ public class CartTest extends AbstractStoreRestTest {
 			Assert.fail();
 		} catch (IllegalArgumentException e) {
 		}
-		
-		notFound = LoadBalancedStoreOperations.updateQuantity(loggedIn, -1L, 7);
-		Assert.assertTrue(notFound == null);
-		
-		notFound = LoadBalancedStoreOperations.updateQuantity(loggedIn, 108L, 7);
-		Assert.assertTrue(notFound == null);
+
+		try {
+			LoadBalancedStoreOperations.updateQuantity(loggedIn, -1L, 7);
+			Assert.fail();
+		} catch (NotFoundException e) {}
+
+		try {
+			LoadBalancedStoreOperations.updateQuantity(loggedIn, 108L, 7);
+			Assert.fail();
+		} catch (NotFoundException e) {}
 		
 		loggedIn = LoadBalancedStoreOperations.removeProductFromCart(loggedIn, 106L);
 		Assert.assertEquals(1, loggedIn.getOrderItems().size());
 		Assert.assertEquals(107, loggedIn.getOrderItems().get(0).getProductId());
-		
-		notFound = LoadBalancedStoreOperations.removeProductFromCart(loggedIn, 106L);
-		Assert.assertTrue(notFound == null);
+
+		try {
+			LoadBalancedStoreOperations.removeProductFromCart(loggedIn, 106L);
+			Assert.fail();
+		} catch (NotFoundException e) {}
 		
 		loggedIn = LoadBalancedStoreOperations.removeProductFromCart(loggedIn, 107L);
 		Assert.assertEquals(0, loggedIn.getOrderItems().size());
-		
-		notFound = LoadBalancedStoreOperations.placeOrder(loggedIn, "", "", "", "", "2015-12-12", -1L, "");
-		Assert.assertTrue(notFound == null);
+
+		try {
+			LoadBalancedStoreOperations.placeOrder(loggedIn, "", "", "", "", "2015-12-12", -1L, "");
+			Assert.fail();
+		} catch (NotFoundException e) {}
 		
 		loggedIn = LoadBalancedStoreOperations.addProductToCart(loggedIn, 107L);
 		loggedIn = LoadBalancedStoreOperations.placeOrder(loggedIn, "", "", "", "", "2015-12-12", -1L, "");
@@ -154,6 +174,7 @@ public class CartTest extends AbstractStoreRestTest {
 		u.setPassword(BCrypt.hashpw("password", BCrypt.gensalt()));
 		u.setId(1231245125);
 		mockValidGetRestCall(u, "/tools.descartes.petsupplystore.persistence/rest/users/name/user1");
+		mockValidGetRestCall(null, "/tools.descartes.petsupplystore.persistence/rest/users/name/user-1");
 	}
 
 	private void mockCreateOrderItems() {

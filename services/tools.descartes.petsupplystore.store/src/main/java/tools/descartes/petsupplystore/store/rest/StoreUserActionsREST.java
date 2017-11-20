@@ -136,7 +136,7 @@ public class StoreUserActionsREST {
 		} catch (TimeoutException e) {
 			return Response.status(408).build();
 		} catch (NotFoundException e) {
-			return Response.status(Response.Status.FORBIDDEN).entity(blob).build();
+			return Response.status(Response.Status.OK).entity(blob).build();
 		}
 		if (user != null && BCrypt.checkpw(password, user.getPassword())) {
 			blob.setUID(user.getId());
@@ -144,7 +144,7 @@ public class StoreUserActionsREST {
 			blob = new SHASecurityProvider().secure(blob);
 			return Response.status(Response.Status.OK).entity(blob).build();
 		}
-		return Response.status(Response.Status.FORBIDDEN).entity(blob).build();
+		return Response.status(Response.Status.OK).entity(blob).build();
 	}
 
 	/**

@@ -57,5 +57,6 @@ public class CategoryInformationTest extends AbstractStoreRestTest {
 		c.setId(3);
 		c.setName("category");
 		mockValidGetRestCall(c, "/tools.descartes.petsupplystore.persistence/rest/categories/3");
+		mockValidGetRestCall(null, "/tools.descartes.petsupplystore.persistence/rest/categories/-1");
 	}
 }
