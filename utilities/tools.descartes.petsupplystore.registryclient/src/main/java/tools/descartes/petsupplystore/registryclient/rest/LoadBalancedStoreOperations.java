@@ -275,7 +275,6 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("isloggedin").request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		//TODO: should return a corresponding status-code (such as 403) for non-logged users.
 		throwCommonExceptions(r);
 		SessionBlob validatedBlob = readEntityOrNull(r, SessionBlob.class);
 		return validatedBlob != null;

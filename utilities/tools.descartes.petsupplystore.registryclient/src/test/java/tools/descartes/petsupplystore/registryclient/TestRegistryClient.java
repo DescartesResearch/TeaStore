@@ -13,7 +13,6 @@
  */
 package tools.descartes.petsupplystore.registryclient;
 
-import tools.descartes.petsupplystore.registryclient.RegistryClient;
 
 /**
  * Application Lifecycle Listener implementation class Registry Client Startup.

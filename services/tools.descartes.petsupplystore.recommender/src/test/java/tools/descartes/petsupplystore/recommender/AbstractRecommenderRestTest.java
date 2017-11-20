@@ -83,7 +83,8 @@ public abstract class AbstractRecommenderRestTest {
 		//debuggging response 
 		Response response0 = ClientBuilder.newBuilder().build()
 				.target("http://localhost:" + MockRegistry.DEFAULT_MOCK_REGISTRY_PORT
-				+ "/tools.descartes.petsupplystore.registry/rest/services/" + Service.PERSISTENCE.getServiceName() + "/")
+				+ "/tools.descartes.petsupplystore.registry/rest/services/"
+						+ Service.PERSISTENCE.getServiceName() + "/")
 				.request(MediaType.APPLICATION_JSON).get();
 		System.out.println(response0.getStatus() + ":" + response0.readEntity(String.class));
 		
