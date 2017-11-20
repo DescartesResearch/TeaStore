@@ -1,6 +1,8 @@
 package tools.descartes.petsupplystore.store.rest;
 
 
+import javax.ws.rs.core.Response.Status;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.mindrot.jbcrypt.BCrypt;
@@ -35,10 +37,9 @@ public class LoginLogoutTest extends AbstractStoreRestTest {
 		SessionBlob blob = new SessionBlob();
 		Assert.assertFalse(LoadBalancedStoreOperations.isLoggedIn(blob));
 		
-//		TODO uncomment this once issue #45 is fixed
-//		mockInValidGetRestCall(Status.NOT_FOUND, "/tools.descartes.petsupplystore.persistence/rest/users/name/notauser");
-//		blob = LoadBalancedStoreOperations.login(blob, "notauser", "notapassword");
-//		Assert.assertFalse(LoadBalancedStoreOperations.isLoggedIn(blob));
+		mockInValidGetRestCall(Status.NOT_FOUND, "/tools.descartes.petsupplystore.persistence/rest/users/name/notauser");
+		blob = LoadBalancedStoreOperations.login(blob, "notauser", "notapassword");
+		Assert.assertFalse(LoadBalancedStoreOperations.isLoggedIn(blob));
 
 		blob = LoadBalancedStoreOperations.login(blob, "user1", "password");
 		Assert.assertTrue(LoadBalancedStoreOperations.isLoggedIn(blob));

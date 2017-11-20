@@ -34,18 +34,16 @@ public class UserInformationTest extends AbstractStoreRestTest {
 		User u = LoadBalancedStoreOperations.getUser(509);
 		Assert.assertTrue(u != null);
 		
-//		TODO Uncomment this once issue #45 is fixed		
-//		try {
-//			LoadBalancedStoreOperations.getUser(-1);
-//			Assert.fail();
-//		} catch (Exception e) {}
+		try {
+			LoadBalancedStoreOperations.getUser(-1);
+			Assert.fail();
+		} catch (Exception e) {}
 		
 		List<Order> orders = LoadBalancedStoreOperations.getOrdersForUser(509);
 		Assert.assertTrue(orders != null && orders.size() != 0);
-
-//		TODO Uncomment this once issue #45 is fixed		
-//		List<Order> categories2 = LoadBalancedStoreOperations.getOrdersForUser(-1);
-//		Assert.assertTrue(categories2.size() == 0);
+	
+		List<Order> categories2 = LoadBalancedStoreOperations.getOrdersForUser(-1);
+		Assert.assertTrue(categories2.size() == 0);
 	}
 	
 	private void mockOrdersForUser509() {

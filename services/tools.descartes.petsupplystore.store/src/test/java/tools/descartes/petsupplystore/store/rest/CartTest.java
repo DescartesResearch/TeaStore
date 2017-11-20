@@ -52,39 +52,38 @@ public class CartTest extends AbstractStoreRestTest {
 		Assert.assertEquals(2, notLoggedIn.getOrderItems().size());
 		Assert.assertEquals(2, notLoggedIn.getOrderItems().get(1).getQuantity());
 		
-//		TODO Uncomment all of this stuff once issue #45 is fixed
-//		SessionBlob notFound = LoadBalancedStoreOperations.addProductToCart(notLoggedIn, -1L);
-//		Assert.assertTrue(notFound == null);
+		SessionBlob notFound = LoadBalancedStoreOperations.addProductToCart(notLoggedIn, -1L);
+		Assert.assertTrue(notFound == null);
 		
 		notLoggedIn = LoadBalancedStoreOperations.updateQuantity(notLoggedIn, 106L, 7);
 		Assert.assertEquals(7, notLoggedIn.getOrderItems().get(0).getQuantity());
 		
-//		try {
-//			notLoggedIn = LoadBalancedStoreOperations.updateQuantity(notLoggedIn, 106L, -1);
-//			Assert.fail();
-//		} catch (IllegalArgumentException e) {
-//		}
+		try {
+			notLoggedIn = LoadBalancedStoreOperations.updateQuantity(notLoggedIn, 106L, -1);
+			Assert.fail();
+		} catch (IllegalArgumentException e) {
+		}
 		
-//		SessionBlob notFound = LoadBalancedStoreOperations.updateQuantity(notLoggedIn, -1L, 7);
-//		Assert.assertTrue(notFound == null);
+		notFound = LoadBalancedStoreOperations.updateQuantity(notLoggedIn, -1L, 7);
+		Assert.assertTrue(notFound == null);
 		
-//		notFound = LoadBalancedStoreOperations.updateQuantity(notLoggedIn, 108L, 7);
-//		Assert.assertTrue(notFound == null);
+		notFound = LoadBalancedStoreOperations.updateQuantity(notLoggedIn, 108L, 7);
+		Assert.assertTrue(notFound == null);
 		
 		notLoggedIn = LoadBalancedStoreOperations.removeProductFromCart(notLoggedIn, 106L);
 		Assert.assertEquals(1, notLoggedIn.getOrderItems().size());
 		Assert.assertEquals(107, notLoggedIn.getOrderItems().get(0).getProductId());
 		
-//		notFound = LoadBalancedStoreOperations.removeProductFromCart(notLoggedIn, 106L);
-//		Assert.assertTrue(notFound == null);
+		notFound = LoadBalancedStoreOperations.removeProductFromCart(notLoggedIn, 106L);
+		Assert.assertTrue(notFound == null);
 //		
 		notLoggedIn = LoadBalancedStoreOperations.removeProductFromCart(notLoggedIn, 107L);
 		Assert.assertEquals(0, notLoggedIn.getOrderItems().size());
 
 		
 		notLoggedIn = LoadBalancedStoreOperations.addProductToCart(notLoggedIn, 107L);
-//		notFound = LoadBalancedStoreOperations.placeOrder(notLoggedIn, "", "", "", "", "2015-12-12", -1L, "");
-//		Assert.assertTrue(notFound == null);
+		notFound = LoadBalancedStoreOperations.placeOrder(notLoggedIn, "", "", "", "", "2015-12-12", -1L, "");
+		Assert.assertTrue(notFound == null);
 		
 		
 		
@@ -109,8 +108,8 @@ public class CartTest extends AbstractStoreRestTest {
 		Assert.assertEquals(2, loggedIn.getOrderItems().size());
 		Assert.assertEquals(2, loggedIn.getOrderItems().get(1).getQuantity());
 		
-//		notFound = LoadBalancedStoreOperations.addProductToCart(loggedIn, -1L);
-//		Assert.assertTrue(notFound == null);
+		notFound = LoadBalancedStoreOperations.addProductToCart(loggedIn, -1L);
+		Assert.assertTrue(notFound == null);
 		
 		loggedIn = LoadBalancedStoreOperations.updateQuantity(loggedIn, 106L, 7);
 		Assert.assertEquals(7, loggedIn.getOrderItems().get(0).getQuantity());
@@ -121,24 +120,24 @@ public class CartTest extends AbstractStoreRestTest {
 		} catch (IllegalArgumentException e) {
 		}
 		
-//		notFound = LoadBalancedStoreOperations.updateQuantity(loggedIn, -1L, 7);
-//		Assert.assertTrue(notFound == null);
+		notFound = LoadBalancedStoreOperations.updateQuantity(loggedIn, -1L, 7);
+		Assert.assertTrue(notFound == null);
 		
-//		notFound = LoadBalancedStoreOperations.updateQuantity(loggedIn, 108L, 7);
-//		Assert.assertTrue(notFound == null);
+		notFound = LoadBalancedStoreOperations.updateQuantity(loggedIn, 108L, 7);
+		Assert.assertTrue(notFound == null);
 		
 		loggedIn = LoadBalancedStoreOperations.removeProductFromCart(loggedIn, 106L);
 		Assert.assertEquals(1, loggedIn.getOrderItems().size());
 		Assert.assertEquals(107, loggedIn.getOrderItems().get(0).getProductId());
 		
-//		notFound = LoadBalancedStoreOperations.removeProductFromCart(loggedIn, 106L);
-//		Assert.assertTrue(notFound == null);
+		notFound = LoadBalancedStoreOperations.removeProductFromCart(loggedIn, 106L);
+		Assert.assertTrue(notFound == null);
 		
 		loggedIn = LoadBalancedStoreOperations.removeProductFromCart(loggedIn, 107L);
 		Assert.assertEquals(0, loggedIn.getOrderItems().size());
 		
-//		notFound = LoadBalancedStoreOperations.placeOrder(loggedIn, "", "", "", "", "2015-12-12", -1L, "");
-//		Assert.assertTrue(notFound == null);
+		notFound = LoadBalancedStoreOperations.placeOrder(loggedIn, "", "", "", "", "2015-12-12", -1L, "");
+		Assert.assertTrue(notFound == null);
 		
 		loggedIn = LoadBalancedStoreOperations.addProductToCart(loggedIn, 107L);
 		loggedIn = LoadBalancedStoreOperations.placeOrder(loggedIn, "", "", "", "", "2015-12-12", -1L, "");

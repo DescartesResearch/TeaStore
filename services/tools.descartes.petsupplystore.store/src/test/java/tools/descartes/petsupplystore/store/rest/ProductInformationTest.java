@@ -33,11 +33,10 @@ public class ProductInformationTest extends AbstractStoreRestTest {
 		Product  product = LoadBalancedStoreOperations.getProduct(106);
 		Assert.assertTrue(product != null);
 		
-//		TODO Uncomment this once issue #45 is fixed
-//		try {
-//			LoadBalancedStoreOperations.getProduct(-1);
-//			Assert.fail();
-//		} catch (Exception e) {}
+		try {
+			LoadBalancedStoreOperations.getProduct(-1);
+			Assert.fail();
+		} catch (Exception e) {}
 		
 		List<Product> products = LoadBalancedStoreOperations.getProducts(3, 1, 10);
 		Assert.assertEquals(10, products.size());

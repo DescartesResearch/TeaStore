@@ -32,11 +32,10 @@ public class CategoryInformationTest extends AbstractStoreRestTest {
 		Category category = LoadBalancedStoreOperations.getCategory(3);
 		Assert.assertTrue(category != null);
 		
-//		TODO Uncomment this once issue #45 is fixed
-//		try {
-//			LoadBalancedStoreOperations.getCategory(-1);
-//			Assert.fail();
-//		} catch (Exception e) {}
+		try {
+			LoadBalancedStoreOperations.getCategory(-1);
+			Assert.fail();
+		} catch (Exception e) {}
 		
 		List<Category> categories = LoadBalancedStoreOperations.getCategories();
 		Assert.assertTrue(categories.size() != 0);
