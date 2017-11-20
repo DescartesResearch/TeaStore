@@ -13,10 +13,6 @@
  */
 package tools.descartes.petsupplystore.persistence;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
-
 import java.util.LinkedList;
 import java.util.List;
 
