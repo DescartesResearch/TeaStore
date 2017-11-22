@@ -33,7 +33,6 @@ import tools.descartes.petsupplystore.store.rest.StoreCategoriesREST;
 import tools.descartes.petsupplystore.store.rest.StoreProductREST;
 import tools.descartes.petsupplystore.store.rest.StoreUserActionsREST;
 import tools.descartes.petsupplystore.store.rest.StoreUserREST;
-import tools.descartes.petsupplystore.store.startup.StoreStartup;
 
 
 
