@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
     <properties>
-        <petsupplystoreversion>1.0.0-SNAPSHOT</petsupplystoreversion>
+        <petsupplystoreversion>1.0.0</petsupplystoreversion>
     </properties>
   
 	<prerequisites>
