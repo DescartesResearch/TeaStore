@@ -58,8 +58,7 @@
 			<a href="http://www.descartes.tools" target="_blank"><img
 				src="${descartesLogo}" alt="Descartes Research Group"
 				class="img-rounded img-responsive" /></a>
-			<blockquote>
-				<small><cite title="Source Title"> Our research is
+			<blockquote> Our research is
 						aimed at developing novel methods, techniques and tools for the
 						engineering of dependable and efficient computer-based systems,
 						including both classical software systems and cyber-physical
@@ -74,8 +73,7 @@
 							<li>Cloud computing, virtualization, software-defined data centers</li>
 							<li>Cyber-physical systems, Internet-of-Things, Industry 4.0</li>
 						</ul>
-						Our research is inspired by the vision of Self-Aware Computing Systems, which are a new class of systems designed with built-in model learning and reasoning capabilities enabling autonomic and proactive decision making at run-time
-				</cite></small>		
+						Our research is inspired by the vision of Self-Aware Computing Systems, which are a new class of systems designed with built-in model learning and reasoning capabilities enabling autonomic and proactive decision making at run-time		
 			</blockquote>
 		</div>
 	</div>
