@@ -21,6 +21,7 @@ import org.junit.Assert;
 import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.persistence.rest.CategoryEndpoint;
 import tools.descartes.petsupplystore.rest.NonBalancedCRUDOperations;
+import tools.descartes.petsupplystore.rest.NotFoundException;
 import tools.descartes.petsupplystore.rest.RESTClient;
 
 /**
@@ -61,7 +62,12 @@ public class CategoryEndpointTest {
 		//update category
 		cat.setName("updatedCategory");
 		Assert.assertTrue(NonBalancedCRUDOperations.sendEntityForUpdate(client, id, cat));
-		Assert.assertFalse(NonBalancedCRUDOperations.sendEntityForUpdate(client, 500L, cat));
+		try {
+			NonBalancedCRUDOperations.sendEntityForUpdate(client, 500L, cat);
+			Assert.fail();
+		} catch (NotFoundException e) {
+			//don't fail
+		}
 		
 		//receive category
 		Category recEnt = NonBalancedCRUDOperations.getEntity(client, id);

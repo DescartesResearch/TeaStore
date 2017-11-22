@@ -30,6 +30,7 @@ import tools.descartes.petsupplystore.persistence.rest.OrderItemEndpoint;
 import tools.descartes.petsupplystore.persistence.rest.ProductEndpoint;
 import tools.descartes.petsupplystore.persistence.rest.UserEndpoint;
 import tools.descartes.petsupplystore.rest.NonBalancedCRUDOperations;
+import tools.descartes.petsupplystore.rest.NotFoundException;
 import tools.descartes.petsupplystore.rest.RESTClient;
 
 /**
@@ -129,7 +130,12 @@ public class OrderItemEndpointTest {
 		//update order item
 		creationItem.setUnitPriceInCents(6);
 		Assert.assertTrue(NonBalancedCRUDOperations.sendEntityForUpdate(itemClient, itemId, creationItem));
-		Assert.assertFalse(NonBalancedCRUDOperations.sendEntityForUpdate(itemClient, -1L, creationItem));
+		try {
+			NonBalancedCRUDOperations.sendEntityForUpdate(itemClient, -1L, creationItem);
+			Assert.fail();
+		} catch (NotFoundException e) {
+			//don't fail
+		}
 		
 		//receive order item
 		OrderItem recEnt = NonBalancedCRUDOperations.getEntity(itemClient, itemId);

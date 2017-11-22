@@ -5,15 +5,16 @@ import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleState;
 import org.apache.catalina.startup.Tomcat;
+import org.apache.tomcat.util.descriptor.web.ContextEnvironment;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.junit.After;
@@ -42,10 +43,9 @@ import tools.descartes.petsupplystore.store.rest.StoreUserREST;
  */
 public abstract class AbstractStoreRestTest {
 	@Rule
-	public WireMockRule wireMockRule = new WireMockRule(8080);
+	public WireMockRule wireMockRule = new WireMockRule(18080);
 	
 	private Tomcat storeTomcat;
-	private static final String CONTEXT = "/tools.descartes.petsupplystore.store";
 	private String testWorkingDir = System.getProperty("java.io.tmpdir");
 	/**
 	 * Sets up a store.
@@ -57,8 +57,21 @@ public abstract class AbstractStoreRestTest {
 		storeTomcat.setPort(3000);
 		storeTomcat.setBaseDir(testWorkingDir);
 		storeTomcat.enableNaming();
-		storeTomcat.addWebapp(CONTEXT, System.getProperty("user.dir") + File.separator + "src"
-				+ File.separator + "main" + File.separator + "webapp");
+		Context context3 = storeTomcat.addWebapp("/tools.descartes.petsupplystore.store", testWorkingDir);
+		ContextEnvironment registryURL3 = new ContextEnvironment();
+		registryURL3.setDescription("");
+		registryURL3.setOverride(false);
+		registryURL3.setType("java.lang.String");
+		registryURL3.setName("registryURL");
+		registryURL3.setValue("http://localhost:18080/tools.descartes.petsupplystore.registry/rest/services/");
+		context3.getNamingResources().addEnvironment(registryURL3);
+		ContextEnvironment servicePort3 = new ContextEnvironment();
+		servicePort3.setDescription("");
+		servicePort3.setOverride(false);
+		servicePort3.setType("java.lang.String");
+	    servicePort3.setName("servicePort");
+	    servicePort3.setValue("3000");
+		context3.getNamingResources().addEnvironment(servicePort3);
 		ResourceConfig restServletConfig3 = new ResourceConfig();
 		restServletConfig3.register(StoreCartREST.class);
 		restServletConfig3.register(StoreCategoriesREST.class);
@@ -66,12 +79,13 @@ public abstract class AbstractStoreRestTest {
 		restServletConfig3.register(StoreUserActionsREST.class);
 		restServletConfig3.register(StoreUserREST.class);
 		ServletContainer restServlet3 = new ServletContainer(restServletConfig3);
-		storeTomcat.addServlet(CONTEXT, "restServlet", restServlet3);
-		storeTomcat.start();
+		storeTomcat.addServlet("/tools.descartes.petsupplystore.store", "restServlet", restServlet3);
+		context3.addServletMappingDecoded("/rest/*", "restServlet");
+		context3.addApplicationListener(EmptyStoreStartup.class.getName());
 
 		// Mock registry
 		List<String> strings = new LinkedList<String>();
-		strings.add("localhost:8080");
+		strings.add("localhost:18080");
 		String json = new ObjectMapper().writeValueAsString(strings);
 		List<String> strings2 = new LinkedList<String>();
 		strings2.add("localhost:3000");
@@ -81,6 +95,12 @@ public abstract class AbstractStoreRestTest {
 						.willReturn(okJson(json)));
 		wireMockRule.stubFor(get(urlEqualTo(
 				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.STORE.getServiceName() + "/"))
+						.willReturn(okJson(json2)));
+		wireMockRule.stubFor(WireMock.put(WireMock.urlMatching(
+				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.STORE.getServiceName() + "/.*"))
+						.willReturn(okJson(json2)));
+		wireMockRule.stubFor(WireMock.delete(WireMock.urlMatching(
+				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.STORE.getServiceName() + "/.*"))
 						.willReturn(okJson(json2)));
 		wireMockRule.stubFor(get(urlEqualTo(
 				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.PERSISTENCE.getServiceName() + "/"))
@@ -99,6 +119,8 @@ public abstract class AbstractStoreRestTest {
 		img.put("descartesLogo", "descartesLogo");
 		img.put("icon", "icon");
 		mockValidPostRestCall(img, "/tools.descartes.petsupplystore.image/rest/image/getWebImages");
+		
+		storeTomcat.start();
 	}
 
 	/**
@@ -157,6 +179,7 @@ public abstract class AbstractStoreRestTest {
 		p.setListPriceInCents(99);
 		p.setName("a product");
 		mockValidGetRestCall(p, "/tools.descartes.petsupplystore.persistence/rest/products/106");
+		mockValidGetRestCall(null, "/tools.descartes.petsupplystore.persistence/rest/products/-1");
 	}
 
 	protected void mockProduct107() {

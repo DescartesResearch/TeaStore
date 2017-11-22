@@ -37,7 +37,6 @@ import org.junit.Assert;
 import tools.descartes.petsupplystore.registry.rest.Registry;
 import tools.descartes.petsupplystore.registry.rest.RegistryREST;
 import tools.descartes.petsupplystore.registry.rest.RegistryStartup;
-import tools.descartes.petsupplystore.registryclient.Service;
 
 /**
  * Test for the Registry.

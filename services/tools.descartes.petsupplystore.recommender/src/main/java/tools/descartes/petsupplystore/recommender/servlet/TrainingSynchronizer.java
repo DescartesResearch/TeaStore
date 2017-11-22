@@ -115,7 +115,12 @@ public final class TrainingSynchronizer {
 				}
 			}
 			try {
-				int nextWaitTime = waitTimes.hasNext() ? waitTimes.next() : PERSISTENCE_CREATION_MAX_WAIT_TIME;
+				int nextWaitTime;
+				if (waitTimes.hasNext()) {
+					nextWaitTime = waitTimes.next();
+				} else {
+					nextWaitTime = PERSISTENCE_CREATION_MAX_WAIT_TIME;
+				}
 				LOG.info("Persistence not reachable. Waiting for {}ms.", nextWaitTime);
 				Thread.sleep(nextWaitTime);
 			} catch (InterruptedException interrupted) {

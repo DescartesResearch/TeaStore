@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import tools.descartes.petsupplystore.image.StoreImage;
-import tools.descartes.petsupplystore.image.cache.DummyData;
 
 public class TestAbstractEntry {
 
