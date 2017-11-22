@@ -3,13 +3,13 @@
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-        <dependent-module archiveName="registryclient-1.0.2.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.registryclient/tools.descartes.petsupplystore.registryclient">
+        <dependent-module archiveName="registryclient-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.registryclient/tools.descartes.petsupplystore.registryclient">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="rest-1.0.2.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.rest/tools.descartes.petsupplystore.rest">
+        <dependent-module archiveName="rest-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.rest/tools.descartes.petsupplystore.rest">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="entities-1.0.2.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.entities/tools.descartes.petsupplystore.entities">
+        <dependent-module archiveName="entities-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.entities/tools.descartes.petsupplystore.entities">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="context-root" value="tools.descartes.petsupplystore.store"/>
