@@ -1,3 +1,4 @@
+ARG dockerregistry
 FROM ${dockerregistry}/petsupplystore-base:latest
 MAINTAINER Chair of Software Engineering <se2-it@informatik.uni-wuerzburg.de>
 
