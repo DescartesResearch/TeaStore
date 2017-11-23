@@ -142,7 +142,7 @@
 						<version>1.3.5</version>
 						<executions>
 							<execution>
-								<id>build-image</id>
+								<id>build-image</id><configuration><buildArgs><DOCKERREPOSITORY>${dockerrepository}</DOCKERREPOSITORY></buildArgs></configuration>
 								<goals>
 									<goal>build</goal>
 								</goals>
@@ -156,7 +156,7 @@
 								</goals>
 								<configuration>
 									<repository>${petsupplystoreversion}/petsupplystore-persistence</repository>
-									<tag>latest</tag><buildArgs><dockerrepository>${dockerrepository}</dockerrepository></buildArgs>
+									<tag>latest</tag>
 								</configuration>
 								<phase>package</phase>
 							</execution>
@@ -168,7 +168,7 @@
 								</goals>
 								<configuration>
 									<repository>${petsupplystoreversion}/petsupplystore-persistence</repository>
-									<tag>${project.version}</tag><buildArgs><dockerrepository>${dockerrepository}</dockerrepository></buildArgs>
+									<tag>${project.version}</tag>
 								</configuration>
 								<phase>package</phase>
 							</execution>
@@ -273,7 +273,7 @@
 						<version>1.3.5</version>
 						<executions>
 							<execution>
-								<id>build-image</id>
+								<id>build-image</id><configuration><buildArgs><DOCKERREPOSITORY>${dockerrepository}</DOCKERREPOSITORY></buildArgs></configuration>
 								<goals>
 									<goal>build</goal>
 								</goals>
@@ -287,7 +287,7 @@
 								</goals>
 								<configuration>
 									<repository>${petsupplystoreversion}/petsupplystore-persistence-kieker</repository>
-									<tag>latest</tag><buildArgs><dockerrepository>${dockerrepository}</dockerrepository></buildArgs>
+									<tag>latest</tag>
 								</configuration>
 								<phase>package</phase>
 							</execution>
@@ -299,7 +299,7 @@
 								</goals>
 								<configuration>
 									<repository>${petsupplystoreversion}/petsupplystore-persistence-kieker</repository>
-									<tag>${project.version}</tag><buildArgs><dockerrepository>${dockerrepository}</dockerrepository></buildArgs>
+									<tag>${project.version}</tag>
 								</configuration>
 								<phase>package</phase>
 							</execution>
