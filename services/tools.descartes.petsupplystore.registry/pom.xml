@@ -263,6 +263,21 @@
 									<goal>eval</goal>
 								</goals>
 							</execution>
+							<execution>
+								<phase>process-resources</phase>
+								<configuration>
+									<script>
+										var Files = Java.type('java.nio.file.Files');
+										var Paths = Java.type('java.nio.file.Paths');
+										var content = new
+										java.lang.String(Files.readAllBytes(Paths.get($basedir+'/Dockerfile'))).replace('${DOCKERREPOSITORY}', ${dockerrepository});
+										Files.write(Paths.get($basedir+'/Dockerfile'), content.getBytes());
+									</script>
+								</configuration>
+								<goals>
+									<goal>eval</goal>
+								</goals>
+							</execution>
 						</executions>
 					</plugin>
 
