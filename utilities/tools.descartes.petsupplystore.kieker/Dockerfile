@@ -1,4 +1,4 @@
-ARG DOCKERREGISTRY=default
+ARG DOCKERREGISTRY
 FROM ${DOCKERREGISTRY}/petsupplystore-base:latest
 MAINTAINER Chair of Software Engineering <se2-it@informatik.uni-wuerzburg.de>
 
