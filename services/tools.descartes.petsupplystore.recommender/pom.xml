@@ -128,11 +128,11 @@
 					</plugin>
 					<plugin>
 						<groupId>com.spotify</groupId>
-						<artifactId>dockerfile-maven-plugin</artifactId><configuration><buildArgs><DOCKERREPOSITORY>${dockerrepository}</DOCKERREPOSITORY></buildArgs></configuration>
+						<artifactId>dockerfile-maven-plugin</artifactId>
 						<version>1.3.6</version>
 						<executions>
 							<execution>
-								<id>build-image</id>
+								<id>build-image</id><configuration><buildArgs><DOCKERREPOSITORY>test</DOCKERREPOSITORY></buildArgs></configuration>
 								<goals>
 									<goal>build</goal>
 								</goals>
@@ -259,11 +259,11 @@
 					<!-- BUILD DOCKER -->
 					<plugin>
 						<groupId>com.spotify</groupId>
-						<artifactId>dockerfile-maven-plugin</artifactId><configuration><buildArgs><DOCKERREPOSITORY>${dockerrepository}</DOCKERREPOSITORY></buildArgs></configuration>
+						<artifactId>dockerfile-maven-plugin</artifactId>
 						<version>1.3.6</version>
 						<executions>
 							<execution>
-								<id>build-image</id>
+								<id>build-image</id><configuration><buildArgs><DOCKERREPOSITORY>test</DOCKERREPOSITORY></buildArgs></configuration>
 								<goals>
 									<goal>build</goal>
 								</goals>
