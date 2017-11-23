@@ -145,7 +145,7 @@
 									<goal>push</goal>
 								</goals>
 								<configuration>
-									<repository>descartesresearch/petsupplystore-recommender</repository>
+									<repository>${petsupplystoreversion}/petsupplystore-recommender</repository>
 									<tag>latest</tag>
 								</configuration>
 								<phase>package</phase>
@@ -157,7 +157,7 @@
 									<goal>push</goal>
 								</goals>
 								<configuration>
-									<repository>descartesresearch/petsupplystore-recommender</repository>
+									<repository>${petsupplystoreversion}/petsupplystore-recommender</repository>
 									<tag>${project.version}</tag>
 								</configuration>
 								<phase>package</phase>
@@ -276,7 +276,7 @@
 									<goal>push</goal>
 								</goals>
 								<configuration>
-									<repository>descartesresearch/petsupplystore-recommender-kieker</repository>
+									<repository>${petsupplystoreversion}/petsupplystore-recommender-kieker</repository>
 									<tag>latest</tag>
 								</configuration>
 								<phase>package</phase>
@@ -288,7 +288,7 @@
 									<goal>push</goal>
 								</goals>
 								<configuration>
-									<repository>descartesresearch/petsupplystore-recommender-kieker</repository>
+									<repository>${petsupplystoreversion}/petsupplystore-recommender-kieker</repository>
 									<tag>${project.version}</tag>
 								</configuration>
 								<phase>package</phase>

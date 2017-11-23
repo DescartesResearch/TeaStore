@@ -61,7 +61,7 @@
 							<goal>push</goal>
 						</goals>
 						<configuration>
-							<repository>descartesresearch/petsupplystore-base</repository>
+							<repository>${petsupplystoreversion}/petsupplystore-base</repository>
 							<tag>latest</tag>
 						</configuration>
 						<phase>package</phase>
@@ -73,7 +73,7 @@
 							<goal>push</goal>
 						</goals>
 						<configuration>
-							<repository>descartesresearch/petsupplystore-base</repository>
+							<repository>${petsupplystoreversion}/petsupplystore-base</repository>
 							<tag>${project.version}</tag>
 						</configuration>
 						<phase>package</phase>
