@@ -1,4 +1,4 @@
-FROM descartesresearch/petsupplystore-base:latest
+FROM ${dockerregistry}/petsupplystore-base:latest
 MAINTAINER Chair of Software Engineering <se2-it@informatik.uni-wuerzburg.de>
 
 EXPOSE 8080
