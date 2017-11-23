@@ -264,6 +264,7 @@
 									<repository>descartesresearch/petsupplystore-image-kieker</repository>
 									<tag>latest</tag>
 								</configuration>
+								<phase>package</phase>
 							</execution>
 							<execution>
 								<id>tag-push-version</id>
@@ -275,6 +276,7 @@
 									<repository>descartesresearch/petsupplystore-image-kieker</repository>
 									<tag>${project.version}</tag>
 								</configuration>
+								<phase>package</phase>
 							</execution>
 						</executions>
 					</plugin>

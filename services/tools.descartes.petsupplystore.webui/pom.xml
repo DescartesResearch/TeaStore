@@ -296,6 +296,7 @@
 									<repository>descartesresearch/petsupplystore-webui-kieker</repository>
 									<tag>latest</tag>
 								</configuration>
+								<phase>package</phase>
 							</execution>
 							<execution>
 								<id>tag-push-version</id>
@@ -307,6 +308,7 @@
 									<repository>descartesresearch/petsupplystore-webui-kieker</repository>
 									<tag>${project.version}</tag>
 								</configuration>
+								<phase>package</phase>
 							</execution>
 						</executions>
 					</plugin>
