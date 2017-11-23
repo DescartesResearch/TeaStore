@@ -125,7 +125,7 @@
 					</plugin>
 					<plugin>
 						<groupId>com.spotify</groupId>
-						<artifactId>dockerfile-maven-plugin</artifactId><configuration><buildArgs><DOCKERREPOSITORY>test</DOCKERREPOSITORY></buildArgs></configuration>
+						<artifactId>dockerfile-maven-plugin</artifactId><configuration><buildArgs><DOCKERREPOSITORY>${dockerrepository}</DOCKERREPOSITORY></buildArgs></configuration>
 						<version>1.3.5</version>
 						<executions>
 							<execution>
@@ -255,7 +255,7 @@
 					<!-- BUILD DOCKER -->
 					<plugin>
 						<groupId>com.spotify</groupId>
-						<artifactId>dockerfile-maven-plugin</artifactId><configuration><buildArgs><DOCKERREPOSITORY>test</DOCKERREPOSITORY></buildArgs></configuration>
+						<artifactId>dockerfile-maven-plugin</artifactId><configuration><buildArgs><DOCKERREPOSITORY>${dockerrepository}</DOCKERREPOSITORY></buildArgs></configuration>
 						<version>1.3.5</version>
 						<executions>
 							<execution>
