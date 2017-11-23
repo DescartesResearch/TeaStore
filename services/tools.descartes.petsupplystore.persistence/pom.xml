@@ -156,7 +156,7 @@
 								</goals>
 								<configuration>
 									<repository>${petsupplystoreversion}/petsupplystore-persistence</repository>
-									<tag>latest</tag><env><dockerrepository>${dockerrepository}</dockerrepository></env>
+									<tag>latest</tag><buildArgs><dockerrepository>${dockerrepository}</dockerrepository></buildArgs>
 								</configuration>
 								<phase>package</phase>
 							</execution>
@@ -168,7 +168,7 @@
 								</goals>
 								<configuration>
 									<repository>${petsupplystoreversion}/petsupplystore-persistence</repository>
-									<tag>${project.version}</tag><env><dockerrepository>${dockerrepository}</dockerrepository></env>
+									<tag>${project.version}</tag><buildArgs><dockerrepository>${dockerrepository}</dockerrepository></buildArgs>
 								</configuration>
 								<phase>package</phase>
 							</execution>
@@ -287,7 +287,7 @@
 								</goals>
 								<configuration>
 									<repository>${petsupplystoreversion}/petsupplystore-persistence-kieker</repository>
-									<tag>latest</tag><env><dockerrepository>${dockerrepository}</dockerrepository></env>
+									<tag>latest</tag><buildArgs><dockerrepository>${dockerrepository}</dockerrepository></buildArgs>
 								</configuration>
 								<phase>package</phase>
 							</execution>
@@ -299,7 +299,7 @@
 								</goals>
 								<configuration>
 									<repository>${petsupplystoreversion}/petsupplystore-persistence-kieker</repository>
-									<tag>${project.version}</tag><env><dockerrepository>${dockerrepository}</dockerrepository></env>
+									<tag>${project.version}</tag><buildArgs><dockerrepository>${dockerrepository}</dockerrepository></buildArgs>
 								</configuration>
 								<phase>package</phase>
 							</execution>

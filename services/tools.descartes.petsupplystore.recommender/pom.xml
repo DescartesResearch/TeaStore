@@ -146,7 +146,7 @@
 								</goals>
 								<configuration>
 									<repository>${dockerrepository}/petsupplystore-recommender</repository>
-									<tag>latest</tag><env><dockerrepository>${dockerrepository}</dockerrepository></env>
+									<tag>latest</tag><buildArgs><dockerrepository>${dockerrepository}</dockerrepository></buildArgs>
 								</configuration>
 								<phase>package</phase>
 							</execution>
@@ -158,7 +158,7 @@
 								</goals>
 								<configuration>
 									<repository>${dockerrepository}/petsupplystore-recommender</repository>
-									<tag>${project.version}</tag><env><dockerrepository>${dockerrepository}</dockerrepository></env>
+									<tag>${project.version}</tag><buildArgs><dockerrepository>${dockerrepository}</dockerrepository></buildArgs>
 								</configuration>
 								<phase>package</phase>
 							</execution>
@@ -277,7 +277,7 @@
 								</goals>
 								<configuration>
 									<repository>${dockerrepository}/petsupplystore-recommender-kieker</repository>
-									<tag>latest</tag><env><dockerrepository>${dockerrepository}</dockerrepository></env>
+									<tag>latest</tag><buildArgs><dockerrepository>${dockerrepository}</dockerrepository></buildArgs>
 								</configuration>
 								<phase>package</phase>
 							</execution>
@@ -289,7 +289,7 @@
 								</goals>
 								<configuration>
 									<repository>${dockerrepository}/petsupplystore-recommender-kieker</repository>
-									<tag>${project.version}</tag><env><dockerrepository>${dockerrepository}</dockerrepository></env>
+									<tag>${project.version}</tag><buildArgs><dockerrepository>${dockerrepository}</dockerrepository></buildArgs>
 								</configuration>
 								<phase>package</phase>
 							</execution>
