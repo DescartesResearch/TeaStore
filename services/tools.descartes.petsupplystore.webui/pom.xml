@@ -149,7 +149,7 @@
 						<version>1.3.6</version>
 						<executions>
 							<execution>
-								<id>build-image</id><configuration><buildArgs><DOCKERREPOSITORY>test</DOCKERREPOSITORY></buildArgs></configuration>
+								<id>build-image</id>
 								<goals>
 									<goal>build</goal>
 								</goals>
@@ -280,7 +280,7 @@
 						<version>1.3.6</version>
 						<executions>
 							<execution>
-								<id>build-image</id><configuration><buildArgs><DOCKERREPOSITORY>test</DOCKERREPOSITORY></buildArgs></configuration>
+								<id>build-image</id>
 								<goals>
 									<goal>build</goal>
 								</goals>
