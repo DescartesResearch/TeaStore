@@ -163,7 +163,7 @@
 								</goals>
 								<configuration>
 									<repository>${dockerrepository}/petsupplystore-webui</repository>
-									<tag>latest</tag>
+									<tag>latest</tag><env><dockerrepository>${dockerrepository}</dockerrepository></env>
 								</configuration>
 								<phase>package</phase>
 							</execution>
@@ -175,7 +175,7 @@
 								</goals>
 								<configuration>
 									<repository>${dockerrepository}/petsupplystore-webui</repository>
-									<tag>${project.version}</tag>
+									<tag>${project.version}</tag><env><dockerrepository>${dockerrepository}</dockerrepository></env>
 								</configuration>
 								<phase>package</phase>
 							</execution>
@@ -294,7 +294,7 @@
 								</goals>
 								<configuration>
 									<repository>${dockerrepository}/petsupplystore-webui-kieker</repository>
-									<tag>latest</tag>
+									<tag>latest</tag><env><dockerrepository>${dockerrepository}</dockerrepository></env>
 								</configuration>
 								<phase>package</phase>
 							</execution>
@@ -306,7 +306,7 @@
 								</goals>
 								<configuration>
 									<repository>${dockerrepository}/petsupplystore-webui-kieker</repository>
-									<tag>${project.version}</tag>
+									<tag>${project.version}</tag><env><dockerrepository>${dockerrepository}</dockerrepository></env>
 								</configuration>
 								<phase>package</phase>
 							</execution>
