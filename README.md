@@ -15,5 +15,5 @@ Check out our **[wiki](https://github.com/DescartesResearch/Pet-Supply-Store/wik
 
 To get started, we recommend running the Pet Supply Store in an environment of your choice. We offer three ways of deploying and running the Pet Supply Store:
 * The easiest way: [Run Pet Supply Store Container(s) using Docker](https://github.com/DescartesResearch/Pet-Supply-Store/wiki/Getting-Started#run-pet-supply-store-containers-using-docker) (Recommended)
-* [Deploy the Pet Supply Store in one or several Java Application Container(s)](https://github.com/DescartesResearch/Pet-Supply-Store/wiki/Getting-Started#deploy-the-pet-supply-store-in-java-application-containers)
+* [Deploy the Pet Supply Store in one or several Java Application Server(s)](https://github.com/DescartesResearch/Pet-Supply-Store/wiki/Getting-Started#deploy-the-pet-supply-store-in-java-application-servers)
 * [Setup and run the Pet Supply Store Development Environment](https://github.com/DescartesResearch/Pet-Supply-Store/wiki/Getting-Started#setup-and-run-the-pet-supply-store-development-environment)
