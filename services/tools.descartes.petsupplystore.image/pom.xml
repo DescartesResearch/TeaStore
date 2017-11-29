@@ -130,7 +130,7 @@
 									<goal>push</goal>
 								</goals>
 								<configuration>
-									<repository>${dockerrepository}/petsupplystore-image</repository>
+									<repository>descartesresearch/petsupplystore-image</repository>
 									<tag>latest</tag>
 								</configuration>
 								<phase>package</phase>
@@ -142,7 +142,7 @@
 									<goal>push</goal>
 								</goals>
 								<configuration>
-									<repository>${dockerrepository}/petsupplystore-image</repository>
+									<repository>descartesresearch/petsupplystore-image</repository>
 									<tag>${project.version}</tag>
 								</configuration>
 								<phase>package</phase>
@@ -261,7 +261,7 @@
 									<goal>push</goal>
 								</goals>
 								<configuration>
-									<repository>${dockerrepository}/petsupplystore-image-kieker</repository>
+									<repository>descartesresearch/petsupplystore-image-kieker</repository>
 									<tag>latest</tag>
 								</configuration>
 								<phase>package</phase>
@@ -273,7 +273,7 @@
 									<goal>push</goal>
 								</goals>
 								<configuration>
-									<repository>${dockerrepository}/petsupplystore-image-kieker</repository>
+									<repository>descartesresearch/petsupplystore-image-kieker</repository>
 									<tag>${project.version}</tag>
 								</configuration>
 								<phase>package</phase>

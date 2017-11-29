@@ -33,7 +33,7 @@
 							<goal>push</goal>
 						</goals>
 						<configuration>
-							<repository>${dockerrepository}/petsupplystore-db</repository>
+							<repository>descartesresearch/petsupplystore-db</repository>
 							<tag>latest</tag>
 						</configuration>
 						<phase>package</phase>
@@ -45,7 +45,7 @@
 							<goal>push</goal>
 						</goals>
 						<configuration>
-							<repository>${dockerrepository}/petsupplystore-db</repository>
+							<repository>descartesresearch/petsupplystore-db</repository>
 							<tag>${project.version}</tag>
 						</configuration>
 						<phase>package</phase>

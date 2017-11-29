@@ -186,7 +186,7 @@
 									<goal>push</goal>
 								</goals>
 								<configuration>
-									<repository>${dockerrepository}/petsupplystore-registry</repository>
+									<repository>descartesresearch/petsupplystore-registry</repository>
 									<tag>latest</tag>
 								</configuration>
 								<phase>package</phase>
@@ -198,7 +198,7 @@
 									<goal>push</goal>
 								</goals>
 								<configuration>
-									<repository>${dockerrepository}/petsupplystore-registry</repository>
+									<repository>descartesresearch/petsupplystore-registry</repository>
 									<tag>${project.version}</tag>
 								</configuration>
 								<phase>package</phase>
@@ -321,7 +321,7 @@
 									<goal>push</goal>
 								</goals>
 								<configuration>
-									<repository>${dockerrepository}/petsupplystore-registry-kieker</repository>
+									<repository>descartesresearch/petsupplystore-registry-kieker</repository>
 									<tag>latest</tag>
 								</configuration>
 							</execution>
@@ -333,7 +333,7 @@
 									<goal>push</goal>
 								</goals>
 								<configuration>
-									<repository>${dockerrepository}/petsupplystore-registry-kieker</repository>
+									<repository>descartesresearch/petsupplystore-registry-kieker</repository>
 									<tag>${project.version}</tag>
 								</configuration>
 							</execution>
