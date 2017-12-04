@@ -33,11 +33,13 @@ public final class LoadBalancedRecommenderOperations {
      * and on repeated load balancer socket timeouts.
 	 * @return List of recommended order ids
 	 */
-	public static List<Long> getRecommendations(List<OrderItem> order)
+	public static List<Long> getRecommendations(List<OrderItem> order, Long uid)
 			throws NotFoundException, LoadBalancerTimeoutException {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.RECOMMENDER,
 				"recommend", Category.class, client -> client.getService().path(client.getApplicationURI())
-				.path(client.getEndpointURI()).request(MediaType.APPLICATION_JSON)
+				.path(client.getEndpointURI())
+				.queryParam("uid", uid)
+				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).post(Entity.entity(order, MediaType.APPLICATION_JSON)));
 		try {
 			return r.readEntity(new GenericType<List<Long>>() { });

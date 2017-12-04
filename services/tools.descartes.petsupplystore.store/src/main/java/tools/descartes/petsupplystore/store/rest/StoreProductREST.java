@@ -78,7 +78,7 @@ public class StoreProductREST {
 	 */
 	@POST
 	@Path("ads")
-	public Response getAdvertisement(List<OrderItem> orderItems, @QueryParam("pid") final Long pid) {
+	public Response getAdvertisement(List<OrderItem> orderItems, @QueryParam("pid") final Long pid, @QueryParam("uid") final Long uid) {
 		List<OrderItem> items = new LinkedList<>();
 		if (pid != null) {
 			OrderItem oi = new OrderItem();
@@ -89,7 +89,7 @@ public class StoreProductREST {
 		items.addAll(orderItems);
 		List<Long> productIds;
 		try {
-			productIds = LoadBalancedRecommenderOperations.getRecommendations(items);
+			productIds = LoadBalancedRecommenderOperations.getRecommendations(items, uid);
 		} catch (TimeoutException e) {
 			return Response.status(408).build();
 		} catch (NotFoundException e) {

@@ -111,6 +111,7 @@ public final class LoadBalancedStoreOperations {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"products", Product.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("ads")
+				.queryParam("uid", blob.getUID())
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob.getOrderItems(), MediaType.APPLICATION_JSON), Response.class));
@@ -135,6 +136,7 @@ public final class LoadBalancedStoreOperations {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE,
 				"products", Product.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("ads").queryParam("pid", pid)
+				.queryParam("uid", blob.getUID())
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob.getOrderItems(), MediaType.APPLICATION_JSON), Response.class));
