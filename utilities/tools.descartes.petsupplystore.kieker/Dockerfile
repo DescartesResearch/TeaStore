@@ -17,11 +17,11 @@ COPY src/main/webapp/WEB-INF/lib/kieker-1.14-SNAPSHOT-aspectj.jar 	$CATALINA_BAS
 
 COPY target/*.war 													/usr/local/tomcat/webapps/
 
-ENV JAVA_OPTS="${JAVA_OPTS} -javaagent:{$CATALINA_BASE}/kieker/agent/"
-ENV JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.configuration={$CATALINA_BASE}/kieker/config/kieker.monitoring.properties"
+ENV JAVA_OPTS="${JAVA_OPTS} -javaagent:$CATALINA_BASE/kieker/agent/"
+ENV JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.configuration=$CATALINA_BASE/kieker/config/kieker.monitoring.properties"
 ENV JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.writer.filesystem.AsciiFileWriter.customStoragePath=$CATALINA_BASE/kieker/logs"
 ENV JAVA_OPTS="${JAVA_OPTS} -Daj.weaving.verbose=true"
-ENV JAVA_OPTS="${JAVA_OPTS} -Dorg.aspectj.weaver.loadtime.configuration={$CATALINA_BASE}/kieker/aop/aop.xml"
+ENV JAVA_OPTS="${JAVA_OPTS} -Dorg.aspectj.weaver.loadtime.configuration=$CATALINA_BASE/kieker/aop/aop.xml"
 ENV JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.skipDefaultAOPConfiguration=true"
   
 CMD /usr/local/tomcat/bin/start.sh && \
