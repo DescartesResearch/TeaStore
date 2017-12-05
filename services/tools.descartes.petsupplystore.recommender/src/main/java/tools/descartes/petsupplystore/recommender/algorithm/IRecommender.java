@@ -18,6 +18,7 @@ import java.util.List;
 import tools.descartes.petsupplystore.entities.Order;
 import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.entities.Product;
+import tools.descartes.petsupplystore.entities.User;
 
 /**
  * Interface providing the recommender functionality.
@@ -28,9 +29,9 @@ import tools.descartes.petsupplystore.entities.Product;
 public interface IRecommender {
 
 	/**
-	 * Trains this recommender with the given list of historical
-	 * {@link OrderItems}s and {@link Order}s. This list is used as knowledge basis for the
-	 * recommending in {@link IRecommender#recommendProducts(List)}.<br>
+	 * Trains this recommender with the given list of historical {@link OrderItems}s
+	 * and {@link Order}s. This list is used as knowledge basis for the recommending
+	 * in {@link IRecommender#recommendProducts(List)}.<br>
 	 * The mapping of the different {@link OrderItem}s to their corresponding
 	 * {@link Order}s is done via {@link OrderItem#getOrderId()}.<br>
 	 * Calling this method twice will trigger a retraining.
@@ -43,14 +44,17 @@ public interface IRecommender {
 	public void train(List<OrderItem> orderItems, List<Order> orders);
 
 	/**
-	 * Return a list of all {@link Product}s, that are recommended for a customer
-	 * buying the given list of {@link OrderItem}s. <br>
+	 * Return a list of all {@link Product}s, which are recommended for the given
+	 * {@link User} buying the given list of {@link OrderItem}s. <br>
 	 * {@link IRecommender#train(List)} must be called before any recommendations
 	 * can be executed.
 	 * 
 	 * @param currentItems
 	 *            A list containing all {@link OrderItem}s in the current cart.
 	 *            Might be empty.
+	 * @param userid
+	 *            The id of the {@link User} to recommend for. Must not be null or
+	 *            less or equal than zero.
 	 * @return List of all IDs of the {@link Product} entities that are recommended
 	 *         to add to the cart. Does not contain any {@link Product} that is
 	 *         already part of the given list of {@link OrderItem}s. Might be empty.
@@ -61,6 +65,6 @@ public interface IRecommender {
 	 *             terminated yet.
 	 * 
 	 */
-	public List<Long> recommendProducts(List<OrderItem> currentItems) throws UnsupportedOperationException;
+	public List<Long> recommendProducts(long userid, List<OrderItem> currentItems) throws UnsupportedOperationException;
 
 }

@@ -19,10 +19,12 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.entities.Product;
+import tools.descartes.petsupplystore.entities.User;
 import tools.descartes.petsupplystore.recommender.algorithm.RecommenderSelector;
 
 /**
@@ -37,22 +39,28 @@ import tools.descartes.petsupplystore.recommender.algorithm.RecommenderSelector;
 public class RecommendEndpoint {
 
 	/**
-	 * Return a list of all {@link Product}s, that are recommended for a customer
-	 * buying the given list of {@link OrderItem}s. <br>
+	 * Return a list of all {@link Product}s, that are recommended for the given
+	 * {@link User} buying the given list of {@link OrderItem}s. <br>
 	 * 
 	 * The returning list does not contain any {@link Product} that is already part
 	 * of the given list of {@link OrderItem}s. It might be empty, however.
 	 * 
 	 * @param currentItems
-	 *            A list containing all {@link OrderItem}s in the current cart.
+	 *            A list, containing all {@link OrderItem}s in the current cart.
 	 *            Might be empty.
+	 * @param uid
+	 *            The id of the {@link User} to recommend for. Must not be null or
+	 *            less or equal than zero.
 	 * @return List of {@link Long} objects, containing all {@link Product} IDs that
 	 *         are recommended to add to the cart, or an INTERNALSERVERERROR, if the
 	 *         recommendation failed.
 	 */
 	@POST
-	public Response recommend(List<OrderItem> currentItems) {
-		List<Long> recommended = RecommenderSelector.getInstance().recommendProducts(currentItems);
+	public Response recommend(List<OrderItem> currentItems, @QueryParam("uid") final Long uid) {
+		if (uid == null || uid <= 0) {
+			throw new NullPointerException("User must not be null.");
+		}
+		List<Long> recommended = RecommenderSelector.getInstance().recommendProducts(uid, currentItems);
 		return Response.ok().entity(recommended).build();
 	}
 }
