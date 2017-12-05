@@ -20,10 +20,12 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.entities.Product;
+import tools.descartes.petsupplystore.entities.User;
 import tools.descartes.petsupplystore.recommender.algorithm.RecommenderSelector;
 
 /**
@@ -38,26 +40,32 @@ import tools.descartes.petsupplystore.recommender.algorithm.RecommenderSelector;
 public class RecommendSingleEndpoint {
 
 	/**
-	 * Return a list of all {@link Product}s, that are recommended for a customer
-	 * buying the given {@link OrderItem}. <br>
+	 * Return a list of all {@link Product}s, that are recommended for the given
+	 * {@link User} buying the given {@link OrderItem}. <br>
 	 * 
 	 * The returning list does not contain the {@link Product} of the respective
 	 * {@link OrderItem}. It might be empty, however.
 	 * 
 	 * @param item
-	 *            An {@link OrderItem} to use as recommendator. Must not be null
+	 *            An {@link OrderItem} to use as recommender. Must not be null.
+	 * @param uid
+	 *            The id of the {@link User} to recommend for. Must not be null or
+	 *            less or equal than zero.
 	 * @return List of {@link Long} objects, containing all {@link Product} IDs that
 	 *         are recommended to add to the cart, or an INTERNALSERVERERROR, if the
 	 *         recommendation failed.
 	 */
 	@POST
-	public Response recommend(OrderItem item) {
+	public Response recommend(OrderItem item, @QueryParam("uid") final Long uid) {
 		if (item == null) {
 			throw new NullPointerException("OrderItem must not be null.");
 		}
+		if (uid == null || uid <= 0) {
+			throw new NullPointerException("User must not be null.");
+		}
 		LinkedList<OrderItem> list = new LinkedList<OrderItem>();
 		list.add(item);
-		List<Long> recommended = RecommenderSelector.getInstance().recommendProducts(list);
+		List<Long> recommended = RecommenderSelector.getInstance().recommendProducts(uid, list);
 		return Response.ok().entity(recommended).build();
 	}
 }

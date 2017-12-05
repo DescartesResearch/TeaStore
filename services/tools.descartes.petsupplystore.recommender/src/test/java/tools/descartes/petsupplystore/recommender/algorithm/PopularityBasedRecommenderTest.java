@@ -29,7 +29,8 @@ public class PopularityBasedRecommenderTest extends AbstractRecommenderTest {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommenderTest#
+	 * @see
+	 * tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommenderTest#
 	 * setupAlgo()
 	 */
 	@Override
@@ -40,13 +41,14 @@ public class PopularityBasedRecommenderTest extends AbstractRecommenderTest {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommenderTest#
+	 * @see
+	 * tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommenderTest#
 	 * testResults()
 	 */
 	@Override
 	public void testResults() {
 		// test single
-		List<Long> result = getAlgo().recommendProducts(getRecommendSingle());
+		List<Long> result = getAlgo().recommendProducts(getAllUsers().get(0).getId(), getRecommendSingle());
 		Assert.assertEquals(3L, result.get(0).longValue());
 		Assert.assertEquals(4L, result.get(1).longValue());
 		Assert.assertEquals(1L, result.get(2).longValue());
@@ -54,7 +56,21 @@ public class PopularityBasedRecommenderTest extends AbstractRecommenderTest {
 		Assert.assertEquals(4, result.size());
 
 		// test multi
-		result = getAlgo().recommendProducts(getRecommendMulti());
+		result = getAlgo().recommendProducts(getAllUsers().get(0).getId(), getRecommendMulti());
+		Assert.assertEquals(2L, result.get(0).longValue());
+		Assert.assertEquals(4L, result.get(1).longValue());
+		Assert.assertEquals(1L, result.get(2).longValue());
+		Assert.assertEquals(3, result.size());
+
+		// test multi with different user
+		result = getAlgo().recommendProducts(getAllUsers().get(2).getId(), getRecommendMulti());
+		Assert.assertEquals(2L, result.get(0).longValue());
+		Assert.assertEquals(4L, result.get(1).longValue());
+		Assert.assertEquals(1L, result.get(2).longValue());
+		Assert.assertEquals(3, result.size());
+
+		// test multi with different user
+		result = getAlgo().recommendProducts(getAllUsers().get(4).getId(), getRecommendMulti());
 		Assert.assertEquals(2L, result.get(0).longValue());
 		Assert.assertEquals(4L, result.get(1).longValue());
 		Assert.assertEquals(1L, result.get(2).longValue());

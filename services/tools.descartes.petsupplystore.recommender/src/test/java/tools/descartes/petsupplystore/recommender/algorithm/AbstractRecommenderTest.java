@@ -22,6 +22,7 @@ import org.junit.Test;
 
 import tools.descartes.petsupplystore.entities.Order;
 import tools.descartes.petsupplystore.entities.OrderItem;
+import tools.descartes.petsupplystore.entities.User;
 
 /**
  * Abstract Recommender Test.
@@ -34,6 +35,8 @@ public abstract class AbstractRecommenderTest {
 	private List<OrderItem> trainOrderItems;
 
 	private List<Order> trainOrders;
+	
+	private List<User> allUsers;
 
 	private List<OrderItem> recommendSingle;
 
@@ -52,6 +55,60 @@ public abstract class AbstractRecommenderTest {
 	@Before
 	public void setup() {
 		setupAlgo();
+		// create users
+		allUsers = new ArrayList<>();
+		
+		User u = new User();
+		u.setId(100);
+		u.setEmail("u100@testemail.com");
+		u.setRealName("User 100");
+		u.setUserName("u100");
+		u.setPassword("Bad password");
+		allUsers.add(u);
+		
+		u.setId(101);
+		u.setEmail("u101@testemail.com");
+		u.setRealName("User 101");
+		u.setUserName("u101");
+		u.setPassword("Bad password");
+		allUsers.add(u);
+		
+		u.setId(102);
+		u.setEmail("u102@testemail.com");
+		u.setRealName("User 102");
+		u.setUserName("u102");
+		u.setPassword("Bad password");
+		allUsers.add(u);
+		
+		u.setId(103);
+		u.setEmail("u100@testemail.com");
+		u.setRealName("User 103");
+		u.setUserName("u103");
+		u.setPassword("Bad password");
+		allUsers.add(u);
+		
+		u.setId(104);
+		u.setEmail("u104@testemail.com");
+		u.setRealName("User 104");
+		u.setUserName("u104");
+		u.setPassword("Bad password");
+		allUsers.add(u);
+		
+		u.setId(105);
+		u.setEmail("u105@testemail.com");
+		u.setRealName("User 105");
+		u.setUserName("u105");
+		u.setPassword("Bad password");
+		allUsers.add(u);
+		
+		u.setId(106);
+		u.setEmail("u106@testemail.com");
+		u.setRealName("User 106");
+		u.setUserName("u106");
+		u.setPassword("Bad password");
+		allUsers.add(u);
+		
+		
 		// train orders
 		trainOrders = new ArrayList<>();
 
@@ -208,7 +265,7 @@ public abstract class AbstractRecommenderTest {
 	@Test
 	public void testInterface() {
 		try {
-			getAlgo().recommendProducts(recommendMulti);
+			getAlgo().recommendProducts(allUsers.get(2).getId(), recommendMulti);
 			Assert.fail("Recommender is supposed to throw an exception before being trained.");
 		} catch (UnsupportedOperationException e) {
 			// expected
@@ -220,10 +277,10 @@ public abstract class AbstractRecommenderTest {
 		List<Long> recommended = new ArrayList<Long>();
 		recommended.add(new Long(-1));
 
-		Assert.assertEquals(recommended.getClass(), getAlgo().recommendProducts(recommendMulti).getClass());
+		Assert.assertEquals(recommended.getClass(), getAlgo().recommendProducts(allUsers.get(2).getId(), recommendMulti).getClass());
 		testResults();
 
-		Assert.assertEquals(new ArrayList<Long>(), getAlgo().recommendProducts(new ArrayList<>()));
+		Assert.assertEquals(new ArrayList<Long>(), getAlgo().recommendProducts(allUsers.get(1).getId(), new ArrayList<>()));
 		testResults();
 	}
 
@@ -305,6 +362,20 @@ public abstract class AbstractRecommenderTest {
 	 */
 	public void setAlgo(IRecommender algo) {
 		this.algo = algo;
+	}
+
+	/**
+	 * @return the allUsers
+	 */
+	public List<User> getAllUsers() {
+		return allUsers;
+	}
+
+	/**
+	 * @param allUsers the allUsers to set
+	 */
+	public void setAllUsers(List<User> allUsers) {
+		this.allUsers = allUsers;
 	}
 
 }

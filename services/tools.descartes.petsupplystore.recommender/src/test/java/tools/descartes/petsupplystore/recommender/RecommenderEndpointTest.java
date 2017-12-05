@@ -130,8 +130,14 @@ public class RecommenderEndpointTest extends AbstractRecommenderRestTest {
 		// TEST RECOMMENDATION
 		// test recommendation process is now available
 		list = new ArrayList<OrderItem>();
+		String uid = "12345";
+		// test recommendation fails, when uid is not present
 		response = ClientBuilder.newBuilder().build()
 				.target(RECOMMEND_TARGET)
+				.request(MediaType.APPLICATION_JSON).post(Entity.entity(list, MediaType.APPLICATION_JSON));
+		Assert.assertEquals(org.apache.catalina.connector.Response.SC_INTERNAL_SERVER_ERROR, response.getStatus());
+		response = ClientBuilder.newBuilder().build()
+				.target(RECOMMEND_TARGET).queryParam("uid", uid)
 				.request(MediaType.APPLICATION_JSON).post(Entity.entity(list, MediaType.APPLICATION_JSON));
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
 		List<Long> recommended = response.readEntity(new GenericType<List<Long>>() {
@@ -149,13 +155,18 @@ public class RecommenderEndpointTest extends AbstractRecommenderRestTest {
 		// TEST RECOMMENDATION SINGLE
 		// checking if sending null fails
 		response = ClientBuilder.newBuilder().build()
-				.target(RECOMMEND_SINGLE_TARGET)
+				.target(RECOMMEND_SINGLE_TARGET).queryParam("uid", uid)
 				.request(MediaType.APPLICATION_JSON).post(Entity.entity(null, MediaType.APPLICATION_JSON));
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_INTERNAL_SERVER_ERROR, response.getStatus());
 
 		// test recommendation process is now available
+		// check if sending without uid fails
 		response = ClientBuilder.newBuilder().build()
 				.target(RECOMMEND_SINGLE_TARGET)
+				.request(MediaType.APPLICATION_JSON).post(Entity.entity(new OrderItem(), MediaType.APPLICATION_JSON));
+		Assert.assertEquals(org.apache.catalina.connector.Response.SC_INTERNAL_SERVER_ERROR, response.getStatus());
+		response = ClientBuilder.newBuilder().build()
+				.target(RECOMMEND_SINGLE_TARGET).queryParam("uid", uid)
 				.request(MediaType.APPLICATION_JSON).post(Entity.entity(new OrderItem(), MediaType.APPLICATION_JSON));
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
 		recommended = response.readEntity(new GenericType<List<Long>>() {

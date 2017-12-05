@@ -90,7 +90,8 @@ public abstract class AbstractRecommender implements IRecommender {
 	}
 
 	@Override
-	public List<Long> recommendProducts(List<OrderItem> currentItems) throws UnsupportedOperationException {
+	public List<Long> recommendProducts(long userid, List<OrderItem> currentItems)
+			throws UnsupportedOperationException {
 		if (!trainingFinished) {
 			throw new UnsupportedOperationException("This instance is not fully trained yet.");
 		}
