@@ -219,7 +219,7 @@
 							</execution>
 							<!-- COPY aop.xml -->
 							<execution>
-								<id>copy-appCtx</id>
+								<id>copy-aop</id>
 								<phase>generate-resources</phase>
 								<goals>
 									<goal>copy-resources</goal>
