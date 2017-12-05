@@ -212,6 +212,7 @@
 											<includes>
 												<include>kieker.monitoring.properties</include>
 												<include>aop.xml</include>
+												<include>setenv.sh</include>
 												<include>Dockerfile</include>
 											</includes>
 										</resource>
