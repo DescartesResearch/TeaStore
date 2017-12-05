@@ -1,39 +1,28 @@
-<!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.aspectj.org/dtd/aspectj_1_5_0.dtd">
-
+<!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.eclipse.org/aspectj/dtd/aspectj.dtd">
 <aspectj>
-	<weaver options=""> <!-- options="-verbose" -->
-
-		<!-- Use the exclude/include directives to specify which classes are (not) 
-			to be considered for weaving. Some examples are given below. -->
-		<include within="org.mybatis..*" />
+	<weaver options="-verbose -showWeaveInfo">
+		<include within="tools.descartes.petsupplystore..*"/>
 	</weaver>
-
 	<aspects>
-		<!-- object -->
-		<aspect
-			name="kieker.monitoring.probe.aspectj.flow.constructorCallObject.FullInstrumentation" />
-<!-- 		<aspect -->
-<!-- 			name="kieker.monitoring.probe.aspectj.flow.constructorExecutionObject.FullInstrumentation" /> -->
-		<aspect
-			name="kieker.monitoring.probe.aspectj.flow.constructorExecutionObjectInterface.FullInstrumentation" />
-<!-- 		<aspect -->
-<!-- 			name="kieker.monitoring.probe.aspectj.flow.operationCallObject.FullInstrumentationNoGetterAndSetter" /> -->
-		<aspect
-			name="kieker.monitoring.probe.aspectj.flow.operationExecutionObjectInterface.FullInstrumentationNoGetterAndSetter" />
-		<aspect
-			name="kieker.monitoring.probe.aspectj.flow.operationExecutionObject.FullInstrumentationNoGetterAndSetter" />
-			
-		<!--  static -->
-<!-- 		<aspect -->
-<!-- 			name="kieker.monitoring.probe.aspectj.flow.constructorCall.FullInstrumentation" /> -->
-<!-- 		<aspect -->
-<!-- 			name="kieker.monitoring.probe.aspectj.flow.construction.FullInstrumentation" /> -->
-<!-- 		<aspect -->
-<!-- 			name="kieker.monitoring.probe.aspectj.flow.constructorExecution.FullInstrumentation" /> -->
-<!-- 		<aspect -->
-<!-- 			name="kieker.monitoring.probe.aspectj.flow.operationCall.FullInstrumentationNoGetterAndSetter" /> -->
-<!-- 		<aspect -->
-<!-- 			name="kieker.monitoring.probe.aspectj.flow.operationExecution.FullInstrumentationNoGetterAndSetter" /> -->
+		<!-- Use the aspect directives to specify the aspect(s) to use (typically only one). -->
+		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotation"/>-->
+		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotationServlet"/>-->
+		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFull"/>-->
+		<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullNoConstructor"/>
+		<!--<aspect name="kieker.monitoring.probe.aspect.JoperationExecution.OperationExecutionAspectFullServlet"/>-->
+		<!--<aspect name="kieker.monitoring.probe.aspectj.jersey.OperationExecutionJerseyClientInterceptor"/>
+		<aspect name="kieker.monitoring.probe.aspectj.jersey.OperationExecutionJerseyServerInterceptor"/>-->
+		<!--<aspect name="kieker.monitoring.probe.aspectj.netty.NettyInterceptor"/>-->
+		<concrete-aspect name="kieker.monitoring.probe.aspectj.operationExecution.TargetedAspect" extends="kieker.monitoring.probe.aspectj.operationExecution.AbstractOperationExecutionAspect">
+			<!-- <pointcut name="monitoredOperation" expression="execution(* com.netflix.recipes.rss.jersey.resources.MiddleTierResource.*(..))
+				|| execution(* com.netflix.recipes.rss.manager.RSSManager.getSubscriptions(..))
+				|| execution(* com.netflix.recipes.rss.manager.RSSManager.addSubscription(..))
+				|| execution(* com.netflix.recipes.rss.manager.RSSManager.deleteSubscription(..))
+				|| execution(* com.netflix.recipes.rss.manager.RSSManager.fetchRSSFeed(..))
+				|| execution(* com.netflix.discovery.DiscoveryManager.*(..))
+				|| execution(* com.netflix.karyon.server.KaryonServer.start(..))
+				|| execution(* com.netflix.recipes.rss.impl.CassandraStoreImpl.*(..))" />-->
+				<pointcut name="monitoredOperation" expression="execution(* tools.descartes.petsupplystore..*(..))" />
+		</concrete-aspect>
 	</aspects>
 </aspectj>
-
