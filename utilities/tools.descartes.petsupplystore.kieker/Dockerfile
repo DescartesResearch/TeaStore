@@ -3,6 +3,8 @@ MAINTAINER Chair of Software Engineering <se2-it@informatik.uni-wuerzburg.de>
 
 EXPOSE 8080
 
+ENV CATALINA_BASE="/usr/local/tomcat/"
+
 RUN mkdir $CATALINA_BASE/kieker
 RUN mkdir $CATALINA_BASE/kieker/config
 RUN mkdir $CATALINA_BASE/kieker/agent
