@@ -52,6 +52,20 @@
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
+		
+		
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>1.8.7</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>net.kieker-monitoring</groupId>
+		  <artifactId>kieker</artifactId>
+		  <version>1.13</version>
+		  <classifier>aspectj</classifier>
+		</dependency>
 
 		<dependency>
 			<groupId>javax</groupId>
