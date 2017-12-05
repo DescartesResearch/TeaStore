@@ -16,8 +16,6 @@ COPY src/main/webapp/WEB-INF/lib/kieker-1.14-SNAPSHOT-aspectj.jar 	$CATALINA_BAS
 
 COPY target/*.war 													/usr/local/tomcat/webapps/
 
-COPY setenv.sh	/usr/local/tomcat/bin/setenv.sh
-
 ENV JAVA_OPTS="${JAVA_OPTS} -javaagent:$CATALINA_BASE/kieker/agent/agent.jar"
 ENV JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.configuration=$CATALINA_BASE/kieker/config/kieker.monitoring.properties"
 ENV JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.writer.filesystem.AsciiFileWriter.customStoragePath=$CATALINA_BASE/kieker/logs"

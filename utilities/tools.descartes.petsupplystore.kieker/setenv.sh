@@ -1,1 +1,0 @@
-export JAVA_OPTS="$JAVA_OPTS -Dorg.aspectj.weaver.loadtime.configuration=/usr/local/tomcat/aop.xml"
