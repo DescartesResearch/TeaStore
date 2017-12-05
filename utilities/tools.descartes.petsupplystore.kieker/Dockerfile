@@ -3,34 +3,25 @@ MAINTAINER Chair of Software Engineering <se2-it@informatik.uni-wuerzburg.de>
 
 EXPOSE 8080
 
-WORKDIR /opt
+ENV CATALINA_BASE="/usr/local/tomcat"
 
-RUN mkdir /opt/kieker && mkdir /opt/kieker/config && mkdir /opt/kieker/aop
+RUN mkdir $CATALINA_BASE/kieker
+RUN mkdir $CATALINA_BASE/kieker/config
+RUN mkdir $CATALINA_BASE/kieker/agent
+RUN mkdir $CATALINA_BASE/kieker/logs
 
-COPY aop.xml /opt/kieker/aop/aop.xml
-RUN  mkdir -p /usr/local/tomcat/lib/META-INF
-COPY aop.xml /usr/local/tomcat/lib/META-INF/
-COPY kieker.monitoring.properties /opt/kieker/config/kieker.monitoring.properties
-COPY src/main/webapp/WEB-INF/lib/kieker-1.14-SNAPSHOT-aspectj.jar /opt/kieker/agent/agent.jar
-COPY target/*.war /usr/local/tomcat/webapps/
+COPY kieker.monitoring.properties 									$CATALINA_BASE/kieker/config/kieker.monitoring.properties
+COPY aop.xml					 									$CATALINA_BASE/aop.xml
+COPY src/main/webapp/WEB-INF/lib/kieker-1.14-SNAPSHOT-aspectj.jar 	$CATALINA_BASE/kieker/agent/agent.jar
 
-RUN \
-  mkdir -p /opt/kieker/agent && \
-  mkdir -p /opt/kieker/logs && \
-  ln -s /usr/local/tomcat/webapps /opt/kieker/webapps && \
-  sed -i '250i\'"export KIEKER_JAVA_OPTS=\" \
-    -javaagent:/opt/kieker/agent/agent.jar \
-    -Dkieker.monitoring.configuration=/opt/kieker/config/kieker.monitoring.properties \
-    -Dkieker.monitoring.writer.filesystem.AsciiFileWriter.customStoragePath=/opt/kieker/logs \
-    -Daj.weaving.verbose=true \
-    -Dorg.aspectj.weaver.loadtime.configuration=/opt/kieker/aop/aop.xml \
-    -Dkieker.monitoring.skipDefaultAOPConfiguration=true \
-    \"" /usr/local/tomcat/bin/catalina.sh && \
-  sed -i '251i\'"export JAVA_OPTS=\"\${KIEKER_JAVA_OPTS} \${JAVA_OPTS}\"" /usr/local/tomcat/bin/catalina.sh
-  
-  
-CMD \
-  /usr/local/tomcat/bin/start.sh && \
-  /usr/local/tomcat/bin/catalina.sh run
+COPY target/*.war 													/usr/local/tomcat/webapps/
 
-VOLUME ["/opt/kieker"]
+ENV JAVA_OPTS="${JAVA_OPTS} -javaagent:$CATALINA_BASE/kieker/agent/agent.jar"
+ENV JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.configuration=$CATALINA_BASE/kieker/config/kieker.monitoring.properties"
+ENV JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.writer.filesystem.AsciiFileWriter.customStoragePath=$CATALINA_BASE/kieker/logs"
+ENV JAVA_OPTS="${JAVA_OPTS} -Daj.weaving.verbose=true"
+ENV JAVA_OPTS="${JAVA_OPTS} -Dorg.aspectj.weaver.loadtime.configuration=$CATALINA_BASE/aop.xml"
+ENV JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.skipDefaultAOPConfiguration=true"
+
+RUN /usr/local/tomcat/bin/start.sh
+CMD /usr/local/tomcat/bin/catalina.sh run
