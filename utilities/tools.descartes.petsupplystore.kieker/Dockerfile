@@ -20,5 +20,4 @@ ENV JAVA_OPTS="${JAVA_OPTS} -Daj.weaving.verbose=true"
 ENV JAVA_OPTS="${JAVA_OPTS} -Dorg.aspectj.weaver.loadtime.configuration=/aop.xml"
 ENV JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.skipDefaultAOPConfiguration=true"
 
-RUN /usr/local/tomcat/bin/start.sh
-CMD /usr/local/tomcat/bin/catalina.sh run
+CMD java -jar /usr/local/tomcat/bin/dockermemoryconfigurator.jar ${TOMCAT_HEAP_MEM_PERCENTAGE}; /usr/local/tomcat/bin/start.sh && /usr/local/tomcat/bin/catalina.sh run
