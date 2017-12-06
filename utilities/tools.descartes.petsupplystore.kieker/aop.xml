@@ -4,13 +4,13 @@
 		<include within="tools.descartes.petsupplystore..*"/>
 	</weaver>
 	<aspects>
-		<!-- <aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFull"/> -->
-		<concrete-aspect name="kieker.monitoring.probe.aspectj.operationExecution.TargetedAspect" extends="kieker.monitoring.probe.aspectj.operationExecution.AbstractOperationExecutionAspect">
+		<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullNoGetterAndSetter"/>
+		<!-- <concrete-aspect name="kieker.monitoring.probe.aspectj.operationExecution.TargetedAspect" extends="kieker.monitoring.probe.aspectj.operationExecution.AbstractOperationExecutionAspect">
 			<pointcut name="monitoredOperation" expression="execution(* tools.descartes.petsupplystore.image.rest.*(..))
 				|| execution(* tools.descartes.petsupplystore.persistence.rest.*(..))
 				|| execution(* tools.descartes.petsupplystore.recommender.rest.*(..))
 				|| execution(* tools.descartes.petsupplystore.store.rest.*(..))
 				|| execution(* tools.descartes.petsupplystore.webui.servlet.*(..))" />
-		</concrete-aspect>
+		</concrete-aspect> -->
 	</aspects>
 </aspectj>
