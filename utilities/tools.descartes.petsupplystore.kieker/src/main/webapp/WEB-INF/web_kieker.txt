@@ -17,7 +17,7 @@
 	<filter-class>kieker.monitoring.probe.servlet.SessionAndTraceRegistrationFilter</filter-class>
 	<init-param>
 		<param-name>logFilterExecution</param-name>
-		<param-value>true</param-value>
+		<param-value>false</param-value>
 	</init-param>
 </filter>
 <filter-mapping>
