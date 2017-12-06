@@ -2,6 +2,7 @@
 <aspectj>
 	<weaver options="">
 		<include within="tools.descartes.petsupplystore..*"/>
+		<exclude within=".*init>.*"/>
 	</weaver>
 	<aspects>
 		<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullNoGetterAndSetter"/>
