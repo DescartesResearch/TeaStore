@@ -2,11 +2,12 @@
 <aspectj>
 	<weaver options="">
 		<include within="tools.descartes.petsupplystore..*"/>
+		<exclude within="tools.descartes.petsupplystore.entities..*" />
 	</weaver>
 	<aspects>
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullNoGetterAndSetter"/> -->
 		<concrete-aspect name="kieker.monitoring.probe.aspectj.operationExecution.TargetedAspect" extends="kieker.monitoring.probe.aspectj.operationExecution.AbstractOperationExecutionAspect">
-			<pointcut name="monitoredOperation" expression="execution(* *(..)) AND noGetterAndSetter()" />
+			<pointcut name="monitoredOperation" expression="execution(* *(..))" />
 		</concrete-aspect>
 	</aspects>
 </aspectj>
