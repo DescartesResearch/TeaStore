@@ -3,7 +3,8 @@
 	<weaver options="">
 		<include within="tools.descartes.petsupplystore..*"/>
 		<exclude within="tools.descartes.petsupplystore.entities..*" />
-		<exclude within="tools.descartes.petsupplystore.registryclient.loadbalancers..*" />
+		<exclude within="tools.descartes.petsupplystore.registryclient..*" />
+		<exclude within="tools.descartes.petsupplystore.rest..*" />
 	</weaver>
 	<aspects>
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullNoGetterAndSetter"/> -->
