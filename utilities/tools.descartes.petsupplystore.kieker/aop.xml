@@ -6,7 +6,7 @@
 	<aspects>
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullNoGetterAndSetter"/> -->
 		<concrete-aspect name="kieker.monitoring.probe.aspectj.operationExecution.TargetedAspect" extends="kieker.monitoring.probe.aspectj.operationExecution.AbstractOperationExecutionAspect">
-			<pointcut name="monitoredOperation" expression="execution(* *(..)) AND noGetterAndSetter()) || execution(new(..)" />
+			<pointcut name="monitoredOperation" expression="execution(* *(..)) AND noGetterAndSetter() || execution(new(..))" />
 		</concrete-aspect>
 	</aspects>
 </aspectj>
