@@ -7,7 +7,7 @@ RUN apt-get install unzip
 RUN unzip /apache.zip
 RUN chmod -R +x /apache-tomcat-8.5.24
 RUN mkdir /usr/share/man/man1
-RUN apt-get install default-jre-headless
+RUN apt-get -y install default-jre-headless
 
 EXPOSE 8080
 
