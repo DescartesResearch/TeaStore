@@ -42,7 +42,7 @@ public class PopularityBasedRecommender extends AbstractRecommender {
 	 * java.util.List)
 	 */
 	@Override
-	protected List<Long> execute(List<Long> currentItems) {
+	protected List<Long> execute(Long userid, List<Long> currentItems) {
 		List<Long> reco = new ArrayList<>(MAX_NUMBER_OF_RECOMMENDATIONS);
 		for (Long count : popRanking.descendingKeySet()) {
 			List<Long> productIds = popRanking.get(count);

@@ -49,17 +49,13 @@ public class RecommendEndpoint {
 	 *            A list, containing all {@link OrderItem}s in the current cart.
 	 *            Might be empty.
 	 * @param uid
-	 *            The id of the {@link User} to recommend for. Must not be null or
-	 *            less or equal than zero.
+	 *            The id of the {@link User} to recommend for. May be null.
 	 * @return List of {@link Long} objects, containing all {@link Product} IDs that
 	 *         are recommended to add to the cart, or an INTERNALSERVERERROR, if the
 	 *         recommendation failed.
 	 */
 	@POST
 	public Response recommend(List<OrderItem> currentItems, @QueryParam("uid") final Long uid) {
-		if (uid == null || uid <= 0) {
-			throw new NullPointerException("User must not be null.");
-		}
 		List<Long> recommended = RecommenderSelector.getInstance().recommendProducts(uid, currentItems);
 		return Response.ok().entity(recommended).build();
 	}

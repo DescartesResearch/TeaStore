@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import tools.descartes.petsupplystore.entities.Order;
 import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.entities.Product;
+import tools.descartes.petsupplystore.entities.User;
 
 /**
  * Abstract class for basic recommendation functionality.
@@ -90,7 +91,7 @@ public abstract class AbstractRecommender implements IRecommender {
 	}
 
 	@Override
-	public List<Long> recommendProducts(long userid, List<OrderItem> currentItems)
+	public List<Long> recommendProducts(Long userid, List<OrderItem> currentItems)
 			throws UnsupportedOperationException {
 		if (!trainingFinished) {
 			throw new UnsupportedOperationException("This instance is not fully trained yet.");
@@ -103,20 +104,22 @@ public abstract class AbstractRecommender implements IRecommender {
 		for (OrderItem item : currentItems) {
 			items.add(item.getProductId());
 		}
-		return execute(items);
+		return execute(userid, items);
 	}
 
 	/**
 	 * Has to be implemented by subclasses in order to perform actual
 	 * recommendation.
 	 * 
+	 * @param userid
+	 *            The id of the {@link User} to recommend for. May be null.
 	 * @param currentItems
 	 *            A list containing all ids of {@link OrderItem}s.
 	 * @return List of all IDs of the {@link Product} entities that are recommended
 	 *         to add to the cart. Does not contain any {@link Product} that is
 	 *         already part of the given list of {@link OrderItem}s. Might be empty.
 	 */
-	protected abstract List<Long> execute(List<Long> currentItems);
+	protected abstract List<Long> execute(Long userid, List<Long> currentItems);
 
 	private Order findOrder(List<Order> orders, long orderid) {
 		for (Order order : orders) {

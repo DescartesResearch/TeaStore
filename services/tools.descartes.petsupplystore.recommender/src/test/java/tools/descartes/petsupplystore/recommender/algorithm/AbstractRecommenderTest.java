@@ -35,7 +35,7 @@ public abstract class AbstractRecommenderTest {
 	private List<OrderItem> trainOrderItems;
 
 	private List<Order> trainOrders;
-	
+
 	private List<User> allUsers;
 
 	private List<OrderItem> recommendSingle;
@@ -48,16 +48,16 @@ public abstract class AbstractRecommenderTest {
 	 * Run the dummy test.
 	 * 
 	 * trainOrders = [{10, user100}, {11, user101}, {12, user103}, {13, user104},
-	 * 				  {14, user101}, {15, user101}, {16, user105}, {17, user106}]
-	 * orderItems: 10 = {1, 2, 3}; 11 = {2, 4}; 12 = {1, 3, 4}; 13 = {2}; 14 = {2};
-	 * 				15 = {2}; 16 = {2, 3, 4, 5}; 17 = {3};
+	 * {14, user101}, {15, user101}, {16, user105}, {17, user106}] orderItems: 10 =
+	 * {1, 2, 3}; 11 = {2, 4}; 12 = {1, 3, 4}; 13 = {2}; 14 = {2}; 15 = {2}; 16 =
+	 * {2, 3, 4, 5}; 17 = {3};
 	 */
 	@Before
 	public void setup() {
 		setupAlgo();
 		// create users
 		allUsers = new ArrayList<>();
-		
+
 		User u = new User();
 		u.setId(100);
 		u.setEmail("u100@testemail.com");
@@ -65,50 +65,49 @@ public abstract class AbstractRecommenderTest {
 		u.setUserName("u100");
 		u.setPassword("Bad password");
 		allUsers.add(u);
-		
+
 		u.setId(101);
 		u.setEmail("u101@testemail.com");
 		u.setRealName("User 101");
 		u.setUserName("u101");
 		u.setPassword("Bad password");
 		allUsers.add(u);
-		
+
 		u.setId(102);
 		u.setEmail("u102@testemail.com");
 		u.setRealName("User 102");
 		u.setUserName("u102");
 		u.setPassword("Bad password");
 		allUsers.add(u);
-		
+
 		u.setId(103);
 		u.setEmail("u100@testemail.com");
 		u.setRealName("User 103");
 		u.setUserName("u103");
 		u.setPassword("Bad password");
 		allUsers.add(u);
-		
+
 		u.setId(104);
 		u.setEmail("u104@testemail.com");
 		u.setRealName("User 104");
 		u.setUserName("u104");
 		u.setPassword("Bad password");
 		allUsers.add(u);
-		
+
 		u.setId(105);
 		u.setEmail("u105@testemail.com");
 		u.setRealName("User 105");
 		u.setUserName("u105");
 		u.setPassword("Bad password");
 		allUsers.add(u);
-		
+
 		u.setId(106);
 		u.setEmail("u106@testemail.com");
 		u.setRealName("User 106");
 		u.setUserName("u106");
 		u.setPassword("Bad password");
 		allUsers.add(u);
-		
-		
+
 		// train orders
 		trainOrders = new ArrayList<>();
 
@@ -277,10 +276,12 @@ public abstract class AbstractRecommenderTest {
 		List<Long> recommended = new ArrayList<Long>();
 		recommended.add(new Long(-1));
 
-		Assert.assertEquals(recommended.getClass(), getAlgo().recommendProducts(allUsers.get(2).getId(), recommendMulti).getClass());
+		Assert.assertEquals(recommended.getClass(),
+				getAlgo().recommendProducts(allUsers.get(2).getId(), recommendMulti).getClass());
 		testResults();
 
-		Assert.assertEquals(new ArrayList<Long>(), getAlgo().recommendProducts(allUsers.get(1).getId(), new ArrayList<>()));
+		Assert.assertEquals(new ArrayList<Long>(),
+				getAlgo().recommendProducts(allUsers.get(1).getId(), new ArrayList<>()));
 		testResults();
 	}
 
@@ -372,7 +373,8 @@ public abstract class AbstractRecommenderTest {
 	}
 
 	/**
-	 * @param allUsers the allUsers to set
+	 * @param allUsers
+	 *            the allUsers to set
 	 */
 	public void setAllUsers(List<User> allUsers) {
 		this.allUsers = allUsers;

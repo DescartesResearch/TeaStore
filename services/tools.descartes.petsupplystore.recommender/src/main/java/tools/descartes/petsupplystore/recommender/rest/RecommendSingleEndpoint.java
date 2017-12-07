@@ -49,8 +49,7 @@ public class RecommendSingleEndpoint {
 	 * @param item
 	 *            An {@link OrderItem} to use as recommender. Must not be null.
 	 * @param uid
-	 *            The id of the {@link User} to recommend for. Must not be null or
-	 *            less or equal than zero.
+	 *            The id of the {@link User} to recommend for. May be null.
 	 * @return List of {@link Long} objects, containing all {@link Product} IDs that
 	 *         are recommended to add to the cart, or an INTERNALSERVERERROR, if the
 	 *         recommendation failed.
@@ -59,9 +58,6 @@ public class RecommendSingleEndpoint {
 	public Response recommend(OrderItem item, @QueryParam("uid") final Long uid) {
 		if (item == null) {
 			throw new NullPointerException("OrderItem must not be null.");
-		}
-		if (uid == null || uid <= 0) {
-			throw new NullPointerException("User must not be null.");
 		}
 		LinkedList<OrderItem> list = new LinkedList<OrderItem>();
 		list.add(item);

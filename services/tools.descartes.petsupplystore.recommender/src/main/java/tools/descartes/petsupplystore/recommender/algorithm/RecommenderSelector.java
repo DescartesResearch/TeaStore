@@ -17,7 +17,6 @@ import java.util.List;
 
 import tools.descartes.petsupplystore.entities.Order;
 import tools.descartes.petsupplystore.entities.OrderItem;
-import tools.descartes.petsupplystore.entities.User;
 import tools.descartes.petsupplystore.recommender.algorithm.impl.pop.PopularityBasedRecommender;
 
 /**
@@ -30,6 +29,8 @@ public final class RecommenderSelector implements IRecommender {
 
 	private static RecommenderSelector instance;
 
+	private IRecommender fallbackrecommender;
+
 	private IRecommender recommender;
 
 	/**
@@ -37,11 +38,15 @@ public final class RecommenderSelector implements IRecommender {
 	 */
 	private RecommenderSelector() {
 		recommender = new PopularityBasedRecommender();
+		fallbackrecommender = new PopularityBasedRecommender();
 	}
 
 	@Override
-	public List<Long> recommendProducts(long userid, List<OrderItem> currentItems)
+	public List<Long> recommendProducts(Long userid, List<OrderItem> currentItems)
 			throws UnsupportedOperationException {
+		if (userid == null) {
+			return fallbackrecommender.recommendProducts(userid, currentItems);
+		}
 		return recommender.recommendProducts(userid, currentItems);
 	}
 
@@ -68,6 +73,7 @@ public final class RecommenderSelector implements IRecommender {
 	@Override
 	public void train(List<OrderItem> orderItems, List<Order> orders) {
 		recommender.train(orderItems, orders);
+		fallbackrecommender.train(orderItems, orders);
 	}
 
 }
