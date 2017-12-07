@@ -19,6 +19,7 @@ import tools.descartes.petsupplystore.entities.Order;
 import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.entities.User;
+import tools.descartes.petsupplystore.recommender.algorithm.impl.UseFallBackException;
 
 /**
  * Interface providing the recommender functionality.
@@ -62,7 +63,6 @@ public interface IRecommender {
 	 *             If this instance is not ready to recommend, i.e.,
 	 *             {@link IRecommender#train(List)} has not been invoked or
 	 *             terminated yet.
-	 * 
 	 */
 	public List<Long> recommendProducts(Long userid, List<OrderItem> currentItems) throws UnsupportedOperationException;
 
