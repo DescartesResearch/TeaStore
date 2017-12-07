@@ -1,4 +1,4 @@
-FROM tomcat:8.0-jre8
+FROM tomcat:8.5-jre8
 MAINTAINER Chair of Software Engineering <se2-it@informatik.uni-wuerzburg.de>
 
 # Delete all example webapps from base container
@@ -9,6 +9,8 @@ RUN mkdir /usr/local/tomcat/webapps
 COPY baseContext.xml /usr/local/tomcat/conf/context.xml
 COPY mysql-connector-java-5.1.44-bin.jar /usr/local/tomcat/lib/mysql-connector-java-5.1.44-bin.jar
 COPY target/jars/dockermemoryconfigurator* /usr/local/tomcat/bin/dockermemoryconfigurator.jar
+RUN rm /usr/local/tomcat/conf/server.xml
+COPY server.xml /usr/local/tomcat/conf/
 
 # Copy script to replace placeholders in context.xml with the environment variables
 COPY start.sh /usr/local/tomcat/bin/start.sh

@@ -1,0 +1,64 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>kieker.rabbitmq</artifactId>
+	<name>PetSupplyStore Kieker RabbitMQ</name>
+	<url>http://descartes.tools</url>
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>1.3.6</version>
+				<executions>
+					<execution>
+						<id>build-image</id>
+						<goals>
+							<goal>build</goal>
+						</goals>
+						<phase>package</phase>
+					</execution>
+					<execution>
+						<id>tag-push-latest</id>
+						<goals>
+							<goal>tag</goal>
+							<goal>push</goal>
+						</goals>
+						<configuration>
+							<repository>${dockerrepository}/petsupplystore-kieker-rabbitmq</repository>
+							<tag>latest</tag>
+						</configuration>
+						<phase>package</phase>
+					</execution>
+					<execution>
+						<id>tag-push-version</id>
+						<goals>
+							<goal>tag</goal>
+							<goal>push</goal>
+						</goals>
+						<configuration>
+							<repository>${dockerrepository}/petsupplystore-base</repository>
+							<tag>${project.version}</tag>
+						</configuration>
+						<phase>package</phase>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<finalName>tools.descartes.petsupplystore.kieker.rabbitmq</finalName>
+	</build>
+
+	<packaging>pom</packaging>
+	<parent>
+		<groupId>tools.descartes.petsupplystore</groupId>
+		<artifactId>parent</artifactId>
+		<version>${petsupplystoreversion}</version>
+		<relativePath>../..</relativePath>
+	</parent>
+</project>

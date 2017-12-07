@@ -1,28 +1,15 @@
 <!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.eclipse.org/aspectj/dtd/aspectj.dtd">
 <aspectj>
-	<weaver options="-verbose -showWeaveInfo">
+	<weaver options="">
 		<include within="tools.descartes.petsupplystore..*"/>
+		<exclude within="tools.descartes.petsupplystore.entities..*" />
+		<exclude within="tools.descartes.petsupplystore.registryclient..*" />
+		<exclude within="tools.descartes.petsupplystore.rest..*" />
 	</weaver>
 	<aspects>
-		<!-- Use the aspect directives to specify the aspect(s) to use (typically only one). -->
-		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotation"/>-->
-		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotationServlet"/>-->
-		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFull"/>-->
-		<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullNoConstructor"/>
-		<!--<aspect name="kieker.monitoring.probe.aspect.JoperationExecution.OperationExecutionAspectFullServlet"/>-->
-		<!--<aspect name="kieker.monitoring.probe.aspectj.jersey.OperationExecutionJerseyClientInterceptor"/>
-		<aspect name="kieker.monitoring.probe.aspectj.jersey.OperationExecutionJerseyServerInterceptor"/>-->
-		<!--<aspect name="kieker.monitoring.probe.aspectj.netty.NettyInterceptor"/>-->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullNoGetterAndSetter"/> -->
 		<concrete-aspect name="kieker.monitoring.probe.aspectj.operationExecution.TargetedAspect" extends="kieker.monitoring.probe.aspectj.operationExecution.AbstractOperationExecutionAspect">
-			<!-- <pointcut name="monitoredOperation" expression="execution(* com.netflix.recipes.rss.jersey.resources.MiddleTierResource.*(..))
-				|| execution(* com.netflix.recipes.rss.manager.RSSManager.getSubscriptions(..))
-				|| execution(* com.netflix.recipes.rss.manager.RSSManager.addSubscription(..))
-				|| execution(* com.netflix.recipes.rss.manager.RSSManager.deleteSubscription(..))
-				|| execution(* com.netflix.recipes.rss.manager.RSSManager.fetchRSSFeed(..))
-				|| execution(* com.netflix.discovery.DiscoveryManager.*(..))
-				|| execution(* com.netflix.karyon.server.KaryonServer.start(..))
-				|| execution(* com.netflix.recipes.rss.impl.CassandraStoreImpl.*(..))" />-->
-				<pointcut name="monitoredOperation" expression="execution(* tools.descartes.petsupplystore..*(..))" />
+			<pointcut name="monitoredOperation" expression="execution(* *(..))" />
 		</concrete-aspect>
 	</aspects>
 </aspectj>

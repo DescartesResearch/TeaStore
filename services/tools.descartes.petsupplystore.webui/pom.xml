@@ -211,8 +211,27 @@
 											<directory>../../utilities/tools.descartes.petsupplystore.kieker/</directory>
 											<includes>
 												<include>kieker.monitoring.properties</include>
-												<include>aop.xml</include>
 												<include>Dockerfile</include>
+											</includes>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+							<!-- COPY aop.xml -->
+							<execution>
+								<id>copy-aop</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.basedir}/src/main/resources</outputDirectory>
+									<overwrite>true</overwrite>
+									<resources>
+										<resource>
+											<directory>../../utilities/tools.descartes.petsupplystore.kieker/</directory>
+											<includes>
+												<include>aop.xml</include>
 											</includes>
 										</resource>
 									</resources>

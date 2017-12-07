@@ -5,17 +5,22 @@
     <!-- Default configuration and other configuration values here.    -->
 
     <!-- Service registration settings, almost always required. -->
-    <Environment name="servicePort" value="%%SERVICE_PORT%%" type="java.lang.String" override="false"/>
-    <Environment name="hostName" value="%%HOST_NAME%%" type="java.lang.String" override="false"/>
-    <Environment name="registryURL" value="http://%%REGISTRY_HOST%%:%%REGISTRY_PORT%%/tools.descartes.petsupplystore.registry/rest/services/"
+    <Environment name="servicePort" value="%%PLACEHOLDER%%"
+    	type="java.lang.String" override="false"/>
+    <Environment name="hostName" value="%%PLACEHOLDER%%"
+    	type="java.lang.String" override="false"/>
+    <Environment name="registryURL" value="%%PLACEHOLDER%%"
     		type="java.lang.String" override="false"/>
 
     <!-- Database settings, specify if not localhost:3306 -->
-    <Environment name="databaseHost" value="%%DB_HOST%%" type="java.lang.String" override="false"/>
-    <Environment name="databasePort" value="%%DB_PORT%%" type="java.lang.String" override="false"/>
+    <Environment name="databaseHost" value="%%PLACEHOLDER%%"
+    	type="java.lang.String" override="false"/>
+    <Environment name="databasePort" value="%%PLACEHOLDER%%"
+    	type="java.lang.String" override="false"/>
     
     <!-- Recommender settings, specify loop time in ms if periodic retraining is required -->
-    <Environment name="recommenderLoopTime" value="0" type="java.lang.Long" override="false"/>
+    <Environment name="recommenderLoopTime" value="0"
+    	type="java.lang.Long" override="false"/>
 
     <!-- General Tomcat setting: disable session persistence; improves startup times. -->
     <Manager pathname="" />
