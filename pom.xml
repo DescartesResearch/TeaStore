@@ -33,6 +33,7 @@
 			</activation>
 			<modules>
 				<module>./utilities/tools.descartes.petsupplystore.kieker</module>
+				<module>./utilities/tools.descartes.petsupplystore.kieker.rabbitmq</module>
 			</modules>
 		</profile>
 	</profiles>
