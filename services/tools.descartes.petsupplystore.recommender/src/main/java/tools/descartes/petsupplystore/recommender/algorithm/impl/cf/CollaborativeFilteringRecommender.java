@@ -25,11 +25,19 @@ import tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommender;
  */
 public class CollaborativeFilteringRecommender extends AbstractRecommender {
 
-	/* (non-Javadoc)
-	 * @see tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommender#execute(java.util.List)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommender#
+	 * execute(java.util.List)
 	 */
 	@Override
-	protected List<Long> execute(List<Long> currentItems) {
+	protected List<Long> execute(Long userid, List<Long> currentItems) {
+		if (userid == null) {
+			throw new UnsupportedOperationException(this.getClass().getName()
+					+ " does not support null userids. Use a pseudouser or switch to another approach.");
+		}
 		return null;
 	}
 

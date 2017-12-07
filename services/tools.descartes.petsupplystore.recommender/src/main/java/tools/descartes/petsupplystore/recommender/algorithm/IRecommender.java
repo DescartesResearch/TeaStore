@@ -53,8 +53,7 @@ public interface IRecommender {
 	 *            A list containing all {@link OrderItem}s in the current cart.
 	 *            Might be empty.
 	 * @param userid
-	 *            The id of the {@link User} to recommend for. Must not be null or
-	 *            less or equal than zero.
+	 *            The id of the {@link User} to recommend for. May be null.
 	 * @return List of all IDs of the {@link Product} entities that are recommended
 	 *         to add to the cart. Does not contain any {@link Product} that is
 	 *         already part of the given list of {@link OrderItem}s. Might be empty.
@@ -65,6 +64,6 @@ public interface IRecommender {
 	 *             terminated yet.
 	 * 
 	 */
-	public List<Long> recommendProducts(long userid, List<OrderItem> currentItems) throws UnsupportedOperationException;
+	public List<Long> recommendProducts(Long userid, List<OrderItem> currentItems) throws UnsupportedOperationException;
 
 }

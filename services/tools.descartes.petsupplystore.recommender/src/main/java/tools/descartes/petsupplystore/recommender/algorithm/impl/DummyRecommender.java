@@ -30,7 +30,7 @@ public class DummyRecommender extends AbstractRecommender {
 	 * @see tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommender#execute(java.util.List)
 	 */
 	@Override
-	protected List<Long> execute(List<Long> currentItems) {
+	protected List<Long> execute(Long userid, List<Long> currentItems) {
 		List<Long> recommended = new ArrayList<Long>();
 		recommended.add(new Long(-1));
 		return recommended;
