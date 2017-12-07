@@ -20,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +45,14 @@ public abstract class AbstractRecommender implements IRecommender {
 	 * should return. Is NOT mandatory for any of the algorithms.
 	 */
 	public static final int MAX_NUMBER_OF_RECOMMENDATIONS = 10;
+
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractRecommender.class);
+
+	/**
+	 * This represents the matrix assigning each user a frequency for each product
+	 * ID. The frequency resembles the number of times, a user has bought that item.
+	 */
+	private Map<Long, Map<Long, Double>> userBuyingMatrix;
 
 	/**
 	 * This set maps a userId to a set, containing the corresponding OrderItemSets,
@@ -52,9 +60,16 @@ public abstract class AbstractRecommender implements IRecommender {
 	 */
 	private Map<Long, Set<OrderItemSet>> userItemSets;
 
+	/**
+	 * This is an enumeration of all available products seen during the training
+	 * phase.
+	 */
+	private Set<Long> totalProducts;
+
 	@Override
 	public void train(List<OrderItem> orderItems, List<Order> orders) {
 		long tic = System.currentTimeMillis();
+		totalProducts = new HashSet<>();
 		// first create order mapping unorderized
 		Map<Long, OrderItemSet> unOrderizeditemSets = new HashMap<>();
 		for (OrderItem orderItem : orderItems) {
@@ -62,7 +77,13 @@ public abstract class AbstractRecommender implements IRecommender {
 				unOrderizeditemSets.put(orderItem.getOrderId(), new OrderItemSet());
 				unOrderizeditemSets.get(orderItem.getOrderId()).setOrderId(orderItem.getOrderId());
 			}
-			unOrderizeditemSets.get(orderItem.getOrderId()).getOrderset().add(orderItem.getProductId());
+			unOrderizeditemSets.get(orderItem.getOrderId()).getOrderset().put(orderItem.getProductId(),
+					orderItem.getQuantity());
+			// see, if we already have our item
+			if (!totalProducts.contains(orderItem.getProductId())) {
+				// if not known yet -> add
+				totalProducts.add(orderItem.getProductId());
+			}
 		}
 		// now map each id with the corresponding order
 		Map<Order, OrderItemSet> itemSets = new HashMap<>();
@@ -75,8 +96,10 @@ public abstract class AbstractRecommender implements IRecommender {
 			if (!userItemSets.containsKey(order.getUserId())) {
 				userItemSets.put(order.getUserId(), new HashSet<OrderItemSet>());
 			}
+			itemSets.get(order).setUserId(order.getUserId());
 			userItemSets.get(order.getUserId()).add(itemSets.get(order));
 		}
+		userBuyingMatrix = createUserBuyingMatrix(userItemSets);
 		executePreprocessing();
 		LOG.info("Training recommender finished. Training took: " + (System.currentTimeMillis() - tic) + "ms.");
 		trainingFinished = true;
@@ -131,6 +154,36 @@ public abstract class AbstractRecommender implements IRecommender {
 	}
 
 	/**
+	 * @return the userBuyingMatrix
+	 */
+	public Map<Long, Map<Long, Double>> getUserBuyingMatrix() {
+		return userBuyingMatrix;
+	}
+
+	/**
+	 * @param userBuyingMatrix
+	 *            the userBuyingMatrix to set
+	 */
+	public void setUserBuyingMatrix(Map<Long, Map<Long, Double>> userBuyingMatrix) {
+		this.userBuyingMatrix = userBuyingMatrix;
+	}
+
+	/**
+	 * @return the totalProducts
+	 */
+	public Set<Long> getTotalProducts() {
+		return totalProducts;
+	}
+
+	/**
+	 * @param totalProducts
+	 *            the totalProducts to set
+	 */
+	public void setTotalProducts(Set<Long> totalProducts) {
+		this.totalProducts = totalProducts;
+	}
+
+	/**
 	 * @return the userItemSets
 	 */
 	public Map<Long, Set<OrderItemSet>> getUserItemSets() {
@@ -143,6 +196,43 @@ public abstract class AbstractRecommender implements IRecommender {
 	 */
 	public void setUserItemSets(Map<Long, Set<OrderItemSet>> userItemSets) {
 		this.userItemSets = userItemSets;
+	}
+
+	/**
+	 * Transforms the list of orders into one matrix containing all user-IDs and
+	 * their number of buys (i.e., their rating) of all product-IDs. A
+	 * quantity/rating of a user is null, if the user did not buy that item. If the
+	 * user bought one item at least once, the contained value (rating) is the
+	 * number of times, he bought one given item.
+	 * 
+	 * @param useritemsets
+	 *            A map assigning each user-ID all its OrderItemSets
+	 * @return A Map representing a matrix of each user-ID assigning each item-ID
+	 *         its number of buys (as double value)
+	 */
+	private static Map<Long, Map<Long, Double>> createUserBuyingMatrix(Map<Long, Set<OrderItemSet>> useritemsets) {
+		Map<Long, Map<Long, Double>> matrix = new HashMap<>();
+		// for each user
+		for (Entry<Long, Set<OrderItemSet>> entry : useritemsets.entrySet()) {
+			// create a new line for this user-ID
+			Map<Long, Double> line = new HashMap<>();
+			// for all orders of that user
+			for (OrderItemSet orderset : entry.getValue()) {
+				// for all orderitems of that orderset
+				for (Entry<Long, Integer> product : orderset.getOrderset().entrySet()) {
+					// if key was not known before -> first occurence
+					if (!line.containsKey(product.getKey())) {
+						line.put(product.getKey(), new Double(product.getValue()));
+					} else {
+						// if key was known before -> increase counter
+						line.put(product.getKey(), new Double(line.get(product.getKey()) + product.getValue()));
+					}
+				}
+			}
+			// add this user-ID to the matrix
+			matrix.put(entry.getKey(), line);
+		}
+		return matrix;
 	}
 
 }

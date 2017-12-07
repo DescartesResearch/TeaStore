@@ -156,81 +156,97 @@ public abstract class AbstractRecommenderTest {
 
 		OrderItem o = new OrderItem();
 		o.setProductId(1);
+		o.setQuantity(1);
 		o.setOrderId(10);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(2);
+		o.setQuantity(1);
 		o.setOrderId(10);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(3);
+		o.setQuantity(1);
 		o.setOrderId(10);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(4);
+		o.setQuantity(1);
 		o.setOrderId(11);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(2);
+		o.setQuantity(1);
 		o.setOrderId(11);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(3);
+		o.setQuantity(1);
 		o.setOrderId(12);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(4);
+		o.setQuantity(1);
 		o.setOrderId(12);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(1);
+		o.setQuantity(1);
 		o.setOrderId(12);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(2);
+		o.setQuantity(1);
 		o.setOrderId(13);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(2);
+		o.setQuantity(1);
 		o.setOrderId(14);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(2);
+		o.setQuantity(1);
 		o.setOrderId(15);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(2);
+		o.setQuantity(1);
 		o.setOrderId(16);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(3);
+		o.setQuantity(1);
 		o.setOrderId(16);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(4);
+		o.setQuantity(1);
 		o.setOrderId(16);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(5);
+		o.setQuantity(1);
 		o.setOrderId(16);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(3);
+		o.setQuantity(1);
 		o.setOrderId(17);
 		trainOrderItems.add(o);
 
