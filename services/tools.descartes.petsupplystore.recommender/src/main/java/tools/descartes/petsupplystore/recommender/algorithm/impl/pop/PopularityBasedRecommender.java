@@ -13,12 +13,10 @@
  */
 package tools.descartes.petsupplystore.recommender.algorithm.impl.pop;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.TreeMap;
 
 import tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommender;
 
@@ -30,8 +28,10 @@ import tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommender;
  */
 public class PopularityBasedRecommender extends AbstractRecommender {
 
-	// map with all count items for the corresponding purchase count
-	private TreeMap<Long, List<Long>> popRanking;
+	/**
+	 * Map with all product IDs and their corresponding total purchase counts.
+	 */
+	private HashMap<Long, Double> counts;
 
 	/*
 	 * (non-Javadoc)
@@ -42,46 +42,23 @@ public class PopularityBasedRecommender extends AbstractRecommender {
 	 */
 	@Override
 	protected List<Long> execute(Long userid, List<Long> currentItems) {
-		List<Long> reco = new ArrayList<>(MAX_NUMBER_OF_RECOMMENDATIONS);
-		for (Long count : popRanking.descendingKeySet()) {
-			List<Long> productIds = popRanking.get(count);
-			for (long productId : productIds) {
-				if (reco.size() < MAX_NUMBER_OF_RECOMMENDATIONS) {
-					if (!currentItems.contains(productId)) {
-						reco.add(productId);
-					}
-				} else {
-					return reco;
-				}
-			}
-		}
-		return reco;
+		return filterRecommendations(counts, currentItems);
 	}
 
 	@Override
 	protected void executePreprocessing() {
 		// assigns each product a quantity
-		HashMap<Long, Long> tmp = new HashMap<>();
+		counts = new HashMap<>();
 		// calculate product frequencies
 		for (Map<Long, Double> usermap : getUserBuyingMatrix().values()) {
 			for (Entry<Long, Double> product : usermap.entrySet()) {
-				if (!tmp.containsKey(product.getKey())) {
-					tmp.put(product.getKey(), product.getValue().longValue());
+				if (!counts.containsKey(product.getKey())) {
+					counts.put(product.getKey(), product.getValue());
 				} else {
-					tmp.put(product.getKey(), tmp.get(product.getKey()) + product.getValue().longValue());
+					counts.put(product.getKey(), counts.get(product.getKey()) + product.getValue());
 				}
 			}
 		}
-		// and saving them in a treemap (for efficient access)
-		popRanking = new TreeMap<Long, List<Long>>();
-		for (Entry<Long, Long> entry : tmp.entrySet()) {
-			List<Long> productIds = popRanking.get(entry.getValue());
-			if (productIds == null) {
-				productIds = new ArrayList<>();
-				popRanking.put(entry.getValue(), productIds);
-			}
-			productIds.add(entry.getKey());
-		}
-	}
 
+	}
 }

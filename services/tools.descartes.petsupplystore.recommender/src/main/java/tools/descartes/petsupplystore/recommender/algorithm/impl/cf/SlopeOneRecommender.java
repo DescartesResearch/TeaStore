@@ -28,7 +28,7 @@ import tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommender;
  *
  */
 public class SlopeOneRecommender extends AbstractRecommender {
-	
+
 	/**
 	 * Represents a matrix, assigning each itemid an average difference (in
 	 * rating/buying) to any other itemid.
@@ -51,15 +51,17 @@ public class SlopeOneRecommender extends AbstractRecommender {
 	@Override
 	protected List<Long> execute(Long userid, List<Long> currentItems) {
 		if (userid == null) {
-			throw new UnsupportedOperationException(this.getClass().getName()
+			throw new IllegalArgumentException(this.getClass().getName()
 					+ " does not support null userids. Use a pseudouser or switch to another approach.");
 		}
 		// This could be further optimized by moving this part into the pre-processing
 		// step, but we want to have nicer performance behavior
-		
-		return null;
-		
-		
+		HashMap<Long, Double> importances = new HashMap<>();
+		for (Long productid : getTotalProducts()) {
+			importances.put(productid, calculateScoreForItem(userid, productid));
+		}
+		return filterRecommendations(importances, currentItems);
+
 	}
 
 	private double calculateScoreForItem(long userid, long itemid) {
