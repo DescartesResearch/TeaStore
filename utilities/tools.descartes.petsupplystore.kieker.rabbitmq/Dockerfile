@@ -11,4 +11,4 @@ RUN apt-get -y install default-jre-headless
 
 EXPOSE 8080
 
-CMD /apache-tomcat-8.5.24/bin/startup.sh && rabbitmq-server 
+CMD  rabbitmq-server -detached && rabbitmqadmin declare queue name=kieker durable=false && /apache-tomcat-8.5.24/bin/catalina.sh run
