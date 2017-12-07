@@ -11,4 +11,4 @@ RUN apt-get -y install default-jre-headless
 
 EXPOSE 8080
 
-CMD rabbitmq-start && /apache-tomcat-8.5.24/bin/startup.sh
+CMD rabbitmq-server && /apache-tomcat-8.5.24/bin/startup.sh
