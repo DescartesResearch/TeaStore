@@ -131,11 +131,11 @@ public class RecommenderEndpointTest extends AbstractRecommenderRestTest {
 		// test recommendation process is now available
 		list = new ArrayList<OrderItem>();
 		String uid = "12345";
-		// test recommendation fails, when uid is not present
+		// test recommendation succeeds, even when uid is not present
 		response = ClientBuilder.newBuilder().build()
 				.target(RECOMMEND_TARGET)
 				.request(MediaType.APPLICATION_JSON).post(Entity.entity(list, MediaType.APPLICATION_JSON));
-		Assert.assertEquals(org.apache.catalina.connector.Response.SC_INTERNAL_SERVER_ERROR, response.getStatus());
+		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
 		response = ClientBuilder.newBuilder().build()
 				.target(RECOMMEND_TARGET).queryParam("uid", uid)
 				.request(MediaType.APPLICATION_JSON).post(Entity.entity(list, MediaType.APPLICATION_JSON));
@@ -160,11 +160,11 @@ public class RecommenderEndpointTest extends AbstractRecommenderRestTest {
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_INTERNAL_SERVER_ERROR, response.getStatus());
 
 		// test recommendation process is now available
-		// check if sending without uid fails
+		// check if sending without uid, does not fail
 		response = ClientBuilder.newBuilder().build()
 				.target(RECOMMEND_SINGLE_TARGET)
 				.request(MediaType.APPLICATION_JSON).post(Entity.entity(new OrderItem(), MediaType.APPLICATION_JSON));
-		Assert.assertEquals(org.apache.catalina.connector.Response.SC_INTERNAL_SERVER_ERROR, response.getStatus());
+		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
 		response = ClientBuilder.newBuilder().build()
 				.target(RECOMMEND_SINGLE_TARGET).queryParam("uid", uid)
 				.request(MediaType.APPLICATION_JSON).post(Entity.entity(new OrderItem(), MediaType.APPLICATION_JSON));

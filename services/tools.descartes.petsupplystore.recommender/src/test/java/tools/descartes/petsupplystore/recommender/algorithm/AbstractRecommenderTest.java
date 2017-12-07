@@ -49,7 +49,7 @@ public abstract class AbstractRecommenderTest {
 	 * 
 	 * trainOrders = [{10, user100}, {11, user101}, {12, user103}, {13, user104},
 	 * {14, user101}, {15, user101}, {16, user105}, {17, user106}] orderItems: 10 =
-	 * {1, 2, 3}; 11 = {2, 4}; 12 = {1, 3, 4}; 13 = {2}; 14 = {2}; 15 = {2}; 16 =
+	 * {1, 2, 3}; 11 = {2,2,2,2,2,4,4}; 12 = {1, 3, 4}; 13 = {2,2}; 14 = {2,2}; 15 = {2}; 16 =
 	 * {2, 3, 4, 5}; 17 = {3};
 	 */
 	@Before
@@ -156,81 +156,97 @@ public abstract class AbstractRecommenderTest {
 
 		OrderItem o = new OrderItem();
 		o.setProductId(1);
+		o.setQuantity(1);
 		o.setOrderId(10);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(2);
+		o.setQuantity(1);
 		o.setOrderId(10);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(3);
+		o.setQuantity(1);
 		o.setOrderId(10);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(4);
+		o.setQuantity(2);
 		o.setOrderId(11);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(2);
+		o.setQuantity(5);
 		o.setOrderId(11);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(3);
+		o.setQuantity(1);
 		o.setOrderId(12);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(4);
+		o.setQuantity(1);
 		o.setOrderId(12);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(1);
+		o.setQuantity(1);
 		o.setOrderId(12);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(2);
+		o.setQuantity(2);
 		o.setOrderId(13);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(2);
+		o.setQuantity(2);
 		o.setOrderId(14);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(2);
+		o.setQuantity(1);
 		o.setOrderId(15);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(2);
+		o.setQuantity(1);
 		o.setOrderId(16);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(3);
+		o.setQuantity(1);
 		o.setOrderId(16);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(4);
+		o.setQuantity(1);
 		o.setOrderId(16);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(5);
+		o.setQuantity(1);
 		o.setOrderId(16);
 		trainOrderItems.add(o);
 
 		o = new OrderItem();
 		o.setProductId(3);
+		o.setQuantity(1);
 		o.setOrderId(17);
 		trainOrderItems.add(o);
 
