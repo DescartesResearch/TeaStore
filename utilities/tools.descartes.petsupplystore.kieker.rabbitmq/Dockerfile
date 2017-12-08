@@ -14,4 +14,5 @@ RUN apt-get -y install default-jre-headless
 
 EXPOSE 8080
 
+#Login for rabbitmq webui is admin:nimda
 CMD  /apache-tomcat-8.5.24/bin/startup.sh && rabbitmq-server
