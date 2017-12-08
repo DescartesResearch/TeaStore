@@ -105,6 +105,11 @@
 			<artifactId>sigar</artifactId>
 			<version>1.6.4</version>
 		</dependency>
+		<dependency>
+			<groupId>com.rabbitmq</groupId>
+			<artifactId>amqp-client</artifactId>
+			<version>5.0.0</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>tools.descartes.petsupplystore.registry</finalName>
@@ -333,7 +338,7 @@
 									<goal>build</goal>
 								</goals>
 							</execution>
-							
+
 							<execution>
 								<id>tag-push-latest</id>
 								<goals>
@@ -345,7 +350,7 @@
 									<tag>latest</tag>
 								</configuration>
 							</execution>
-							
+
 							<execution>
 								<id>tag-push-version</id>
 								<goals>
