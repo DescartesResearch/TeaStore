@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommender;
+import tools.descartes.petsupplystore.recommender.algorithm.impl.UseFallBackException;
 
 /**
  * Recommender based on item-based collaborative filtering with the slope one
@@ -28,7 +29,7 @@ import tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommender;
  *
  */
 public class SlopeOneRecommender extends AbstractRecommender {
-	
+
 	/**
 	 * Represents a matrix, assigning each itemid an average difference (in
 	 * rating/buying) to any other itemid.
@@ -51,21 +52,38 @@ public class SlopeOneRecommender extends AbstractRecommender {
 	@Override
 	protected List<Long> execute(Long userid, List<Long> currentItems) {
 		if (userid == null) {
-			throw new UnsupportedOperationException(this.getClass().getName()
+			throw new UseFallBackException(this.getClass().getName()
 					+ " does not support null userids. Use a pseudouser or switch to another approach.");
+		}
+		if (getUserBuyingMatrix().get(userid) == null) {
+			// this user has not bought anything yet, so we do not have any information
+			throw new UseFallBackException("No user information.");
 		}
 		// This could be further optimized by moving this part into the pre-processing
 		// step, but we want to have nicer performance behavior
-		
-		return null;
-		
-		
+		HashMap<Long, Double> importances = new HashMap<>();
+		for (Long productid : getTotalProducts()) {
+			importances.put(productid, calculateScoreForItem(userid, productid));
+		}
+		return filterRecommendations(importances, currentItems);
+
 	}
 
 	private double calculateScoreForItem(long userid, long itemid) {
 		double score = 0;
 		double cumWeights = 0;
-
+		for (Entry<Long, Double> useritem : getUserBuyingMatrix().get(userid).entrySet()) {
+			// if we find that the user actually bought this item before, we can return this
+			// value
+			// (considering it is his rating, we can directly return this rating)
+			if (useritem.getKey() == itemid) {
+				return useritem.getValue();
+			}
+			// if not, we can calculate the (expected) rating for that user based on item i
+			score += useritem.getValue();
+			score += differences.get(useritem.getKey()).get(itemid);
+			cumWeights += frequencies.get(useritem.getKey()).get(itemid);
+		}
 		// normalize
 		return score / cumWeights;
 	}

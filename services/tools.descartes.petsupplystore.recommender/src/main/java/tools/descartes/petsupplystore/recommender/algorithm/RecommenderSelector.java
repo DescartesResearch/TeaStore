@@ -17,6 +17,7 @@ import java.util.List;
 
 import tools.descartes.petsupplystore.entities.Order;
 import tools.descartes.petsupplystore.entities.OrderItem;
+import tools.descartes.petsupplystore.recommender.algorithm.impl.UseFallBackException;
 import tools.descartes.petsupplystore.recommender.algorithm.impl.pop.PopularityBasedRecommender;
 
 /**
@@ -44,10 +45,11 @@ public final class RecommenderSelector implements IRecommender {
 	@Override
 	public List<Long> recommendProducts(Long userid, List<OrderItem> currentItems)
 			throws UnsupportedOperationException {
-		if (userid == null) {
+		try {
+			return recommender.recommendProducts(userid, currentItems);
+		} catch (UseFallBackException e) {
 			return fallbackrecommender.recommendProducts(userid, currentItems);
 		}
-		return recommender.recommendProducts(userid, currentItems);
 	}
 
 	/**

@@ -20,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.Map.Entry;
 
 import org.slf4j.Logger;
@@ -128,6 +129,53 @@ public abstract class AbstractRecommender implements IRecommender {
 			items.add(item.getProductId());
 		}
 		return execute(userid, items);
+	}
+
+	/**
+	 * Filters the given ranking of recommendations and deletes items that already
+	 * are in the cart. Furthermore caps the recommendations and only uses the
+	 * {@link AbstractRecommender#MAX_NUMBER_OF_RECOMMENDATIONS} highest rated
+	 * recommendations.
+	 * 
+	 * @param priorityList
+	 *            The unfiltered ranking assigning each recommended product ID a
+	 *            score or an importance. Does not need to be sorted.
+	 * @param currentItems
+	 *            The list of item IDs that must NOT be contained in the returned
+	 *            list.
+	 * @return A sorted list of recommendations with a size not greater than
+	 *         {@link AbstractRecommender#MAX_NUMBER_OF_RECOMMENDATIONS}
+	 */
+	protected List<Long> filterRecommendations(HashMap<Long, Double> priorityList, List<Long> currentItems) {
+		TreeMap<Double, List<Long>> ranking = createRanking(priorityList);
+		List<Long> reco = new ArrayList<>(MAX_NUMBER_OF_RECOMMENDATIONS);
+		for (Double score : ranking.descendingKeySet()) {
+			List<Long> productIds = ranking.get(score);
+			for (long productId : productIds) {
+				if (reco.size() < MAX_NUMBER_OF_RECOMMENDATIONS) {
+					if (!currentItems.contains(productId)) {
+						reco.add(productId);
+					}
+				} else {
+					return reco;
+				}
+			}
+		}
+		return reco;
+	}
+
+	private TreeMap<Double, List<Long>> createRanking(HashMap<Long, Double> map) {
+		// transforming the map into a treemap (for efficient access)
+		TreeMap<Double, List<Long>> ranking = new TreeMap<Double, List<Long>>();
+		for (Entry<Long, Double> entry : map.entrySet()) {
+			List<Long> productIds = ranking.get(entry.getValue());
+			if (productIds == null) {
+				productIds = new ArrayList<>();
+				ranking.put(entry.getValue(), productIds);
+			}
+			productIds.add(entry.getKey());
+		}
+		return ranking;
 	}
 
 	/**
