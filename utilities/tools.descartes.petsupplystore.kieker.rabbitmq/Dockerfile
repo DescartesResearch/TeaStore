@@ -2,6 +2,9 @@ FROM rabbitmq:management
 MAINTAINER Chair of Software Engineering <se2-it@informatik.uni-wuerzburg.de>
 
 COPY apache-tomcat-8.5.24.zip /apache.zip
+COPY rabbitmq.config /etc/rabbitmq/
+COPY custom_definitions.json /etc/rabbitmq/
+
 RUN apt-get update
 RUN apt-get install unzip
 RUN unzip /apache.zip
@@ -11,4 +14,4 @@ RUN apt-get -y install default-jre-headless
 
 EXPOSE 8080
 
-CMD  rabbitmq-server -detached && rabbitmqadmin declare queue name=kieker durable=false && /apache-tomcat-8.5.24/bin/catalina.sh run
+CMD  /apache-tomcat-8.5.24/bin/startup.sh && rabbitmq-server

@@ -1,0 +1,54 @@
+{
+    "rabbit_version": "3.5.7",
+    "users": [{
+            "name": "admin",
+            "password_hash": "b/XedHeZ8AVWttrmlrs5Mjl+eKI=",
+            "tags": "administrator"
+        }],
+    "vhosts": [{
+            "name": "/"
+        }, {
+            "name": "example-vhost"
+        }],
+    "permissions": [{
+            "user": "admin",
+            "vhost": "/",
+            "configure": ".*",
+            "write": ".*",
+            "read": ".*"
+        }, {
+            "user": "admin",
+            "vhost": "example-vhost",
+            "configure": ".*",
+            "write": ".*",
+            "read": ".*"
+        }],
+    "parameters": [],
+    "policies": [],
+    "queues": [{
+            "name": "example-queue",
+            "vhost": "example-vhost",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-max-length": 5
+            }
+        }],
+    "exchanges": [{
+            "name": "example-exchange",
+            "vhost": "example-vhost",
+            "type": "fanout",
+            "durable": true,
+            "auto_delete": false,
+            "internal": false,
+            "arguments": {}
+        }],
+    "bindings": [{
+            "source": "example-exchange",
+            "vhost": "example-vhost",
+            "destination": "example-queue",
+            "destination_type": "queue",
+            "routing_key": "",
+            "arguments": {}
+        }]
+}
