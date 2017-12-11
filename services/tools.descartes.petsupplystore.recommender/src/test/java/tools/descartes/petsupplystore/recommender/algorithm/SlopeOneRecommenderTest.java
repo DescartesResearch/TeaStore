@@ -13,10 +13,15 @@
  */
 package tools.descartes.petsupplystore.recommender.algorithm;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
-import tools.descartes.petsupplystore.recommender.algorithm.impl.pop.PopularityBasedRecommender;
+
+import tools.descartes.petsupplystore.recommender.algorithm.impl.cf.SlopeOneRecommender;
 
 /**
  * Test for the Dummy Recommender.
@@ -24,7 +29,7 @@ import tools.descartes.petsupplystore.recommender.algorithm.impl.pop.PopularityB
  * @author Johannes Grohmann
  *
  */
-public class PopularityBasedRecommenderTest extends AbstractRecommenderFunctionalityTest {
+public class SlopeOneRecommenderTest extends AbstractRecommenderFunctionalityTest {
 
 	/*
 	 * (non-Javadoc)
@@ -35,7 +40,7 @@ public class PopularityBasedRecommenderTest extends AbstractRecommenderFunctiona
 	 */
 	@Override
 	protected void setupAlgo() {
-		setAlgo(new PopularityBasedRecommender());
+		setAlgo(new SlopeOneRecommender());
 	}
 
 	/*
@@ -47,8 +52,11 @@ public class PopularityBasedRecommenderTest extends AbstractRecommenderFunctiona
 	 */
 	@Override
 	public void testSingleResults() {
+		// check resulting matrices
+		checkDiffMatrix();
+		checkFreqMatrix();
 		// test single
-		List<Long> result = getAlgo().recommendProducts(getAllUsers().get(0).getId(), getRecommendSingle());
+		List<Long> result = getAlgo().recommendProducts(getAllUsers().get(1).getId(), getRecommendSingle());
 		Assert.assertEquals(3L, result.get(0).longValue());
 		Assert.assertEquals(4L, result.get(1).longValue());
 		Assert.assertEquals(1L, result.get(2).longValue());
@@ -73,6 +81,9 @@ public class PopularityBasedRecommenderTest extends AbstractRecommenderFunctiona
 	 */
 	@Override
 	public void testMultiResults() {
+		// check that matrices did not change
+		checkDiffMatrix();
+		checkFreqMatrix();
 		// test multi
 		List<Long> result = getAlgo().recommendProducts(getAllUsers().get(0).getId(), getRecommendMulti());
 		Assert.assertEquals(2L, result.get(0).longValue());
@@ -93,6 +104,100 @@ public class PopularityBasedRecommenderTest extends AbstractRecommenderFunctiona
 		Assert.assertEquals(4L, result.get(1).longValue());
 		Assert.assertEquals(1L, result.get(2).longValue());
 		Assert.assertEquals(3, result.size());
+
+		// check that matrices still not changed
+		checkDiffMatrix();
+		checkFreqMatrix();
+	}
+
+	private void checkDiffMatrix() {
+		Map<Long, Map<Long, Double>> differences = new HashMap<>();
+
+		// item 1
+		Map<Long, Double> entry = new HashMap<>();
+		entry.put(1L, 0.0);
+		entry.put(2L, 0.0);
+		entry.put(3L, 0.0);
+		entry.put(4L, 0.0);
+		differences.put(1L, entry);
+		// item 2
+		entry = new HashMap<>();
+		entry.put(1L, 0.0);
+		entry.put(2L, 0.0);
+		entry.put(3L, 0.0);
+		entry.put(4L, 3.0);
+		entry.put(5L, 0.0);
+		differences.put(2L, entry);
+		// item 3
+		entry = new HashMap<>();
+		entry.put(1L, 0.0);
+		entry.put(2L, 0.0);
+		entry.put(3L, 0.0);
+		entry.put(4L, 0.0);
+		entry.put(5L, 0.0);
+		differences.put(3L, entry);
+		// item 4
+		entry = new HashMap<>();
+		entry.put(1L, 0.0);
+		entry.put(2L, -3.0);
+		entry.put(3L, 0.0);
+		entry.put(4L, 0.0);
+		entry.put(5L, 0.0);
+		differences.put(4L, entry);
+		// item 5
+		entry = new HashMap<>();
+		entry.put(2L, 0.0);
+		entry.put(3L, 0.0);
+		entry.put(4L, 0.0);
+		entry.put(5L, 0.0);
+		differences.put(5L, entry);
+
+		assertEquals(differences, ((SlopeOneRecommender) getAlgo()).getDifferences());
+	}
+
+	private void checkFreqMatrix() {
+		Map<Long, Map<Long, Integer>> frequencies = new HashMap<>();
+
+		// item 1
+		Map<Long, Integer> entry = new HashMap<>();
+		entry.put(1L, 2);
+		entry.put(2L, 1);
+		entry.put(3L, 2);
+		entry.put(4L, 1);
+		frequencies.put(1L, entry);
+		// item 2
+		entry = new HashMap<>();
+		entry.put(1L, 1);
+		entry.put(2L, 4);
+		entry.put(3L, 2);
+		entry.put(4L, 2);
+		entry.put(5L, 1);
+		frequencies.put(2L, entry);
+		// item 3
+		entry = new HashMap<>();
+		entry.put(1L, 2);
+		entry.put(2L, 2);
+		entry.put(3L, 4);
+		entry.put(4L, 2);
+		entry.put(5L, 1);
+		frequencies.put(3L, entry);
+		// item 4
+		entry = new HashMap<>();
+		entry.put(1L, 1);
+		entry.put(2L, 2);
+		entry.put(3L, 2);
+		entry.put(4L, 3);
+		entry.put(5L, 1);
+		frequencies.put(4L, entry);
+		// item 5
+		entry = new HashMap<>();
+		entry.put(2L, 1);
+		entry.put(3L, 1);
+		entry.put(4L, 1);
+		entry.put(5L, 1);
+		frequencies.put(5L, entry);
+
+		assertEquals(frequencies, ((SlopeOneRecommender) getAlgo()).getFrequencies());
 	}
 
 }

@@ -53,15 +53,8 @@ public class DummyRecommenderTest extends AbstractRecommenderFunctionalityTest {
 		// compare
 		List<Long> recommended = new ArrayList<Long>();
 		recommended.add(new Long(-1));
-
-		Assert.assertEquals(recommended,
-				getAlgo().recommendProducts(getAllUsers().get(0).getId(), getRecommendMulti()));
 		Assert.assertEquals(recommended,
 				getAlgo().recommendProducts(getAllUsers().get(0).getId(), getRecommendSingle()));
-		Assert.assertEquals(recommended,
-				getAlgo().recommendProducts(getAllUsers().get(1).getId(), getRecommendMulti()));
-		Assert.assertEquals(recommended,
-				getAlgo().recommendProducts(getAllUsers().get(4).getId(), getRecommendMulti()));
 	}
 	
 	/*
@@ -79,8 +72,6 @@ public class DummyRecommenderTest extends AbstractRecommenderFunctionalityTest {
 
 		Assert.assertEquals(recommended,
 				getAlgo().recommendProducts(getAllUsers().get(0).getId(), getRecommendMulti()));
-		Assert.assertEquals(recommended,
-				getAlgo().recommendProducts(getAllUsers().get(0).getId(), getRecommendSingle()));
 		Assert.assertEquals(recommended,
 				getAlgo().recommendProducts(getAllUsers().get(1).getId(), getRecommendMulti()));
 		Assert.assertEquals(recommended,

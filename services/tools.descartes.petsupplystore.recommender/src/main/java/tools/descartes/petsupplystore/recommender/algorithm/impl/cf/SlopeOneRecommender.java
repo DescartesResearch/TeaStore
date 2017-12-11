@@ -81,6 +81,7 @@ public class SlopeOneRecommender extends AbstractRecommender {
 	 */
 	@Override
 	protected List<Long> execute(Long userid, List<Long> currentItems) {
+
 		if (userid == null) {
 			throw new UseFallBackException(this.getClass().getName()
 					+ " does not support null userids. Use a pseudouser or switch to another approach.");
@@ -108,7 +109,12 @@ public class SlopeOneRecommender extends AbstractRecommender {
 		// step, but we want to have nicer performance behavior
 		HashMap<Long, Double> importances = new HashMap<>();
 		for (Long productid : getTotalProducts()) {
-			importances.put(productid, calculateScoreForItem(userid, productid));
+			try {
+				importances.put(productid, calculateScoreForItem(userid, productid));
+			} catch (NullPointerException e) {
+				// this exception can be thrown if we have not enough information
+				importances.put(productid, -1.0);
+			}
 		}
 		return importances;
 	}
@@ -124,9 +130,10 @@ public class SlopeOneRecommender extends AbstractRecommender {
 				return useritem.getValue();
 			}
 			// if not, we can calculate the (expected) rating for that user based on item i
-			score += useritem.getValue();
-			score += differences.get(useritem.getKey()).get(itemid);
-			cumWeights += frequencies.get(useritem.getKey()).get(itemid);
+			int frequency = frequencies.get(useritem.getKey()).get(itemid);
+			score += useritem.getValue() * frequency;
+			score += differences.get(useritem.getKey()).get(itemid) * frequency;
+			cumWeights += frequency;
 		}
 		// normalize
 		return score / cumWeights;
