@@ -42,6 +42,36 @@ public class SlopeOneRecommender extends AbstractRecommender {
 	 */
 	private Map<Long, Map<Long, Integer>> frequencies = new HashMap<>();
 
+	/**
+	 * @return the differences
+	 */
+	public Map<Long, Map<Long, Double>> getDifferences() {
+		return differences;
+	}
+
+	/**
+	 * @param differences
+	 *            the differences to set
+	 */
+	public void setDifferences(Map<Long, Map<Long, Double>> differences) {
+		this.differences = differences;
+	}
+
+	/**
+	 * @return the frequencies
+	 */
+	public Map<Long, Map<Long, Integer>> getFrequencies() {
+		return frequencies;
+	}
+
+	/**
+	 * @param frequencies
+	 *            the frequencies to set
+	 */
+	public void setFrequencies(Map<Long, Map<Long, Integer>> frequencies) {
+		this.frequencies = frequencies;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -59,14 +89,28 @@ public class SlopeOneRecommender extends AbstractRecommender {
 			// this user has not bought anything yet, so we do not have any information
 			throw new UseFallBackException("No user information.");
 		}
+		Map<Long, Double> importances = getUserVector(userid);
+		return filterRecommendations(importances, currentItems);
+
+	}
+
+	/**
+	 * Generates one row of the matrix for the given user. (Predicts the user score
+	 * for each product ID.)
+	 * 
+	 * @param userid
+	 *            The user to predict for
+	 * @return A Map assigning each product ID a (predicted) score (for the given
+	 *         user)
+	 */
+	protected Map<Long, Double> getUserVector(Long userid) {
 		// This could be further optimized by moving this part into the pre-processing
 		// step, but we want to have nicer performance behavior
 		HashMap<Long, Double> importances = new HashMap<>();
 		for (Long productid : getTotalProducts()) {
 			importances.put(productid, calculateScoreForItem(userid, productid));
 		}
-		return filterRecommendations(importances, currentItems);
-
+		return importances;
 	}
 
 	private double calculateScoreForItem(long userid, long itemid) {
@@ -149,5 +193,4 @@ public class SlopeOneRecommender extends AbstractRecommender {
 			}
 		}
 	}
-
 }
