@@ -24,7 +24,7 @@ import tools.descartes.petsupplystore.recommender.algorithm.impl.pop.PopularityB
  * @author Johannes Grohmann
  *
  */
-public class PopularityBasedRecommenderTest extends AbstractRecommenderTest {
+public class PopularityBasedRecommenderTest extends AbstractRecommenderFunctionalityTest {
 
 	/*
 	 * (non-Javadoc)
@@ -46,7 +46,7 @@ public class PopularityBasedRecommenderTest extends AbstractRecommenderTest {
 	 * testResults()
 	 */
 	@Override
-	public void testResults() {
+	public void testSingleResults() {
 		// test single
 		List<Long> result = getAlgo().recommendProducts(getAllUsers().get(0).getId(), getRecommendSingle());
 		Assert.assertEquals(3L, result.get(0).longValue());
@@ -54,9 +54,19 @@ public class PopularityBasedRecommenderTest extends AbstractRecommenderTest {
 		Assert.assertEquals(1L, result.get(2).longValue());
 		Assert.assertEquals(5L, result.get(3).longValue());
 		Assert.assertEquals(4, result.size());
+	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommenderTest#
+	 * testResults()
+	 */
+	@Override
+	public void testMultiResults() {
 		// test multi
-		result = getAlgo().recommendProducts(getAllUsers().get(0).getId(), getRecommendMulti());
+		List<Long> result = getAlgo().recommendProducts(getAllUsers().get(0).getId(), getRecommendMulti());
 		Assert.assertEquals(2L, result.get(0).longValue());
 		Assert.assertEquals(4L, result.get(1).longValue());
 		Assert.assertEquals(1L, result.get(2).longValue());
@@ -75,7 +85,6 @@ public class PopularityBasedRecommenderTest extends AbstractRecommenderTest {
 		Assert.assertEquals(4L, result.get(1).longValue());
 		Assert.assertEquals(1L, result.get(2).longValue());
 		Assert.assertEquals(3, result.size());
-
 	}
 
 }
