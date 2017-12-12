@@ -26,7 +26,7 @@ import tools.descartes.petsupplystore.recommender.algorithm.impl.DummyRecommende
  * @author Johannes Grohmann
  *
  */
-public class DummyRecommenderTest extends AbstractRecommenderTest {
+public class DummyRecommenderTest extends AbstractRecommenderFunctionalityTest {
 
 	/*
 	 * (non-Javadoc)
@@ -49,15 +49,29 @@ public class DummyRecommenderTest extends AbstractRecommenderTest {
 	 * testResults()
 	 */
 	@Override
-	public void testResults() {
+	public void testSingleResults() {
+		// compare
+		List<Long> recommended = new ArrayList<Long>();
+		recommended.add(new Long(-1));
+		Assert.assertEquals(recommended,
+				getAlgo().recommendProducts(getAllUsers().get(0).getId(), getRecommendSingle()));
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommenderTest#
+	 * testResults()
+	 */
+	@Override
+	public void testMultiResults() {
 		// compare
 		List<Long> recommended = new ArrayList<Long>();
 		recommended.add(new Long(-1));
 
 		Assert.assertEquals(recommended,
 				getAlgo().recommendProducts(getAllUsers().get(0).getId(), getRecommendMulti()));
-		Assert.assertEquals(recommended,
-				getAlgo().recommendProducts(getAllUsers().get(0).getId(), getRecommendSingle()));
 		Assert.assertEquals(recommended,
 				getAlgo().recommendProducts(getAllUsers().get(1).getId(), getRecommendMulti()));
 		Assert.assertEquals(recommended,

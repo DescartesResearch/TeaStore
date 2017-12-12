@@ -19,7 +19,6 @@ import tools.descartes.petsupplystore.entities.Order;
 import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.entities.User;
-import tools.descartes.petsupplystore.recommender.algorithm.impl.UseFallBackException;
 
 /**
  * Interface providing the recommender functionality.

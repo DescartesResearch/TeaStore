@@ -15,6 +15,9 @@ package tools.descartes.petsupplystore.recommender.algorithm;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import tools.descartes.petsupplystore.entities.Order;
 import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.recommender.algorithm.impl.UseFallBackException;
@@ -27,6 +30,8 @@ import tools.descartes.petsupplystore.recommender.algorithm.impl.pop.PopularityB
  *
  */
 public final class RecommenderSelector implements IRecommender {
+
+	private static final Logger LOG = LoggerFactory.getLogger(RecommenderSelector.class);
 
 	private static RecommenderSelector instance;
 
@@ -48,6 +53,8 @@ public final class RecommenderSelector implements IRecommender {
 		try {
 			return recommender.recommendProducts(userid, currentItems);
 		} catch (UseFallBackException e) {
+			LOG.warn(
+					"Executing" + recommender.getClass().getName() + "recommender failed. Using fallback recommender.");
 			return fallbackrecommender.recommendProducts(userid, currentItems);
 		}
 	}

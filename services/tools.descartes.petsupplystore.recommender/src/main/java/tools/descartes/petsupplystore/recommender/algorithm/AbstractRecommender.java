@@ -146,7 +146,7 @@ public abstract class AbstractRecommender implements IRecommender {
 	 * @return A sorted list of recommendations with a size not greater than
 	 *         {@link AbstractRecommender#MAX_NUMBER_OF_RECOMMENDATIONS}
 	 */
-	protected List<Long> filterRecommendations(HashMap<Long, Double> priorityList, List<Long> currentItems) {
+	protected List<Long> filterRecommendations(Map<Long, Double> priorityList, List<Long> currentItems) {
 		TreeMap<Double, List<Long>> ranking = createRanking(priorityList);
 		List<Long> reco = new ArrayList<>(MAX_NUMBER_OF_RECOMMENDATIONS);
 		for (Double score : ranking.descendingKeySet()) {
@@ -164,7 +164,7 @@ public abstract class AbstractRecommender implements IRecommender {
 		return reco;
 	}
 
-	private TreeMap<Double, List<Long>> createRanking(HashMap<Long, Double> map) {
+	private TreeMap<Double, List<Long>> createRanking(Map<Long, Double> map) {
 		// transforming the map into a treemap (for efficient access)
 		TreeMap<Double, List<Long>> ranking = new TreeMap<Double, List<Long>>();
 		for (Entry<Long, Double> entry : map.entrySet()) {

@@ -42,15 +42,15 @@ public abstract class AbstractRecommenderTest {
 
 	private List<OrderItem> recommendMulti;
 
-	private IRecommender algo;
+	private AbstractRecommender algo;
 
 	/**
 	 * Run the dummy test.
 	 * 
 	 * trainOrders = [{10, user100}, {11, user101}, {12, user103}, {13, user104},
-	 * {14, user101}, {15, user101}, {16, user105}, {17, user106}] orderItems: 10 =
-	 * {1, 2, 3}; 11 = {2,2,2,2,2,4,4}; 12 = {1, 3, 4}; 13 = {2,2}; 14 = {2,2}; 15 = {2}; 16 =
-	 * {2, 3, 4, 5}; 17 = {3};
+	 * {14, user101}, {15, user101}, {16, user105}, {17, user106}] <br>
+	 * orderItems: 10 = {1, 2, 3}; 11 = {2^5,4^2}; 12 = {1, 3, 4}; 13 = {2^2}; 14 =
+	 * {2^2}; 15 = {2}; 16 = {2, 3, 4, 5}; 17 = {3};
 	 */
 	@Before
 	public void setup() {
@@ -294,17 +294,30 @@ public abstract class AbstractRecommenderTest {
 
 		Assert.assertEquals(recommended.getClass(),
 				getAlgo().recommendProducts(allUsers.get(2).getId(), recommendMulti).getClass());
-		testResults();
 
 		Assert.assertEquals(new ArrayList<Long>(),
 				getAlgo().recommendProducts(allUsers.get(1).getId(), new ArrayList<>()));
-		testResults();
 	}
 
 	/**
 	 * Test the results.
 	 */
-	public abstract void testResults();
+	@Test
+	public void testResults() {
+		getAlgo().train(getTrainOrderItems(), getTrainOrders());
+		testSingleResults();
+		testMultiResults();
+	}
+
+	/**
+	 * Test the results of the single recommender interface.
+	 */
+	public abstract void testSingleResults();
+
+	/**
+	 * Test the results of the multi recommender interface.
+	 */
+	public abstract void testMultiResults();
 
 	/**
 	 * @return the trainOrderItems
@@ -369,7 +382,7 @@ public abstract class AbstractRecommenderTest {
 	/**
 	 * @return the algo
 	 */
-	public IRecommender getAlgo() {
+	public AbstractRecommender getAlgo() {
 		return algo;
 	}
 
@@ -377,7 +390,7 @@ public abstract class AbstractRecommenderTest {
 	 * @param algo
 	 *            the algo to set
 	 */
-	public void setAlgo(IRecommender algo) {
+	public void setAlgo(AbstractRecommender algo) {
 		this.algo = algo;
 	}
 
