@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.enterprise.inject.Instance;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -52,11 +53,25 @@ public final class TrainingSynchronizer {
 	// creating entries
 	private static final int PERSISTENCE_CREATION_MAX_WAIT_TIME = 120000;
 	// Wait time in ms before checking again for an existing persistence service
-	private static final List<Integer> PERSISTENCE_CREATION_WAIT_TIME = 
-			Arrays.asList(1000, 2000, 5000, 10000, 30000, 60000);
+	private static final List<Integer> PERSISTENCE_CREATION_WAIT_TIME = Arrays.asList(1000, 2000, 5000, 10000, 30000,
+			60000);
 
-	
+	private static TrainingSynchronizer instance;
+
 	private TrainingSynchronizer() {
+
+	}
+
+	/**
+	 * Returns the instance for this singleton.
+	 * 
+	 * @return An instance of {@link TrainingSynchronizer}
+	 */
+	public static TrainingSynchronizer getInstance() {
+		if (instance == null) {
+			instance = new TrainingSynchronizer();
+		}
+		return instance;
 
 	}
 
@@ -66,32 +81,32 @@ public final class TrainingSynchronizer {
 	 * The maximum considered time in milliseconds. Long.MAX_VALUE signals no entry,
 	 * e.g. all orders are used for training.
 	 */
-	private static long maxTime = Long.MAX_VALUE;
+	private long maxTime = Long.MAX_VALUE;
 
 	/**
 	 * @return the maxTime
 	 */
-	public static long getMaxTime() {
-		return TrainingSynchronizer.maxTime;
+	public long getMaxTime() {
+		return maxTime;
 	}
 
 	/**
 	 * @param maxTime
 	 *            the maxTime to set
 	 */
-	public static void setMaxTime(String maxTime) {
-		TrainingSynchronizer.maxTime = toMillis(maxTime);
+	public void setMaxTime(String maxTime) {
+		setMaxTime(toMillis(maxTime));
 	}
 
 	/**
 	 * @param maxTime
 	 *            the maxTime to set
 	 */
-	public static void setMaxTime(long maxTime) {
-		TrainingSynchronizer.maxTime = maxTime;
+	public void setMaxTime(long maxTime) {
+		this.maxTime = maxTime;
 	}
-	
-	private static void waitForPersistence() {
+
+	private void waitForPersistence() {
 		// We have to wait for the database that all entries are created before
 		// generating images (which queries persistence). Yes we want to wait forever in
 		// case the persistence is
@@ -100,15 +115,15 @@ public final class TrainingSynchronizer {
 		while (true) {
 			Response result = null;
 			try {
-				result = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "generatedb",
-						String.class, client -> client.getService().path(client.getApplicationURI())
-								.path(client.getEndpointURI()).path("finished").request().get());
-				
+				result = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "generatedb", String.class,
+						client -> client.getService().path(client.getApplicationURI()).path(client.getEndpointURI())
+								.path("finished").request().get());
+
 				if (result != null && Boolean.parseBoolean(result.readEntity(String.class))) {
 					break;
 				}
 			} catch (NotFoundException | LoadBalancerTimeoutException e) {
-				//continue waiting as usual
+				// continue waiting as usual
 			} finally {
 				if (result != null) {
 					result.close();
@@ -136,11 +151,11 @@ public final class TrainingSynchronizer {
 	 * @return The number of elements retrieved from the database or -1 if the
 	 *         process failed.
 	 */
-	public static long retrieveDataAndRetrain() {
+	public long retrieveDataAndRetrain() {
 		LOG.trace("Retrieving data objects from database...");
-		
+
 		waitForPersistence();
-		
+
 		List<OrderItem> items = null;
 		List<Order> orders = null;
 		// retrieve
@@ -163,7 +178,7 @@ public final class TrainingSynchronizer {
 		return items.size() + orders.size();
 	}
 
-	private static void filterLists(List<OrderItem> orderItems, List<Order> orders) {
+	private void filterLists(List<OrderItem> orderItems, List<Order> orders) {
 		// since we are not registered ourselves, we can multicast to all services
 		List<Response> maxTimeResponses = ServiceLoadBalancer.multicastRESTOperation(Service.RECOMMENDER,
 				"train/timestamp", Response.class,
@@ -178,7 +193,7 @@ public final class TrainingSynchronizer {
 				}
 				maxTime = Math.min(maxTime, milliTS);
 			} else {
-				LOG.warn("Service " + response.toString() + " was not available for time-check.");
+				LOG.warn("Service " + response + " was not available for time-check.");
 			}
 		}
 		if (maxTime == Long.MAX_VALUE) {
@@ -191,7 +206,7 @@ public final class TrainingSynchronizer {
 		filterForMaxtimeStamp(orderItems, orders);
 	}
 
-	private static void filterForMaxtimeStamp(List<OrderItem> orderItems, List<Order> orders) {
+	private void filterForMaxtimeStamp(List<OrderItem> orderItems, List<Order> orders) {
 		// filter orderItems and orders and ignore newer entries.
 		List<Order> remove = new ArrayList<>();
 		for (Order or : orders) {
@@ -216,7 +231,7 @@ public final class TrainingSynchronizer {
 		orderItems.removeAll(removeItems);
 	}
 
-	private static long toMillis(String date) {
+	private long toMillis(String date) {
 		TemporalAccessor temporalAccessor = DateTimeFormatter.ISO_LOCAL_DATE_TIME.parse(date);
 		LocalDateTime localDateTime = LocalDateTime.from(temporalAccessor);
 		ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, ZoneId.systemDefault());
