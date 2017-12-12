@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import tools.descartes.petsupplystore.entities.Order;
 import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.recommender.algorithm.impl.UseFallBackException;
+import tools.descartes.petsupplystore.recommender.algorithm.impl.cf.SlopeOneRecommender;
 import tools.descartes.petsupplystore.recommender.algorithm.impl.pop.PopularityBasedRecommender;
 
 /**
@@ -43,7 +44,7 @@ public final class RecommenderSelector implements IRecommender {
 	 * Private Constructor.
 	 */
 	private RecommenderSelector() {
-		recommender = new PopularityBasedRecommender();
+		recommender = new SlopeOneRecommender();
 		fallbackrecommender = new PopularityBasedRecommender();
 	}
 
