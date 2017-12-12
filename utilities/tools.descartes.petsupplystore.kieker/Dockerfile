@@ -9,7 +9,7 @@ RUN mkdir /kieker/agent
 RUN mkdir /kieker/logs
 
 COPY kieker.monitoring.properties 									/kieker/config/kieker.monitoring.properties
-COPY src/main/webapp/WEB-INF/lib/kieker-1.14-SNAPSHOT-aspectj.jar 	/kieker/agent/agent.jar
+COPY src/main/webapp/WEB-INF/lib/kieker-1.13-aspectj.jar 	/kieker/agent/agent.jar
 
 COPY target/*.war 													/usr/local/tomcat/webapps/
 
