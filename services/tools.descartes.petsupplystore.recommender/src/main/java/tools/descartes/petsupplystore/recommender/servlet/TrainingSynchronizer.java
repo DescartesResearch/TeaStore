@@ -192,7 +192,7 @@ public final class TrainingSynchronizer {
 	}
 
 	private static void filterForMaxtimeStamp(List<OrderItem> orderItems, List<Order> orders) {
-		// filter orderItems and orders and ignore junger entries.
+		// filter orderItems and orders and ignore newer entries.
 		List<Order> remove = new ArrayList<>();
 		for (Order or : orders) {
 			if (toMillis(or.getTime()) > maxTime) {
