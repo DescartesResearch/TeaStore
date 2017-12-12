@@ -81,7 +81,6 @@ public class SlopeOneRecommender extends AbstractRecommender {
 	 */
 	@Override
 	protected List<Long> execute(Long userid, List<Long> currentItems) {
-
 		if (userid == null) {
 			throw new UseFallBackException(this.getClass().getName()
 					+ " does not support null userids. Use a pseudouser or switch to another approach.");

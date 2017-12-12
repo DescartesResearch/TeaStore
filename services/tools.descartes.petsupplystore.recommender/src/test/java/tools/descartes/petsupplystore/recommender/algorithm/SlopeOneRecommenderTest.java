@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.junit.Assert;
 
+import tools.descartes.petsupplystore.recommender.algorithm.impl.UseFallBackException;
 import tools.descartes.petsupplystore.recommender.algorithm.impl.cf.SlopeOneRecommender;
 
 /**
@@ -56,20 +57,31 @@ public class SlopeOneRecommenderTest extends AbstractRecommenderFunctionalityTes
 		checkDiffMatrix();
 		checkFreqMatrix();
 		// test single
-		List<Long> result = getAlgo().recommendProducts(getAllUsers().get(1).getId(), getRecommendSingle());
-		Assert.assertEquals(3L, result.get(0).longValue());
-		Assert.assertEquals(4L, result.get(1).longValue());
-		Assert.assertEquals(1L, result.get(2).longValue());
+		List<Long> result = getAlgo().recommendProducts(100L, getRecommendSingle());
+		Assert.assertEquals(4L, result.get(0).longValue());
+		try {
+			Assert.assertEquals(3L, result.get(1).longValue());
+			Assert.assertEquals(1L, result.get(2).longValue());
+		} catch (AssertionError e) {
+			// Result should contain 3 or 1 on position 1
+			Assert.assertEquals(1L, result.get(1).longValue());
+			Assert.assertEquals(3L, result.get(2).longValue());
+		}
 		Assert.assertEquals(5L, result.get(3).longValue());
 		Assert.assertEquals(4, result.size());
 
 		// test single with different user
-		result = getAlgo().recommendProducts(getAllUsers().get(2).getId(), getRecommendSingle());
-		Assert.assertEquals(3L, result.get(0).longValue());
-		Assert.assertEquals(4L, result.get(1).longValue());
-		Assert.assertEquals(1L, result.get(2).longValue());
-		Assert.assertEquals(5L, result.get(3).longValue());
-		Assert.assertEquals(4, result.size());
+		try {
+			result = getAlgo().recommendProducts(102L, getRecommendSingle());
+		} catch (UseFallBackException e) {
+			// expected
+		}
+		// test single with null user
+		try {
+			result = getAlgo().recommendProducts(null, getRecommendSingle());
+		} catch (UseFallBackException e) {
+			// expected
+		}
 	}
 
 	/*
@@ -85,24 +97,63 @@ public class SlopeOneRecommenderTest extends AbstractRecommenderFunctionalityTes
 		checkDiffMatrix();
 		checkFreqMatrix();
 		// test multi
-		List<Long> result = getAlgo().recommendProducts(getAllUsers().get(0).getId(), getRecommendMulti());
-		Assert.assertEquals(2L, result.get(0).longValue());
-		Assert.assertEquals(4L, result.get(1).longValue());
+		List<Long> result = getAlgo().recommendProducts(100L, getRecommendMulti());
+		Assert.assertEquals(4L, result.get(0).longValue());
+		try {
+			Assert.assertEquals(2L, result.get(1).longValue());
+			Assert.assertEquals(1L, result.get(2).longValue());
+		} catch (AssertionError e) {
+			// Result should contain 2 or 1 on position 1
+			Assert.assertEquals(1L, result.get(1).longValue());
+			Assert.assertEquals(2L, result.get(2).longValue());
+		}
+		Assert.assertEquals(3, result.size());
+
+		// test multi with different user
+		try {
+			result = getAlgo().recommendProducts(102L, getRecommendMulti());
+		} catch (UseFallBackException e) {
+			// expected
+		}
+		
+		// test multi with null user
+		try {
+			result = getAlgo().recommendProducts(null, getRecommendMulti());
+		} catch (UseFallBackException e) {
+			// expected
+		}
+
+		// test multi with different user
+		result = getAlgo().recommendProducts(104L, getRecommendMulti());
+		Assert.assertEquals(4L, result.get(0).longValue());
+		try {
+			Assert.assertEquals(2L, result.get(1).longValue());
+			Assert.assertEquals(1L, result.get(2).longValue());
+		} catch (AssertionError e) {
+			// Result should contain 2 or 1 on position 1
+			Assert.assertEquals(1L, result.get(1).longValue());
+			Assert.assertEquals(2L, result.get(2).longValue());
+		}
+		Assert.assertEquals(3, result.size());
+
+		// test multi with different user
+		result = getAlgo().recommendProducts(105L, getRecommendMulti());
+		try {
+			Assert.assertEquals(4L, result.get(0).longValue());
+			Assert.assertEquals(2L, result.get(1).longValue());
+		}  catch (AssertionError e) {
+			// Result should contain 2 or 1 on position 1
+			Assert.assertEquals(2L, result.get(0).longValue());
+			Assert.assertEquals(4L, result.get(1).longValue());
+		}
 		Assert.assertEquals(1L, result.get(2).longValue());
 		Assert.assertEquals(3, result.size());
 
 		// test multi with different user
-		result = getAlgo().recommendProducts(getAllUsers().get(2).getId(), getRecommendMulti());
+		result = getAlgo().recommendProducts(101L, getRecommendMulti());
 		Assert.assertEquals(2L, result.get(0).longValue());
-		Assert.assertEquals(4L, result.get(1).longValue());
-		Assert.assertEquals(1L, result.get(2).longValue());
-		Assert.assertEquals(3, result.size());
-
-		// test multi with different user
-		result = getAlgo().recommendProducts(getAllUsers().get(4).getId(), getRecommendMulti());
-		Assert.assertEquals(2L, result.get(0).longValue());
-		Assert.assertEquals(4L, result.get(1).longValue());
-		Assert.assertEquals(1L, result.get(2).longValue());
+		Assert.assertEquals(1L, result.get(1).longValue());
+		Assert.assertEquals(4L, result.get(2).longValue());
 		Assert.assertEquals(3, result.size());
 
 		// check that matrices still not changed
