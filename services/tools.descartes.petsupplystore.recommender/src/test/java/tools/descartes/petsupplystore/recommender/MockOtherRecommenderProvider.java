@@ -34,7 +34,7 @@ public class MockOtherRecommenderProvider {
 	/**
 	 * The timestamp to mock. Should include and exclude some entries.
 	 */
-	private static final String TIMESTAMP = "1495010140000";
+	private static final String TIMESTAMP = "1500910140000";
 
 	/**
 	 * @return the timestamp

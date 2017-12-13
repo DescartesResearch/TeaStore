@@ -27,6 +27,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import tools.descartes.petsupplystore.entities.OrderItem;
+import tools.descartes.petsupplystore.recommender.servlet.TrainingSynchronizer;
 import tools.descartes.petsupplystore.registryclient.Service;
 
 /**
@@ -115,10 +116,8 @@ public class RecommenderEndpointTest extends AbstractRecommenderRestTest {
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
 		List<Long> recommended = response.readEntity(new GenericType<List<Long>>() {
 		});
-		// these would be the results of all orders
-		// List<Long> expected = Arrays.asList(191L, 298L, 88L, 4L, 7L, 425L, 22L, 180L,
-		// 160L, 706L);
-		List<Long> expected = Arrays.asList(191L, 298L, 88L, 4L, 7L, 22L, 180L, 160L, 706L, 264L);
+		// these are the results of all orders
+		List<Long> expected = Arrays.asList(191L, 298L, 88L, 4L, 7L, 425L, 22L, 180L, 160L, 706L);
 		Assert.assertEquals(expected, recommended);
 
 		// with uid -> Preprocessed Slope One (Env variable defined above)
@@ -128,8 +127,48 @@ public class RecommenderEndpointTest extends AbstractRecommenderRestTest {
 
 		recommended = response.readEntity(new GenericType<List<Long>>() {
 		});
-		// these would be the results of all orders
-		// expected = Arrays.asList(345L, 48L, 88L, 320L, 30L, 3L, 1L, 2L, 4L, 5L);
+		// these are the results of all orders
+		expected = Arrays.asList(345L, 48L, 88L, 320L, 30L, 3L, 1L, 2L, 4L, 5L);
+		Assert.assertEquals(expected, recommended);
+
+		
+		// CHANGE TIMESTAMP
+		// we somewhat "cheat" do adapt the timestamp, in order to force an earlier synchronization
+		String newmax = "1495010140000";
+		TrainingSynchronizer.getInstance().setMaxTime(Long.parseLong(newmax));
+		
+		// train again
+		response = ClientBuilder.newBuilder().build().target(RecommenderEndpointTest.TRAIN_TARGET)
+				.request(MediaType.TEXT_PLAIN).get();
+		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
+		str = response.readEntity(String.class);
+		Assert.assertTrue("The return string must report the successful training.",
+				str.startsWith("The (re)train was succesfully done."));
+		// after the training, we get our timestamp
+		response = ClientBuilder.newBuilder().build().target(RecommenderEndpointTest.TIMESTAMP_TARGET)
+				.request(MediaType.TEXT_PLAIN).get();
+		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
+		str = response.readEntity(String.class);
+		Assert.assertEquals(newmax, str);
+		
+		// without uid -> fallback (Popbased recommender)
+		response = ClientBuilder.newBuilder().build().target(RECOMMEND_TARGET).request(MediaType.APPLICATION_JSON)
+				.post(Entity.entity(list, MediaType.APPLICATION_JSON));
+		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
+		recommended = response.readEntity(new GenericType<List<Long>>() {
+		});
+		// these results are different with a different timestamp
+		expected = Arrays.asList(191L, 298L, 88L, 4L, 7L, 22L, 180L, 160L, 706L, 264L);
+		Assert.assertEquals(expected, recommended);
+
+		// with uid -> Preprocessed Slope One (Env variable defined above)
+		response = ClientBuilder.newBuilder().build().target(RECOMMEND_TARGET).queryParam("uid", uid)
+				.request(MediaType.APPLICATION_JSON).post(Entity.entity(list, MediaType.APPLICATION_JSON));
+		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
+
+		recommended = response.readEntity(new GenericType<List<Long>>() {
+		});
+		// these results actually did not change
 		expected = Arrays.asList(345L, 48L, 88L, 320L, 30L, 3L, 1L, 2L, 4L, 5L);
 		Assert.assertEquals(expected, recommended);
 
