@@ -34,8 +34,15 @@ public class MockOtherRecommenderProvider {
 	/**
 	 * The timestamp to mock. Should include and exclude some entries.
 	 */
-	public static final String TIMESTAMP = "1500010140000";
+	private static final String TIMESTAMP = "1495010140000";
 
+	/**
+	 * @return the timestamp
+	 */
+	public static String getTimestamp() {
+		return TIMESTAMP;
+	}
+	
 	private int port;
 
 	/**
@@ -49,7 +56,7 @@ public class MockOtherRecommenderProvider {
 		this.port = rule.port();
 		rule.stubFor(
 				WireMock.get(WireMock.urlEqualTo("/" + Service.RECOMMENDER.getServiceName() + "/rest/train/timestamp"))
-						.willReturn(WireMock.okJson(TIMESTAMP)));
+						.willReturn(WireMock.okJson(getTimestamp())));
 	}
 
 	/**

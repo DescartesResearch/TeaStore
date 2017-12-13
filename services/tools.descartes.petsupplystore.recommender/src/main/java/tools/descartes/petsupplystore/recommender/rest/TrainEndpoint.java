@@ -77,7 +77,6 @@ public class TrainEndpoint {
 	@GET
 	@Path("timestamp")
 	public Response getTimeStamp() {
-		long time = TrainingSynchronizer.getInstance().getMaxTime();
 		if (TrainingSynchronizer.getInstance().getMaxTime() == Long.MIN_VALUE) {
 			return Response.status(Response.Status.PRECONDITION_FAILED.getStatusCode())
 					.entity("The collection of the current maxTime was not possible.").build();
