@@ -104,8 +104,8 @@ public final class RecommenderSelector implements IRecommender {
 		try {
 			return recommender.recommendProducts(userid, currentItems);
 		} catch (UseFallBackException e) {
-			LOG.warn(
-					"Executing" + recommender.getClass().getName() + "recommender failed. Using fallback recommender.");
+			LOG.warn("Executing " + recommender.getClass().getName()
+					+ "recommender failed. Using fallback recommender.");
 			return fallbackrecommender.recommendProducts(userid, currentItems);
 		}
 	}

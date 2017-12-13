@@ -78,10 +78,10 @@ public final class TrainingSynchronizer {
 	private static final Logger LOG = LoggerFactory.getLogger(TrainingSynchronizer.class);
 
 	/**
-	 * The maximum considered time in milliseconds. Long.MAX_VALUE signals no entry,
+	 * The maximum considered time in milliseconds. Long.MIN_VALUE signals no entry,
 	 * e.g. all orders are used for training.
 	 */
-	private long maxTime = Long.MAX_VALUE;
+	private long maxTime = Long.MIN_VALUE;
 
 	/**
 	 * @return the maxTime
@@ -188,15 +188,16 @@ public final class TrainingSynchronizer {
 			if (response != null && response.getStatus() == Response.Status.OK.getStatusCode()) {
 				// only consider if status was fine
 				long milliTS = response.readEntity(Long.class);
-				if (maxTime != Long.MAX_VALUE && maxTime != milliTS) {
-					LOG.warn("Services disagree about timestamp: " + maxTime + " vs " + milliTS + ".");
+				if (maxTime != Long.MIN_VALUE && maxTime != milliTS) {
+					LOG.warn("Services disagree about timestamp: " + maxTime + " vs " + milliTS
+							+ ". Therfore using the minimum.");
 				}
 				maxTime = Math.min(maxTime, milliTS);
 			} else {
 				LOG.warn("Service " + response + " was not available for time-check.");
 			}
 		}
-		if (maxTime == Long.MAX_VALUE) {
+		if (maxTime == Long.MIN_VALUE) {
 			// we are the only known service
 			// therefore we find max and set it
 			for (Order or : orders) {
