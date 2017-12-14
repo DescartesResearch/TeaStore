@@ -15,10 +15,6 @@ package tools.descartes.petsupplystore.recommender;
 
 import java.util.Arrays;
 
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.LifecycleState;
@@ -39,9 +35,9 @@ import tools.descartes.petsupplystore.recommender.servlet.RecommenderStartup;
 import tools.descartes.petsupplystore.registryclient.Service;
 
 /**
- * Abstract base for testing of the stores rest functionality.
+ * Abstract base for testing of the recommender rest functionality.
  * 
- * @author Simon Eismann
+ * @author Johannes Grohmann
  *
  */
 public abstract class AbstractRecommenderRestTest {
@@ -50,14 +46,23 @@ public abstract class AbstractRecommenderRestTest {
 	 * Port for testing recommender.
 	 */
 	protected static final int RECOMMENDER_TEST_PORT = 3002;
+
 	/**
 	 * The wiremock rule for the mock persistence.
 	 */
 	@Rule
-	public WireMockRule persistenceWireMockRule
-		= new WireMockRule(MockPersistenceProvider.DEFAULT_MOCK_PERSISTENCE_PORT);
+	public WireMockRule persistenceWireMockRule = new WireMockRule(
+			MockPersistenceProvider.DEFAULT_MOCK_PERSISTENCE_PORT);
 	private MockPersistenceProvider persistence;
-	
+
+	/**
+	 * The wiremock rule for the mock second recommender.
+	 */
+	@Rule
+	public WireMockRule otherRecommenderWireMockRule = new WireMockRule(
+			MockOtherRecommenderProvider.DEFAULT_MOCK_RECOMMENDER_PORT);
+	private MockOtherRecommenderProvider otherrecommender;
+
 	/**
 	 * The wiremock rule for the mock registry.
 	 */
@@ -76,122 +81,142 @@ public abstract class AbstractRecommenderRestTest {
 	@Before
 	public void setup() throws Throwable {
 		persistence = new MockPersistenceProvider(persistenceWireMockRule);
-		registry = new MockRegistry(registryWireMockRule,
-				Arrays.asList(persistence.getPort()),
-				Arrays.asList(RECOMMENDER_TEST_PORT));
-		
-		//debuggging response 
-		Response response0 = ClientBuilder.newBuilder().build()
-				.target("http://localhost:" + MockRegistry.DEFAULT_MOCK_REGISTRY_PORT
-				+ "/tools.descartes.petsupplystore.registry/rest/services/"
-						+ Service.PERSISTENCE.getServiceName() + "/")
-				.request(MediaType.APPLICATION_JSON).get();
-		System.out.println(response0.getStatus() + ":" + response0.readEntity(String.class));
-		
-		Response response1 = ClientBuilder.newBuilder().build()
-				.target("http://localhost:" + persistence.getPort()
-				+ "/tools.descartes.petsupplystore.persistence/rest/orderitems")
-				.request(MediaType.APPLICATION_JSON).get();
-		System.out.println(response1.getStatus() + ":" + response1.readEntity(String.class));
-		
-		// Setup registry
-//		registryTomcat = new Tomcat();
-//		registryTomcat.setPort(3000);
-//		registryTomcat.setBaseDir(testWorkingDir);
-//		Context context = registryTomcat.addWebapp(CONTEXT, testWorkingDir);
-//		ResourceConfig restServletConfig = new ResourceConfig();
-//		restServletConfig.register(RegistryREST.class);
-//		restServletConfig.register(Registry.class);
-//		ServletContainer restServlet = new ServletContainer(restServletConfig);
-//		registryTomcat.addServlet(CONTEXT, "restServlet", restServlet);
-//		context.addServletMappingDecoded("/rest/*", "restServlet");
-//		registryTomcat.start();
 
-		// Setup persistance tomcat
-//		persistanceTomcat = new Tomcat();
-//		persistanceTomcat.setPort(3001);
-//		persistanceTomcat.setBaseDir(testWorkingDir);
-//		persistanceTomcat.enableNaming();
-//		Context context2 = persistanceTomcat.addWebapp("/tools.descartes.petsupplystore.persistence", testWorkingDir);
-//		ContextEnvironment registryURL = new ContextEnvironment();
-//		registryURL.setDescription("");
-//		registryURL.setOverride(false);
-//		registryURL.setType("java.lang.String");
-//		registryURL.setName("registryURL");
-//		registryURL.setValue("http://localhost:3000/test/rest/services/");
-//		context2.getNamingResources().addEnvironment(registryURL);
-//		ContextEnvironment servicePort = new ContextEnvironment();
-//		servicePort.setDescription("");
-//		servicePort.setOverride(false);
-//		servicePort.setType("java.lang.String");
-//		servicePort.setName("servicePort");
-//		servicePort.setValue("3001");
-//		context2.getNamingResources().addEnvironment(servicePort);
-//		ResourceConfig restServletConfig2 = new ResourceConfig();
-//		restServletConfig2.register(CategoryEndpoint.class);
-//		restServletConfig2.register(OrderEndpoint.class);
-//		restServletConfig2.register(OrderItemEndpoint.class);
-//		restServletConfig2.register(ProductEndpoint.class);
-//		restServletConfig2.register(UserEndpoint.class);
-//		ServletContainer restServlet2 = new ServletContainer(restServletConfig2);
-//		persistanceTomcat.addServlet("/tools.descartes.petsupplystore.persistence", "restServlet", restServlet2);
-//		context2.addServletMappingDecoded("/rest/*", "restServlet");
-//		context2.addApplicationListener(InitialDataGenerationDaemon.class.getName());
-//		persistanceTomcat.start();
+		otherrecommender = new MockOtherRecommenderProvider(otherRecommenderWireMockRule);
+
+		setRegistry(new MockRegistry(registryWireMockRule, Arrays.asList(getPersistence().getPort()),
+				Arrays.asList(RECOMMENDER_TEST_PORT, otherrecommender.getPort())));
+
+		// debuggging response
+		// Response response1 = ClientBuilder
+		// .newBuilder().build().target("http://localhost:" + otherrecommender.getPort()
+		// + "/"
+		// + Service.RECOMMENDER.getServiceName() + "/rest/train/timestamp")
+		// .request(MediaType.APPLICATION_JSON).get();
+		// System.out.println(response1.getStatus() + ":" +
+		// response1.readEntity(String.class));
+
+		// debuggging response
+		// Response response0 = ClientBuilder.newBuilder().build()
+		// .target("http://localhost:" + MockRegistry.DEFAULT_MOCK_REGISTRY_PORT
+		// + "/tools.descartes.petsupplystore.registry/rest/services/"
+		// + Service.PERSISTENCE.getServiceName() + "/")
+		// .request(MediaType.APPLICATION_JSON).get();
+		// System.out.println(response0.getStatus() + ":" +
+		// response0.readEntity(String.class));
+		//
+		// Response response1 = ClientBuilder.newBuilder().build()
+		// .target("http://localhost:" + persistence.getPort()
+		// + "/tools.descartes.petsupplystore.persistence/rest/orderitems")
+		// .request(MediaType.APPLICATION_JSON).get();
+		// System.out.println(response1.getStatus() + ":" +
+		// response1.readEntity(String.class));
 
 		// Setup recommend tomcat
 		testTomcat = new Tomcat();
 		testTomcat.setPort(RECOMMENDER_TEST_PORT);
 		testTomcat.setBaseDir(testWorkingDir);
 		testTomcat.enableNaming();
-		Context context3 = testTomcat.addWebapp("/" + Service.RECOMMENDER.getServiceName(), testWorkingDir);
+		Context context = testTomcat.addWebapp("/" + Service.RECOMMENDER.getServiceName(), testWorkingDir);
 		ContextEnvironment registryURL3 = new ContextEnvironment();
 		registryURL3.setDescription("");
 		registryURL3.setOverride(false);
 		registryURL3.setType("java.lang.String");
 		registryURL3.setName("registryURL");
-		registryURL3.setValue("http://localhost:" + registry.getPort()
-		+ "/tools.descartes.petsupplystore.registry/rest/services/");
-		context3.getNamingResources().addEnvironment(registryURL3);
+		registryURL3.setValue(
+				"http://localhost:" + registry.getPort() + "/tools.descartes.petsupplystore.registry/rest/services/");
+		context.getNamingResources().addEnvironment(registryURL3);
 		ContextEnvironment servicePort3 = new ContextEnvironment();
 		servicePort3.setDescription("");
 		servicePort3.setOverride(false);
 		servicePort3.setType("java.lang.String");
 		servicePort3.setName("servicePort");
 		servicePort3.setValue("" + RECOMMENDER_TEST_PORT);
-		context3.getNamingResources().addEnvironment(servicePort3);
+		context.getNamingResources().addEnvironment(servicePort3);
 		ResourceConfig restServletConfig3 = new ResourceConfig();
 		restServletConfig3.register(TrainEndpoint.class);
 		restServletConfig3.register(RecommendEndpoint.class);
 		restServletConfig3.register(RecommendSingleEndpoint.class);
 		ServletContainer restServlet3 = new ServletContainer(restServletConfig3);
 		testTomcat.addServlet("/" + Service.RECOMMENDER.getServiceName(), "restServlet", restServlet3);
-		context3.addServletMappingDecoded("/rest/*", "restServlet");
-		context3.addApplicationListener(RecommenderStartup.class.getName());
+		context.addServletMappingDecoded("/rest/*", "restServlet");
+		context.addApplicationListener(RecommenderStartup.class.getName());
+
+		ContextEnvironment recommender = new ContextEnvironment();
+		recommender.setDescription("");
+		recommender.setOverride(false);
+		recommender.setType("java.lang.String");
+		recommender.setName("recommenderAlgorithm");
+		recommender.setValue("PreprocessedSlopeOne");
+		context.getNamingResources().addEnvironment(recommender);
+
+		ContextEnvironment retrainlooptime = new ContextEnvironment();
+		retrainlooptime.setDescription("");
+		retrainlooptime.setOverride(false);
+		retrainlooptime.setType("java.lang.Long");
+		retrainlooptime.setName("recommenderLoopTime");
+		retrainlooptime.setValue("100");
+		context.getNamingResources().addEnvironment(retrainlooptime);
+
 		testTomcat.start();
-		
+
 		try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {
 		}
 	}
-	
+
 	/**
 	 * Dismantle Tomcat.
 	 */
 	@After
 	public void dismantle() {
 		try {
-			if (testTomcat.getServer() != null
-					&& testTomcat.getServer().getState() != LifecycleState.DESTROYED) {
-		        if (testTomcat.getServer().getState() != LifecycleState.STOPPED) {
-		        	testTomcat.stop();
-		        }
-		        testTomcat.destroy();
-		    }
+			if (testTomcat.getServer() != null && testTomcat.getServer().getState() != LifecycleState.DESTROYED) {
+				if (testTomcat.getServer().getState() != LifecycleState.STOPPED) {
+					testTomcat.stop();
+				}
+				testTomcat.destroy();
+			}
 		} catch (LifecycleException e) {
 			System.out.println("Exception shutting down testing Tomcat: " + e.getMessage());
 		}
+
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * @return the persistence
+	 */
+	public MockPersistenceProvider getPersistence() {
+		return persistence;
+	}
+
+	/**
+	 * @param persistence
+	 *            the persistence to set
+	 */
+	public void setPersistence(MockPersistenceProvider persistence) {
+		this.persistence = persistence;
+	}
+
+	/**
+	 * @return the registry
+	 */
+	public MockRegistry getRegistry() {
+		return registry;
+	}
+
+	/**
+	 * @param registry
+	 *            the registry to set
+	 */
+	public void setRegistry(MockRegistry registry) {
+		this.registry = registry;
 	}
 
 }

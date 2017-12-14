@@ -13,7 +13,12 @@
  */
 package tools.descartes.petsupplystore.recommender.algorithm;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +26,8 @@ import org.slf4j.LoggerFactory;
 import tools.descartes.petsupplystore.entities.Order;
 import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.recommender.algorithm.impl.UseFallBackException;
+import tools.descartes.petsupplystore.recommender.algorithm.impl.cf.PreprocessedSlopeOneRecommender;
+import tools.descartes.petsupplystore.recommender.algorithm.impl.cf.SlopeOneRecommender;
 import tools.descartes.petsupplystore.recommender.algorithm.impl.pop.PopularityBasedRecommender;
 
 /**
@@ -30,6 +37,24 @@ import tools.descartes.petsupplystore.recommender.algorithm.impl.pop.PopularityB
  *
  */
 public final class RecommenderSelector implements IRecommender {
+
+	/**
+	 * This map lists all currently available recommending approaches and assigns
+	 * them their "name" for the environment variable.
+	 */
+	private static Map<String, Class<? extends IRecommender>> RECOMMENDERS = new HashMap<>();
+
+	static {
+		RECOMMENDERS = new HashMap<String, Class<? extends IRecommender>>();
+		RECOMMENDERS.put("Popularity", PopularityBasedRecommender.class);
+		RECOMMENDERS.put("SlopeOne", SlopeOneRecommender.class);
+		RECOMMENDERS.put("PreprocessedSlopeOne", PreprocessedSlopeOneRecommender.class);
+	}
+
+	/**
+	 * The default recommender to choose, if no other recommender was set.
+	 */
+	private static final Class<? extends IRecommender> DEFAULT_RECOMMENDER = SlopeOneRecommender.class;
 
 	private static final Logger LOG = LoggerFactory.getLogger(RecommenderSelector.class);
 
@@ -43,8 +68,34 @@ public final class RecommenderSelector implements IRecommender {
 	 * Private Constructor.
 	 */
 	private RecommenderSelector() {
-		recommender = new PopularityBasedRecommender();
 		fallbackrecommender = new PopularityBasedRecommender();
+		try {
+			String recommendername = (String) new InitialContext().lookup("java:comp/env/recommenderAlgorithm");
+			// if a specific algorithm is set, we can use that algorithm
+			if (RECOMMENDERS.containsKey(recommendername)) {
+				recommender = RECOMMENDERS.get(recommendername).newInstance();
+			} else {
+				LOG.warn("Recommendername: " + recommendername
+						+ " was not found. Using default recommender (SlopeOneRecommeder).");
+				recommender = DEFAULT_RECOMMENDER.newInstance();
+			}
+		} catch (InstantiationException | IllegalAccessException e) {
+			// if creating a new instance fails
+			e.printStackTrace();
+			LOG.warn("Could not create an instance of the requested recommender. Using fallback.");
+			recommender = fallbackrecommender;
+		} catch (NamingException e) {
+			// if nothing was set
+			LOG.info("Recommender not set. Using default recommender (SlopeOneRecommeder).");
+			try {
+				recommender = DEFAULT_RECOMMENDER.newInstance();
+			} catch (InstantiationException | IllegalAccessException e1) {
+				// also the default algorithm could fail
+				e1.printStackTrace();
+				LOG.warn("Could not create an instance of DEFAULT_RECOMMENDER " + DEFAULT_RECOMMENDER.getName() + ".");
+				recommender = fallbackrecommender;
+			}
+		}
 	}
 
 	@Override
@@ -53,8 +104,8 @@ public final class RecommenderSelector implements IRecommender {
 		try {
 			return recommender.recommendProducts(userid, currentItems);
 		} catch (UseFallBackException e) {
-			LOG.warn(
-					"Executing" + recommender.getClass().getName() + "recommender failed. Using fallback recommender.");
+			LOG.warn("Executing " + recommender.getClass().getName()
+					+ "recommender failed. Using fallback recommender.");
 			return fallbackrecommender.recommendProducts(userid, currentItems);
 		}
 	}

@@ -14,6 +14,7 @@
 package tools.descartes.petsupplystore.recommender;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.ws.rs.client.ClientBuilder;
@@ -26,6 +27,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import tools.descartes.petsupplystore.entities.OrderItem;
+import tools.descartes.petsupplystore.recommender.servlet.TrainingSynchronizer;
 import tools.descartes.petsupplystore.registryclient.Service;
 
 /**
@@ -35,61 +37,182 @@ import tools.descartes.petsupplystore.registryclient.Service;
  *
  */
 public class RecommenderEndpointTest extends AbstractRecommenderRestTest {
-	
-	private static final String RECOMMENDER_REST_PREFIX =
-			"http://localhost:" + RECOMMENDER_TEST_PORT + "/" + Service.RECOMMENDER.getServiceName() + "/rest/";
-	private static final String TRAIN_TARGET = RECOMMENDER_REST_PREFIX + "train";
-	private static final String RECOMMEND_TARGET = RECOMMENDER_REST_PREFIX + "recommend";
-	private static final String RECOMMEND_SINGLE_TARGET = RECOMMENDER_REST_PREFIX + "recommendsingle";
-	
+
+	/**
+	 * Prefix for all recommender rest calls.
+	 */
+	public static final String RECOMMENDER_REST_PREFIX = "http://localhost:" + RECOMMENDER_TEST_PORT + "/"
+			+ Service.RECOMMENDER.getServiceName() + "/rest/";
+
+	/**
+	 * Endpoint for training.
+	 */
+	public static final String TRAIN_TARGET = RECOMMENDER_REST_PREFIX + "train";
+
+	/**
+	 * Endpoint for time synchronization.
+	 */
+	public static final String TIMESTAMP_TARGET = TRAIN_TARGET + "/timestamp";
+
+	/**
+	 * Endpoint for recommending (multi).
+	 */
+	public static final String RECOMMEND_TARGET = RECOMMENDER_REST_PREFIX + "recommend";
+
+	/**
+	 * Endpoint for recommending (single).
+	 */
+	public static final String RECOMMEND_SINGLE_TARGET = RECOMMENDER_REST_PREFIX + "recommendsingle";
+
 	/**
 	 * Run the access test.
 	 */
 	@Test
-	public void testRecommendEndpoint() {	
+	public void testRecommendInterface() {
+		performInterfaceTests();
+		performSynchronizationTests();
+	}
+
+	/**
+	 * Tests the synchronization behavior with other recommenders.
+	 */
+	public void performSynchronizationTests() {
+		// TEST SYNCHRONIZATION
+
+		// train again
+		Response response = ClientBuilder.newBuilder().build().target(RecommenderEndpointTest.TRAIN_TARGET)
+				.request(MediaType.TEXT_PLAIN).get();
+		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
+		String str = response.readEntity(String.class);
+		Assert.assertTrue("The return string must report the successful training.",
+				str.startsWith("The (re)train was succesfully done."));
+		// after the training, we get our timestamp
+		response = ClientBuilder.newBuilder().build().target(RecommenderEndpointTest.TIMESTAMP_TARGET)
+				.request(MediaType.TEXT_PLAIN).get();
+		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
+		str = response.readEntity(String.class);
+		Assert.assertEquals(MockOtherRecommenderProvider.getTimestamp(), str);
+
+		// TEST RESULTS
+		// test recommendation succeeds, even when uid is not present
+
+		// sample values
+		ArrayList<OrderItem> list = new ArrayList<OrderItem>();
+		list.add(new OrderItem());
+		list.get(list.size() - 1).setProductId(92);
+		list.add(new OrderItem());
+		list.get(list.size() - 1).setProductId(761);
+		list.add(new OrderItem());
+		list.get(list.size() - 1).setProductId(354);
+		list.add(new OrderItem());
+		list.get(list.size() - 1).setProductId(23);
+		list.add(new OrderItem());
+		list.get(list.size() - 1).setProductId(41);
+		String uid = "884";
+
+		// without uid -> fallback (Popbased recommender)
+		response = ClientBuilder.newBuilder().build().target(RECOMMEND_TARGET).request(MediaType.APPLICATION_JSON)
+				.post(Entity.entity(list, MediaType.APPLICATION_JSON));
+		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
+		List<Long> recommended = response.readEntity(new GenericType<List<Long>>() {
+		});
+		// these are the results of all orders
+		List<Long> expected = Arrays.asList(191L, 298L, 88L, 4L, 7L, 425L, 22L, 180L, 160L, 706L);
+		Assert.assertEquals(expected, recommended);
+
+		// with uid -> Preprocessed Slope One (Env variable defined above)
+		response = ClientBuilder.newBuilder().build().target(RECOMMEND_TARGET).queryParam("uid", uid)
+				.request(MediaType.APPLICATION_JSON).post(Entity.entity(list, MediaType.APPLICATION_JSON));
+		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
+
+		recommended = response.readEntity(new GenericType<List<Long>>() {
+		});
+		// these are the results of all orders
+		expected = Arrays.asList(345L, 48L, 88L, 320L, 30L, 3L, 1L, 2L, 4L, 5L);
+		Assert.assertEquals(expected, recommended);
+
+		
+		// CHANGE TIMESTAMP
+		// we somewhat "cheat" do adapt the timestamp, in order to force an earlier synchronization
+		String newmax = "1495010140000";
+		TrainingSynchronizer.getInstance().setMaxTime(Long.parseLong(newmax));
+		
+		// train again
+		response = ClientBuilder.newBuilder().build().target(RecommenderEndpointTest.TRAIN_TARGET)
+				.request(MediaType.TEXT_PLAIN).get();
+		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
+		str = response.readEntity(String.class);
+		Assert.assertTrue("The return string must report the successful training.",
+				str.startsWith("The (re)train was succesfully done."));
+		// after the training, we get our timestamp
+		response = ClientBuilder.newBuilder().build().target(RecommenderEndpointTest.TIMESTAMP_TARGET)
+				.request(MediaType.TEXT_PLAIN).get();
+		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
+		str = response.readEntity(String.class);
+		Assert.assertEquals(newmax, str);
+		
+		// without uid -> fallback (Popbased recommender)
+		response = ClientBuilder.newBuilder().build().target(RECOMMEND_TARGET).request(MediaType.APPLICATION_JSON)
+				.post(Entity.entity(list, MediaType.APPLICATION_JSON));
+		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
+		recommended = response.readEntity(new GenericType<List<Long>>() {
+		});
+		// these results are different with a different timestamp
+		expected = Arrays.asList(191L, 298L, 88L, 4L, 7L, 22L, 180L, 160L, 706L, 264L);
+		Assert.assertEquals(expected, recommended);
+
+		// with uid -> Preprocessed Slope One (Env variable defined above)
+		response = ClientBuilder.newBuilder().build().target(RECOMMEND_TARGET).queryParam("uid", uid)
+				.request(MediaType.APPLICATION_JSON).post(Entity.entity(list, MediaType.APPLICATION_JSON));
+		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
+
+		recommended = response.readEntity(new GenericType<List<Long>>() {
+		});
+		// these results actually did not change
+		expected = Arrays.asList(345L, 48L, 88L, 320L, 30L, 3L, 1L, 2L, 4L, 5L);
+		Assert.assertEquals(expected, recommended);
+
+	}
+
+	/**
+	 * Performs the interface tests for the REST interface.
+	 */
+	public void performInterfaceTests() {
 		// TEST RECOMMEND ENDPOINT
 		// Assert PUT Method is not allowed
-		Response response = ClientBuilder.newBuilder().build()
-				.target(RECOMMEND_TARGET)
+		Response response = ClientBuilder.newBuilder().build().target(RECOMMEND_TARGET)
 				.request(MediaType.APPLICATION_JSON).put(Entity.text(""));
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_METHOD_NOT_ALLOWED, response.getStatus());
 		// Assert GET Method is not allowed
-		response = ClientBuilder.newBuilder().build()
-				.target(RECOMMEND_TARGET)
-				.request(MediaType.APPLICATION_JSON).get();
+		response = ClientBuilder.newBuilder().build().target(RECOMMEND_TARGET).request(MediaType.APPLICATION_JSON)
+				.get();
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_METHOD_NOT_ALLOWED, response.getStatus());
 		// Assert DELETE Method is not allowed
-		response = ClientBuilder.newBuilder().build()
-				.target(RECOMMEND_TARGET)
-				.request(MediaType.APPLICATION_JSON).delete();
+		response = ClientBuilder.newBuilder().build().target(RECOMMEND_TARGET).request(MediaType.APPLICATION_JSON)
+				.delete();
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_METHOD_NOT_ALLOWED, response.getStatus());
 		// Assert calling recommend with single entity fails
-		response = ClientBuilder.newBuilder().build()
-				.target(RECOMMEND_TARGET)
-				.request(MediaType.APPLICATION_JSON).post(Entity.entity(new OrderItem(), MediaType.APPLICATION_JSON));
+		response = ClientBuilder.newBuilder().build().target(RECOMMEND_TARGET).request(MediaType.APPLICATION_JSON)
+				.post(Entity.entity(new OrderItem(), MediaType.APPLICATION_JSON));
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_BAD_REQUEST, response.getStatus());
 
 		List<OrderItem> list = new ArrayList<OrderItem>();
 
 		// TEST RECOMMENDSINGLE ENDPOINT
 		// Assert PUT Method is not allowed
-		response = ClientBuilder.newBuilder().build()
-				.target(RECOMMEND_SINGLE_TARGET)
+		response = ClientBuilder.newBuilder().build().target(RECOMMEND_SINGLE_TARGET)
 				.request(MediaType.APPLICATION_JSON).put(Entity.text(""));
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_METHOD_NOT_ALLOWED, response.getStatus());
 		// Assert GET Method is not allowed
-		response = ClientBuilder.newBuilder().build()
-				.target(RECOMMEND_SINGLE_TARGET)
+		response = ClientBuilder.newBuilder().build().target(RECOMMEND_SINGLE_TARGET)
 				.request(MediaType.APPLICATION_JSON).get();
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_METHOD_NOT_ALLOWED, response.getStatus());
 		// Assert DELETE Method is not allowed
-		response = ClientBuilder.newBuilder().build()
-				.target(RECOMMEND_SINGLE_TARGET)
+		response = ClientBuilder.newBuilder().build().target(RECOMMEND_SINGLE_TARGET)
 				.request(MediaType.APPLICATION_JSON).delete();
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_METHOD_NOT_ALLOWED, response.getStatus());
 		// Assert calling recommend with list entity fails
-		response = ClientBuilder.newBuilder().build()
-				.target(RECOMMEND_SINGLE_TARGET)
+		response = ClientBuilder.newBuilder().build().target(RECOMMEND_SINGLE_TARGET)
 				.request(MediaType.APPLICATION_JSON).post(Entity.entity(list, MediaType.APPLICATION_JSON));
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_BAD_REQUEST, response.getStatus());
 
@@ -97,31 +220,23 @@ public class RecommenderEndpointTest extends AbstractRecommenderRestTest {
 
 		// TEST TRAIN ENDPOINT
 		// Assert PUT Method is not allowed
-		response = ClientBuilder.newBuilder().build()
-				.target(TRAIN_TARGET)
-				.request(MediaType.TEXT_PLAIN).put(Entity.text(""));
+		response = ClientBuilder.newBuilder().build().target(TRAIN_TARGET).request(MediaType.TEXT_PLAIN)
+				.put(Entity.text(""));
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_METHOD_NOT_ALLOWED, response.getStatus());
 		// Assert POST Method is not allowed
-		response = ClientBuilder.newBuilder().build()
-				.target(TRAIN_TARGET)
-				.request(MediaType.TEXT_PLAIN).post(Entity.text(""));
+		response = ClientBuilder.newBuilder().build().target(TRAIN_TARGET).request(MediaType.TEXT_PLAIN)
+				.post(Entity.text(""));
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_METHOD_NOT_ALLOWED, response.getStatus());
 		// Assert DELETE Method is not allowed
-		response = ClientBuilder.newBuilder().build()
-				.target(TRAIN_TARGET)
-				.request(MediaType.TEXT_PLAIN).delete();
+		response = ClientBuilder.newBuilder().build().target(TRAIN_TARGET).request(MediaType.TEXT_PLAIN).delete();
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_METHOD_NOT_ALLOWED, response.getStatus());
 
 		// Assert calling train via GET is OK
-		response = ClientBuilder.newBuilder().build()
-				.target(TRAIN_TARGET)
-				.request(MediaType.TEXT_PLAIN).get();
+		response = ClientBuilder.newBuilder().build().target(TRAIN_TARGET).request(MediaType.TEXT_PLAIN).get();
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
 
 		// test training process finishes
-		response = ClientBuilder.newBuilder().build()
-				.target(TRAIN_TARGET)
-				.request(MediaType.TEXT_PLAIN).get();
+		response = ClientBuilder.newBuilder().build().target(TRAIN_TARGET).request(MediaType.TEXT_PLAIN).get();
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
 		String str = response.readEntity(String.class);
 		Assert.assertTrue("The return string must report the successful training.",
@@ -132,12 +247,10 @@ public class RecommenderEndpointTest extends AbstractRecommenderRestTest {
 		list = new ArrayList<OrderItem>();
 		String uid = "12345";
 		// test recommendation succeeds, even when uid is not present
-		response = ClientBuilder.newBuilder().build()
-				.target(RECOMMEND_TARGET)
-				.request(MediaType.APPLICATION_JSON).post(Entity.entity(list, MediaType.APPLICATION_JSON));
+		response = ClientBuilder.newBuilder().build().target(RECOMMEND_TARGET).request(MediaType.APPLICATION_JSON)
+				.post(Entity.entity(list, MediaType.APPLICATION_JSON));
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
-		response = ClientBuilder.newBuilder().build()
-				.target(RECOMMEND_TARGET).queryParam("uid", uid)
+		response = ClientBuilder.newBuilder().build().target(RECOMMEND_TARGET).queryParam("uid", uid)
 				.request(MediaType.APPLICATION_JSON).post(Entity.entity(list, MediaType.APPLICATION_JSON));
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
 		List<Long> recommended = response.readEntity(new GenericType<List<Long>>() {
@@ -154,19 +267,16 @@ public class RecommenderEndpointTest extends AbstractRecommenderRestTest {
 
 		// TEST RECOMMENDATION SINGLE
 		// checking if sending null fails
-		response = ClientBuilder.newBuilder().build()
-				.target(RECOMMEND_SINGLE_TARGET).queryParam("uid", uid)
+		response = ClientBuilder.newBuilder().build().target(RECOMMEND_SINGLE_TARGET).queryParam("uid", uid)
 				.request(MediaType.APPLICATION_JSON).post(Entity.entity(null, MediaType.APPLICATION_JSON));
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_INTERNAL_SERVER_ERROR, response.getStatus());
 
 		// test recommendation process is now available
 		// check if sending without uid, does not fail
-		response = ClientBuilder.newBuilder().build()
-				.target(RECOMMEND_SINGLE_TARGET)
+		response = ClientBuilder.newBuilder().build().target(RECOMMEND_SINGLE_TARGET)
 				.request(MediaType.APPLICATION_JSON).post(Entity.entity(new OrderItem(), MediaType.APPLICATION_JSON));
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
-		response = ClientBuilder.newBuilder().build()
-				.target(RECOMMEND_SINGLE_TARGET).queryParam("uid", uid)
+		response = ClientBuilder.newBuilder().build().target(RECOMMEND_SINGLE_TARGET).queryParam("uid", uid)
 				.request(MediaType.APPLICATION_JSON).post(Entity.entity(new OrderItem(), MediaType.APPLICATION_JSON));
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
 		recommended = response.readEntity(new GenericType<List<Long>>() {
@@ -179,5 +289,6 @@ public class RecommenderEndpointTest extends AbstractRecommenderRestTest {
 		} catch (ArrayStoreException e) {
 			Assert.fail("The list should contain Long ids.");
 		}
+
 	}
 }
