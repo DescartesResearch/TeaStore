@@ -15,6 +15,7 @@ COPY target/*.war 													/usr/local/tomcat/webapps/
 
 ENV JAVA_OPTS="${JAVA_OPTS} -javaagent:/kieker/agent/agent.jar"
 ENV JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.configuration=/kieker/config/kieker.monitoring.properties"
+ENV JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.writer.amqp.AmqpWriter.uri=amqp://admin:nimda@${RABBITMQ_PORT}"
 ENV JAVA_OPTS="${JAVA_OPTS} -Daj.weaving.verbose=true"
 ENV JAVA_OPTS="${JAVA_OPTS} -Dorg.aspectj.weaver.loadtime.configuration=/aop.xml"
 ENV JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.skipDefaultAOPConfiguration=true"
