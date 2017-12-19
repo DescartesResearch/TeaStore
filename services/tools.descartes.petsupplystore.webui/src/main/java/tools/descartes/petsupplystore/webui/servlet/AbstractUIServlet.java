@@ -70,7 +70,10 @@ public abstract class AbstractUIServlet extends HttpServlet {
 				if (cook.getName().equals(BLOB)) {
 					ObjectMapper o = new ObjectMapper();
 					try {
-						return o.readValue(URLDecoder.decode(cook.getValue(), "UTF-8"), SessionBlob.class);
+						SessionBlob blob = o.readValue(URLDecoder.decode(cook.getValue(), "UTF-8"), SessionBlob.class);
+						if(blob != null) {
+						return blob;
+						} 
 					} catch (IOException e) {
 						throw new IllegalStateException("Cookie corrupted!");
 					}
