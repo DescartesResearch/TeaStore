@@ -54,7 +54,16 @@
 		<finalName>tools.descartes.petsupplystore.kieker.rabbitmq</finalName>
 	</build>
 
-	<packaging>pom</packaging>
+	<dependencies>
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>7.0</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<packaging>war</packaging>
 	<parent>
 		<groupId>tools.descartes.petsupplystore</groupId>
 		<artifactId>parent</artifactId>

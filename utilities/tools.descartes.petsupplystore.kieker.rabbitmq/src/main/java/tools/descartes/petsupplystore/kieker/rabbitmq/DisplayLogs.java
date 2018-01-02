@@ -1,0 +1,23 @@
+package tools.descartes.petsupplystore.kieker.rabbitmq;
+
+import java.io.IOException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+
+@WebServlet("/logs")
+public class DisplayLogs extends HttpServlet{
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * {@inheritDoc}
+	 * @throws IOException 
+	 */
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		response.getWriter().append("Hello World!");
+	}
+
+}
