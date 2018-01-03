@@ -81,7 +81,13 @@
 			<artifactId>rabbitmq-client</artifactId>
 			<version>1.3.0</version>
 		</dependency>
-
+		<dependency>
+			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>kieker</artifactId>
+			<version>1.14</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/kieker-1.14-SNAPSHOT-aspectj.jar</systemPath>
+		</dependency>
 	</dependencies>
 
 	<packaging>war</packaging>
