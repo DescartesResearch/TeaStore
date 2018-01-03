@@ -61,6 +61,11 @@
 			<version>7.0</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>kieker</artifactId>
+			<version>1.13</version>
+		</dependency>
 	</dependencies>
 
 	<packaging>war</packaging>
