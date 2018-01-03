@@ -37,19 +37,26 @@ public class DisplayLogs extends HttpServlet{
 
 		final IAnalysisController analysisInstance = new AnalysisController();
 
+		System.out.println("1");
 		final Configuration logReaderConfiguration = new Configuration();
+		System.out.println("2");
 		logReaderConfiguration.setProperty(AmqpReader.CONFIG_PROPERTY_URI, URI);
 		logReaderConfiguration.setProperty(AmqpReader.CONFIG_PROPERTY_QUEUENAME, QUEUENAME);
+		System.out.println("3");
 
 		final AmqpReader logReader = new AmqpReader(logReaderConfiguration, analysisInstance);
+		System.out.println("4");
 		// Create and register our own consumer
-		final StdOutDumpConsumer consumer = new StdOutDumpConsumer(new Configuration(), analysisInstance);		
+		final StdOutDumpConsumer consumer = new StdOutDumpConsumer(new Configuration(), analysisInstance);
+		System.out.println("5");		
 
 		try {
 			// Connect both components.
 			analysisInstance.connect(logReader, AmqpReader.OUTPUT_PORT_NAME_RECORDS, consumer, StdOutDumpConsumer.INPUT_PORT_NAME);
+			System.out.println("6");
 			// Start the analysis
 			analysisInstance.run();
+			System.out.println("7");
 		} catch (final AnalysisConfigurationException e) {
 			e.printStackTrace();
 		}
@@ -69,6 +76,7 @@ class StdOutDumpConsumer extends AbstractFilterPlugin {
 			name = StdOutDumpConsumer.INPUT_PORT_NAME,
 			eventTypes = { IMonitoringRecord.class })
 	public void newMonitoringRecord(final Object record) {
+		System.out.println("8");
 		if (record instanceof CPUUtilizationRecord) {
 			final CPUUtilizationRecord cpuUtilizationRecord =
 					(CPUUtilizationRecord) record;
