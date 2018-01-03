@@ -62,11 +62,6 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.kieker-monitoring</groupId>
-			<artifactId>kieker</artifactId>
-			<version>1.13</version>
-		</dependency>
-		<dependency>
 			<groupId>com.rabbitmq</groupId>
 			<artifactId>amqp-client</artifactId>
 			<version>5.0.0</version>

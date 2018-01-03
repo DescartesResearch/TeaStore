@@ -23,5 +23,6 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/kieker-1.14-SNAPSHOT-aspectj.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

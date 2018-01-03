@@ -35,7 +35,7 @@ public class DisplayLogs extends HttpServlet{
 		logReaderConfiguration.setProperty(AmqpReader.CONFIG_PROPERTY_QUEUENAME, QUEUENAME);
 
 		final AmqpReader logReader = new AmqpReader(logReaderConfiguration, analysisInstance);
-
+		
 		// Create and register a simple output writer.
 		final TeeFilter teeFilter = new TeeFilter(new Configuration(), analysisInstance);
 
