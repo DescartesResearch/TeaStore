@@ -80,9 +80,10 @@ public class DisplayLogs extends HttpServlet {
 			super(configuration, projectContext);
 		}
 
-		@InputPort(name = StdOutDumpConsumer.INPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
+		@InputPort(name = StdOutDumpConsumer.INPUT_PORT_NAME, eventTypes = { Object.class })
 		public void newMonitoringRecord(final Object record) {
 			System.out.println("8");
+			System.out.println(record.getClass());
 			if (record instanceof CPUUtilizationRecord) {
 				final CPUUtilizationRecord cpuUtilizationRecord = (CPUUtilizationRecord) record;
 
