@@ -195,8 +195,8 @@
 											<directory>../../utilities/tools.descartes.petsupplystore.kieker/</directory>
 											<includes>
 												<include>kieker.monitoring.properties</include>
-												<include>aop.xml</include>
 												<include>Dockerfile</include>
+												<include>start_kieker.sh</include>
 											</includes>
 										</resource>
 									</resources>
