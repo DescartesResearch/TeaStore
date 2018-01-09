@@ -42,13 +42,13 @@ public final class RecommenderSelector implements IRecommender {
 	 * This map lists all currently available recommending approaches and assigns
 	 * them their "name" for the environment variable.
 	 */
-	private static Map<String, Class<? extends IRecommender>> RECOMMENDERS = new HashMap<>();
+	private static Map<String, Class<? extends IRecommender>> recommenders = new HashMap<>();
 
 	static {
-		RECOMMENDERS = new HashMap<String, Class<? extends IRecommender>>();
-		RECOMMENDERS.put("Popularity", PopularityBasedRecommender.class);
-		RECOMMENDERS.put("SlopeOne", SlopeOneRecommender.class);
-		RECOMMENDERS.put("PreprocessedSlopeOne", PreprocessedSlopeOneRecommender.class);
+		recommenders = new HashMap<String, Class<? extends IRecommender>>();
+		recommenders.put("Popularity", PopularityBasedRecommender.class);
+		recommenders.put("SlopeOne", SlopeOneRecommender.class);
+		recommenders.put("PreprocessedSlopeOne", PreprocessedSlopeOneRecommender.class);
 	}
 
 	/**
@@ -72,8 +72,8 @@ public final class RecommenderSelector implements IRecommender {
 		try {
 			String recommendername = (String) new InitialContext().lookup("java:comp/env/recommenderAlgorithm");
 			// if a specific algorithm is set, we can use that algorithm
-			if (RECOMMENDERS.containsKey(recommendername)) {
-				recommender = RECOMMENDERS.get(recommendername).newInstance();
+			if (recommenders.containsKey(recommendername)) {
+				recommender = recommenders.get(recommendername).newInstance();
 			} else {
 				LOG.warn("Recommendername: " + recommendername
 						+ " was not found. Using default recommender (SlopeOneRecommeder).");

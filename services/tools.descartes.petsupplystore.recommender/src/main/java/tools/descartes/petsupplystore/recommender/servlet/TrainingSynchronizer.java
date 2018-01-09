@@ -184,7 +184,9 @@ public final class TrainingSynchronizer {
 				client -> client.getService().path(client.getApplicationURI()).path(client.getEndpointURI())
 						.request(MediaType.TEXT_PLAIN).accept(MediaType.TEXT_PLAIN).get());
 		for (Response response : maxTimeResponses) {
-			if (response != null && response.getStatus() == Response.Status.OK.getStatusCode()) {
+			if (response == null) {
+				LOG.warn("One service response was null and is therefore not available for time-check.");
+			} else if (response.getStatus() == Response.Status.OK.getStatusCode()) {
 				// only consider if status was fine
 				long milliTS = response.readEntity(Long.class);
 				if (maxTime != Long.MIN_VALUE && maxTime != milliTS) {
@@ -193,7 +195,7 @@ public final class TrainingSynchronizer {
 				}
 				maxTime = Math.min(maxTime, milliTS);
 			} else {
-				LOG.warn("Service " + response + " was not available for time-check.");
+				LOG.warn("Service " + response + "was not available for time-check.");
 			}
 		}
 		if (maxTime == Long.MIN_VALUE) {
