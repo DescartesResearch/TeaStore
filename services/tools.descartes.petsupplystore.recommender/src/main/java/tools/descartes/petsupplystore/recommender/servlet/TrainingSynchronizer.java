@@ -48,6 +48,11 @@ import tools.descartes.petsupplystore.rest.NotFoundException;
  */
 public final class TrainingSynchronizer {
 
+	/**
+	 * This value signals that the maximum training time is not known.
+	 */
+	public static final long DEFAULT_MAX_TIME_VALUE = Long.MIN_VALUE;
+
 	// Longest wait period before querying the persistence again if it is finished
 	// creating entries
 	private static final int PERSISTENCE_CREATION_MAX_WAIT_TIME = 120000;
@@ -77,10 +82,10 @@ public final class TrainingSynchronizer {
 	private static final Logger LOG = LoggerFactory.getLogger(TrainingSynchronizer.class);
 
 	/**
-	 * The maximum considered time in milliseconds. Long.MIN_VALUE signals no entry,
+	 * The maximum considered time in milliseconds. DEFAULT_MAX_TIME_VALUE signals no entry,
 	 * e.g. all orders are used for training.
 	 */
-	private long maxTime = Long.MIN_VALUE;
+	private long maxTime = DEFAULT_MAX_TIME_VALUE;
 
 	/**
 	 * @return the maxTime
@@ -189,7 +194,7 @@ public final class TrainingSynchronizer {
 			} else if (response.getStatus() == Response.Status.OK.getStatusCode()) {
 				// only consider if status was fine
 				long milliTS = response.readEntity(Long.class);
-				if (maxTime != Long.MIN_VALUE && maxTime != milliTS) {
+				if (maxTime != TrainingSynchronizer.DEFAULT_MAX_TIME_VALUE && maxTime != milliTS) {
 					LOG.warn("Services disagree about timestamp: " + maxTime + " vs " + milliTS
 							+ ". Therfore using the minimum.");
 				}
