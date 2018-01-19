@@ -21,7 +21,9 @@
     <!-- Recommender settings, specify loop time in ms if periodic retraining is required -->
     <Environment name="recommenderLoopTime" value="0"
     	type="java.lang.Long" override="false"/>
-
+	<Environment name="recommenderAlgorithm" value="SlopeOne"
+    	type="java.lang.String" override="false"/>
+    	
     <!-- General Tomcat setting: disable session persistence; improves startup times. -->
     <Manager pathname="" />
 </Context>
