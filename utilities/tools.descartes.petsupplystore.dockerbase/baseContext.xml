@@ -7,8 +7,7 @@
     <!-- Service registration settings, almost always required. -->
     <Environment name="servicePort" value="%%PLACEHOLDER%%"
     	type="java.lang.String" override="false"/>
-    <Environment name="hostName" value="%%PLACEHOLDER%%"
-    	type="java.lang.String" override="false"/>
+    <Environment name="hostName" value="%%PLACEHOLDER%%" type="java.lang.String" override="false"/>
     <Environment name="registryURL" value="%%PLACEHOLDER%%"
     		type="java.lang.String" override="false"/>
 
