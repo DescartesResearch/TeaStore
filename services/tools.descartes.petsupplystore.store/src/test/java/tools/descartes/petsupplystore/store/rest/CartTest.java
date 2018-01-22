@@ -1,11 +1,12 @@
 package tools.descartes.petsupplystore.store.rest;
 
+import javax.ws.rs.core.Response;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.mindrot.jbcrypt.BCrypt;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.sun.mail.iap.Response;
 
 import tools.descartes.petsupplystore.entities.User;
 import tools.descartes.petsupplystore.entities.message.SessionBlob;
@@ -29,7 +30,9 @@ public class CartTest extends AbstractStoreRestTest {
 	public void runTest() throws JsonProcessingException {
 		mockProduct106();
 		mockProduct107();
+		mockInvalidProduct();
 		mockUser1();
+		mockInvalidUser();
 		mockCreateOrderItems();
 		mockCreateOrder();
 		
@@ -174,13 +177,22 @@ public class CartTest extends AbstractStoreRestTest {
 		u.setPassword(BCrypt.hashpw("password", BCrypt.gensalt()));
 		u.setId(1231245125);
 		mockValidGetRestCall(u, "/tools.descartes.petsupplystore.persistence/rest/users/name/user1");
-		mockValidGetRestCall(null, "/tools.descartes.petsupplystore.persistence/rest/users/name/user-1");
+	}
+	
+	private void mockInvalidUser() {
+		mockInValidGetRestCall(Response.Status.NOT_FOUND, "/tools.descartes.petsupplystore.persistence/rest/users/name/user/-1");
 	}
 
+	/**
+	 * Returns id of newly created object
+	 */
 	private void mockCreateOrderItems() {
-		mockValidPostRestCall(Response.OK, "/tools.descartes.petsupplystore.persistence/rest/orderitems");
+		mockValidPostRestCall(8, "/tools.descartes.petsupplystore.persistence/rest/orderitems");
 	}
 
+	/**
+	 * Returns id of newly created object
+	 */
 	private void mockCreateOrder() {
 		mockValidPostRestCall(7, "/tools.descartes.petsupplystore.persistence/rest/orders");
 	}
