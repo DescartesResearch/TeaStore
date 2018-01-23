@@ -3,7 +3,7 @@
 sed -i "s/<Environment name=\"servicePort\" value=.*/<Environment name=\"servicePort\" value=\"${SERVICE_PORT}\"/g" /usr/local/tomcat/conf/context.xml
 if [ "$HOST_NAME" != "unset" ]
 then
-	sed -i "s|<Environment name=\"hostName\" value=.*|<Environment name=\"hostName\" value=\"${HOST_NAME}\"  type=\"java.lang.String\" override=\"false\"/>|g" /usr/local/tomcat/conf/context.xml
+	sed -i "s|<Environment name=\"hostName\" value=.*|<Environment name=\"hostName\" value=\"${HOST_NAME}\" type=\"java.lang.String\" override=\"false\"/>|g" /usr/local/tomcat/conf/context.xml
 else
 	sed -i "/Environment name=\"hostName\"/d" /usr/local/tomcat/conf/context.xml
 fi
