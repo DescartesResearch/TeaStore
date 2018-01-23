@@ -39,10 +39,37 @@ public final class LoadBalancedStoreOperations {
 	}
 	
 	private static <T> T readEntityOrNull(Response r, Class<T> entityClass) {
-		if (r == null || r.getStatus() != 200) {
-			return null;
+		if (r != null) {
+			if (r.getStatus() == 200) {
+				return r.readEntity(entityClass);
+			} else {
+				r.bufferEntity();
+			}
 		}
-		return r.readEntity(entityClass);
+		return null;
+	}
+	
+	private static <T> T readThrowAndOrClose(Response responseWithStatus, Class<T> entityClass) {
+		T entity = null;
+		entity = readEntityOrNull(responseWithStatus, entityClass);
+		throwCommonExceptions(responseWithStatus);
+		return entity;
+	}
+	
+	private static <T> List<T> readListThrowAndOrClose(Response r) {
+		List<T> entity = null;
+		if (r != null) {
+			if (r.getStatus() == 200) {
+				entity = r.readEntity(new GenericType<List<T>>() { });
+			} else {
+				r.bufferEntity();
+			}
+		}
+		if (r == null || entity == null) {
+			entity = new ArrayList<>();
+		}
+		throwCommonExceptions(r);
+		return entity;
 	}
 	
 	/**
@@ -57,11 +84,17 @@ public final class LoadBalancedStoreOperations {
 				"categories", Category.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		throwCommonExceptions(r);
-		if (r == null || r.getStatus() != 200) {
-			return null;
+		List<Category> entity = null;
+		try {
+			entity = r.readEntity(new GenericType<List<Category>>() { });
+			
+		} finally {
+			if (r != null) {
+				r.close();
+			}
 		}
-		return r.readEntity(new GenericType<List<Category>>() { });
+		throwCommonExceptions(r);
+		return entity;
 	}
 	
 	/**
@@ -77,8 +110,7 @@ public final class LoadBalancedStoreOperations {
 				"categories", Category.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("" + cid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		throwCommonExceptions(r);
-		return readEntityOrNull(r, Category.class);
+		return readThrowAndOrClose(r, Category.class);
 	}
 	
 	/**
@@ -94,8 +126,7 @@ public final class LoadBalancedStoreOperations {
 				"products", Product.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("" + pid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		throwCommonExceptions(r);
-		return readEntityOrNull(r, Product.class);
+		return readThrowAndOrClose(r, Product.class);
 	}
 
 	/**
@@ -115,11 +146,7 @@ public final class LoadBalancedStoreOperations {
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob.getOrderItems(), MediaType.APPLICATION_JSON), Response.class));
-		throwCommonExceptions(r);
-		if (r == null || r.getStatus() != 200) {
-			return new ArrayList<>();
-		}
-		return r.readEntity(new GenericType<List<Product>>() { });
+		return readListThrowAndOrClose(r);
 	}
 	
 	/**
@@ -140,11 +167,7 @@ public final class LoadBalancedStoreOperations {
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob.getOrderItems(), MediaType.APPLICATION_JSON), Response.class));
-		throwCommonExceptions(r);
-		if (r == null || r.getStatus() != 200) {
-			return new ArrayList<>();
-		}
-		return r.readEntity(new GenericType<List<Product>>() { });
+		return readListThrowAndOrClose(r);
 	}
 	
 	/**
@@ -161,8 +184,7 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("category").path("" + cid).path("totalNumber")
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		throwCommonExceptions(r);
-		return readEntityOrNull(r, int.class);
+		return readThrowAndOrClose(r, Integer.class);
 	}
 	
 	/**
@@ -182,11 +204,7 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("category").path("" + cid).queryParam("page", page)
 				.queryParam("articlesPerPage", articlesPerPage).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		throwCommonExceptions(r);
-		if (r == null || r.getStatus() != 200) {
-			return new ArrayList<>();
-		}
-		return r.readEntity(new GenericType<List<Product>>() { });
+		return readListThrowAndOrClose(r);
 	}
 	
 	/**
@@ -220,8 +238,7 @@ public final class LoadBalancedStoreOperations {
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		throwCommonExceptions(r);
-		return readEntityOrNull(r, SessionBlob.class);
+		return readThrowAndOrClose(r, SessionBlob.class);
 	}
 	
 	/**
@@ -241,8 +258,7 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("login").queryParam("name", name)
 				.queryParam("password", password).request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		throwCommonExceptions(r);
-		return readEntityOrNull(r, SessionBlob.class);
+		return readThrowAndOrClose(r, SessionBlob.class);
 	}
 	
 	/**
@@ -259,8 +275,7 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("logout").request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		throwCommonExceptions(r);
-		return readEntityOrNull(r, SessionBlob.class);
+		return readThrowAndOrClose(r, SessionBlob.class);
 	}
 	
 	/**
@@ -277,9 +292,7 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("isloggedin").request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		throwCommonExceptions(r);
-		SessionBlob validatedBlob = readEntityOrNull(r, SessionBlob.class);
-		return validatedBlob != null;
+		return readThrowAndOrClose(r, SessionBlob.class) != null;
 	}
 	
 	/**
@@ -298,8 +311,7 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("add").path("" + pid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		throwCommonExceptions(r);
-		return readEntityOrNull(r, SessionBlob.class);
+		return readThrowAndOrClose(r, SessionBlob.class);
 	}
 	
 	/**
@@ -318,8 +330,7 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("remove").path("" + pid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		throwCommonExceptions(r);
-		return readEntityOrNull(r, SessionBlob.class);
+		return readThrowAndOrClose(r, SessionBlob.class);
 	}
 	
 	/**
@@ -342,8 +353,7 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("" + pid).queryParam("quantity", quantity)
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.put(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		throwCommonExceptions(r);
-		return readEntityOrNull(r, SessionBlob.class);
+		return readThrowAndOrClose(r, SessionBlob.class);
 	}
 	
 	/**
@@ -360,9 +370,7 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("" + uid)
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.get());
-		throwCommonExceptions(r);
-		return readEntityOrNull(r, User.class);
-		
+		return readThrowAndOrClose(r, User.class);
 	}
 	
 	/**
@@ -379,11 +387,7 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("" + uid).path("orders")
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.get());
-		throwCommonExceptions(r);
-		if (r == null || r.getStatus() != 200) {
-			return new ArrayList<>();
-		}
-		return r.readEntity(new GenericType<List<Order>>() { });
+		return readListThrowAndOrClose(r);
 	}
 }
 

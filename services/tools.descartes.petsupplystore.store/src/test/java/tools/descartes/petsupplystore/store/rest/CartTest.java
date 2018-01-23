@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.mindrot.jbcrypt.BCrypt;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.sun.mail.iap.Response;
 
 import tools.descartes.petsupplystore.entities.User;
 import tools.descartes.petsupplystore.entities.message.SessionBlob;
@@ -20,7 +19,7 @@ import tools.descartes.petsupplystore.rest.NotFoundException;
  *
  */
 public class CartTest extends AbstractStoreRestTest {
-
+	
 	/**
 	 * Tests for the loggin, logout and isloggedin functionality.
 	 * @throws JsonProcessingException 
@@ -178,7 +177,7 @@ public class CartTest extends AbstractStoreRestTest {
 	}
 
 	private void mockCreateOrderItems() {
-		mockValidPostRestCall(Response.OK, "/tools.descartes.petsupplystore.persistence/rest/orderitems");
+		mockValidPostRestCall(200, "/tools.descartes.petsupplystore.persistence/rest/orderitems");
 	}
 
 	private void mockCreateOrder() {

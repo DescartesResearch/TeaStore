@@ -96,7 +96,13 @@ public final class LoadBalancedImageOperations {
 			return new HashMap<Long, String>();
 		}
 		
-		HashMap<Long, String> result = r.readEntity(new GenericType<HashMap<Long, String>>() { });
+		HashMap<Long, String> result = null;
+		if (r.getStatus() < 400) {
+			result = r.readEntity(new GenericType<HashMap<Long, String>>() { });
+		} else {
+			//buffer all entities so that the connections are released to the connection pool
+			r.bufferEntity();
+		}
 		if (result == null) {
 			return new HashMap<Long, String>();
 		}
@@ -143,7 +149,13 @@ public final class LoadBalancedImageOperations {
 			return new HashMap<String, String>();
 		}
 		
-		HashMap<String, String> result = r.readEntity(new GenericType<HashMap<String, String>>() { });
+		HashMap<String, String> result = null;
+		if (r.getStatus() < 400) {
+			result = r.readEntity(new GenericType<HashMap<String, String>>() { });
+		} else {
+			//buffer all entities so that the connections are released to the connection pool
+			r.bufferEntity();
+		}
 		if (result == null) {
 			return new HashMap<String, String>();
 		}
@@ -161,9 +173,13 @@ public final class LoadBalancedImageOperations {
 		if (r == null) {
 			return new ArrayList<Integer>();
 		}
-		return r.stream()
+		List<Integer> statuses = r.stream()
 				.filter(response -> response != null)
 				.map(response -> response.getStatus())
 				.collect(Collectors.toList());
+		//buffer all entities so that the connections are released to the connection pool
+		r.stream().filter(response -> response != null)
+		.forEach(response -> response.bufferEntity());
+		return statuses;
 	}
 }

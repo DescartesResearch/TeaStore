@@ -41,11 +41,14 @@ public final class LoadBalancedRecommenderOperations {
 				.queryParam("uid", uid)
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).post(Entity.entity(order, MediaType.APPLICATION_JSON)));
-		try {
-			return r.readEntity(new GenericType<List<Long>>() { });
-		} catch (NullPointerException e) {
-			return new ArrayList<>();
+		if (r != null) {
+			if (r.getStatus() < 400) {
+				return r.readEntity(new GenericType<List<Long>>() { });
+			} else {
+				r.bufferEntity();
+			}
 		}
+		return new ArrayList<>();
 	}
 }
 
