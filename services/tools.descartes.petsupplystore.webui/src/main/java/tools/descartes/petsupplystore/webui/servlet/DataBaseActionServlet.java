@@ -69,6 +69,8 @@ public class DataBaseActionServlet extends AbstractUIServlet {
 								.queryParam(PARAMETERS[0], infos[0]).queryParam(PARAMETERS[1], infos[1])
 								.queryParam(PARAMETERS[2], infos[2]).queryParam(PARAMETERS[3], infos[3])
 								.request(MediaType.TEXT_PLAIN).get());
+				//buffer entity to release connections
+				resp.bufferEntity();
 				if (resp.getStatus() == 200) {
 					LOG.info("DB is re-generating.");
 				}
@@ -83,6 +85,8 @@ public class DataBaseActionServlet extends AbstractUIServlet {
 						client -> client.getEndpointTarget().path("async").request(MediaType.TEXT_PLAIN).get());
 				recResp.stream().filter(r -> r.getStatus() != 200).forEach(
 						r -> LOG.warn("A recommender service responded with " + r.getStatus() + " when retraining."));
+				//buffer entity to release connections
+				recResp.stream().forEach(r -> r.bufferEntity());
 				redirect("/status", response);
 			}
 

@@ -401,6 +401,7 @@ public final class DataGenerator {
 				"generatedb", String.class, client -> setMaintenanceModeExternal(client, maintenanceMode));
 		rs.forEach(r -> {
 				if (r != null) {
+					r.bufferEntity();
 					r.close();
 				}
 			}); 

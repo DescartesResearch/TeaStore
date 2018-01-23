@@ -164,14 +164,17 @@ public final class ServiceLoadBalancer {
     	}
     	serviceServers = new HashSet<Server>(newServers);
     	loadBalancerModificationLock.writeLock().lock();
-    	if (loadBalancer != null) {
-    		loadBalancer.shutdown();
+    	try {
+	    	if (loadBalancer != null) {
+	    		loadBalancer.shutdown();
+	    	}
+	    	loadBalancer = LoadBalancerBuilder.newBuilder().buildFixedServerListLoadBalancer(newServers);
+	    	for (EndpointClientCollection<?> lb : endpointMap.values()) {
+	    		lb.updateServers(newServers);
+	    	}
+    	} finally {
+    		loadBalancerModificationLock.writeLock().unlock();
     	}
-    	loadBalancer = LoadBalancerBuilder.newBuilder().buildFixedServerListLoadBalancer(newServers);
-    	for (EndpointClientCollection<?> lb : endpointMap.values()) {
-    		lb.updateServers(newServers);
-    	}
-    	loadBalancerModificationLock.writeLock().unlock();
     }
     
     /**
@@ -276,24 +279,27 @@ public final class ServiceLoadBalancer {
     	List<R> responses = new ArrayList<>();
     	List<Server> servers = null;
     	loadBalancerModificationLock.readLock().lock();
-    	if (loadBalancer != null) {
-    		servers = new ArrayList<>(loadBalancer.getAllServers());
+    	try {
+	    	if (loadBalancer != null) {
+	    		servers = new ArrayList<>(loadBalancer.getAllServers());
+	    	}
+	    	if (servers != null) {
+	    		if (exception != null) {
+	        		servers.remove(exception);
+	        	}
+	        	responses = servers.parallelStream().map(
+	        		server -> {
+	        			try {
+	        				return operation.apply((RESTClient<T>) getEndpointClientCollection(endpointURI, entityClass)
+	                				.getRESTClient(server));
+	        			} catch (Exception e) {
+	        				return null;
+	        			}
+	        		}).collect(Collectors.toList());
+	    	}
+    	} finally {
+    		loadBalancerModificationLock.readLock().unlock();
     	}
-    	if (servers != null) {
-    		if (exception != null) {
-        		servers.remove(exception);
-        	}
-        	responses = servers.parallelStream().map(
-        		server -> {
-        			try {
-        				return operation.apply((RESTClient<T>) getEndpointClientCollection(endpointURI, entityClass)
-                				.getRESTClient(server));
-        			} catch (Exception e) {
-        				return null;
-        			}
-        		}).collect(Collectors.toList());
-    	}
-    	loadBalancerModificationLock.readLock().unlock();
     	return responses;
     }
 }

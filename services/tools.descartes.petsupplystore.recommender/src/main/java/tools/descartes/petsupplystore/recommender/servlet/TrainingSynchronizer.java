@@ -200,6 +200,8 @@ public final class TrainingSynchronizer {
 				}
 				maxTime = Math.min(maxTime, milliTS);
 			} else {
+				//release connection by buffering entity
+				response.bufferEntity();
 				LOG.warn("Service " + response + "was not available for time-check.");
 			}
 		}
