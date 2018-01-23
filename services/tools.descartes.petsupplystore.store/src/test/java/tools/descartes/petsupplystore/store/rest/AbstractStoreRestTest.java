@@ -180,6 +180,9 @@ public abstract class AbstractStoreRestTest {
 		p.setListPriceInCents(99);
 		p.setName("a product");
 		mockValidGetRestCall(p, "/tools.descartes.petsupplystore.persistence/rest/products/106");
+	}
+	
+	protected void mockInvalidProduct() {
 		mockInValidGetRestCall(Response.Status.NOT_FOUND, "/tools.descartes.petsupplystore.persistence/rest/products/-1");
 	}
 
