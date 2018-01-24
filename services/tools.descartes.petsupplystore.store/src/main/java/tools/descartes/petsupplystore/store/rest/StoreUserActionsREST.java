@@ -30,6 +30,7 @@ import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.entities.User;
 import tools.descartes.petsupplystore.entities.message.SessionBlob;
 import tools.descartes.petsupplystore.registryclient.Service;
+import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;
 import tools.descartes.petsupplystore.rest.NotFoundException;
 import tools.descartes.petsupplystore.rest.TimeoutException;
@@ -93,7 +94,7 @@ public class StoreUserActionsREST {
 		try {
 			orderId = LoadBalancedCRUDOperations.sendEntityForCreation(Service.PERSISTENCE, "orders", Order.class,
 					blob.getOrder());
-		} catch (TimeoutException e) {
+		} catch (LoadBalancerTimeoutException e) {
 			return Response.status(408).build();
 		} catch (NotFoundException e) {
 			return Response.status(404).build();
