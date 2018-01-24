@@ -56,17 +56,33 @@ public final class LoadBalancedStoreOperations {
 		return entity;
 	}
 	
-	private static <T> List<T> readListThrowAndOrClose(Response r) {
-		List<T> entity = null;
+	private static List<Order> readListThrowAndOrCloseOrder(Response r) {
+		List<Order> entity = null;
 		if (r != null) {
 			if (r.getStatus() == 200) {
-				entity = r.readEntity(new GenericType<List<T>>() { });
+				entity = r.readEntity(new GenericType<List<Order>>() { });
 			} else {
 				r.bufferEntity();
 			}
 		}
 		if (r == null || entity == null) {
-			entity = new ArrayList<>();
+			entity = new ArrayList<Order>();
+		}
+		throwCommonExceptions(r);
+		return entity;
+	}
+	
+	private static List<Product> readListThrowAndOrCloseProduct(Response r) {
+		List<Product> entity = null;
+		if (r != null) {
+			if (r.getStatus() == 200) {
+				entity = r.readEntity(new GenericType<List<Product>>() { });
+			} else {
+				r.bufferEntity();
+			}
+		}
+		if (r == null || entity == null) {
+			entity = new ArrayList<Product>();
 		}
 		throwCommonExceptions(r);
 		return entity;
@@ -146,7 +162,7 @@ public final class LoadBalancedStoreOperations {
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob.getOrderItems(), MediaType.APPLICATION_JSON), Response.class));
-		return readListThrowAndOrClose(r);
+		return readListThrowAndOrCloseProduct(r);
 	}
 	
 	/**
@@ -167,7 +183,7 @@ public final class LoadBalancedStoreOperations {
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob.getOrderItems(), MediaType.APPLICATION_JSON), Response.class));
-		return readListThrowAndOrClose(r);
+		return readListThrowAndOrCloseProduct(r);
 	}
 	
 	/**
@@ -204,7 +220,7 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("category").path("" + cid).queryParam("page", page)
 				.queryParam("articlesPerPage", articlesPerPage).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		return readListThrowAndOrClose(r);
+		return readListThrowAndOrCloseProduct(r);
 	}
 	
 	/**
@@ -387,7 +403,7 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("" + uid).path("orders")
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.get());
-		return readListThrowAndOrClose(r);
+		return readListThrowAndOrCloseOrder(r);
 	}
 }
 

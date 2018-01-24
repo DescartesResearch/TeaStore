@@ -27,6 +27,7 @@ public class ProductInformationTest extends AbstractStoreRestTest {
 	@Test
 	public void runTest() throws JsonProcessingException {
 		mockProduct106();
+		mockInvalidProduct();
 		mockProducts();
 		mockNumberOfProducts();
 		
