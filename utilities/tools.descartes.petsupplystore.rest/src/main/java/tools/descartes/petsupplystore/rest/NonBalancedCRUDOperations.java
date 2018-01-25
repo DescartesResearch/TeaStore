@@ -54,11 +54,6 @@ public final class NonBalancedCRUDOperations {
 		Response response = client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).request(MediaType.APPLICATION_JSON).
 				post(Entity.entity(entity, MediaType.APPLICATION_JSON), Response.class);
-		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
-			throw new NotFoundException();
-		} else if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
-			throw new TimeoutException();
-		}
 		long id = -1L;
 		//If resource was created successfully
 		if (response != null && response.getStatus() == 201) {
@@ -69,9 +64,13 @@ public final class NonBalancedCRUDOperations {
 			} catch (ProcessingException e) {
 				LOG.warn("Response did not conform to expected message type. Expected a Long ID.");
 			}
+		} else if (response != null) {
+			response.bufferEntity();
 		}
-		if (response != null) {
-			response.close();
+		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+			throw new NotFoundException();
+		} else if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
+			throw new TimeoutException();
 		}
 		return id;
 	}
@@ -93,6 +92,9 @@ public final class NonBalancedCRUDOperations {
 		Response response = client.getService().path(client.getApplicationURI()).path(client.getEndpointURI()).
 				path(String.valueOf(id)).request(MediaType.APPLICATION_JSON).
 				put(Entity.entity(entity, MediaType.APPLICATION_JSON), Response.class);
+		if (response != null) {
+			response.bufferEntity();
+		}
 		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
 			throw new NotFoundException();
 		} else if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
@@ -100,9 +102,6 @@ public final class NonBalancedCRUDOperations {
 		}
 		if (response != null && response.getStatus() == 200) {
 			return true;
-		}
-		if (response != null) {
-			response.close();
 		}
 		return false;
 	}
@@ -119,6 +118,9 @@ public final class NonBalancedCRUDOperations {
 	public static <T> boolean deleteEntity(RESTClient<T> client, long id) throws NotFoundException, TimeoutException {
 		Response response = client.getService().path(client.getApplicationURI()).path(client.getEndpointURI()).
 				path(String.valueOf(id)).request(MediaType.APPLICATION_JSON).delete();
+		if (response != null) {
+			response.bufferEntity();
+		}
 		if (response != null && response.getStatus() == 200) {
 			return true;
 		}
@@ -126,9 +128,6 @@ public final class NonBalancedCRUDOperations {
 			throw new NotFoundException();
 		} else if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
 			throw new TimeoutException();
-		}
-		if (response != null) {
-			response.close();
 		}
 		return false;
 	}
@@ -145,19 +144,20 @@ public final class NonBalancedCRUDOperations {
 	public static <T> T getEntity(RESTClient<T> client, long id) throws NotFoundException, TimeoutException {
 		Response response = client.getService().path(client.getApplicationURI()).path(client.getEndpointURI()).
 				path(String.valueOf(id)).request(MediaType.APPLICATION_JSON).get();
+		T entity = null;
+		if (response != null && response.getStatus() < 400) {
+			try {
+				entity = response.readEntity(client.getEntityClass());
+			} catch (NullPointerException | ProcessingException e) {
+				LOG.warn("Response did not conform to expected entity type.");
+			}
+		} else  if (response != null){
+			response.bufferEntity();
+		}
 		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
 			throw new NotFoundException();
 		} else if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
 			throw new TimeoutException();
-		}
-		T entity = null;
-		try {
-			entity = response.readEntity(client.getEntityClass());
-		} catch (NullPointerException | ProcessingException e) {
-			LOG.warn("Response did not conform to expected entity type.");
-		}
-		if (response != null) {
-			response.close();
 		}
 		return entity;
 	}
@@ -183,11 +183,6 @@ public final class NonBalancedCRUDOperations {
 			target = target.queryParam("max", limit);
 		}
 		Response response = target.request(MediaType.APPLICATION_JSON).get();
-		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
-			throw new NotFoundException();
-		} else if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
-			throw new TimeoutException();
-		}
 		List<T> entities = new ArrayList<T>();
 		if (response != null && response.getStatus() == 200) {
 			try {
@@ -195,9 +190,13 @@ public final class NonBalancedCRUDOperations {
 			} catch (ProcessingException e) {
 				LOG.warn("Response did not conform to expected entity type. List expected.");
 			}
+		} else if (response != null) {
+			response.bufferEntity();
 		}
-		if (response != null) {
-			response.close();
+		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+			throw new NotFoundException();
+		} else if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
+			throw new TimeoutException();
 		}
 		return entities;
 	}
@@ -229,11 +228,6 @@ public final class NonBalancedCRUDOperations {
 			target = target.queryParam("max", limit);
 		}
 		Response response = target.request(MediaType.APPLICATION_JSON).get();
-		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
-			throw new NotFoundException();
-		} else if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
-			throw new TimeoutException();
-		}
 		List<T> entities = new ArrayList<T>();
 		if (response != null && response.getStatus() == 200) {
 			try {
@@ -242,9 +236,13 @@ public final class NonBalancedCRUDOperations {
 				e.printStackTrace();
 				LOG.warn("Response did not conform to expected entity type. List expected.");
 			}
+		} else if (response != null) {
+			response.bufferEntity();
 		}
-		if (response != null) {
-			response.close();
+		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+			throw new NotFoundException();
+		} else if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
+			throw new TimeoutException();
 		}
 		return entities;
 	}
@@ -266,19 +264,20 @@ public final class NonBalancedCRUDOperations {
 		WebTarget target = client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path(propertyURI).path(propertyValue);
 		Response response = target.request(MediaType.APPLICATION_JSON).get();
+		T entity = null;
+		if (response != null && response.getStatus() < 400) {
+			try {
+				entity = response.readEntity(client.getEntityClass());
+			} catch (NullPointerException | ProcessingException e) {
+				//This happens if no entity was found
+			}
+		} else if (response != null) {
+			response.bufferEntity();
+		}
 		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
 			throw new NotFoundException();
 		} else if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
 			throw new TimeoutException();
-		}
-		T entity = null;
-		try {
-			entity = response.readEntity(client.getEntityClass());
-		} catch (NullPointerException | ProcessingException e) {
-			//This happens if no entity was found
-		}
-		if (response != null) {
-			response.close();
 		}
 		return entity;
 	}
