@@ -17,6 +17,8 @@ import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.analysis.plugin.reader.amqp.AmqpReader;
+import kieker.analysis.plugin.reader.amqp.ChunkingAmqpReader;
+import kieker.analysis.plugin.reader.newio.RawDataReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.system.CPUUtilizationRecord;
@@ -37,37 +39,29 @@ public class DisplayLogs extends HttpServlet {
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
 		final IAnalysisController analysisInstance = new AnalysisController();
+		Configuration configuration = new Configuration();
 
-		System.out.println("1");
-		final Configuration logReaderConfiguration = new Configuration();
-		System.out.println("2");
-		logReaderConfiguration.setProperty(AmqpReader.CONFIG_PROPERTY_URI, URI);
-		logReaderConfiguration.setProperty(AmqpReader.CONFIG_PROPERTY_QUEUENAME, QUEUENAME);
-		System.out.println("3");
+		configuration.setProperty(RawDataReaderPlugin.CONFIG_PROPERTY_READER, "kieker.analysis.plugin.reader.amqp.ChunkingAmqpReader");
+		configuration.setProperty(RawDataReaderPlugin.CONFIG_PROPERTY_DESERIALIZER, "kieker.analysis.plugin.reader.newio.deserializer.BinaryDeserializer");
 
-		final AmqpReader logReader = new AmqpReader(logReaderConfiguration, analysisInstance);
-		System.out.println("4");
-		// Create and register our own consumer
-		final StdOutDumpConsumer consumer = new StdOutDumpConsumer(new Configuration(), analysisInstance);
-		System.out.println("5");
+		configuration.setProperty(ChunkingAmqpReader.CONFIG_PROPERTY_URI, URI);
+		configuration.setProperty(ChunkingAmqpReader.CONFIG_PROPERTY_QUEUENAME, QUEUENAME);
 
-		try {
-			// Connect both components.
-			analysisInstance.connect(logReader, AmqpReader.OUTPUT_PORT_NAME_RECORDS, consumer,
-					StdOutDumpConsumer.INPUT_PORT_NAME);
-			System.out.println("6");
-			// Start the analysis
-			analysisInstance.run();
-			System.out.println("7");
-		} catch (final AnalysisConfigurationException e) {
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			e.printStackTrace(pw);
-			String sStackTrace = sw.toString();
-			throw new IllegalStateException(sStackTrace);
-		}
+		RawDataReaderPlugin reader = new RawDataReaderPlugin(configuration, analysisInstance);
+        final StdOutDumpConsumer consumer = new StdOutDumpConsumer(new Configuration(), analysisInstance);
+ 
+        try {
+            analysisInstance.connect(reader, AmqpReader.OUTPUT_PORT_NAME_RECORDS, consumer,
+                    StdOutDumpConsumer.INPUT_PORT_NAME);
+            analysisInstance.run();
+        } catch (final AnalysisConfigurationException e) {
+            final StringWriter sw = new StringWriter();
+            final PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            final String sStackTrace = sw.toString();
+            throw new IllegalStateException(sStackTrace);
+        }
 
 	}
 
@@ -82,7 +76,6 @@ public class DisplayLogs extends HttpServlet {
 
 		@InputPort(name = StdOutDumpConsumer.INPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
 		public void newMonitoringRecord(final Object record) {
-			System.out.println("8");
 			if (record instanceof CPUUtilizationRecord) {
 				final CPUUtilizationRecord cpuUtilizationRecord = (CPUUtilizationRecord) record;
 
