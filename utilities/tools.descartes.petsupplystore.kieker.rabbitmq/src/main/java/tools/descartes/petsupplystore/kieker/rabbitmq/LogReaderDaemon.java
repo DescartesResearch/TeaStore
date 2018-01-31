@@ -25,6 +25,7 @@ public class LogReaderDaemon implements Runnable {
 		configuration.setProperty(RawDataReaderPlugin.CONFIG_PROPERTY_DESERIALIZER, "kieker.analysis.plugin.reader.newio.deserializer.BinaryDeserializer");
 
 		configuration.setProperty(ChunkingAmqpReader.CONFIG_PROPERTY_URI, URI);
+		configuration.setProperty(ChunkingAmqpReader.CONFIG_PROPERTY_HEARTBEAT, 0);
 		configuration.setProperty(ChunkingAmqpReader.CONFIG_PROPERTY_QUEUENAME, QUEUENAME);
 
 		RawDataReaderPlugin reader = new RawDataReaderPlugin(configuration, analysisInstance);
