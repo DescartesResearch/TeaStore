@@ -29,6 +29,7 @@ import javax.servlet.annotation.WebListener;
 @WebListener
 public class LogReaderStartup implements ServletContextListener {
 	private ScheduledExecutorService logReaderStarter = Executors.newSingleThreadScheduledExecutor();
+	private ScheduledExecutorService fileWriterStarter = Executors.newSingleThreadScheduledExecutor();
 	
 	/**
 	 * Also set this accordingly in RegistryClientStartup.
@@ -47,8 +48,10 @@ public class LogReaderStartup implements ServletContextListener {
      */
     public void contextDestroyed(ServletContextEvent event)  { 
     	logReaderStarter.shutdownNow();
+    	fileWriterStarter.shutdownNow();
     	try {
 			logReaderStarter.awaitTermination(10, TimeUnit.SECONDS);
+			fileWriterStarter.awaitTermination(10, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -60,6 +63,7 @@ public class LogReaderStartup implements ServletContextListener {
      */
     public void contextInitialized(ServletContextEvent event)  {
     	logReaderStarter.schedule(new LogReaderDaemon(), 10, TimeUnit.SECONDS);
+    	fileWriterStarter.schedule(new FileWriterDaemon(), 10, TimeUnit.SECONDS);
     }
     
 }
