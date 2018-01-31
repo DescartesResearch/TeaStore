@@ -1,5 +1,6 @@
 package tools.descartes.petsupplystore.kieker.rabbitmq;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import kieker.common.configuration.Configuration;
@@ -11,6 +12,7 @@ public class FileWriterDaemon implements Runnable {
 	@Override
 	public void run() {
 		Logger logger = Logger.getLogger("FileWriterDaemon");
+		logger.setLevel(Level.DEBUG);
 		logger.info("Starting FileWriterDaemon!");
 		try {
 			while (true) {

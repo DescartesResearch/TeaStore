@@ -3,6 +3,10 @@ package tools.descartes.petsupplystore.kieker.rabbitmq;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
@@ -18,6 +22,9 @@ public class LogReaderDaemon implements Runnable {
 
 	@Override
 	public void run() {
+		Logger logger = Logger.getLogger("LogReaderDaemon");
+		logger.setLevel(Level.DEBUG);
+		logger.info("Starting FileWriterDaemon!");
 		final IAnalysisController analysisInstance = new AnalysisController();
 		Configuration configuration = new Configuration();
 

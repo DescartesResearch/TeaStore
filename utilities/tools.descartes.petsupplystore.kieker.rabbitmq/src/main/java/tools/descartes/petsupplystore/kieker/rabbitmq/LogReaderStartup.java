@@ -21,6 +21,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+import org.apache.log4j.BasicConfigurator;
+
 /**
  * Application Lifecycle Listener implementation class Registry Client Startup.
  * @author Simon Eismann
@@ -62,6 +64,7 @@ public class LogReaderStartup implements ServletContextListener {
      * @param arg0 The servlet context event at initialization.
      */
     public void contextInitialized(ServletContextEvent event)  {
+		BasicConfigurator.configure();
     	logReaderStarter.schedule(new LogReaderDaemon(), 10, TimeUnit.SECONDS);
     	fileWriterStarter.schedule(new FileWriterDaemon(), 10, TimeUnit.SECONDS);
     }
