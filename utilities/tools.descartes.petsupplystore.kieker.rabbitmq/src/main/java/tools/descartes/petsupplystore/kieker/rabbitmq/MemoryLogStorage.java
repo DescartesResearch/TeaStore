@@ -1,18 +1,18 @@
 package tools.descartes.petsupplystore.kieker.rabbitmq;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import kieker.common.record.IMonitoringRecord;
 
 public class MemoryLogStorage {
-	private static List<IMonitoringRecord> records = new LinkedList<IMonitoringRecord>();
+	private static Queue<IMonitoringRecord> records = new ConcurrentLinkedQueue<IMonitoringRecord>();
 	
 	public static void storeRecord(IMonitoringRecord record) {
 		records.add(record);
 	}
 	
-	public static List<IMonitoringRecord> getRecords() {
+	public static Queue<IMonitoringRecord> getRecords() {
 		return records;
 	}
 	

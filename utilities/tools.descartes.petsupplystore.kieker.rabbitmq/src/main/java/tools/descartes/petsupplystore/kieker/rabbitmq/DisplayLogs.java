@@ -21,6 +21,7 @@ public class DisplayLogs extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		PrintWriter writer = response.getWriter();
+		response.setCharacterEncoding("utf8");
 		for (IMonitoringRecord record: MemoryLogStorage.getRecords())
 			writer.println(record);
 		MemoryLogStorage.clearMemoryStorage();
