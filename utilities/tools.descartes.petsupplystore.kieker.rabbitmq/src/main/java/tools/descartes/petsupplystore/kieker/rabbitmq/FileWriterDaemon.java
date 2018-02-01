@@ -17,8 +17,6 @@ public class FileWriterDaemon implements Runnable {
 	public void run() {
 		Logger logger = Logger.getLogger("FileWriterDaemon");
 		logger.setLevel(Level.INFO);
-		Set<String> knownMonitoringTypes = new HashSet<String>();
-		int id = 0;
 		new File("apache-tomcat-8.5.24/webapps/logs").mkdir();
 		new File("apache-tomcat-8.5.24/webapps/logs").mkdirs();
 		Configuration configuration = new Configuration();
