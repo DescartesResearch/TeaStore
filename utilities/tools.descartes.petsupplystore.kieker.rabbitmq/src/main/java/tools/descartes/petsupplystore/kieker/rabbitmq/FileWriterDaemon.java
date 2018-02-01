@@ -17,11 +17,11 @@ public class FileWriterDaemon implements Runnable {
 	public void run() {
 		Set<String> knownMonitoringTypes = new HashSet<String>();
 		int id = 0;
-		new File("logs").mkdir();
-		new File("logs").mkdirs();
+		new File("apache-tomcat-8.5.24/logs").mkdir();
+		new File("apache-tomcat-8.5.24/logs").mkdirs();
 		Configuration configuration = new Configuration();
 
-		configuration.setProperty(AsciiFileWriter.CONFIG_PATH, "logs");
+		configuration.setProperty(AsciiFileWriter.CONFIG_PATH, "apache-tomcat-8.5.24/logs");
 		configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "-1");
 		configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGSIZE, "-1");
 		configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGFILES, "-1");
