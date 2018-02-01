@@ -150,35 +150,7 @@ public class RegistryClient {
      * @param callback StartupCallback to call
      */
     public void runAfterServiceIsAvailable(Service requestedService, StartupCallback callback, Service myService) {
-    	    availabilityScheduler.schedule(new Runnable() {
-			
-			@Override
-			public void run() {
-				try {
-		    	List<Server> servers;
-		    	do {
-		    		servers = getServersForService(requestedService);
-		    		if (servers == null || servers.isEmpty()) {
-		    			try {
-		    				if (servers == null) {
-		    					LOG.info("Registry not online. " + myService + " is waiting for it to come online");
-		    				} else {
-		    					LOG.info(requestedService.getServiceName() + " not online. "
-		    							+ myService + " is waiting for it to come online");
-		    				}
-							Thread.sleep(1000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-		    		}
-		    	} while (servers == null || servers.isEmpty());
-		    	callback.callback();
-				} catch (Exception e) {
-					e.printStackTrace();
-					throw(e);
-				}
-			}
-		}, 0, TimeUnit.NANOSECONDS);
+    	    availabilityScheduler.schedule(new StartupCallbackTask(requestedService, callback, myService), 0, TimeUnit.NANOSECONDS);
     	availabilityScheduler.shutdown();
     }
     
