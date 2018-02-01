@@ -8,6 +8,7 @@
 		<exclude within="tools.descartes.petsupplystore.registryclient.RegistryClient" />
 		<exclude within="tools.descartes.petsupplystore.registryclient.StartupCallbackTask" />
 		<exclude within="tools.descartes.petsupplystore.registryclient.RegistryClientHeartbeatDaemon" />
+		<exclude within="tools.descartes.petsupplystore.registryclient.RestUtil" />
 		<exclude within="tools.descartes.petsupplystore.registryclient.Service" />
 		<exclude within="tools.descartes.petsupplystore.registryclient.StartupCallback" />
 	</weaver>

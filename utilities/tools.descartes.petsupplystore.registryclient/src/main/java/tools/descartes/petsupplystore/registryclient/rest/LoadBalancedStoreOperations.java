@@ -1,14 +1,11 @@
 package tools.descartes.petsupplystore.registryclient.rest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
 import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.Order;
 import tools.descartes.petsupplystore.entities.Product;
@@ -27,65 +24,6 @@ public final class LoadBalancedStoreOperations {
 
 	private LoadBalancedStoreOperations() {
 		
-	}
-	
-	private static void throwCommonExceptions(Response responseWithStatus)
-			throws NotFoundException, LoadBalancerTimeoutException {
-		if (responseWithStatus.getStatus() == Status.NOT_FOUND.getStatusCode()) {
-			throw new NotFoundException();
-		} else if (responseWithStatus.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
-			throw new LoadBalancerTimeoutException("Timout waiting for Store.", Service.STORE);
-		}
-	}
-	
-	private static <T> T readEntityOrNull(Response r, Class<T> entityClass) {
-		if (r != null) {
-			if (r.getStatus() == 200) {
-				return r.readEntity(entityClass);
-			} else {
-				r.bufferEntity();
-			}
-		}
-		return null;
-	}
-	
-	private static <T> T readThrowAndOrClose(Response responseWithStatus, Class<T> entityClass) {
-		T entity = null;
-		entity = readEntityOrNull(responseWithStatus, entityClass);
-		throwCommonExceptions(responseWithStatus);
-		return entity;
-	}
-	
-	private static List<Order> readListThrowAndOrCloseOrder(Response r) {
-		List<Order> entity = null;
-		if (r != null) {
-			if (r.getStatus() == 200) {
-				entity = r.readEntity(new GenericType<List<Order>>() { });
-			} else {
-				r.bufferEntity();
-			}
-		}
-		if (r == null || entity == null) {
-			entity = new ArrayList<Order>();
-		}
-		throwCommonExceptions(r);
-		return entity;
-	}
-	
-	private static List<Product> readListThrowAndOrCloseProduct(Response r) {
-		List<Product> entity = null;
-		if (r != null) {
-			if (r.getStatus() == 200) {
-				entity = r.readEntity(new GenericType<List<Product>>() { });
-			} else {
-				r.bufferEntity();
-			}
-		}
-		if (r == null || entity == null) {
-			entity = new ArrayList<Product>();
-		}
-		throwCommonExceptions(r);
-		return entity;
 	}
 	
 	/**
@@ -109,7 +47,7 @@ public final class LoadBalancedStoreOperations {
 				r.close();
 			}
 		}
-		throwCommonExceptions(r);
+		RestUtil.throwCommonExceptions(r);
 		return entity;
 	}
 	
@@ -126,7 +64,7 @@ public final class LoadBalancedStoreOperations {
 				"categories", Category.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("" + cid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		return readThrowAndOrClose(r, Category.class);
+		return RestUtil.readThrowAndOrClose(r, Category.class);
 	}
 	
 	/**
@@ -142,7 +80,7 @@ public final class LoadBalancedStoreOperations {
 				"products", Product.class, client -> client.getService().path(client.getApplicationURI())
 				.path(client.getEndpointURI()).path("" + pid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		return readThrowAndOrClose(r, Product.class);
+		return RestUtil.readThrowAndOrClose(r, Product.class);
 	}
 
 	/**
@@ -162,7 +100,7 @@ public final class LoadBalancedStoreOperations {
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob.getOrderItems(), MediaType.APPLICATION_JSON), Response.class));
-		return readListThrowAndOrCloseProduct(r);
+		return RestUtil.readListThrowAndOrCloseProduct(r);
 	}
 	
 	/**
@@ -183,7 +121,7 @@ public final class LoadBalancedStoreOperations {
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob.getOrderItems(), MediaType.APPLICATION_JSON), Response.class));
-		return readListThrowAndOrCloseProduct(r);
+		return RestUtil.readListThrowAndOrCloseProduct(r);
 	}
 	
 	/**
@@ -200,7 +138,7 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("category").path("" + cid).path("totalNumber")
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		return readThrowAndOrClose(r, Integer.class);
+		return RestUtil.readThrowAndOrClose(r, Integer.class);
 	}
 	
 	/**
@@ -220,7 +158,7 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("category").path("" + cid).queryParam("page", page)
 				.queryParam("articlesPerPage", articlesPerPage).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).get());
-		return readListThrowAndOrCloseProduct(r);
+		return RestUtil.readListThrowAndOrCloseProduct(r);
 	}
 	
 	/**
@@ -254,7 +192,7 @@ public final class LoadBalancedStoreOperations {
 				.request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		return readThrowAndOrClose(r, SessionBlob.class);
+		return RestUtil.readThrowAndOrClose(r, SessionBlob.class);
 	}
 	
 	/**
@@ -274,7 +212,7 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("login").queryParam("name", name)
 				.queryParam("password", password).request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		return readThrowAndOrClose(r, SessionBlob.class);
+		return RestUtil.readThrowAndOrClose(r, SessionBlob.class);
 	}
 	
 	/**
@@ -291,7 +229,7 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("logout").request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		return readThrowAndOrClose(r, SessionBlob.class);
+		return RestUtil.readThrowAndOrClose(r, SessionBlob.class);
 	}
 	
 	/**
@@ -308,7 +246,7 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("isloggedin").request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		return readThrowAndOrClose(r, SessionBlob.class) != null;
+		return RestUtil.readThrowAndOrClose(r, SessionBlob.class) != null;
 	}
 	
 	/**
@@ -327,7 +265,7 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("add").path("" + pid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		return readThrowAndOrClose(r, SessionBlob.class);
+		return RestUtil.readThrowAndOrClose(r, SessionBlob.class);
 	}
 	
 	/**
@@ -346,7 +284,7 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("remove").path("" + pid).request(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		return readThrowAndOrClose(r, SessionBlob.class);
+		return RestUtil.readThrowAndOrClose(r, SessionBlob.class);
 	}
 	
 	/**
@@ -369,7 +307,7 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("" + pid).queryParam("quantity", quantity)
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.put(Entity.entity(blob, MediaType.APPLICATION_JSON), Response.class));
-		return readThrowAndOrClose(r, SessionBlob.class);
+		return RestUtil.readThrowAndOrClose(r, SessionBlob.class);
 	}
 	
 	/**
@@ -386,7 +324,7 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("" + uid)
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.get());
-		return readThrowAndOrClose(r, User.class);
+		return RestUtil.readThrowAndOrClose(r, User.class);
 	}
 	
 	/**
@@ -403,7 +341,7 @@ public final class LoadBalancedStoreOperations {
 				.path(client.getEndpointURI()).path("" + uid).path("orders")
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.get());
-		return readListThrowAndOrCloseOrder(r);
+		return RestUtil.readListThrowAndOrCloseOrder(r);
 	}
 }
 
