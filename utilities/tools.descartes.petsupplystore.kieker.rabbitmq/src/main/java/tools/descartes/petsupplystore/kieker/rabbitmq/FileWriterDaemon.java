@@ -1,5 +1,7 @@
 package tools.descartes.petsupplystore.kieker.rabbitmq;
 
+import java.io.File;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -16,6 +18,8 @@ public class FileWriterDaemon implements Runnable {
 		logger.info("Starting FileWriterDaemon!");
 		try {
 			while (true) {
+				new File("logs").mkdir();
+				new File("logs").mkdirs();
 				Configuration configuration = new Configuration();
 
 				configuration.setProperty(AsciiFileWriter.CONFIG_PATH, "logs");
