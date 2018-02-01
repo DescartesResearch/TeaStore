@@ -1,6 +1,8 @@
 package tools.descartes.petsupplystore.kieker.rabbitmq;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -13,6 +15,8 @@ public class FileWriterDaemon implements Runnable {
 
 	@Override
 	public void run() {
+		Set<String> knownMonitoringTypes = new HashSet<String>();
+		int id = 0;
 		new File("logs").mkdir();
 		new File("logs").mkdirs();
 		Configuration configuration = new Configuration();
@@ -26,8 +30,14 @@ public class FileWriterDaemon implements Runnable {
 		AsciiFileWriter writer = new AsciiFileWriter(configuration);
 		try {
 			while (true) {
-				for (IMonitoringRecord record : MemoryLogStorage.getRecords())
+				for (IMonitoringRecord record : MemoryLogStorage.getRecords()) {
+					if (!knownMonitoringTypes.contains(record.getClass().getName())) {
+						knownMonitoringTypes.add(record.getClass().getName());
+						writer.onNewRegistryEntry(record.getClass().getName(), id);
+						id++;
+					}
 					writer.writeMonitoringRecord(record);
+				}
 				try {
 					Thread.sleep(5000);
 				} catch (InterruptedException e) {
@@ -38,6 +48,6 @@ public class FileWriterDaemon implements Runnable {
 			Logger logger = Logger.getLogger("FileWriterDaemon");
 			logger.setLevel(Level.INFO);
 			logger.error("Error!", t);
-			}
+		}
 	}
 }
