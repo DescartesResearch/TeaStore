@@ -19,11 +19,11 @@ public class FileWriterDaemon implements Runnable {
 		logger.setLevel(Level.INFO);
 		Set<String> knownMonitoringTypes = new HashSet<String>();
 		int id = 0;
-		new File("apache-tomcat-8.5.24/kieker").mkdir();
-		new File("apache-tomcat-8.5.24/kieker").mkdirs();
+		new File("apache-tomcat-8.5.24/webapps/logs").mkdir();
+		new File("apache-tomcat-8.5.24/webapps/logs").mkdirs();
 		Configuration configuration = new Configuration();
 
-		configuration.setProperty(AsciiFileWriter.CONFIG_PATH, "apache-tomcat-8.5.24/kieker");
+		configuration.setProperty(AsciiFileWriter.CONFIG_PATH, "apache-tomcat-8.5.24/webapps/logs");
 		configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "-1");
 		configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGSIZE, "-1");
 		configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGFILES, "-1");

@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import kieker.common.record.IMonitoringRecord;
 
-@WebServlet("/logs")
+@WebServlet("/displaylogs")
 public class DisplayLogs extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
