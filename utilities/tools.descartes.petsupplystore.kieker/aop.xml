@@ -8,9 +8,9 @@
 		<exclude within="tools.descartes.petsupplystore.registryclient.RegistryClient" />
 		<exclude within="tools.descartes.petsupplystore.registryclient.StartupCallbackTask" />
 		<exclude within="tools.descartes.petsupplystore.registryclient.RegistryClientHeartbeatDaemon" />
-		<exclude within="tools.descartes.petsupplystore.registryclient.RestUtil" />
 		<exclude within="tools.descartes.petsupplystore.registryclient.Service" />
 		<exclude within="tools.descartes.petsupplystore.registryclient.StartupCallback" />
+		<exclude within="tools.descartes.petsupplystore.registryclient.rest.RestUtil" />
 	</weaver>
 	<aspects>
 		<concrete-aspect name="kieker.monitoring.probe.aspectj.operationExecution.TargetedAspect" extends="kieker.monitoring.probe.aspectj.operationExecution.AbstractOperationExecutionAspect">
