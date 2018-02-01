@@ -1,8 +1,6 @@
 package tools.descartes.petsupplystore.kieker.rabbitmq;
 
 import java.io.File;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
