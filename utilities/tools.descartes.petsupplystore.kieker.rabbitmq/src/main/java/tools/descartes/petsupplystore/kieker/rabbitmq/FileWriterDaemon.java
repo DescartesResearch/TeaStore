@@ -42,6 +42,7 @@ public class FileWriterDaemon implements Runnable {
 					}
 					writer.writeMonitoringRecord(record);
 				}
+				MemoryLogStorage.clearMemoryStorage();
 				try {
 					Thread.sleep(5000);
 				} catch (InterruptedException e) {

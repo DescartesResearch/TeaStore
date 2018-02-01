@@ -24,6 +24,5 @@ public class DisplayLogs extends HttpServlet {
 		response.setCharacterEncoding("utf8");
 		for (IMonitoringRecord record: MemoryLogStorage.getRecords())
 			writer.println(record);
-		MemoryLogStorage.clearMemoryStorage();
 	}
 }
