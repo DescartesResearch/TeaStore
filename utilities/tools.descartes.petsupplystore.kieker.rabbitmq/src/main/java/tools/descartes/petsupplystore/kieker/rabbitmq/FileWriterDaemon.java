@@ -15,13 +15,15 @@ public class FileWriterDaemon implements Runnable {
 
 	@Override
 	public void run() {
+		Logger logger = Logger.getLogger("FileWriterDaemon");
+		logger.setLevel(Level.INFO);
 		Set<String> knownMonitoringTypes = new HashSet<String>();
 		int id = 0;
-		new File("apache-tomcat-8.5.24/logs").mkdir();
-		new File("apache-tomcat-8.5.24/logs").mkdirs();
+		new File("apache-tomcat-8.5.24/kieker").mkdir();
+		new File("apache-tomcat-8.5.24/kieker").mkdirs();
 		Configuration configuration = new Configuration();
 
-		configuration.setProperty(AsciiFileWriter.CONFIG_PATH, "apache-tomcat-8.5.24/logs");
+		configuration.setProperty(AsciiFileWriter.CONFIG_PATH, "apache-tomcat-8.5.24/kieker");
 		configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "-1");
 		configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGSIZE, "-1");
 		configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGFILES, "-1");
@@ -32,6 +34,7 @@ public class FileWriterDaemon implements Runnable {
 			while (true) {
 				for (IMonitoringRecord record : MemoryLogStorage.getRecords()) {
 					if (!knownMonitoringTypes.contains(record.getClass().getName())) {
+						logger.info("NEW RecordType!");
 						knownMonitoringTypes.add(record.getClass().getName());
 						writer.onNewRegistryEntry(record.getClass().getName(), id);
 						id++;
@@ -45,8 +48,6 @@ public class FileWriterDaemon implements Runnable {
 				}
 			}
 		} catch (Throwable t) {
-			Logger logger = Logger.getLogger("FileWriterDaemon");
-			logger.setLevel(Level.INFO);
 			logger.error("Error!", t);
 		}
 	}

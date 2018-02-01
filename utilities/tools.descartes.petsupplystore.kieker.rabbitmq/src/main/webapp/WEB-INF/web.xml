@@ -24,6 +24,6 @@
 
 	<servlet-mapping>
 		<servlet-name>ListLogs</servlet-name>
-		<url-pattern>/logs/*</url-pattern>
+		<url-pattern>/kieker/*</url-pattern>
 	</servlet-mapping>
 </web-app>
