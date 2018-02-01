@@ -13,7 +13,8 @@
 	</weaver>
 	<aspects>
 		<concrete-aspect name="kieker.monitoring.probe.aspectj.operationExecution.TargetedAspect" extends="kieker.monitoring.probe.aspectj.operationExecution.AbstractOperationExecutionAspect">
-			<pointcut name="monitoredOperation" expression="execution(* *(..))" />
+			<pointcut name="monitoredOperation" expression="execution(* *(..)) 
+			AND !execution(* tools.descartes.petsupplystore.registryclient.RegistryClient*(..))" />
 		</concrete-aspect>
 	</aspects>
 </aspectj>
