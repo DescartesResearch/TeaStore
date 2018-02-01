@@ -104,8 +104,20 @@ public final class RecommenderSelector implements IRecommender {
 		try {
 			return recommender.recommendProducts(userid, currentItems);
 		} catch (UseFallBackException e) {
+			// a UseFallBackException is usually ignored (as it is conceptual and might
+			// occur quite often)
+			LOG.trace("Executing " + recommender.getClass().getName()
+					+ " as recommender failed. Using fallback recommender. Reason:\n" + e.getMessage());
+			return fallbackrecommender.recommendProducts(userid, currentItems);
+		} catch (UnsupportedOperationException e) {
+			// if algorithm is not yet trained, we throw the error
+			LOG.error("Executing " + recommender.getClass().getName()
+					+ " threw an UnsupportedOperationException. The recommender was not finished with training.");
+			throw e;
+		} catch (Exception e) {
+			// any other exception is just reported
 			LOG.warn("Executing " + recommender.getClass().getName()
-					+ "recommender failed. Using fallback recommender.");
+					+ " threw an unexpected error. Using fallback recommender. Reason:\n" + e.getMessage());
 			return fallbackrecommender.recommendProducts(userid, currentItems);
 		}
 	}
