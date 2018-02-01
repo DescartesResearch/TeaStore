@@ -3,11 +3,14 @@
 	<weaver options="">
 		<include within="tools.descartes.petsupplystore..*"/>
 		<exclude within="tools.descartes.petsupplystore.entities..*" />
-		<exclude within="tools.descartes.petsupplystore.registryclient..*" />
 		<exclude within="tools.descartes.petsupplystore.rest..*" />
+		<exclude within="tools.descartes.petsupplystore.registryclient.loadbalancers..*" />
+		<exclude within="tools.descartes.petsupplystore.registryclient.RegistryClient..*" />
+		<exclude within="tools.descartes.petsupplystore.registryclient.RegistryClient..*" />
+		<exclude within="tools.descartes.petsupplystore.registryclient.Service..*" />
+		<exclude within="tools.descartes.petsupplystore.registryclient.StartupCallback..*" />
 	</weaver>
 	<aspects>
-		<!-- <aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullNoGetterAndSetter"/> -->
 		<concrete-aspect name="kieker.monitoring.probe.aspectj.operationExecution.TargetedAspect" extends="kieker.monitoring.probe.aspectj.operationExecution.AbstractOperationExecutionAspect">
 			<pointcut name="monitoredOperation" expression="execution(* *(..))" />
 		</concrete-aspect>
