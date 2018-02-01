@@ -6,7 +6,7 @@
 		<exclude within="tools.descartes.petsupplystore.rest..*" />
 		<exclude within="tools.descartes.petsupplystore.registryclient.loadbalancers..*" />
 		<exclude within="tools.descartes.petsupplystore.registryclient.RegistryClient" />
-		<exclude within="tools.descartes.petsupplystore.registryclient.RegistryClient$1" />
+		<exclude within="tools.descartes.petsupplystore.registryclient.StartupCallbackTask" />
 		<exclude within="tools.descartes.petsupplystore.registryclient.RegistryClientHeartbeatDaemon" />
 		<exclude within="tools.descartes.petsupplystore.registryclient.Service" />
 		<exclude within="tools.descartes.petsupplystore.registryclient.StartupCallback" />
