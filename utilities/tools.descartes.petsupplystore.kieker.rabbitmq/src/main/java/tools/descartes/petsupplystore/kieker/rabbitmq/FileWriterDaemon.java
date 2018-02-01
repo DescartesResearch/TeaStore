@@ -34,7 +34,7 @@ public class FileWriterDaemon implements Runnable {
 				}
 			}
 		} catch (Throwable t) { // Catch Throwable rather than Exception (a subclass).
-			logger.error("Caught exception in ScheduledExecutorService. StackTrace:\n" + t.getStackTrace());
-		}
+			logger.error("Error!", t);
+			}
 	}
 }
