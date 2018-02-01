@@ -28,6 +28,7 @@ import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.recommender.algorithm.impl.UseFallBackException;
 import tools.descartes.petsupplystore.recommender.algorithm.impl.cf.PreprocessedSlopeOneRecommender;
 import tools.descartes.petsupplystore.recommender.algorithm.impl.cf.SlopeOneRecommender;
+import tools.descartes.petsupplystore.recommender.algorithm.impl.orderbased.OrderBasedRecommender;
 import tools.descartes.petsupplystore.recommender.algorithm.impl.pop.PopularityBasedRecommender;
 
 /**
@@ -49,6 +50,7 @@ public final class RecommenderSelector implements IRecommender {
 		recommenders.put("Popularity", PopularityBasedRecommender.class);
 		recommenders.put("SlopeOne", SlopeOneRecommender.class);
 		recommenders.put("PreprocessedSlopeOne", PreprocessedSlopeOneRecommender.class);
+		recommenders.put("OrderBased", OrderBasedRecommender.class);
 	}
 
 	/**
