@@ -28,6 +28,7 @@ public class FileWriterDaemon implements Runnable {
 		configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGSIZE, "-1");
 		configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGFILES, "-1");
 		configuration.setProperty(AsciiFileWriter.CONFIG_FLUSH, "true");
+		configuration.setProperty(AsciiFileWriter.CONFIG_FLUSH_MAPFILE, "true");
 
 		AsciiFileWriter writer = new AsciiFileWriter(configuration);
 		try {
