@@ -34,12 +34,6 @@ public class FileWriterDaemon implements Runnable {
 		try {
 			while (true) {
 				for (IMonitoringRecord record : MemoryLogStorage.getRecords()) {
-					if (!knownMonitoringTypes.contains(record.getClass().getName())) {
-						logger.info("NEW RecordType!");
-						knownMonitoringTypes.add(record.getClass().getName());
-						writer.onNewRegistryEntry(record.getClass().getName(), id);
-						id++;
-					}
 					writer.writeMonitoringRecord(record);
 				}
 				MemoryLogStorage.clearMemoryStorage();
