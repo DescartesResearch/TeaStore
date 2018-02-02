@@ -22,12 +22,9 @@
 		<exclude within="tools.descartes.petsupplystore.recommender.algorithm.impl.UseFallBackException" />
 		<exclude within="tools.descartes.petsupplystore.recommender.algorithm.OrderItemSet" />
 		<exclude within="tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommender" />
-		<exclude within="tools.descartes.petsupplystore.image.setup..*" />
-		<exclude within="tools.descartes.petsupplystore.image.storage..*" />
-		<exclude within="tools.descartes.petsupplystore.image.rules..*" />
-		<exclude within="tools.descartes.petsupplystore.image.cache.rules..*" />
-		<exclude within="tools.descartes.petsupplystore.image.cache..*" />
-		<exclude within="tools.descartes.petsupplystore.image.StoreImage" />
+		<exclude within="tools.descartes.petsupplystore.webui.startup..*" />
+		<exclude within="tools.descartes.petsupplystore.webui.servlet.elhelper..*" />
+		<exclude within="tools.descartes.petsupplystore.webui.servlet.AbstractUIServlet" />
 	</weaver>
 	<aspects>
 		<concrete-aspect name="kieker.monitoring.probe.aspectj.operationExecution.TargetedAspect" extends="kieker.monitoring.probe.aspectj.operationExecution.AbstractOperationExecutionAspect">
