@@ -1,6 +1,6 @@
 <!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.eclipse.org/aspectj/dtd/aspectj.dtd">
 <aspectj>
-	<weaver options="">
+	<weaver options="-Xlint ignore">
 		<include within="tools.descartes.petsupplystore..*"/>
 		<exclude within="tools.descartes.petsupplystore.entities..*" />
 		<exclude within="tools.descartes.petsupplystore.rest..*" />
@@ -17,6 +17,10 @@
 		<exclude within="tools.descartes.petsupplystore.persistence.repository..*" />
 		<exclude within="tools.descartes.petsupplystore.persistence.servlet..*" />
 		<exclude within="tools.descartes.petsupplystore.persistence.rest.DatabaseGenerationEndpoint" />
+		<exclude within="tools.descartes.petsupplystore.recommender.servlet..*" />
+		<exclude within="tools.descartes.petsupplystore.recommender.rest.TrainEndPoint" />
+		<exclude within="tools.descartes.petsupplystore.recommender.UseFallBackException" />
+		<exclude within="tools.descartes.petsupplystore.recommender.OrderItemSet" />
 	</weaver>
 	<aspects>
 		<concrete-aspect name="kieker.monitoring.probe.aspectj.operationExecution.TargetedAspect" extends="kieker.monitoring.probe.aspectj.operationExecution.AbstractOperationExecutionAspect">
