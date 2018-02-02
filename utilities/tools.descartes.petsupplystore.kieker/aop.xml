@@ -82,7 +82,13 @@
 			&amp;&amp; !execution(* tools.descartes.petsupplystore.persistence.domain.PersistenceUser.getRealName(..))
 			&amp;&amp; !execution(* tools.descartes.petsupplystore.persistence.domain.PersistenceUser.setRealName(..))
 			&amp;&amp; !execution(* tools.descartes.petsupplystore.persistence.domain.PersistenceUser.getEmail(..))
-			&amp;&amp; !execution(* tools.descartes.petsupplystore.persistence.domain.PersistenceUser.setEmail(..))" />
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.persistence.domain.PersistenceUser.setEmail(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.recommender.algorithm.RecommenderSelector.getInstance(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.recommender.algorithm.RecommenderSelector.train(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.recommender.algorithm.impl.cf.SlopeOneRecommender.executePreprocessing(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.recommender.algorithm.impl.cf.SlopeOneRecommender.getUserVector(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.recommender.algorithm.impl.cf.SlopeOneRecommender.calculateScoreForItem(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.recommender.algorithm.impl.pop.PopularityBasedRecommender.executePreprocessing(..))" />
 		</concrete-aspect>
 	</aspects>
 </aspectj>
