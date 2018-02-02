@@ -14,8 +14,8 @@
 		<exclude within="tools.descartes.petsupplystore.registryclient.rest.RestUtil" />
 		<exclude within="tools.descartes.petsupplystore.persistence.daemons..*" />
 		<exclude within="tools.descartes.petsupplystore.persistence.domain.converters..*" />
-		<exclude within="tools.descartes.petsupplystore.persistence.persistence.repository..*" />
-		<exclude within="tools.descartes.petsupplystore.persistence.persistence.servlet..*" />
+		<exclude within="tools.descartes.petsupplystore.persistence.repository..*" />
+		<exclude within="tools.descartes.petsupplystore.persistence.servlet..*" />
 	</weaver>
 	<aspects>
 		<concrete-aspect name="kieker.monitoring.probe.aspectj.operationExecution.TargetedAspect" extends="kieker.monitoring.probe.aspectj.operationExecution.AbstractOperationExecutionAspect">
