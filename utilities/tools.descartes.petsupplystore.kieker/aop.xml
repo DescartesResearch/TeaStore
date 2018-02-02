@@ -19,7 +19,9 @@
 			&amp;&amp; !execution(private static * *..lambda*(..)) 
 			&amp;&amp; !execution(private * *..lambda*(..)) 
 			&amp;&amp; !execution(* tools.descartes.petsupplystore.store.security.SHASecurityProvider.blobToString(..))
-			&amp;&amp; !execution(* tools.descartes.petsupplystore.store.security.SHASecurityProvider.getSHA512(..))" />
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.store.security.SHASecurityProvider.getSHA512(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.store.security.SHASecurityProvider.getKeyProvider(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.store.security.ConstantKeyProvider.getKey(..))" />
 		</concrete-aspect>
 	</aspects>
 </aspectj>
