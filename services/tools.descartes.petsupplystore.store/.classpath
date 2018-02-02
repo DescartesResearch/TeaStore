@@ -58,5 +58,15 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Simon/git/Pet-Supply-Store2/utilities/tools.descartes.petsupplystore.kieker.rabbitmq/src/main/webapp/WEB-INF/lib/kieker-1.14-SNAPSHOT-aspectj.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+			<attribute name="maven.groupId" value="net.kieker-monitoring"/>
+			<attribute name="maven.artifactId" value="kieker"/>
+			<attribute name="maven.version" value="1.14"/>
+			<attribute name="maven.scope" value="system"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
