@@ -1,6 +1,6 @@
 <!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.eclipse.org/aspectj/dtd/aspectj.dtd">
 <aspectj>
-	<weaver options="-Xlint ignore">
+	<weaver options="-Xlint:none">
 		<include within="tools.descartes.petsupplystore..*"/>
 		<exclude within="tools.descartes.petsupplystore.entities..*" />
 		<exclude within="tools.descartes.petsupplystore.rest..*" />
