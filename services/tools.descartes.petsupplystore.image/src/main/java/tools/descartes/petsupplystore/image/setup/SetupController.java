@@ -102,7 +102,6 @@ public enum SetupController {
 	private AtomicLong nrOfImagesGenerated = new AtomicLong();
 	private HashMap<String, BufferedImage> categoryImages = new HashMap<>();
 	private ImageDB imgDB = new ImageDB();
-	private List<StoreImage> preCacheImg = new ArrayList<>();
 	private IDataStorage<StoreImage> storage = null;
 	private IDataCache<StoreImage> cache = null;
 	private ScheduledThreadPoolExecutor imgCreationPool = new ScheduledThreadPoolExecutor(
@@ -361,7 +360,6 @@ public enum SetupController {
 									file.getName().length() - StoreImage.STORE_IMAGE_FORMAT.length() - 1),
 							imageID, new ImageSize(buffImg.getWidth(), buffImg.getHeight()));
 					StoreImage img = new StoreImage(imageID, buffImg, ImageSizePreset.FULL.getSize());
-					preCacheImg.add(img);
 
 					try {
 						Files.write(workingDir.resolve(String.valueOf(imageID)), img.getByteArray(),
@@ -483,12 +481,6 @@ public enum SetupController {
 			break;
 		default:
 			break;
-		}
-
-		if (cache != null) {
-			for (StoreImage img : preCacheImg) {
-				cache.cacheData(img);
-			}
 		}
 
 		log.info("Storage setup done.");
