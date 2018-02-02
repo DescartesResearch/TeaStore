@@ -25,6 +25,7 @@
 		<exclude within="tools.descartes.petsupplystore.webui.startup..*" />
 		<exclude within="tools.descartes.petsupplystore.webui.servlet.elhelper..*" />
 		<exclude within="tools.descartes.petsupplystore.webui.servlet.AbstractUIServlet" />
+		<exclude within="tools.descartes.petsupplystore.image.setup..*" />
 	</weaver>
 	<aspects>
 		<concrete-aspect name="kieker.monitoring.probe.aspectj.operationExecution.TargetedAspect" extends="kieker.monitoring.probe.aspectj.operationExecution.AbstractOperationExecutionAspect">
