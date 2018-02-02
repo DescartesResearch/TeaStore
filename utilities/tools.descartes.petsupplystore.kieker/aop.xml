@@ -88,6 +88,7 @@
 			&amp;&amp; !execution(* tools.descartes.petsupplystore.recommender.algorithm.impl.cf.SlopeOneRecommender.executePreprocessing(..))
 			&amp;&amp; !execution(* tools.descartes.petsupplystore.recommender.algorithm.impl.cf.SlopeOneRecommender.getUserVector(..))
 			&amp;&amp; !execution(* tools.descartes.petsupplystore.recommender.algorithm.impl.cf.SlopeOneRecommender.calculateScoreForItem(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.recommender.algorithm.impl.cf.SlopeOneRecommender.buildDifferencesMatrices(..))
 			&amp;&amp; !execution(* tools.descartes.petsupplystore.recommender.algorithm.impl.pop.PopularityBasedRecommender.executePreprocessing(..))" />
 		</concrete-aspect>
 	</aspects>
