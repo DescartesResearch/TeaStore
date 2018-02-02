@@ -6,6 +6,7 @@
 		<exclude within="tools.descartes.petsupplystore.rest..*" />
 		<exclude within="tools.descartes.petsupplystore.registryclient.loadbalancers..*" />
 		<exclude within="tools.descartes.petsupplystore.registryclient.RegistryClient" />
+		<exclude within="tools.descartes.petsupplystore.store.startup.StoreStartup" />
 		<exclude within="tools.descartes.petsupplystore.registryclient.StartupCallbackTask" />
 		<exclude within="tools.descartes.petsupplystore.registryclient.RegistryClientHeartbeatDaemon" />
 		<exclude within="tools.descartes.petsupplystore.registryclient.Service" />
@@ -14,7 +15,11 @@
 	</weaver>
 	<aspects>
 		<concrete-aspect name="kieker.monitoring.probe.aspectj.operationExecution.TargetedAspect" extends="kieker.monitoring.probe.aspectj.operationExecution.AbstractOperationExecutionAspect">
-			<pointcut name="monitoredOperation" expression="execution(* *(..)) &amp;&amp; !execution(private static * *..lambda*(..)) &amp;&amp; !execution(private * *..lambda*(..))" />
+			<pointcut name="monitoredOperation" expression="execution(* *(..)) 
+			&amp;&amp; !execution(private static * *..lambda*(..)) 
+			&amp;&amp; !execution(private * *..lambda*(..)) 
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.store.security.SHASecurityProvider.blobToString(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.store.security.SHASecurityProvider.getSHA512(..))" />
 		</concrete-aspect>
 	</aspects>
 </aspectj>
