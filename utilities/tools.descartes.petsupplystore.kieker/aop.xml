@@ -97,7 +97,12 @@
 			&amp;&amp; !execution(* tools.descartes.petsupplystore.recommender.algorithm.impl.cf.SlopeOneRecommender.getUserVector(..))
 			&amp;&amp; !execution(* tools.descartes.petsupplystore.recommender.algorithm.impl.cf.SlopeOneRecommender.calculateScoreForItem(..))
 			&amp;&amp; !execution(* tools.descartes.petsupplystore.recommender.algorithm.impl.cf.SlopeOneRecommender.buildDifferencesMatrices(..))
-			&amp;&amp; !execution(* tools.descartes.petsupplystore.recommender.algorithm.impl.pop.PopularityBasedRecommender.executePreprocessing(..))" />
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.recommender.algorithm.impl.pop.PopularityBasedRecommender.executePreprocessing(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.webui.servlet.CategoryServlet.createNavigation(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.webui.servlet.CartActionServlet.updateOrder(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.webui.servlet.CartActionServlet.confirmOrder(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.webui.servlet.CartActionServlet.extractOrderInformation(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.webui.servlet.OrderServlet.doGetInternal(..))" />
 		</concrete-aspect>
 	</aspects>
 </aspectj>
