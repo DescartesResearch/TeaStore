@@ -45,7 +45,7 @@ public abstract class AbstractRecommenderTest {
 	private AbstractRecommender algo;
 
 	/**
-	 * Run the dummy test.
+	 * Run the setup.
 	 * 
 	 * trainOrders = [{10, user100}, {11, user101}, {12, user103}, {13, user104},
 	 * {14, user101}, {15, user101}, {16, user105}, {17, user106}] <br>

@@ -73,12 +73,14 @@ public class SlopeOneRecommenderTest extends AbstractRecommenderFunctionalityTes
 		// test single with different user
 		try {
 			result = getAlgo().recommendProducts(102L, getRecommendSingle());
+			Assert.fail("Exception expected");
 		} catch (UseFallBackException e) {
 			// expected
 		}
 		// test single with null user
 		try {
 			result = getAlgo().recommendProducts(null, getRecommendSingle());
+			Assert.fail("Exception expected");
 		} catch (UseFallBackException e) {
 			// expected
 		}
@@ -112,6 +114,7 @@ public class SlopeOneRecommenderTest extends AbstractRecommenderFunctionalityTes
 		// test multi with different user
 		try {
 			result = getAlgo().recommendProducts(102L, getRecommendMulti());
+			Assert.fail("Exception expected");
 		} catch (UseFallBackException e) {
 			// expected
 		}
@@ -119,6 +122,7 @@ public class SlopeOneRecommenderTest extends AbstractRecommenderFunctionalityTes
 		// test multi with null user
 		try {
 			result = getAlgo().recommendProducts(null, getRecommendMulti());
+			Assert.fail("Exception expected");
 		} catch (UseFallBackException e) {
 			// expected
 		}
