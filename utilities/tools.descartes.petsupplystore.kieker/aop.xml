@@ -14,7 +14,7 @@
 	</weaver>
 	<aspects>
 		<concrete-aspect name="kieker.monitoring.probe.aspectj.operationExecution.TargetedAspect" extends="kieker.monitoring.probe.aspectj.operationExecution.AbstractOperationExecutionAspect">
-			<pointcut name="monitoredOperation" expression="execution(* *(..)) &amp;&amp; !execution(void *lambda*(..))" />
+			<pointcut name="monitoredOperation" expression="execution(* *(..)) &amp;&amp; !execution(void *.lambda*(..))" />
 		</concrete-aspect>
 	</aspects>
 </aspectj>
