@@ -11,6 +11,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 public class TrackingFilter implements Filter {
@@ -19,17 +20,19 @@ public class TrackingFilter implements Filter {
 	
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		// TODO Auto-generated method stub
+		BasicConfigurator.configure();
+		logger.setLevel(Level.INFO);
 		
 	}
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		BasicConfigurator.configure();
 		if (request instanceof HttpServletRequest) {
 			HttpServletRequest httpRequest = (HttpServletRequest) request;
-			logger.info(httpRequest.getHeader("KiekerTracingInfo"));
+			String trackingInfo = httpRequest.getHeader("KiekerTracingInfo");
+			if (trackingInfo != null && !trackingInfo.equals(""))
+				logger.info(trackingInfo);
 		} else {
 			logger.error("Something went wrong");
 		}
