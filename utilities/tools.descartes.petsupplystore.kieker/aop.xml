@@ -114,7 +114,28 @@
 			&amp;&amp; !execution(* tools.descartes.petsupplystore.webui.servlet.CartActionServlet.updateOrder(..))
 			&amp;&amp; !execution(* tools.descartes.petsupplystore.webui.servlet.CartActionServlet.confirmOrder(..))
 			&amp;&amp; !execution(* tools.descartes.petsupplystore.webui.servlet.CartActionServlet.extractOrderInformation(..))
-			&amp;&amp; !execution(* tools.descartes.petsupplystore.webui.servlet.OrderServlet.doGetInternal(..))" />
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.webui.servlet.OrderServlet.doGetInternal(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.image.cache.AbstractCache.setMaxCacheSize(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.image.cache.AbstractCache.getFreeSpace(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.image.cache.AbstractCache.getCurrentCacheSize(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.image.ImageProvider.setImageDB(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.image.ImageProvider.setStorage(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.image.cache.AbstractCache.findInEntries(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.image.storage.DriveStorage.loadFromDisk(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.image.storage.DriveStorage.getIDLock(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.image.storage.DriveStorage.saveData(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.image.storage.DriveStorage.dataIsStorable(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.image.cache.AbstractCache.dataIsInCache(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.image.cache.AbstractCache.getData(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.image.cache.AbstractCache.hasStorageFor(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.image.cache.AbstractCache.addEntry(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.image.cache.AbstractCache.dataAddedToCache(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.image.cache.AbstractCache.dataRemovedFromCache(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.image.cache.AbstractCache.dataIsCachable(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.image.cache.AbstractCache.saveData(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.image.cache.AbstractCache.cacheData(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.image.cache.AbstractCache.findInEntries(..))
+			" />
 		</concrete-aspect>
 	</aspects>
 </aspectj>
