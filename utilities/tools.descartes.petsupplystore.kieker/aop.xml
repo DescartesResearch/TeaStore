@@ -43,7 +43,8 @@
 		<exclude within="tools.descartes.petsupplystore.image.cache.MostRecentlyUsed" />
 		<exclude within="tools.descartes.petsupplystore.image.cache.RandomReplacement" />
 		<exclude within="tools.descartes.petsupplystore.registryclient.rest.HttpWrapper" />
-	</weaver>
+		<exclude within="tools.descartes.petsupplystore.registryclient.rest.NonBalancedCRUDOperations" />
+		</weaver>
 	<aspects>
 		<concrete-aspect name="kieker.monitoring.probe.aspectj.operationExecution.TargetedAspect" extends="kieker.monitoring.probe.aspectj.operationExecution.AbstractOperationExecutionAspect">
 			<pointcut name="monitoredOperation" expression="execution(* *(..)) 
