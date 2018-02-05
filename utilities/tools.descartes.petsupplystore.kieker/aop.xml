@@ -42,6 +42,7 @@
 		<exclude within="tools.descartes.petsupplystore.image.cache.LeastRecentlyUsed" />
 		<exclude within="tools.descartes.petsupplystore.image.cache.MostRecentlyUsed" />
 		<exclude within="tools.descartes.petsupplystore.image.cache.RandomReplacement" />
+		<exclude within="tools.descartes.petsupplystore.rest.HttpWrapper" />
 	</weaver>
 	<aspects>
 		<concrete-aspect name="kieker.monitoring.probe.aspectj.operationExecution.TargetedAspect" extends="kieker.monitoring.probe.aspectj.operationExecution.AbstractOperationExecutionAspect">
@@ -138,6 +139,9 @@
 			&amp;&amp; !execution(* tools.descartes.petsupplystore.image.cache.AbstractCache.saveData(..))
 			&amp;&amp; !execution(* tools.descartes.petsupplystore.image.cache.AbstractCache.cacheData(..))
 			&amp;&amp; !execution(* tools.descartes.petsupplystore.image.cache.AbstractCache.findInEntries(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperation.getProductImage(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperation.getProductPreviewImages(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperation.getWebImage(..))
 			" />
 		</concrete-aspect>
 	</aspects>
