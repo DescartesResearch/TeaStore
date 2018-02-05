@@ -33,6 +33,7 @@ public class TrackingFilter implements Filter {
 		} else {
 			logger.error("Something went wrong");
 		}
+		chain.doFilter(request, response);
 	}
 
 	@Override
