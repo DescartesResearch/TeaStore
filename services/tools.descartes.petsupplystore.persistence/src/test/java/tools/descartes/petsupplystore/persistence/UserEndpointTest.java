@@ -21,7 +21,7 @@ import org.junit.Assert;
 
 import tools.descartes.petsupplystore.entities.User;
 import tools.descartes.petsupplystore.persistence.rest.UserEndpoint;
-import tools.descartes.petsupplystore.rest.NonBalancedCRUDOperations;
+import tools.descartes.petsupplystore.registryclient.rest.NonBalancedCRUDOperations;
 import tools.descartes.petsupplystore.rest.NotFoundException;
 import tools.descartes.petsupplystore.rest.RESTClient;
 

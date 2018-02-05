@@ -31,7 +31,7 @@ import tools.descartes.petsupplystore.persistence.rest.CacheManagerEndpoint;
 import tools.descartes.petsupplystore.persistence.rest.DatabaseGenerationEndpoint;
 import tools.descartes.petsupplystore.persistence.rest.ProductEndpoint;
 import tools.descartes.petsupplystore.registryclient.Service;
-import tools.descartes.petsupplystore.rest.NonBalancedCRUDOperations;
+import tools.descartes.petsupplystore.registryclient.rest.NonBalancedCRUDOperations;
 import tools.descartes.petsupplystore.rest.RESTClient;
 
 /**

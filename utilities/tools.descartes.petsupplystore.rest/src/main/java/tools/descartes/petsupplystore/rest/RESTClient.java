@@ -121,7 +121,7 @@ public class RESTClient<T> {
 	 * Generic type of return lists.
 	 * @return Generic List type.
 	 */
-	GenericType<List<T>> getGenericListType() {
+	public GenericType<List<T>> getGenericListType() {
 		return genericListType;
 	}
 
@@ -129,7 +129,7 @@ public class RESTClient<T> {
 	 * Class of entities to handle in REST Client.
 	 * @return Entity class.
 	 */
-	Class<T> getEntityClass() {
+	public Class<T> getEntityClass() {
 		return entityClass;
 	}
 	

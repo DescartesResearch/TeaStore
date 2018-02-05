@@ -29,7 +29,7 @@ import tools.descartes.petsupplystore.persistence.rest.OrderEndpoint;
 import tools.descartes.petsupplystore.persistence.rest.OrderItemEndpoint;
 import tools.descartes.petsupplystore.persistence.rest.ProductEndpoint;
 import tools.descartes.petsupplystore.persistence.rest.UserEndpoint;
-import tools.descartes.petsupplystore.rest.NonBalancedCRUDOperations;
+import tools.descartes.petsupplystore.registryclient.rest.NonBalancedCRUDOperations;
 import tools.descartes.petsupplystore.rest.NotFoundException;
 import tools.descartes.petsupplystore.rest.RESTClient;
 

@@ -14,36 +14,40 @@ import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
 import tools.descartes.petsupplystore.rest.NotFoundException;
+
 /**
  * Container class for the static calls to the Store service.
+ * 
  * @author Simon
  *
  */
 public final class LoadBalancedRecommenderOperations {
 
 	private LoadBalancedRecommenderOperations() {
-		
+
 	}
-	
+
 	/**
 	 * Gets recommendations.
-	 * @param order list of order items
-	 * @throws NotFoundException If 404 was returned.
-	 * @throws LoadBalancerTimeoutException On receiving the 408 status code
-     * and on repeated load balancer socket timeouts.
+	 * 
+	 * @param order
+	 *            list of order items
+	 * @throws NotFoundException
+	 *             If 404 was returned.
+	 * @throws LoadBalancerTimeoutException
+	 *             On receiving the 408 status code and on repeated load balancer
+	 *             socket timeouts.
 	 * @return List of recommended order ids
 	 */
 	public static List<Long> getRecommendations(List<OrderItem> order, Long uid)
 			throws NotFoundException, LoadBalancerTimeoutException {
-		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.RECOMMENDER,
-				"recommend", Category.class, client -> client.getService().path(client.getApplicationURI())
-				.path(client.getEndpointURI())
-				.queryParam("uid", uid)
-				.request(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON).post(Entity.entity(order, MediaType.APPLICATION_JSON)));
+		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.RECOMMENDER, "recommend", Category.class,
+				client -> HttpWrapper.wrap(client.getEndpointTarget().queryParam("uid", uid))
+						.post(Entity.entity(order, MediaType.APPLICATION_JSON)));
 		if (r != null) {
 			if (r.getStatus() < 400) {
-				return r.readEntity(new GenericType<List<Long>>() { });
+				return r.readEntity(new GenericType<List<Long>>() {
+				});
 			} else {
 				r.bufferEntity();
 			}
@@ -51,4 +55,3 @@ public final class LoadBalancedRecommenderOperations {
 		return new ArrayList<>();
 	}
 }
-

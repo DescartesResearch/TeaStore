@@ -20,7 +20,7 @@ import org.junit.Assert;
 
 import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.persistence.rest.CategoryEndpoint;
-import tools.descartes.petsupplystore.rest.NonBalancedCRUDOperations;
+import tools.descartes.petsupplystore.registryclient.rest.NonBalancedCRUDOperations;
 import tools.descartes.petsupplystore.rest.NotFoundException;
 import tools.descartes.petsupplystore.rest.RESTClient;
 
