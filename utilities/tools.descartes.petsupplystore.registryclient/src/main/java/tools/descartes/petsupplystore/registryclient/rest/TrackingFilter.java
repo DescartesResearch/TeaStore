@@ -10,18 +10,15 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 
 public class TrackingFilter implements Filter {
 
-	Logger logger = Logger.getLogger(TrackingFilter.class);
+	private static final Log LOG = LogFactory.getLog(TrackingFilter.class);
 	
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		BasicConfigurator.configure();
-		logger.setLevel(Level.INFO);
 		
 	}
 
@@ -32,9 +29,9 @@ public class TrackingFilter implements Filter {
 			HttpServletRequest httpRequest = (HttpServletRequest) request;
 			String trackingInfo = httpRequest.getHeader("KiekerTracingInfo");
 			if (trackingInfo != null && !trackingInfo.equals(""))
-				logger.info(trackingInfo);
+				LOG.info(trackingInfo);
 		} else {
-			logger.error("Something went wrong");
+			LOG.error("Something went wrong");
 		}
 		chain.doFilter(request, response);
 	}

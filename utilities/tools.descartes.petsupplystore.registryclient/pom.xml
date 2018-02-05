@@ -87,11 +87,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
-		</dependency>
-		<dependency>
 			<groupId>tools.descartes.petsupplystore</groupId>
 			<artifactId>registry</artifactId>
 			<version>${petsupplystoreversion}</version>
