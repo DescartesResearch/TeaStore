@@ -26,8 +26,6 @@ import org.junit.Test;
 import org.junit.Assert;
 
 import tools.descartes.petsupplystore.registryclient.rest.NonBalancedCRUDOperations;
-import tools.descartes.petsupplystore.rest.test.TestEntity;
-import tools.descartes.petsupplystore.rest.test.TestEntityEndpoint;
 
 /**
  * Test for CRUDClient and AbstractCrudEndpoint.
