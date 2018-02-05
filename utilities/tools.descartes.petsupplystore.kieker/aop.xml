@@ -26,6 +26,22 @@
 		<exclude within="tools.descartes.petsupplystore.webui.servlet.elhelper..*" />
 		<exclude within="tools.descartes.petsupplystore.webui.servlet.AbstractUIServlet" />
 		<exclude within="tools.descartes.petsupplystore.image.setup..*" />
+		<exclude within="tools.descartes.petsupplystore.image.storage.rules..*" />
+		<exclude within="tools.descartes.petsupplystore.image.cache.rules..*" />
+		<exclude within="tools.descartes.petsupplystore.image.cache.entry..*" />
+		<exclude within="tools.descartes.petsupplystore.image.ImageDB" />
+		<exclude within="tools.descartes.petsupplystore.image.ImageDBKey" />
+		<exclude within="tools.descartes.petsupplystore.image.ImageScaler" />
+		<exclude within="tools.descartes.petsupplystore.image.StoreImage" />
+		<exclude within="tools.descartes.petsupplystore.image.cache.AbstractQueueCache" />
+		<exclude within="tools.descartes.petsupplystore.image.cache.AbstractTreeCache" />
+		<exclude within="tools.descartes.petsupplystore.image.cache.FirstInFirstOut" />
+		<exclude within="tools.descartes.petsupplystore.image.cache.IDataCache" />
+		<exclude within="tools.descartes.petsupplystore.image.cache.LastInFirstOut" />
+		<exclude within="tools.descartes.petsupplystore.image.cache.LeastFrequentlyUsed" />
+		<exclude within="tools.descartes.petsupplystore.image.cache.LeastRecentlyUsed" />
+		<exclude within="tools.descartes.petsupplystore.image.cache.MostRecentlyUsed" />
+		<exclude within="tools.descartes.petsupplystore.image.cache.RandomReplacement" />
 	</weaver>
 	<aspects>
 		<concrete-aspect name="kieker.monitoring.probe.aspectj.operationExecution.TargetedAspect" extends="kieker.monitoring.probe.aspectj.operationExecution.AbstractOperationExecutionAspect">
