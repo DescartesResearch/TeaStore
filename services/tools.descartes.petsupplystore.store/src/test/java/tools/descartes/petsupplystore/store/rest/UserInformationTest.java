@@ -3,6 +3,7 @@ package tools.descartes.petsupplystore.store.rest;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.log4j.BasicConfigurator;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mindrot.jbcrypt.BCrypt;
@@ -28,6 +29,7 @@ public class UserInformationTest extends AbstractStoreRestTest {
 	 */
 	@Test
 	public void runTest() throws JsonProcessingException {
+		BasicConfigurator.configure();
 		mockUser509();
 		mockOrdersForUser509();
 		
