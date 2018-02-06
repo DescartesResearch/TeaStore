@@ -29,7 +29,6 @@ public class UserInformationTest extends AbstractStoreRestTest {
 	 */
 	@Test
 	public void runTest() throws JsonProcessingException {
-		BasicConfigurator.configure();
 		mockUser509();
 		mockOrdersForUser509();
 		

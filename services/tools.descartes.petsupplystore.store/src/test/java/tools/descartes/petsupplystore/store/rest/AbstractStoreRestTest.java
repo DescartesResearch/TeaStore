@@ -15,6 +15,7 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleState;
 import org.apache.catalina.startup.Tomcat;
+import org.apache.log4j.BasicConfigurator;
 import org.apache.tomcat.util.descriptor.web.ContextEnvironment;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
@@ -54,6 +55,8 @@ public abstract class AbstractStoreRestTest {
 	 */
 	@Before
 	public void setup() throws Throwable {
+		BasicConfigurator.configure();
+		
 		storeTomcat = new Tomcat();
 		storeTomcat.setPort(3000);
 		storeTomcat.setBaseDir(testWorkingDir);
