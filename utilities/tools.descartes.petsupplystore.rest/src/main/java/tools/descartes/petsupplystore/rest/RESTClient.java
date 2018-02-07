@@ -42,7 +42,7 @@ public class RESTClient<T> {
 	private static final int DEFAULT_POOL_SIZE = Runtime.getRuntime().availableProcessors() * 2;
 	private static final int MAX_POOL_SIZE = Runtime.getRuntime().availableProcessors() * 16;
 	
-	private static final int CONNECT_TIMEOUT = 400;
+	private static final int DEFAULT_CONNECT_TIMEOUT = 400;
 	private static final int DEFAULT_READ_TIMEOUT = 3000;
 	
 	/**
@@ -51,6 +51,7 @@ public class RESTClient<T> {
 	public static final String DEFAULT_REST_APPLICATION = "rest";
 	
 	private static int readTimeout = DEFAULT_READ_TIMEOUT;
+	private static int connectTimeout = DEFAULT_CONNECT_TIMEOUT;
 	
 	private String applicationURI;
 	private String endpointURI;
@@ -80,7 +81,7 @@ public class RESTClient<T> {
 			hostURL = "http://" + hostURL;
 		}
 		ClientConfig config = new ClientConfig();
-		config.property(ClientProperties.CONNECT_TIMEOUT, CONNECT_TIMEOUT);
+		config.property(ClientProperties.CONNECT_TIMEOUT, connectTimeout);
 		config.property(ClientProperties.READ_TIMEOUT, readTimeout);
 		PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
 	    connectionManager.setMaxTotal(MAX_POOL_SIZE);
@@ -115,6 +116,14 @@ public class RESTClient<T> {
 	 */
 	public static void setGlobalReadTimeout(int readTimeout) {
 		RESTClient.readTimeout = readTimeout;
+	}
+	
+	/**
+	 * Sets the global connect timeout for all REST clients of this service.
+	 * @param connectTimeout The read timeout in ms.
+	 */
+	public static void setGlobalConnectTimeout(int connectTimeout) {
+		RESTClient.connectTimeout = connectTimeout;
 	}
 	
 	/**

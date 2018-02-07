@@ -28,7 +28,8 @@ import tools.descartes.petsupplystore.rest.RESTClient;
 @WebListener
 public class EmptyStoreStartup implements ServletContextListener {
 	
-	private static final int REST_READ_TIMOUT = 1750;
+	private static final int TEST_REST_READ_TIMOUT = 5000;
+	private static final int TEST_REST_CONNECT_TIMOUT = 3000;
 	
 	/**
 	 * Also set this accordingly in RegistryClientStartup.
@@ -53,7 +54,8 @@ public class EmptyStoreStartup implements ServletContextListener {
      * @param arg0 The servlet context event at initialization.
      */
     public void contextInitialized(ServletContextEvent event)  {
-    	RESTClient.setGlobalReadTimeout(REST_READ_TIMOUT);
+    	RESTClient.setGlobalConnectTimeout(TEST_REST_CONNECT_TIMOUT);
+    	RESTClient.setGlobalReadTimeout(TEST_REST_READ_TIMOUT);
     	ServiceLoadBalancer.preInitializeServiceLoadBalancers(Service.PERSISTENCE, Service.RECOMMENDER);
     }
     
