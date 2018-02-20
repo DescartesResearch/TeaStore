@@ -131,8 +131,9 @@ public class TrackingFilter implements Filter {
 
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
-		
+		CF_REGISTRY.unsetThreadLocalTraceId();
+		CF_REGISTRY.unsetThreadLocalEOI();
+		CF_REGISTRY.unsetThreadLocalESS();
 	}
 
 }
