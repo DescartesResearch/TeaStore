@@ -25,7 +25,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.Response;
 
 import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.ImageSizePreset;
@@ -38,8 +37,6 @@ import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperat
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedRecommenderOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
-import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
-import tools.descartes.petsupplystore.registryclient.util.TimeoutException;
 
 /**
  * Servlet implementation for the web view of "Cart"
