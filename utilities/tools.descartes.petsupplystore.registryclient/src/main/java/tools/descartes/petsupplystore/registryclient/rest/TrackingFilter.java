@@ -1,8 +1,6 @@
 package tools.descartes.petsupplystore.registryclient.rest;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -16,11 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
-import kieker.monitoring.timer.ITimeSource;
 
 public class TrackingFilter implements Filter {
 
@@ -29,9 +24,9 @@ public class TrackingFilter implements Filter {
 
 	public static final String SESSION_ID_ASYNC_TRACE = "NOSESSION-ASYNCIN";
 
-		private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
-	private static final ITimeSource TIME = CTRLINST.getTimeSource();
-	private static final String VMNAME = CTRLINST.getHostname();
+//	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
+//	private static final ITimeSource TIME = CTRLINST.getTimeSource();
+//	private static final String VMNAME = CTRLINST.getHostname();
 	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 	public static final String HEADER_FIELD = "KiekerTracingInfo";
@@ -46,15 +41,15 @@ public class TrackingFilter implements Filter {
 			throws IOException, ServletException {
 		if (request instanceof HttpServletRequest && response instanceof HttpServletResponse) {
 			HttpServletRequest req = (HttpServletRequest) request;
-	        String signature;
+//	        String signature;
 	        String sessionId = SESSION_REGISTRY.recallThreadLocalSessionId();
 	        long traceId = -1L;
-	        long tin;
-	        final String hostname = VMNAME;
+//	        long tin;
+//	        final String hostname = VMNAME;
 	        int eoi;
 	        int ess;
 			
-			signature = "public void com.example.intercept.in.RestInInterceptor.interceptIncoming" + req.getMethod() + "Request()";
+//			signature = "public void com.example.intercept.in.RestInInterceptor.interceptIncoming" + req.getMethod() + "Request()";
 
 			final String operationExecutionHeader = req.getHeader(HEADER_FIELD);
 
@@ -119,7 +114,7 @@ public class TrackingFilter implements Filter {
 			}
 
 			// measure before
-			tin = TIME.getTime();
+//			tin = TIME.getTime();
 
 			((HttpServletResponse)response).addHeader(HEADER_FIELD, traceId + "," + sessionId + "," + (eoi+1) + "," + Integer.toString(CF_REGISTRY.recallThreadLocalESS()));
 		
