@@ -5,7 +5,6 @@
 	<projects>
 		<project>tools.descartes.petsupplystore.entities</project>
 		<project>tools.descartes.petsupplystore.registryclient</project>
-		<project>tools.descartes.petsupplystore.rest</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -32,7 +32,7 @@ import tools.descartes.petsupplystore.persistence.rest.DatabaseGenerationEndpoin
 import tools.descartes.petsupplystore.persistence.rest.ProductEndpoint;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.rest.NonBalancedCRUDOperations;
-import tools.descartes.petsupplystore.rest.RESTClient;
+import tools.descartes.petsupplystore.registryclient.util.RESTClient;
 
 /**
  * Test for the all federated cache utilities.

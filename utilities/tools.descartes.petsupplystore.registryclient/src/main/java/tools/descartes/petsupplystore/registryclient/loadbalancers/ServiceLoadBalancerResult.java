@@ -15,9 +15,9 @@ package tools.descartes.petsupplystore.registryclient.loadbalancers;
 
 import java.util.function.Function;
 
-import tools.descartes.petsupplystore.rest.NotFoundException;
-import tools.descartes.petsupplystore.rest.RESTClient;
-import tools.descartes.petsupplystore.rest.TimeoutException;
+import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
+import tools.descartes.petsupplystore.registryclient.util.RESTClient;
+import tools.descartes.petsupplystore.registryclient.util.TimeoutException;
 
 /**
  * Wrapper for results from service load balancer calls.

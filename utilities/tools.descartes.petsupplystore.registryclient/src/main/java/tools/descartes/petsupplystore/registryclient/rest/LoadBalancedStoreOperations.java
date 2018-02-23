@@ -10,7 +10,7 @@ import tools.descartes.petsupplystore.entities.message.SessionBlob;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
-import tools.descartes.petsupplystore.rest.NotFoundException;
+import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
 
 /**
  * Container class for the static calls to the Store service.

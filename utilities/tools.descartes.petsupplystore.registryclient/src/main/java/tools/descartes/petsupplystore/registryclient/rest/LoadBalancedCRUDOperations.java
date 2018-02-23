@@ -19,7 +19,7 @@ import java.util.Optional;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
-import tools.descartes.petsupplystore.rest.NotFoundException;
+import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
 
 /**
  * Default REST operations that transfer Entities to/from a service that has a

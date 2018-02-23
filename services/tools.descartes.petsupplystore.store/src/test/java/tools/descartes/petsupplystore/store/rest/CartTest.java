@@ -11,7 +11,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import tools.descartes.petsupplystore.entities.User;
 import tools.descartes.petsupplystore.entities.message.SessionBlob;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
-import tools.descartes.petsupplystore.rest.NotFoundException;
+import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
 
 
 

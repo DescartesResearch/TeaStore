@@ -18,7 +18,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import com.netflix.loadbalancer.Server;
 import tools.descartes.petsupplystore.registryclient.Service;
-import tools.descartes.petsupplystore.rest.RESTClient;
+import tools.descartes.petsupplystore.registryclient.util.RESTClient;
 
 /**
  * Load balancer for a REST endpoint. Balances between the different servers.

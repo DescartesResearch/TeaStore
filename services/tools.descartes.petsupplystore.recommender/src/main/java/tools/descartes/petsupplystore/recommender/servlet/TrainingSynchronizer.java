@@ -37,7 +37,7 @@ import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;
-import tools.descartes.petsupplystore.rest.NotFoundException;
+import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
 
 /**
  * This class organizes the communication with the other services and

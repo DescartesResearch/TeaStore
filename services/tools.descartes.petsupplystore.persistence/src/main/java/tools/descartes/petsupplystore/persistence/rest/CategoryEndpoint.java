@@ -21,7 +21,7 @@ import javax.ws.rs.Path;
 import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.persistence.domain.CategoryRepository;
 import tools.descartes.petsupplystore.persistence.repository.DataGenerator;
-import tools.descartes.petsupplystore.rest.AbstractCRUDEndpoint;
+import tools.descartes.petsupplystore.registryclient.util.AbstractCRUDEndpoint;
 
 /**
  * Persistence endpoint for CRUD operations on Categories.

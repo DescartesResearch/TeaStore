@@ -66,7 +66,7 @@ import tools.descartes.petsupplystore.registryclient.RegistryClient;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
-import tools.descartes.petsupplystore.rest.NotFoundException;
+import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
 
 public enum SetupController {
 

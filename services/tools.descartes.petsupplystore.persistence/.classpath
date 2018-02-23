@@ -38,11 +38,6 @@
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/tools.descartes.petsupplystore.rest">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
-		</attributes>
-	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/tools.descartes.petsupplystore.registry">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>

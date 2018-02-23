@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 import tools.descartes.petsupplystore.registryclient.RegistryClient;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
-import tools.descartes.petsupplystore.rest.RESTClient;
+import tools.descartes.petsupplystore.registryclient.util.RESTClient;
 
 /**
  * Startup Handler for the Recommender Service.

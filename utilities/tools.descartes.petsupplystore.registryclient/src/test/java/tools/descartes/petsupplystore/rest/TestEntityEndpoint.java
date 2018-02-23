@@ -19,7 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.ws.rs.Path;
-import tools.descartes.petsupplystore.rest.AbstractCRUDEndpoint;
+
+import tools.descartes.petsupplystore.registryclient.util.AbstractCRUDEndpoint;
 
 /**
  * Endpoint for test entities.

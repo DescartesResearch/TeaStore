@@ -58,7 +58,7 @@
 		<module>
 			utilities/tools.descartes.petsupplystore.registryclient
 		</module>
-		<module>utilities/tools.descartes.petsupplystore.rest</module>
+		
 		<module>services/tools.descartes.petsupplystore.store</module>
 		<module>services/tools.descartes.petsupplystore.webui</module>
 	</modules>

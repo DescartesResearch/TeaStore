@@ -25,7 +25,7 @@ import javax.ws.rs.core.Response.Status;
 import tools.descartes.petsupplystore.entities.User;
 import tools.descartes.petsupplystore.persistence.domain.UserRepository;
 import tools.descartes.petsupplystore.persistence.repository.DataGenerator;
-import tools.descartes.petsupplystore.rest.AbstractCRUDEndpoint;
+import tools.descartes.petsupplystore.registryclient.util.AbstractCRUDEndpoint;
 
 /**
  * Persistence endpoint for CRUD operations on Categories.

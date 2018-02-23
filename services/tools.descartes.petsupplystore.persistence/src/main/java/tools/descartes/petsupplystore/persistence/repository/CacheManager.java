@@ -21,7 +21,7 @@ import javax.ws.rs.core.Response;
 
 import tools.descartes.petsupplystore.persistence.domain.CategoryRepository;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
-import tools.descartes.petsupplystore.rest.RESTClient;
+import tools.descartes.petsupplystore.registryclient.util.RESTClient;
 
 /**
  * Class for managing (mostly clearing) the persistence cache.

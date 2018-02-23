@@ -26,9 +26,9 @@ import javax.ws.rs.core.Response.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tools.descartes.petsupplystore.rest.NotFoundException;
-import tools.descartes.petsupplystore.rest.RESTClient;
-import tools.descartes.petsupplystore.rest.TimeoutException;
+import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
+import tools.descartes.petsupplystore.registryclient.util.RESTClient;
+import tools.descartes.petsupplystore.registryclient.util.TimeoutException;
 
 /**
  * Default REST operations that transfer Entities to/from a service that has a

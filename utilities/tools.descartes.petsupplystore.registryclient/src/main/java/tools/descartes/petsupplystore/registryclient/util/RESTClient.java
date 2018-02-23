@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.rest;
+package tools.descartes.petsupplystore.registryclient.util;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

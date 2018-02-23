@@ -10,12 +10,6 @@
         <dependent-module archiveName="registryclient-1.1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.registryclient/tools.descartes.petsupplystore.registryclient">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="rest-1.1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.rest/tools.descartes.petsupplystore.rest">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="entities-1.1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.entities/tools.descartes.petsupplystore.entities">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <property name="java-output-path" value="/tools.descartes.petsupplystore.persistence/build/classes"/>
         <property name="context-root" value="tools.descartes.petsupplystore.persistence"/>
     </wb-module>

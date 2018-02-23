@@ -27,8 +27,8 @@ import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.entities.message.SessionBlob;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;
-import tools.descartes.petsupplystore.rest.NotFoundException;
-import tools.descartes.petsupplystore.rest.TimeoutException;
+import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
+import tools.descartes.petsupplystore.registryclient.util.TimeoutException;
 import tools.descartes.petsupplystore.store.security.SHASecurityProvider;
 
 /**

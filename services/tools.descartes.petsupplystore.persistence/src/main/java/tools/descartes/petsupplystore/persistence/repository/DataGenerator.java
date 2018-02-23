@@ -42,7 +42,7 @@ import tools.descartes.petsupplystore.persistence.domain.PersistenceUser;
 import tools.descartes.petsupplystore.persistence.domain.ProductRepository;
 import tools.descartes.petsupplystore.persistence.domain.UserRepository;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
-import tools.descartes.petsupplystore.rest.RESTClient;
+import tools.descartes.petsupplystore.registryclient.util.RESTClient;
 
 /**
  * Class for generating data in the database.

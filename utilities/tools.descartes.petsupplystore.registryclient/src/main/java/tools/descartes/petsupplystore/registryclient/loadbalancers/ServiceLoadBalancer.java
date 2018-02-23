@@ -38,8 +38,8 @@ import com.netflix.loadbalancer.reactive.LoadBalancerCommand;
 import rx.Observable;
 import tools.descartes.petsupplystore.registryclient.RegistryClient;
 import tools.descartes.petsupplystore.registryclient.Service;
-import tools.descartes.petsupplystore.rest.NotFoundException;
-import tools.descartes.petsupplystore.rest.RESTClient;
+import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
+import tools.descartes.petsupplystore.registryclient.util.RESTClient;
 
 /**
  * The load balancer for services.

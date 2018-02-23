@@ -37,7 +37,7 @@ import tools.descartes.petsupplystore.registryclient.test.NotFoundServlet;
 import tools.descartes.petsupplystore.registryclient.test.SlowTimeoutingServlet;
 import tools.descartes.petsupplystore.registryclient.test.TestServlet;
 import tools.descartes.petsupplystore.registryclient.test.TimeoutStatusServlet;
-import tools.descartes.petsupplystore.rest.NotFoundException;
+import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
 
 /**
  * Test the load balancer.

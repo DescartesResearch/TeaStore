@@ -18,12 +18,27 @@
 			<version>1.13</version>
 		</dependency>
 		<!-- Internal Dependencies -->
-		<dependency>
-			<groupId>tools.descartes.petsupplystore</groupId>
-			<artifactId>rest</artifactId>
-			<version>${petsupplystoreversion}</version>
-		</dependency>
 
+		<dependency>
+			<groupId>org.glassfish.jersey.containers</groupId>
+			<artifactId>jersey-container-servlet</artifactId>
+			<version>2.25.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.media</groupId>
+			<artifactId>jersey-media-json-jackson</artifactId>
+			<version>2.25.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.core</groupId>
+			<artifactId>jersey-server</artifactId>
+			<version>2.25.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.glassfish.jersey.connectors</groupId>
+		    <artifactId>jersey-apache-connector</artifactId>
+		    <version>2.25.1</version>
+		</dependency>
 		<!-- WebApp Dependencies -->
 		<!-- jackson, slf4j, and rx must be included before ribbon to avoid version 
 			conflicts. -->

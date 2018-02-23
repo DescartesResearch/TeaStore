@@ -28,8 +28,8 @@ import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.persistence.rest.CategoryEndpoint;
 import tools.descartes.petsupplystore.persistence.rest.ProductEndpoint;
 import tools.descartes.petsupplystore.registryclient.rest.NonBalancedCRUDOperations;
-import tools.descartes.petsupplystore.rest.NotFoundException;
-import tools.descartes.petsupplystore.rest.RESTClient;
+import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
+import tools.descartes.petsupplystore.registryclient.util.RESTClient;
 
 /**
  * Test for the ProductEndpoint.
