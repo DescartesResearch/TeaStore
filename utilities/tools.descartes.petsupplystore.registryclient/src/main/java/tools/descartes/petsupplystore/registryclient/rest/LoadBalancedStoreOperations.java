@@ -25,50 +25,6 @@ public final class LoadBalancedStoreOperations {
 	}
 
 	/**
-	 * Gets ads.
-	 * 
-	 * @param blob
-	 *            SessionBlob
-	 * @throws NotFoundException
-	 *             If 404 was returned.
-	 * @throws LoadBalancerTimeoutException
-	 *             On receiving the 408 status code and on repeated load balancer
-	 *             socket timeouts.
-	 * @return product
-	 */
-	public static List<Product> getAdvertisements(SessionBlob blob)
-			throws NotFoundException, LoadBalancerTimeoutException {
-		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE, "products", Product.class,
-				client -> HttpWrapper.wrap(client.getEndpointTarget().path("ads").queryParam("uid", blob.getUID()))
-						.post(Entity.entity(blob.getOrderItems(), MediaType.APPLICATION_JSON), Response.class));
-		return RestUtil.readListThrowAndOrCloseProduct(r);
-	}
-
-	/**
-	 * Gets ads.
-	 * 
-	 * @param blob
-	 *            SessionBlob
-	 * @param pid
-	 *            pid of currentProduct
-	 * @throws NotFoundException
-	 *             If 404 was returned.
-	 * @throws LoadBalancerTimeoutException
-	 *             On receiving the 408 status code and on repeated load balancer
-	 *             socket timeouts.
-	 * @return product
-	 */
-	public static List<Product> getAdvertisements(SessionBlob blob, long pid)
-			throws NotFoundException, LoadBalancerTimeoutException {
-		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE, "products", Product.class,
-				client -> HttpWrapper
-						.wrap(client.getEndpointTarget().path("ads").queryParam("pid", pid).queryParam("uid",
-								blob.getUID()))
-						.post(Entity.entity(blob.getOrderItems(), MediaType.APPLICATION_JSON), Response.class));
-		return RestUtil.readListThrowAndOrCloseProduct(r);
-	}
-
-	/**
 	 * Persists order in database.
 	 * 
 	 * @param blob

@@ -17,6 +17,7 @@ package tools.descartes.petsupplystore.webui.servlet;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -24,6 +25,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.Response;
 
 import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.ImageSizePreset;
@@ -34,7 +36,10 @@ import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
+import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedRecommenderOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
+import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
+import tools.descartes.petsupplystore.registryclient.util.TimeoutException;
 
 /**
  * Servlet implementation for the web view of "Cart"
@@ -82,13 +87,19 @@ public class CartServlet extends AbstractUIServlet {
 		request.setAttribute("Products", products);
 		request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
 
-		List<Product> ad = LoadBalancedStoreOperations.getAdvertisements(blob);
-		if (ad.size() > 3) {
-			ad.subList(3, ad.size()).clear();
+		
+		List<Long> productIds = LoadBalancedRecommenderOperations.getRecommendations(blob.getOrderItems(), blob.getUID());
+		List<Product> ads = new LinkedList<Product>();
+		for (Long productId : productIds) {
+			ads.add(LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "products", Product.class, productId));
 		}
-		request.setAttribute("Advertisment", ad);
+		
+		if (ads.size() > 3) {
+			ads.subList(3, ads.size()).clear();
+		}
+		request.setAttribute("Advertisment", ads);
 
-		request.setAttribute("productImages", LoadBalancedImageOperations.getProductPreviewImages(ad));
+		request.setAttribute("productImages", LoadBalancedImageOperations.getProductPreviewImages(ads));
 
 		request.getRequestDispatcher("WEB-INF/pages/cart.jsp").forward(request, response);
 

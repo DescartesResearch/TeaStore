@@ -14,6 +14,7 @@
 package tools.descartes.petsupplystore.webui.servlet;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -24,12 +25,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.ImageSizePreset;
+import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.entities.message.SessionBlob;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
+import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedRecommenderOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
 import tools.descartes.petsupplystore.webui.servlet.elhelper.ELHelperUtils;
 
@@ -66,14 +69,25 @@ public class ProductServlet extends AbstractUIServlet {
 			Product p = LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "products", Product.class, id);
 			request.setAttribute("product", p);
 
-			List<Product> ad = LoadBalancedStoreOperations.getAdvertisements(blob, p.getId());
-			if (ad.size() > 3) {
-				ad.subList(3, ad.size()).clear();
+			List<OrderItem> items = new LinkedList<>();
+			OrderItem oi = new OrderItem();
+			oi.setProductId(id);
+			oi.setQuantity(1);
+			items.add(oi);
+			items.addAll(getSessionBlob(request).getOrderItems());
+			List<Long> productIds = LoadBalancedRecommenderOperations.getRecommendations(items, getSessionBlob(request).getUID());
+			List<Product> ads = new LinkedList<Product>();
+			for (Long productId : productIds) {
+				ads.add(LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "products", Product.class, productId));
 			}
-			request.setAttribute("Advertisment", ad);
+			
+			if (ads.size() > 3) {
+				ads.subList(3, ads.size()).clear();
+			}
+			request.setAttribute("Advertisment", ads);
 
 			request.setAttribute("productImages",
-					LoadBalancedImageOperations.getProductImages(ad, ImageSizePreset.RECOMMENDATION.getSize()));
+					LoadBalancedImageOperations.getProductImages(ads, ImageSizePreset.RECOMMENDATION.getSize()));
 			request.setAttribute("productImage", LoadBalancedImageOperations.getProductImage(p));
 			request.setAttribute("storeIcon",
 					LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
