@@ -131,7 +131,7 @@ public abstract class AbstractUiTest {
 			category.setDescription("Description " + i);
 			categories.add(category);
 		}
-		mockValidGetRestCall(categories, "/tools.descartes.petsupplystore.store/rest/categories");
+		mockValidGetRestCall(categories, "/tools.descartes.petsupplystore.persistence/rest/categories");
 	}
 
 	protected String doGet() {
