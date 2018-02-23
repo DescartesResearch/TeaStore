@@ -25,7 +25,7 @@ public class ProductServletTest extends AbstractUiTest {
 		mockValidPostRestCall(new HashMap<Long, String>(),
 				"/tools.descartes.petsupplystore.image/rest/image/getProductImages");
 		mockValidGetRestCall(new Product(),
-				"/tools.descartes.petsupplystore.store/rest/products/1"); 
+				"/tools.descartes.petsupplystore.persistence/rest/products/1"); 
 		
 
 		String html = doGet();

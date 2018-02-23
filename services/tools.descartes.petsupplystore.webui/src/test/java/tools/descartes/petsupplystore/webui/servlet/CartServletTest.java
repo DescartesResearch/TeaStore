@@ -28,7 +28,7 @@ public class CartServletTest extends AbstractUiTest {
 		mockValidPostRestCall(null, "/tools.descartes.petsupplystore.store/rest/useractions/isloggedin");
 		mockValidPostRestCall(new HashMap<Long, String>(),
 				"/tools.descartes.petsupplystore.image/rest/image/getProductImages");
-		mockValidGetRestCall(new Product(), "/tools.descartes.petsupplystore.store/rest/products/0");
+		mockValidGetRestCall(new Product(), "/tools.descartes.petsupplystore.persistence/rest/products/0");
 
 		String html = doGet();
 		Assert.assertEquals("There are no order, thus there should be no \"Proceed to Checkout\" button", 0,
