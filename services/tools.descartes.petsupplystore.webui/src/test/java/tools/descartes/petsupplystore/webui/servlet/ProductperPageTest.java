@@ -76,8 +76,8 @@ public class ProductperPageTest extends AbstractUiTest {
 			products.add(productlist.get(i));
 		}
 
-		mockValidGetRestCall(products, "/tools.descartes.petsupplystore.persistence/rest/products/category/0?page=" + page
-				+ "&articlesPerPage=" + amount);
+		mockValidGetRestCall(products, "/tools.descartes.petsupplystore.persistence/rest/products/category/0?start=" + page*amount
+				+ "&max=" + amount);
 	}
 
 	@Override

@@ -31,6 +31,8 @@ public class PaginationTest extends AbstractUiTest {
 				"/tools.descartes.petsupplystore.persistence/rest/products/category/0?start=20&max=20");
 		mockValidGetRestCall(products,
 				"/tools.descartes.petsupplystore.persistence/rest/products/category/0?start=40&max=20");
+		mockValidGetRestCall(products,
+				"/tools.descartes.petsupplystore.persistence/rest/products/category/0?start=80&max=20");
 
 		String html = doGet("?category=0&page=1");
 
