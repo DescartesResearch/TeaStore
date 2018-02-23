@@ -21,8 +21,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.ImageSizePreset;
+import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
+import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
 
@@ -54,10 +57,11 @@ public class ErrorServlet extends AbstractUIServlet {
 		if (statusCode == null) {
 			redirect("/", response);
 		} else {
-			request.setAttribute("CategoryList", LoadBalancedStoreOperations.getCategories());
-			request.setAttribute("storeIcon", 
+			request.setAttribute("CategoryList",
+					LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "categories", Category.class, -1, -1));
+			request.setAttribute("storeIcon",
 					LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
-			request.setAttribute("errorImage", 
+			request.setAttribute("errorImage",
 					LoadBalancedImageOperations.getWebImage("error", ImageSizePreset.ERROR.getSize()));
 			request.setAttribute("title", "Pet Supply Store Error ");
 			request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));

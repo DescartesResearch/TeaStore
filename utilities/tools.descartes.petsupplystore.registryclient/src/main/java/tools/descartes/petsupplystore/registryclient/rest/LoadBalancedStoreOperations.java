@@ -3,13 +3,9 @@ package tools.descartes.petsupplystore.registryclient.rest;
 import java.util.List;
 
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import tools.descartes.petsupplystore.entities.Category;
-import tools.descartes.petsupplystore.entities.Order;
 import tools.descartes.petsupplystore.entities.Product;
-import tools.descartes.petsupplystore.entities.User;
 import tools.descartes.petsupplystore.entities.message.SessionBlob;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
@@ -26,69 +22,6 @@ public final class LoadBalancedStoreOperations {
 
 	private LoadBalancedStoreOperations() {
 
-	}
-
-	/**
-	 * Gets all categories.
-	 * 
-	 * @throws NotFoundException
-	 *             If 404 was returned.
-	 * @throws LoadBalancerTimeoutException
-	 *             On receiving the 408 status code and on repeated load balancer
-	 *             socket timeouts.
-	 * @return List of categories
-	 */
-	public static List<Category> getCategories() throws NotFoundException, LoadBalancerTimeoutException {
-		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE, "categories", Category.class,
-				client -> HttpWrapper.wrap(client.getEndpointTarget()).get());
-		List<Category> entity = null;
-		try {
-			entity = r.readEntity(new GenericType<List<Category>>() {
-			});
-
-		} finally {
-			if (r != null) {
-				r.close();
-			}
-		}
-		RestUtil.throwCommonExceptions(r);
-		return entity;
-	}
-
-	/**
-	 * Gets category by id.
-	 * 
-	 * @param cid
-	 *            categoryid
-	 * @throws NotFoundException
-	 *             If 404 was returned.
-	 * @throws LoadBalancerTimeoutException
-	 *             On receiving the 408 status code and on repeated load balancer
-	 *             socket timeouts.
-	 * @return category
-	 */
-	public static Category getCategory(long cid) throws NotFoundException, LoadBalancerTimeoutException {
-		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE, "categories", Category.class,
-				client -> HttpWrapper.wrap(client.getEndpointTarget().path("" + cid)).get());
-		return RestUtil.readThrowAndOrClose(r, Category.class);
-	}
-
-	/**
-	 * Gets product by id.
-	 * 
-	 * @param pid
-	 *            productid
-	 * @throws NotFoundException
-	 *             If 404 was returned.
-	 * @throws LoadBalancerTimeoutException
-	 *             On receiving the 408 status code and on repeated load balancer
-	 *             socket timeouts.
-	 * @return product
-	 */
-	public static Product getProduct(long pid) throws NotFoundException, LoadBalancerTimeoutException {
-		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE, "products", Product.class,
-				client -> HttpWrapper.wrap(client.getEndpointTarget().path("" + pid)).get());
-		return RestUtil.readThrowAndOrClose(r, Product.class);
 	}
 
 	/**
@@ -132,54 +65,6 @@ public final class LoadBalancedStoreOperations {
 						.wrap(client.getEndpointTarget().path("ads").queryParam("pid", pid).queryParam("uid",
 								blob.getUID()))
 						.post(Entity.entity(blob.getOrderItems(), MediaType.APPLICATION_JSON), Response.class));
-		return RestUtil.readListThrowAndOrCloseProduct(r);
-	}
-
-	/**
-	 * Gets all products from one category on page if every page has X articles per
-	 * page.
-	 * 
-	 * @param cid
-	 *            categoryid
-	 * @throws NotFoundException
-	 *             If 404 was returned.
-	 * @throws LoadBalancerTimeoutException
-	 *             On receiving the 408 status code and on repeated load balancer
-	 *             socket timeouts.
-	 * @return Number of products
-	 */
-	public static int getNumberOfProducts(long cid) throws NotFoundException, LoadBalancerTimeoutException {
-		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE, "products", List.class,
-				client -> HttpWrapper
-						.wrap(client.getEndpointTarget().path("category").path("" + cid).path("totalNumber")).get());
-		return RestUtil.readThrowAndOrClose(r, Integer.class);
-	}
-
-	/**
-	 * Gets all products from one category on page if every page has X articles per
-	 * page.
-	 * 
-	 * @param cid
-	 *            categoryid
-	 * @param page
-	 *            pagenumber
-	 * @param articlesPerPage
-	 *            number of articles per page
-	 * @throws NotFoundException
-	 *             If 404 was returned.
-	 * @throws LoadBalancerTimeoutException
-	 *             On receiving the 408 status code and on repeated load balancer
-	 *             socket timeouts.
-	 * @return List of products
-	 */
-	public static List<Product> getProducts(long cid, int page, int articlesPerPage)
-			throws NotFoundException, LoadBalancerTimeoutException {
-		Response r = ServiceLoadBalancer
-				.loadBalanceRESTOperation(Service.STORE, "products", List.class,
-						client -> HttpWrapper
-								.wrap(client.getEndpointTarget().path("category").path("" + cid)
-										.queryParam("page", page).queryParam("articlesPerPage", articlesPerPage))
-								.get());
 		return RestUtil.readListThrowAndOrCloseProduct(r);
 	}
 
@@ -359,39 +244,4 @@ public final class LoadBalancedStoreOperations {
 		return RestUtil.readThrowAndOrClose(r, SessionBlob.class);
 	}
 
-	/**
-	 * Gets user via id.
-	 * 
-	 * @param uid
-	 *            user id
-	 * @throws NotFoundException
-	 *             If 404 was returned.
-	 * @throws LoadBalancerTimeoutException
-	 *             On receiving the 408 status code and on repeated load balancer
-	 *             socket timeouts.
-	 * @return user
-	 */
-	public static User getUser(long uid) throws NotFoundException, LoadBalancerTimeoutException {
-		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE, "users", User.class,
-				client -> HttpWrapper.wrap(client.getEndpointTarget().path("" + uid)).get());
-		return RestUtil.readThrowAndOrClose(r, User.class);
-	}
-
-	/**
-	 * Gets all orders for a user.
-	 * 
-	 * @param uid
-	 *            userid
-	 * @throws NotFoundException
-	 *             If 404 was returned.
-	 * @throws LoadBalancerTimeoutException
-	 *             On receiving the 408 status code and on repeated load balancer
-	 *             socket timeouts.
-	 * @return List of orders
-	 */
-	public static List<Order> getOrdersForUser(long uid) throws NotFoundException, LoadBalancerTimeoutException {
-		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.STORE, "users", User.class,
-				client -> HttpWrapper.wrap(client.getEndpointTarget().path("" + uid).path("orders")).get());
-		return RestUtil.readListThrowAndOrCloseOrder(r);
-	}
 }

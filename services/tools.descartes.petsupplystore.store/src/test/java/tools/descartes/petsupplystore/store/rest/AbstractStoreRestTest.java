@@ -31,10 +31,8 @@ import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.store.rest.StoreCartREST;
-import tools.descartes.petsupplystore.store.rest.StoreCategoriesREST;
 import tools.descartes.petsupplystore.store.rest.StoreProductREST;
 import tools.descartes.petsupplystore.store.rest.StoreUserActionsREST;
-import tools.descartes.petsupplystore.store.rest.StoreUserREST;
 
 
 
@@ -78,10 +76,8 @@ public abstract class AbstractStoreRestTest {
 		context3.getNamingResources().addEnvironment(servicePort3);
 		ResourceConfig restServletConfig3 = new ResourceConfig();
 		restServletConfig3.register(StoreCartREST.class);
-		restServletConfig3.register(StoreCategoriesREST.class);
 		restServletConfig3.register(StoreProductREST.class);
 		restServletConfig3.register(StoreUserActionsREST.class);
-		restServletConfig3.register(StoreUserREST.class);
 		ServletContainer restServlet3 = new ServletContainer(restServletConfig3);
 		storeTomcat.addServlet("/tools.descartes.petsupplystore.store", "restServlet", restServlet3);
 		context3.addServletMappingDecoded("/rest/*", "restServlet");

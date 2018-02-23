@@ -17,22 +17,17 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.registryclient.Service;
-import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedRecommenderOperations;
-import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
 import tools.descartes.petsupplystore.rest.NotFoundException;
 import tools.descartes.petsupplystore.rest.TimeoutException;
 
@@ -45,27 +40,6 @@ import tools.descartes.petsupplystore.rest.TimeoutException;
 @Produces({ "application/json" })
 @Consumes({ "application/json" })
 public class StoreProductREST {
-
-	/**
-	 * Gets product by product id.
-	 * 
-	 * @param pid
-	 *            product id
-	 * @return Response containing product
-	 */
-	@GET
-	@Path("{pid}")
-	public Response getProduct(@PathParam("pid") final Long pid) {
-		Product product;
-		try {
-			product = LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "products", Product.class, pid);
-		} catch (TimeoutException e) {
-			return Response.status(408).build();
-		} catch (NotFoundException e) {
-			return Response.status(404).build();
-		}
-		return Response.status(Response.Status.OK).entity(product).build();
-	}
 
 	/**
 	 * Get advertisement.
@@ -97,59 +71,8 @@ public class StoreProductREST {
 		}
 		List<Product> products = new LinkedList<Product>();
 		for (Long productId : productIds) {
-			products.add(LoadBalancedStoreOperations.getProduct(productId));
+			products.add(LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "products", Product.class, productId));
 		}
 		return Response.status(Response.Status.OK).entity(products).build();
-	}
-
-	/**
-	 * Gets all products from a category page of a set size.
-	 * 
-	 * @param cid
-	 *            category id
-	 * @param page
-	 *            page number
-	 * @param articlesPerPage
-	 *            number of articles per page
-	 * @return Response containing List of products
-	 */
-	@GET
-	@Path("category/{cid}")
-	public Response getProducts(@PathParam("cid") final Long cid, @QueryParam("page") int page,
-			@QueryParam("articlesPerPage") int articlesPerPage) {
-		List<Product> products;
-		try {
-			products = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "products", Product.class,
-					"category", cid, (page - 1) * articlesPerPage, articlesPerPage);
-		} catch (TimeoutException e) {
-			return Response.status(408).build();
-		} catch (NotFoundException e) {
-			return Response.status(404).build();
-		}
-		return Response.status(Response.Status.OK).entity(products).build();
-	}
-
-	/**
-	 * Gets all products from a category page of a set size.
-	 * 
-	 * @param cid
-	 *            category id
-	 * @return Response containing List of products
-	 */
-	@GET
-	@Path("category/{cid}/totalNumber")
-	public Response getNumberOfProducts(@PathParam("cid") final Long cid) {
-		String s;
-		try {
-			s = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "products", Product.class,
-					client -> client.getEndpointTarget().path("count").path(String.valueOf(cid))
-							.request(MediaType.TEXT_PLAIN).get().readEntity(String.class));
-		} catch (TimeoutException e) {
-			return Response.status(408).build();
-		} catch (NotFoundException e) {
-			return Response.status(404).build();
-		}
-		long result = Long.parseLong(s);
-		return Response.status(Response.Status.OK).entity(result).build();
 	}
 }

@@ -21,8 +21,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.ImageSizePreset;
+import tools.descartes.petsupplystore.entities.Order;
+import tools.descartes.petsupplystore.entities.User;
+import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
+import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
 import tools.descartes.petsupplystore.webui.servlet.elhelper.ELHelperUtils;
@@ -50,18 +55,20 @@ public class ProfileServlet extends AbstractUIServlet {
 	@Override
 	protected void doGetInternal(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, LoadBalancerTimeoutException {
-		checkforCookie(request,response);
+		checkforCookie(request, response);
 		if (!LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request))) {
 			redirect("/", response);
 		} else {
 
-			request.setAttribute("storeIcon", 
+			request.setAttribute("storeIcon",
 					LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
-			request.setAttribute("CategoryList", LoadBalancedStoreOperations.getCategories());
+			request.setAttribute("CategoryList",
+					LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "categories", Category.class, -1, -1));
 			request.setAttribute("title", "Pet Supply Store Home");
-			request.setAttribute("User", LoadBalancedStoreOperations.getUser(getSessionBlob(request).getUID()));
+			request.setAttribute("User", LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "users", User.class, getSessionBlob(request).getUID()));
 			request.setAttribute("Orders",
-					LoadBalancedStoreOperations.getOrdersForUser(getSessionBlob(request).getUID()));
+					LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "orders", Order.class, "user", getSessionBlob(request).getUID(), -1,
+							-1));
 			request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
 			request.setAttribute("helper", ELHelperUtils.UTILS);
 

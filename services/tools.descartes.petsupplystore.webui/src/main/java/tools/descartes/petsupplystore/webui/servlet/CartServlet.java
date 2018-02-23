@@ -25,11 +25,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.ImageSizePreset;
 import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.entities.message.SessionBlob;
+import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
+import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
 
@@ -66,14 +69,15 @@ public class CartServlet extends AbstractUIServlet {
 
 		HashMap<Long, Product> products = new HashMap<Long, Product>();
 		for (Long id : ids) {
-			Product product = LoadBalancedStoreOperations.getProduct(id);
+			Product product = LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "products", Product.class, id);
 			products.put(product.getId(), product);
 		}
 
-		request.setAttribute("storeIcon", 
+		request.setAttribute("storeIcon",
 				LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
 		request.setAttribute("title", "Pet Supply Store Cart");
-		request.setAttribute("CategoryList", LoadBalancedStoreOperations.getCategories());
+		request.setAttribute("CategoryList",
+				LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "categories", Category.class, -1, -1));
 		request.setAttribute("OrderItems", orderItems);
 		request.setAttribute("Products", products);
 		request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));

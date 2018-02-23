@@ -23,11 +23,15 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.MediaType;
 
 import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.ImageSizePreset;
 import tools.descartes.petsupplystore.entities.Product;
+import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
+import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
+import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
 
@@ -60,9 +64,12 @@ public class CategoryServlet extends AbstractUIServlet {
 			checkforCookie(request, response);
 			long categoryID = Long.valueOf(request.getParameter("category"));
 
-			Category category = LoadBalancedStoreOperations.getCategory(categoryID);
+			Category category = LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "categories", Category.class,
+					categoryID);
 
-			int products = LoadBalancedStoreOperations.getNumberOfProducts(categoryID);
+			int products = Integer.valueOf(ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "products", Product.class,
+					client -> client.getEndpointTarget().path("count").path(String.valueOf(categoryID))
+					.request(MediaType.TEXT_PLAIN).get().readEntity(String.class)));
 
 			int numberProducts = INITIAL_PRODUCT_DISPLAY_COUNT;
 			if (request.getAttribute("numberProducts") != null) {
@@ -80,11 +87,13 @@ public class CategoryServlet extends AbstractUIServlet {
 
 			ArrayList<String> navigation = createNavigation(products, page, numberProducts);
 
-			List<Product> productlist = LoadBalancedStoreOperations.getProducts(categoryID, page, numberProducts);
+			List<Product> productlist = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "products", Product.class,
+					"category", categoryID, (page - 1) * numberProducts, numberProducts);
 			request.setAttribute("productImages", LoadBalancedImageOperations.getProductPreviewImages(productlist));
-			request.setAttribute("storeIcon", 
+			request.setAttribute("storeIcon",
 					LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
-			request.setAttribute("CategoryList", LoadBalancedStoreOperations.getCategories());
+			request.setAttribute("CategoryList",
+					LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "categories", Category.class, -1, -1));
 			request.setAttribute("title", "Pet Supply Store Categorie " + category.getName());
 
 			request.setAttribute("Productslist", productlist);

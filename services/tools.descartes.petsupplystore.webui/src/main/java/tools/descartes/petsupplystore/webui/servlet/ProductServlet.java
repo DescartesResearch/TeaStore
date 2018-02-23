@@ -22,10 +22,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.ImageSizePreset;
 import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.entities.message.SessionBlob;
+import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
+import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
 import tools.descartes.petsupplystore.webui.servlet.elhelper.ELHelperUtils;
@@ -55,11 +58,12 @@ public class ProductServlet extends AbstractUIServlet {
 		checkforCookie(request, response);
 		if (request.getParameter("id") != null) {
 			long id = Long.valueOf(request.getParameter("id"));
-			request.setAttribute("CategoryList", LoadBalancedStoreOperations.getCategories());
+			request.setAttribute("CategoryList",
+					LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "categories", Category.class, -1, -1));
 			request.setAttribute("title", "Pet Supply Store Product");
 			SessionBlob blob = getSessionBlob(request);
 			request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(blob));
-			Product p = LoadBalancedStoreOperations.getProduct(id);
+			Product p = LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "products", Product.class, id);
 			request.setAttribute("product", p);
 
 			List<Product> ad = LoadBalancedStoreOperations.getAdvertisements(blob, p.getId());
@@ -68,10 +72,10 @@ public class ProductServlet extends AbstractUIServlet {
 			}
 			request.setAttribute("Advertisment", ad);
 
-			request.setAttribute("productImages", LoadBalancedImageOperations.getProductImages(ad, 
-					ImageSizePreset.RECOMMENDATION.getSize()));
+			request.setAttribute("productImages",
+					LoadBalancedImageOperations.getProductImages(ad, ImageSizePreset.RECOMMENDATION.getSize()));
 			request.setAttribute("productImage", LoadBalancedImageOperations.getProductImage(p));
-			request.setAttribute("storeIcon", 
+			request.setAttribute("storeIcon",
 					LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
 			request.setAttribute("helper", ELHelperUtils.UTILS);
 

@@ -20,8 +20,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.ImageSizePreset;
+import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
+import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
 
@@ -48,8 +51,9 @@ public class LoginServlet extends AbstractUIServlet {
 	protected void doGetInternal(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, LoadBalancerTimeoutException {
 		checkforCookie(request, response);
-		request.setAttribute("CategoryList", LoadBalancedStoreOperations.getCategories());
-		request.setAttribute("storeIcon", 
+		request.setAttribute("CategoryList",
+				LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "categories", Category.class, -1, -1));
+		request.setAttribute("storeIcon",
 				LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
 		request.setAttribute("title", "Pet Supply Store Login");
 		request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
