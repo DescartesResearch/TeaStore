@@ -20,17 +20,13 @@ public class PaginationTest extends AbstractUiTest {
 	public void testPagination() throws IOException, ServletException, InterruptedException {
 		mockCategories(1);
 		mockValidPostRestCall(null, "/tools.descartes.petsupplystore.store/rest/useractions/isloggedin");
-		mockValidGetRestCall(new Category(), "/tools.descartes.petsupplystore.store/rest/categories/0");
-		mockValidGetRestCall(100, "/tools.descartes.petsupplystore.store/rest/products/category/0/totalNumber");
+		mockValidGetRestCall(new Category(), "/tools.descartes.petsupplystore.persistence/rest/categories/0");
+		mockValidGetRestCall(100, "/tools.descartes.petsupplystore.persistence/rest/products/count/0");
 		List<Product> products = new LinkedList<Product>();
 		mockValidPostRestCall(new HashMap<Long, String>(),
 				"/tools.descartes.petsupplystore.image/rest/image/getProductImages");
 		mockValidGetRestCall(products,
-				"/tools.descartes.petsupplystore.store/rest/products/category/0?page=1&articlesPerPage=20");
-		mockValidGetRestCall(products,
-				"/tools.descartes.petsupplystore.store/rest/products/category/0?page=3&articlesPerPage=20");
-		mockValidGetRestCall(products,
-				"/tools.descartes.petsupplystore.store/rest/products/category/0?page=5&articlesPerPage=20");
+				"/tools.descartes.petsupplystore.persistence/rest/products/category/0?start=0&max=20");
 
 		String html = doGet("?category=0&page=1");
 
