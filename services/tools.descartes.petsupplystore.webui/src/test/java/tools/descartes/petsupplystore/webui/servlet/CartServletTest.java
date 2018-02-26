@@ -25,7 +25,7 @@ public class CartServletTest extends AbstractUiTest {
 	public void testCartAction() throws IOException, ServletException, InterruptedException {
 		mockCategories(1);
 		mockValidPostRestCall(new ArrayList<Product>(), "/tools.descartes.petsupplystore.recommender/rest/recommend");
-		mockValidPostRestCall(null, "/tools.descartes.petsupplystore.store/rest/useractions/isloggedin");
+		mockValidPostRestCall(null, "/tools.descartes.petsupplystore.auth/rest/useractions/isloggedin");
 		mockValidPostRestCall(new HashMap<Long, String>(),
 				"/tools.descartes.petsupplystore.image/rest/image/getProductImages");
 		mockValidGetRestCall(new Product(), "/tools.descartes.petsupplystore.persistence/rest/products/0");
@@ -39,7 +39,7 @@ public class CartServletTest extends AbstractUiTest {
 		List<OrderItem> orderItems = new ArrayList<OrderItem>();
 		orderItems.add(new OrderItem());
 		blob.setOrderItems(orderItems);
-		mockValidPostRestCall(blob, "/tools.descartes.petsupplystore.store/rest/useractions/isloggedin");
+		mockValidPostRestCall(blob, "/tools.descartes.petsupplystore.auth/rest/useractions/isloggedin");
 		ObjectMapper o = new ObjectMapper();
 		String value = URLEncoder.encode(o.writeValueAsString(blob), "UTF-8");
 		html = doGet("", "sessionBlob", value);
@@ -55,7 +55,7 @@ public class CartServletTest extends AbstractUiTest {
 				orderItems.add(new OrderItem());
 			}
 			blob.setOrderItems(orderItems);
-			mockValidPostRestCall(blob, "/tools.descartes.petsupplystore.store/rest/useractions/isloggedin");
+			mockValidPostRestCall(blob, "/tools.descartes.petsupplystore.auth/rest/useractions/isloggedin");
 			o = new ObjectMapper();
 			value = URLEncoder.encode(o.writeValueAsString(blob), "UTF-8");
 			html = doGet("", "sessionBlob", value);

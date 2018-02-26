@@ -70,7 +70,7 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>tools.descartes.petsupplystore.store</finalName>
+		<finalName>tools.descartes.petsupplystore.auth</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

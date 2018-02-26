@@ -30,7 +30,7 @@ public enum Service {
 	/**
 	 * Store service.
 	 */
-	STORE("tools.descartes.petsupplystore.store"),
+	STORE("tools.descartes.petsupplystore.auth"),
 	/**
 	 * WebUi service.
 	 */

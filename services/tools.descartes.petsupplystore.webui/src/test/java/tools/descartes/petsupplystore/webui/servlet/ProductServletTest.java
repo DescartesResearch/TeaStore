@@ -21,7 +21,7 @@ public class ProductServletTest extends AbstractUiTest {
 		mockCategories(1);
 		ArrayList<Long> ads = new ArrayList<Long>();
 		mockValidPostRestCall(ads, "/tools.descartes.petsupplystore.recommender/rest/recommend");
-		mockValidPostRestCall(null, "/tools.descartes.petsupplystore.store/rest/useractions/isloggedin");
+		mockValidPostRestCall(null, "/tools.descartes.petsupplystore.auth/rest/useractions/isloggedin");
 		mockValidPostRestCall(new HashMap<Long, String>(),
 				"/tools.descartes.petsupplystore.image/rest/image/getProductImages");
 		mockValidGetRestCall(new Product(),

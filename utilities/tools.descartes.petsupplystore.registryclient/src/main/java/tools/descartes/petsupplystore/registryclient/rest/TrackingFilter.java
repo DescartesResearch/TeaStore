@@ -57,8 +57,8 @@ public class TrackingFilter implements Filter {
 				LOG.debug("No monitoring data found in the incoming request header");
 				// LOG.info("Will continue without sending back reponse header");
 				traceId = CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
-				CF_REGISTRY.storeThreadLocalEOI(0);
-				CF_REGISTRY.storeThreadLocalESS(1); // next operation is ess + 1
+				CF_REGISTRY.authThreadLocalEOI(0);
+				CF_REGISTRY.authThreadLocalESS(1); // next operation is ess + 1
 				eoi = 0;
 				ess = 0;
 			} else {
@@ -107,10 +107,10 @@ public class TrackingFilter implements Filter {
 				}
 
 				// Store thread-local values
-				CF_REGISTRY.storeThreadLocalTraceId(traceId);
-				CF_REGISTRY.storeThreadLocalEOI(eoi); // this execution has EOI=eoi; next execution will get eoi with incrementAndRecall
-				CF_REGISTRY.storeThreadLocalESS(ess + 1); // this execution has ESS=ess
-				SESSION_REGISTRY.storeThreadLocalSessionId(sessionId);
+				CF_REGISTRY.authThreadLocalTraceId(traceId);
+				CF_REGISTRY.authThreadLocalEOI(eoi); // this execution has EOI=eoi; next execution will get eoi with incrementAndRecall
+				CF_REGISTRY.authThreadLocalESS(ess + 1); // this execution has ESS=ess
+				SESSION_REGISTRY.authThreadLocalSessionId(sessionId);
 			}
 
 			// measure before

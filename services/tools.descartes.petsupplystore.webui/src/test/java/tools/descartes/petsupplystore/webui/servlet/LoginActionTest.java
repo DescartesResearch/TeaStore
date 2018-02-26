@@ -14,12 +14,12 @@ public class LoginActionTest extends AbstractUiTest {
 	@Test
 	public void testLoginAction() throws IOException, ServletException, InterruptedException {
 		mockCategories(1);
-		mockValidPostRestCall(null, "/tools.descartes.petsupplystore.store/rest/useractions/isloggedin");
+		mockValidPostRestCall(null, "/tools.descartes.petsupplystore.auth/rest/useractions/isloggedin");
 
 		SessionBlob blob = new SessionBlob();
 		blob.setSID("1");
 		mockValidPostRestCall(blob,
-				"/tools.descartes.petsupplystore.store/rest/useractions/login?name=user&password=password");
+				"/tools.descartes.petsupplystore.auth/rest/useractions/login?name=user&password=password");
 
 		String html = doPost("username=user&password=password");
 		Assert.assertEquals("After sucessful login redirect home", "Pet Supply Store Home", getWebSiteTitle(html));
@@ -27,7 +27,7 @@ public class LoginActionTest extends AbstractUiTest {
 
 		blob = new SessionBlob();
 		mockValidPostRestCall(blob,
-				"/tools.descartes.petsupplystore.store/rest/useractions/login?name=user&password=wrong");
+				"/tools.descartes.petsupplystore.auth/rest/useractions/login?name=user&password=wrong");
 		html = doPost("username=user&password=wrong");
 		Assert.assertEquals("After failed login redirect login", "Pet Supply Store Login", getWebSiteTitle(html));
 

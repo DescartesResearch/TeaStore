@@ -6,7 +6,7 @@
 		<exclude within="tools.descartes.petsupplystore.rest..*" />
 		<exclude within="tools.descartes.petsupplystore.registryclient.loadbalancers..*" />
 		<exclude within="tools.descartes.petsupplystore.registryclient.RegistryClient" />
-		<exclude within="tools.descartes.petsupplystore.store.startup.StoreStartup" />
+		<exclude within="tools.descartes.petsupplystore.auth.startup.StoreStartup" />
 		<exclude within="tools.descartes.petsupplystore.registryclient.StartupCallbackTask" />
 		<exclude within="tools.descartes.petsupplystore.registryclient.RegistryClientHeartbeatDaemon" />
 		<exclude within="tools.descartes.petsupplystore.registryclient.Service" />
@@ -51,10 +51,10 @@
 			&amp;&amp; !execution(private static * *..lambda*(..)) 
 			&amp;&amp; !execution(private * *..lambda*(..)) 
 			&amp;&amp; !execution(* *..getEntityClass*(..)) 
-			&amp;&amp; !execution(* tools.descartes.petsupplystore.store.security.SHASecurityProvider.blobToString(..))
-			&amp;&amp; !execution(* tools.descartes.petsupplystore.store.security.SHASecurityProvider.getSHA512(..))
-			&amp;&amp; !execution(* tools.descartes.petsupplystore.store.security.SHASecurityProvider.getKeyProvider(..))
-			&amp;&amp; !execution(* tools.descartes.petsupplystore.store.security.ConstantKeyProvider.getKey(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.auth.security.SHASecurityProvider.blobToString(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.auth.security.SHASecurityProvider.getSHA512(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.auth.security.SHASecurityProvider.getKeyProvider(..))
+			&amp;&amp; !execution(* tools.descartes.petsupplystore.auth.security.ConstantKeyProvider.getKey(..))
 			&amp;&amp; !execution(* tools.descartes.petsupplystore.persistence.domain.PersistenceCategory.getName(..))
 			&amp;&amp; !execution(* tools.descartes.petsupplystore.persistence.domain.PersistenceCategory.setName(..))
 			&amp;&amp; !execution(* tools.descartes.petsupplystore.persistence.domain.PersistenceCategory.getDescription(..))

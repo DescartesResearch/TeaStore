@@ -59,7 +59,7 @@
 			utilities/tools.descartes.petsupplystore.registryclient
 		</module>
 		
-		<module>services/tools.descartes.petsupplystore.store</module>
+		<module>services/tools.descartes.petsupplystore.auth</module>
 		<module>services/tools.descartes.petsupplystore.webui</module>
 	</modules>
 </project>

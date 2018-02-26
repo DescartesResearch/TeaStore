@@ -18,7 +18,7 @@ public class CategoryTest extends AbstractUiTest {
 		for (int category : categories) {
 			mockCategories(category);
 			mockValidPostRestCall(new SessionBlob(),
-					"/tools.descartes.petsupplystore.store/rest/useractions/isloggedin");
+					"/tools.descartes.petsupplystore.auth/rest/useractions/isloggedin");
 			String html = doGet();
 			Assert.assertEquals("Test the number of shown categories", category, countString("Category ", html));
 

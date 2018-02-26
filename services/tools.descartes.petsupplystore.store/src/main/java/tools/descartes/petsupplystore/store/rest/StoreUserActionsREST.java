@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.store.rest;
+package tools.descartes.petsupplystore.auth.rest;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -34,8 +34,8 @@ import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerT
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;
 import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
 import tools.descartes.petsupplystore.registryclient.util.TimeoutException;
-import tools.descartes.petsupplystore.store.security.SHASecurityProvider;
-import tools.descartes.petsupplystore.store.security.RandomSessionIdGenerator;
+import tools.descartes.petsupplystore.auth.security.SHASecurityProvider;
+import tools.descartes.petsupplystore.auth.security.RandomSessionIdGenerator;
 
 /**
  * Rest endpoint for the store user actions.

@@ -18,7 +18,7 @@ public class LogConsumer extends AbstractFilterPlugin {
 	public void newMonitoringRecord(final Object record) {
 		if (record instanceof IMonitoringRecord) {
 			IMonitoringRecord monitoringRecord = (IMonitoringRecord)record;
-			MemoryLogStorage.storeRecord(monitoringRecord);
+			MemoryLogStorage.authRecord(monitoringRecord);
 		} else {
 			throw new IllegalStateException("Unknown monitoring result type");
 		}

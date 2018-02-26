@@ -1,4 +1,4 @@
-package tools.descartes.petsupplystore.store.security;
+package tools.descartes.petsupplystore.auth.security;
 
 import java.util.Random;
 

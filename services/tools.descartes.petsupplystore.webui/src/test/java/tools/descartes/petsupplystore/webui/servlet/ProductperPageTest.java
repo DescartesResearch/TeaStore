@@ -21,7 +21,7 @@ public class ProductperPageTest extends AbstractUiTest {
 	@Test
 	public void testProductsperPage() throws IOException, ServletException, InterruptedException {
 		mockCategories(1);
-		mockValidPostRestCall(null, "/tools.descartes.petsupplystore.store/rest/useractions/isloggedin");
+		mockValidPostRestCall(null, "/tools.descartes.petsupplystore.auth/rest/useractions/isloggedin");
 		mockValidGetRestCall(new Category(), "/tools.descartes.petsupplystore.persistence/rest/categories/0");
 		mockValidGetRestCall(100, "/tools.descartes.petsupplystore.persistence/rest/products/count/0");
 		mockValidPostRestCall(new HashMap<Long, String>(),

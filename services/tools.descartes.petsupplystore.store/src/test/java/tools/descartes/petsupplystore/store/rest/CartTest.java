@@ -1,4 +1,4 @@
-package tools.descartes.petsupplystore.store.rest;
+package tools.descartes.petsupplystore.auth.rest;
 
 import javax.ws.rs.core.Response;
 

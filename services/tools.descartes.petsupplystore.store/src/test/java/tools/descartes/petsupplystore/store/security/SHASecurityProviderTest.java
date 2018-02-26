@@ -1,11 +1,11 @@
-package tools.descartes.petsupplystore.store.security;
+package tools.descartes.petsupplystore.auth.security;
 
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import tools.descartes.petsupplystore.entities.message.SessionBlob;
-import tools.descartes.petsupplystore.store.security.SHASecurityProvider;
+import tools.descartes.petsupplystore.auth.security.SHASecurityProvider;
 
 /**
  * Test for the SHASecurityProviuder.

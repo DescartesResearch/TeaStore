@@ -1,4 +1,4 @@
-package tools.descartes.petsupplystore.store.rest;
+package tools.descartes.petsupplystore.auth.rest;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
@@ -30,8 +30,8 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.registryclient.Service;
-import tools.descartes.petsupplystore.store.rest.StoreCartREST;
-import tools.descartes.petsupplystore.store.rest.StoreUserActionsREST;
+import tools.descartes.petsupplystore.auth.rest.StoreCartREST;
+import tools.descartes.petsupplystore.auth.rest.StoreUserActionsREST;
 
 
 
@@ -58,7 +58,7 @@ public abstract class AbstractStoreRestTest {
 		storeTomcat.setPort(3000);
 		storeTomcat.setBaseDir(testWorkingDir);
 		storeTomcat.enableNaming();
-		Context context3 = storeTomcat.addWebapp("/tools.descartes.petsupplystore.store", testWorkingDir);
+		Context context3 = storeTomcat.addWebapp("/tools.descartes.petsupplystore.auth", testWorkingDir);
 		ContextEnvironment registryURL3 = new ContextEnvironment();
 		registryURL3.setDescription("");
 		registryURL3.setOverride(false);
@@ -77,7 +77,7 @@ public abstract class AbstractStoreRestTest {
 		restServletConfig3.register(StoreCartREST.class);
 		restServletConfig3.register(StoreUserActionsREST.class);
 		ServletContainer restServlet3 = new ServletContainer(restServletConfig3);
-		storeTomcat.addServlet("/tools.descartes.petsupplystore.store", "restServlet", restServlet3);
+		storeTomcat.addServlet("/tools.descartes.petsupplystore.auth", "restServlet", restServlet3);
 		context3.addServletMappingDecoded("/rest/*", "restServlet");
 		context3.addApplicationListener(EmptyStoreStartup.class.getName());
 
@@ -166,7 +166,7 @@ public abstract class AbstractStoreRestTest {
 			category.setDescription("Description " + i);
 			categories.add(category);
 		}
-		mockValidGetRestCall(categories, "/tools.descartes.petsupplystore.store/rest/categories");
+		mockValidGetRestCall(categories, "/tools.descartes.petsupplystore.auth/rest/categories");
 	}
 
 	protected void mockProduct106() {

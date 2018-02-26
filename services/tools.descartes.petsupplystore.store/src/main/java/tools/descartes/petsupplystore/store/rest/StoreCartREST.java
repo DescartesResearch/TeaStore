@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.store.rest;
+package tools.descartes.petsupplystore.auth.rest;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -29,7 +29,7 @@ import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;
 import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
 import tools.descartes.petsupplystore.registryclient.util.TimeoutException;
-import tools.descartes.petsupplystore.store.security.SHASecurityProvider;
+import tools.descartes.petsupplystore.auth.security.SHASecurityProvider;
 
 /**
  * Rest endpoint for the store cart.
