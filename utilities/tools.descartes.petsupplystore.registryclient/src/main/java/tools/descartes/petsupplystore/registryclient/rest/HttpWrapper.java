@@ -33,8 +33,8 @@ public class HttpWrapper {
 		if (traceId == -1) {
 //			entrypoint = true;
 			traceId = CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
-			CF_REGISTRY.authThreadLocalEOI(0);
-			CF_REGISTRY.authThreadLocalESS(1); // next operation is ess + 1
+			CF_REGISTRY.storeThreadLocalEOI(0);
+			CF_REGISTRY.storeThreadLocalESS(1); // next operation is ess + 1
 			eoi = 0;
 			ess = 0;
 			nextESS = 1;
