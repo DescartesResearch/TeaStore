@@ -44,7 +44,7 @@ public class ProductServletTest extends AbstractUiTest {
 			for(int i = 0; i < ad; i++) {
 				ads.add(new Product());
 			}
-			mockValidPostRestCall(ads, "/tools.descartes.petsupplystore.store/rest/products/ads?pid=1");
+			mockValidPostRestCall(ads, "/tools.descartes.petsupplystore.recommender/rest/recommend");
 			html = doGet("?id=1");
 			// the maximum of shown ads is 3
 			Assert.assertEquals("There should be " + ad + " ads", Math.min(ad,3), countString("productid", html)-1);
