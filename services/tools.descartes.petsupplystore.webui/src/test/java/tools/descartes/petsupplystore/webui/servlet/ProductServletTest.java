@@ -43,7 +43,7 @@ public class ProductServletTest extends AbstractUiTest {
 			ads = new ArrayList<Long>();
 			for(int i = 0; i < ad; i++) {
 				ads.add((long) i);
-				mockValidGetRestCall(ads, "/tools.descartes.petsupplystore.persistence/rest/products/" + i);
+				mockValidGetRestCall(new Product(), "/tools.descartes.petsupplystore.persistence/rest/products/" + i);
 			}
 			mockValidPostRestCall(ads, "/tools.descartes.petsupplystore.recommender/rest/recommend");
 			html = doGet("?id=1");
