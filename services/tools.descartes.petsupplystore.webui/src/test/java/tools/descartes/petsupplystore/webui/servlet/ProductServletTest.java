@@ -19,7 +19,7 @@ public class ProductServletTest extends AbstractUiTest {
 	@Test
 	public void testCartAction() throws IOException, ServletException, InterruptedException {
 		mockCategories(1);
-		ArrayList<Product> ads = new ArrayList<Product>();
+		ArrayList<Long> ads = new ArrayList<Long>();
 		mockValidPostRestCall(ads, "/tools.descartes.petsupplystore.recommender/rest/recommend");
 		mockValidPostRestCall(null, "/tools.descartes.petsupplystore.store/rest/useractions/isloggedin");
 		mockValidPostRestCall(new HashMap<Long, String>(),
@@ -40,9 +40,10 @@ public class ProductServletTest extends AbstractUiTest {
 		
 		List<Integer> numberads = Arrays.asList(0, 1, 3, 5, 20);
 		for(int ad : numberads) {
-			ads = new ArrayList<Product>();
+			ads = new ArrayList<Long>();
 			for(int i = 0; i < ad; i++) {
-				ads.add(new Product());
+				ads.add((long) i);
+				mockValidGetRestCall(ads, "/tools.descartes.petsupplystore.persistence/rest/products/" + i);
 			}
 			mockValidPostRestCall(ads, "/tools.descartes.petsupplystore.recommender/rest/recommend");
 			html = doGet("?id=1");
