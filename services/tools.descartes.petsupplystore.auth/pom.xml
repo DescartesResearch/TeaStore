@@ -147,7 +147,7 @@
 									<goal>push</goal>
 								</goals>
 								<configuration>
-									<repository>${dockerrepository}/petsupplystore-store</repository>
+									<repository>${dockerrepository}/petsupplystore-auth</repository>
 									<tag>latest</tag>
 								</configuration>
 								<phase>package</phase>
@@ -159,7 +159,7 @@
 									<goal>push</goal>
 								</goals>
 								<configuration>
-									<repository>${dockerrepository}/petsupplystore-store</repository>
+									<repository>${dockerrepository}/petsupplystore-auth</repository>
 									<tag>${project.version}</tag>
 								</configuration>
 								<phase>package</phase>
@@ -297,7 +297,7 @@
 									<goal>push</goal>
 								</goals>
 								<configuration>
-									<repository>${dockerrepository}/petsupplystore-store-kieker</repository>
+									<repository>${dockerrepository}/petsupplystore-auth-kieker</repository>
 									<tag>latest</tag>
 								</configuration>
 								<phase>package</phase>
@@ -309,7 +309,7 @@
 									<goal>push</goal>
 								</goals>
 								<configuration>
-									<repository>${dockerrepository}/petsupplystore-store-kieker</repository>
+									<repository>${dockerrepository}/petsupplystore-auth-kieker</repository>
 									<tag>${project.version}</tag>
 								</configuration>
 								<phase>package</phase>
