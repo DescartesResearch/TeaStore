@@ -26,7 +26,7 @@ import tools.descartes.petsupplystore.registryclient.util.RESTClient;
  *
  */
 @WebListener
-public class EmptyStoreStartup implements ServletContextListener {
+public class EmptyAuthStartup implements ServletContextListener {
 	
 	private static final int TEST_REST_READ_TIMOUT = 5000;
 	private static final int TEST_REST_CONNECT_TIMOUT = 3000;
@@ -38,7 +38,7 @@ public class EmptyStoreStartup implements ServletContextListener {
 	/**
 	 * Empty constructor.
 	 */
-    public EmptyStoreStartup() {
+    public EmptyAuthStartup() {
     	
     }
 

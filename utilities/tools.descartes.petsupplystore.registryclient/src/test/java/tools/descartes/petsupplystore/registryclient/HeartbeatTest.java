@@ -80,13 +80,13 @@ public class HeartbeatTest {
 	@Test
 	public void test() throws ServletException, LifecycleException, InterruptedException {
 		Tomcat store1 = new Tomcat();
-		createClientTomcat(Service.STORE, store1);
-		waitAndValidate(Service.STORE, new String[] {"40008"});
+		createClientTomcat(Service.AUTH, store1);
+		waitAndValidate(Service.AUTH, new String[] {"40008"});
 		Tomcat store2 = new Tomcat();
-		createClientTomcat(Service.STORE, store2);
-		waitAndValidate(Service.STORE, new String[] {"40008", "40009"});
+		createClientTomcat(Service.AUTH, store2);
+		waitAndValidate(Service.AUTH, new String[] {"40008", "40009"});
 		store2.stop();
-		waitAndValidate(Service.STORE, new String[] {"40008"});
+		waitAndValidate(Service.AUTH, new String[] {"40008"});
 	}
 	
 	private void waitAndValidate(Service service, String[] strings) throws InterruptedException {

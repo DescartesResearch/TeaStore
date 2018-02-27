@@ -30,8 +30,8 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.registryclient.Service;
-import tools.descartes.petsupplystore.auth.rest.StoreCartREST;
-import tools.descartes.petsupplystore.auth.rest.StoreUserActionsREST;
+import tools.descartes.petsupplystore.auth.rest.AuthCartREST;
+import tools.descartes.petsupplystore.auth.rest.AuthUserActionsREST;
 
 
 
@@ -74,12 +74,12 @@ public abstract class AbstractStoreRestTest {
 	    servicePort3.setValue("3000");
 		context3.getNamingResources().addEnvironment(servicePort3);
 		ResourceConfig restServletConfig3 = new ResourceConfig();
-		restServletConfig3.register(StoreCartREST.class);
-		restServletConfig3.register(StoreUserActionsREST.class);
+		restServletConfig3.register(AuthCartREST.class);
+		restServletConfig3.register(AuthUserActionsREST.class);
 		ServletContainer restServlet3 = new ServletContainer(restServletConfig3);
 		storeTomcat.addServlet("/tools.descartes.petsupplystore.auth", "restServlet", restServlet3);
 		context3.addServletMappingDecoded("/rest/*", "restServlet");
-		context3.addApplicationListener(EmptyStoreStartup.class.getName());
+		context3.addApplicationListener(EmptyAuthStartup.class.getName());
 
 		// Mock registry
 		List<String> strings = new LinkedList<String>();
@@ -92,13 +92,13 @@ public abstract class AbstractStoreRestTest {
 				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.IMAGE.getServiceName() + "/"))
 						.willReturn(okJson(json)));
 		wireMockRule.stubFor(get(urlEqualTo(
-				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.STORE.getServiceName() + "/"))
+				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.AUTH.getServiceName() + "/"))
 						.willReturn(okJson(json2)));
 		wireMockRule.stubFor(WireMock.put(WireMock.urlMatching(
-				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.STORE.getServiceName() + "/.*"))
+				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.AUTH.getServiceName() + "/.*"))
 						.willReturn(okJson(json2)));
 		wireMockRule.stubFor(WireMock.delete(WireMock.urlMatching(
-				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.STORE.getServiceName() + "/.*"))
+				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.AUTH.getServiceName() + "/.*"))
 						.willReturn(okJson(json2)));
 		wireMockRule.stubFor(get(urlEqualTo(
 				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.PERSISTENCE.getServiceName() + "/"))

@@ -38,7 +38,7 @@ import tools.descartes.petsupplystore.auth.security.SHASecurityProvider;
 @Path("cart")
 @Produces({ "application/json" })
 @Consumes({ "application/json" })
-public class StoreCartREST {
+public class AuthCartREST {
 	
 	/**
 	 * Adds product to cart. If the product is already in the cart the quantity is increased.

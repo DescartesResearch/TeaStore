@@ -48,7 +48,7 @@ public class WebuiStartup implements ServletContextListener {
      * @param arg0 The servlet context event at initialization.
      */
     public void contextInitialized(ServletContextEvent event)  {
-    	ServiceLoadBalancer.preInitializeServiceLoadBalancers(Service.STORE, Service.IMAGE);
+    	ServiceLoadBalancer.preInitializeServiceLoadBalancers(Service.AUTH, Service.IMAGE);
     	RegistryClient.getClient().register(event.getServletContext().getContextPath());
     }
     

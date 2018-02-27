@@ -45,7 +45,7 @@ import tools.descartes.petsupplystore.auth.security.RandomSessionIdGenerator;
 @Path("useractions")
 @Produces({ "application/json" })
 @Consumes({ "application/json" })
-public class StoreUserActionsREST {
+public class AuthUserActionsREST {
 
 	/**
 	 * 

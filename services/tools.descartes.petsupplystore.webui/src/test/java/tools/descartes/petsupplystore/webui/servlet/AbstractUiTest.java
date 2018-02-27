@@ -72,7 +72,7 @@ public abstract class AbstractUiTest {
 				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.IMAGE.getServiceName() + "/"))
 						.willReturn(okJson(json)));
 		wireMockRule.stubFor(get(urlEqualTo(
-				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.STORE.getServiceName() + "/"))
+				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.AUTH.getServiceName() + "/"))
 						.willReturn(okJson(json)));
 		wireMockRule.stubFor(get(urlEqualTo(
 				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.PERSISTENCE.getServiceName() + "/"))

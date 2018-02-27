@@ -34,10 +34,10 @@
 						<td class="success">OK</td>
 					</tr>
 					<tr>
-						<td>Store</td>
-						<td <c:if test = "${storeservers.size() < 1}"> class="danger" </c:if>>${storeservers.size()}</td>
+						<td>Auth</td>
+						<td <c:if test = "${authservers.size() < 1}"> class="danger" </c:if>>${storeservers.size()}</td>
 						<td>
-							<c:forEach items="${storeservers}" var="server" varStatus="loop">
+							<c:forEach items="${authservers}" var="server" varStatus="loop">
 								${server.host}:${server.port}<br/>
 							</c:forEach>
 						</td>

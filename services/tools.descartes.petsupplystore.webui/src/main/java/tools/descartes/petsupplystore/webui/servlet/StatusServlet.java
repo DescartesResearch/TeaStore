@@ -66,7 +66,7 @@ public class StatusServlet extends AbstractUIServlet {
 		boolean noregistry = false;
 		try {
 			request.setAttribute("webuiservers", RegistryClient.getClient().getServersForService(Service.WEBUI));
-			request.setAttribute("storeservers", RegistryClient.getClient().getServersForService(Service.STORE));
+			request.setAttribute("authservers", RegistryClient.getClient().getServersForService(Service.AUTH));
 			request.setAttribute("persistenceservers",
 					RegistryClient.getClient().getServersForService(Service.PERSISTENCE));
 			request.setAttribute("imageservers", RegistryClient.getClient().getServersForService(Service.IMAGE));

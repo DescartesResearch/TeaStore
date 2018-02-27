@@ -20,7 +20,7 @@ public class RestUtil {
 		if (responseWithStatus.getStatus() == Status.NOT_FOUND.getStatusCode()) {
 			throw new NotFoundException();
 		} else if (responseWithStatus.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
-			throw new LoadBalancerTimeoutException("Timout waiting for Store.", Service.STORE);
+			throw new LoadBalancerTimeoutException("Timout waiting for Store.", Service.AUTH);
 		}
 	}
 	

@@ -47,7 +47,7 @@ import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
 public class LoadBalancerTest {
 	
 	private static final int NUM_SERVERS = 4;
-	private static final Service SERVICE = Service.STORE;
+	private static final Service SERVICE = Service.AUTH;
 	private static final String CONTEXT = "/" + SERVICE.getServiceName();
 	private static final String ENDPOINT = "products";
 	private static final String NOT_FOUND_ENDPOINT = "categories";
@@ -109,7 +109,7 @@ public class LoadBalancerTest {
 			}
 		});
 		List<Server> servers = tomcatsToServers();
-		ServiceLoadBalancer.getServiceLoadBalancer(Service.STORE, servers);
+		ServiceLoadBalancer.getServiceLoadBalancer(Service.AUTH, servers);
 		
 		//send to all servers
 		ArrayList<Long> ids = new ArrayList<>();
