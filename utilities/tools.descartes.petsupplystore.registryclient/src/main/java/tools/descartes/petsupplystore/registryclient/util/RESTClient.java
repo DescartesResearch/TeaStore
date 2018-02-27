@@ -39,8 +39,8 @@ public class RESTClient<T> {
 	/**
 	 * Default and max size for connection pools. We estimate a good size by using the available processor count.
 	 */
-	private static final int DEFAULT_POOL_SIZE = Runtime.getRuntime().availableProcessors() * 2;
-	private static final int MAX_POOL_SIZE = Runtime.getRuntime().availableProcessors() * 16;
+	private static final int DEFAULT_POOL_SIZE = Math.min(2048, Runtime.getRuntime().availableProcessors() * 32);
+	private static final int MAX_POOL_SIZE = Math.min(4096, Runtime.getRuntime().availableProcessors() * 128);
 	
 	private static final int DEFAULT_CONNECT_TIMEOUT = 400;
 	private static final int DEFAULT_READ_TIMEOUT = 3000;
