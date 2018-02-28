@@ -39,8 +39,8 @@ public class RESTClient<T> {
 	/**
 	 * Default and max size for connection pools. We estimate a good size by using the available processor count.
 	 */
-	private static final int DEFAULT_POOL_SIZE = 50;
-	private static final int MAX_POOL_SIZE = 1000;
+	private static final int DEFAULT_POOL_SIZE = 500;
+	private static final int MAX_POOL_SIZE = 10000;
 	
 	private static final int DEFAULT_CONNECT_TIMEOUT = 400;
 	private static final int DEFAULT_READ_TIMEOUT = 3000;
