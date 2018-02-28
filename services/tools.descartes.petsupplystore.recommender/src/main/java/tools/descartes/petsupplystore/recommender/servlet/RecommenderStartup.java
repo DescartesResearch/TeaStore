@@ -76,6 +76,9 @@ public class RecommenderStartup implements ServletContextListener {
 			// if a looptime is specified, a retraining daemon is started
 			if (looptime > 0) {
 				new RetrainDaemon(looptime).start();
+				LOG.info("Periodic retraining every " + looptime + " milliseconds");
+			} else {
+				LOG.info("Recommender loop time not set. Disabling periodic retraining.");
 			}
 		} catch (NamingException e) {
 			LOG.info("Recommender loop time not set. Disabling periodic retraining.");
