@@ -184,6 +184,7 @@ public abstract class AbstractUIServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		Arrivalrates.arrivals.add(System.currentTimeMillis());
 		try {
 			
 			doGetInternal(request, response);
@@ -203,6 +204,7 @@ public abstract class AbstractUIServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		Arrivalrates.arrivals.add(System.currentTimeMillis());
 		try {
 
 			doPostInternal(request, response);
