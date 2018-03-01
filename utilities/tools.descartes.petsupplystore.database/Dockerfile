@@ -5,6 +5,7 @@ MAINTAINER Chair of Software Engineering <se2-it@informatik.uni-wuerzburg.de>
 COPY setup.sql /docker-entrypoint-initdb.d/setup_0.sql
 # Uncomment the following line if the petsupplydb schema should come with a standard initialized data set
 # COPY setupData.sql /docker-entrypoint-initdb.d/setup_1.sql
+RUN sed -i "s/max_connections.*/max_connections = 2048/g" /usr/local/tomcat/conf/context.xml
 
 ENV MYSQL_ROOT_PASSWORD rootpassword
 
