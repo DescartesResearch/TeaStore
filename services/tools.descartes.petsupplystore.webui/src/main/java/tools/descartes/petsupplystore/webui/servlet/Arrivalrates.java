@@ -33,7 +33,7 @@ public class Arrivalrates extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		for (Long arrival: arrivals)	
-			response.getWriter().append("arrival\n");
+			response.getWriter().append(arrival + "\n");
 	}
 
 	/**
