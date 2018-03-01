@@ -41,7 +41,7 @@
 		</dependency>
 		<dependency>
 		    <groupId>org.glassfish.jersey.connectors</groupId>
-		    <artifactId>jersey-apache-connector</artifactId>
+		    <artifactId>jersey-netty-connector</artifactId>
 		    <version>2.25.1</version>
 		</dependency>
 		<!-- WebApp Dependencies -->

@@ -23,11 +23,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.UriBuilder;
 
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.glassfish.jersey.apache.connector.ApacheClientProperties;
-import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.netty.connector.NettyConnectorProvider;
 
 /**
  * Default Client that transfers Entities to/from a service that has a standard conforming REST-API.
@@ -39,8 +37,9 @@ public class RESTClient<T> {
 	/**
 	 * Default and max size for connection pools. We estimate a good size by using the available processor count.
 	 */
-	private static final int DEFAULT_POOL_SIZE = 500;
-	private static final int MAX_POOL_SIZE = 100000;
+
+//	private static final int DEFAULT_POOL_SIZE = 500;
+//	private static final int MAX_POOL_SIZE = 100000;
 	
 	private static final int DEFAULT_CONNECT_TIMEOUT = 400;
 	private static final int DEFAULT_READ_TIMEOUT = 3000;
@@ -83,11 +82,11 @@ public class RESTClient<T> {
 		ClientConfig config = new ClientConfig();
 		config.property(ClientProperties.CONNECT_TIMEOUT, connectTimeout);
 		config.property(ClientProperties.READ_TIMEOUT, readTimeout);
-		PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
-	    connectionManager.setMaxTotal(MAX_POOL_SIZE);
-	    connectionManager.setDefaultMaxPerRoute(DEFAULT_POOL_SIZE);
-	    config.property(ApacheClientProperties.CONNECTION_MANAGER, connectionManager);
-		config.connectorProvider(new ApacheConnectorProvider());
+		//PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
+	    //connectionManager.setMaxTotal(MAX_POOL_SIZE);
+	    //connectionManager.setDefaultMaxPerRoute(DEFAULT_POOL_SIZE);
+	    //config.property(ApacheClientProperties.CONNECTION_MANAGER, connectionManager);
+		config.connectorProvider(new NettyConnectorProvider());
 		client = ClientBuilder.newClient(config);
 		service = client.target(UriBuilder.fromUri(hostURL).build());
 		applicationURI = application;
