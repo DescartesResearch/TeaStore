@@ -60,6 +60,7 @@ public class TrainEndpoint {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		// set ready to true anyway to avoid being stuck
 		return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
 				.entity("The (re)trainprocess failed.").build();
 	}
@@ -82,5 +83,23 @@ public class TrainEndpoint {
 					.entity("The collection of the current maxTime was not possible.").build();
 		}
 		return Response.ok(TrainingSynchronizer.getInstance().getMaxTime()).build();
+	}
+	
+	/**
+	 * This methods checks, if the service is ready to serve recommendation
+	 * requests, i.e., if the algorithm is finish training and no retraining process
+	 * is running. However, this does not imply that issuing a recommendation will
+	 * fail, if this method returns false. For example, if a retraining is issued,
+	 * the old trained instance might still answer issued requests until the new
+	 * instance is fully trained. However, performance behavior is probably
+	 * influenced.
+	 * 
+	 * @return True, if recommender is ready; false, if not.
+	 */
+	@GET
+	@Path("isready")
+	public Response isReady() {
+		boolean isReady = TrainingSynchronizer.getInstance().isReady();
+		return Response.ok(String.valueOf(isReady)).build();
 	}
 }

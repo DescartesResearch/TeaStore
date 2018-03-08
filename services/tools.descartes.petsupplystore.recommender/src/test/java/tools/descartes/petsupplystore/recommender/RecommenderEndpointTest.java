@@ -50,6 +50,11 @@ public class RecommenderEndpointTest extends AbstractRecommenderRestTest {
 	public static final String TRAIN_TARGET = RECOMMENDER_REST_PREFIX + "train";
 
 	/**
+	 * Endpoint for isReady.
+	 */
+	public static final String ISREADY_TARGET = TRAIN_TARGET + "/isready";
+
+	/**
 	 * Endpoint for time synchronization.
 	 */
 	public static final String TIMESTAMP_TARGET = TRAIN_TARGET + "/timestamp";
@@ -131,12 +136,12 @@ public class RecommenderEndpointTest extends AbstractRecommenderRestTest {
 		expected = Arrays.asList(345L, 48L, 88L, 320L, 30L, 3L, 1L, 2L, 4L, 5L);
 		Assert.assertEquals(expected, recommended);
 
-		
 		// CHANGE TIMESTAMP
-		// we somewhat "cheat" do adapt the timestamp, in order to force an earlier synchronization
+		// we somewhat "cheat" do adapt the timestamp, in order to force an earlier
+		// synchronization
 		String newmax = "1495010140000";
 		TrainingSynchronizer.getInstance().setMaxTime(Long.parseLong(newmax));
-		
+
 		// train again
 		response = ClientBuilder.newBuilder().build().target(RecommenderEndpointTest.TRAIN_TARGET)
 				.request(MediaType.TEXT_PLAIN).get();
@@ -150,7 +155,7 @@ public class RecommenderEndpointTest extends AbstractRecommenderRestTest {
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
 		str = response.readEntity(String.class);
 		Assert.assertEquals(newmax, str);
-		
+
 		// without uid -> fallback (Popbased recommender)
 		response = ClientBuilder.newBuilder().build().target(RECOMMEND_TARGET).request(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(list, MediaType.APPLICATION_JSON));
@@ -218,6 +223,26 @@ public class RecommenderEndpointTest extends AbstractRecommenderRestTest {
 
 		list = new ArrayList<OrderItem>();
 
+		// TEST ISREADY ENDPOINT
+		// Assert PUT Method is not allowed
+		response = ClientBuilder.newBuilder().build().target(ISREADY_TARGET).request(MediaType.TEXT_PLAIN)
+				.put(Entity.text(""));
+		Assert.assertEquals(org.apache.catalina.connector.Response.SC_METHOD_NOT_ALLOWED, response.getStatus());
+		// Assert POST Method is not allowed
+		response = ClientBuilder.newBuilder().build().target(ISREADY_TARGET).request(MediaType.TEXT_PLAIN)
+				.post(Entity.text(""));
+		Assert.assertEquals(org.apache.catalina.connector.Response.SC_METHOD_NOT_ALLOWED, response.getStatus());
+		// Assert DELETE Method is not allowed
+		response = ClientBuilder.newBuilder().build().target(ISREADY_TARGET).request(MediaType.TEXT_PLAIN).delete();
+		Assert.assertEquals(org.apache.catalina.connector.Response.SC_METHOD_NOT_ALLOWED, response.getStatus());
+
+		// Assert calling train via GET is OK
+		response = ClientBuilder.newBuilder().build().target(ISREADY_TARGET).request(MediaType.TEXT_PLAIN).get();
+		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
+		// assert that string returns true
+		String isready = response.readEntity(String.class);
+		Assert.assertEquals(String.valueOf(true), isready);
+
 		// TEST TRAIN ENDPOINT
 		// Assert PUT Method is not allowed
 		response = ClientBuilder.newBuilder().build().target(TRAIN_TARGET).request(MediaType.TEXT_PLAIN)
@@ -236,8 +261,6 @@ public class RecommenderEndpointTest extends AbstractRecommenderRestTest {
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
 
 		// test training process finishes
-		response = ClientBuilder.newBuilder().build().target(TRAIN_TARGET).request(MediaType.TEXT_PLAIN).get();
-		Assert.assertEquals(org.apache.catalina.connector.Response.SC_OK, response.getStatus());
 		String str = response.readEntity(String.class);
 		Assert.assertTrue("The return string must report the successful training.",
 				str.startsWith("The (re)train was succesfully done."));
