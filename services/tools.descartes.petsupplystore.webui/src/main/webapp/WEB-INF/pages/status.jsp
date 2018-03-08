@@ -35,14 +35,14 @@
 					</tr>
 					<tr>
 						<td>Auth</td>
-						<td <c:if test = "${authservers.size() < 1}"> class="danger" </c:if>>${storeservers.size()}</td>
+						<td <c:if test = "${authservers.size() < 1}"> class="danger" </c:if>>${authservers.size()}</td>
 						<td>
 							<c:forEach items="${authservers}" var="server" varStatus="loop">
 								${server.host}:${server.port}<br/>
 							</c:forEach>
 						</td>
 						<c:choose>
-							<c:when test = "${storeservers.size() > 0}">
+							<c:when test = "${authservers.size() > 0}">
 							   <td class="success">OK</td>
 							</c:when>
 							<c:otherwise>
