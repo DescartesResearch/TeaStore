@@ -62,6 +62,23 @@ public final class TrainingSynchronizer {
 
 	private static TrainingSynchronizer instance;
 
+	private boolean isReady = false;
+
+	/**
+	 * @return the isReady
+	 */
+	public boolean isReady() {
+		return isReady;
+	}
+
+	/**
+	 * @param isReady
+	 *            the isReady to set
+	 */
+	public void setReady(boolean isReady) {
+		this.isReady = isReady;
+	}
+
 	private TrainingSynchronizer() {
 
 	}
@@ -82,8 +99,8 @@ public final class TrainingSynchronizer {
 	private static final Logger LOG = LoggerFactory.getLogger(TrainingSynchronizer.class);
 
 	/**
-	 * The maximum considered time in milliseconds. DEFAULT_MAX_TIME_VALUE signals no entry,
-	 * e.g. all orders are used for training.
+	 * The maximum considered time in milliseconds. DEFAULT_MAX_TIME_VALUE signals
+	 * no entry, e.g. all orders are used for training.
 	 */
 	private long maxTime = DEFAULT_MAX_TIME_VALUE;
 
@@ -156,6 +173,7 @@ public final class TrainingSynchronizer {
 	 *         process failed.
 	 */
 	public long retrieveDataAndRetrain() {
+		setReady(false);
 		LOG.trace("Retrieving data objects from database...");
 
 		waitForPersistence();
@@ -171,6 +189,8 @@ public final class TrainingSynchronizer {
 			long noOrders = orders.size();
 			LOG.trace("Retrieved " + noOrders + " orders, starting training now.");
 		} catch (Exception e) {
+			// set ready anyway to avoid deadlocks
+			setReady(true);
 			LOG.error("Database retrieving failed.");
 			return -1;
 		}
@@ -179,6 +199,7 @@ public final class TrainingSynchronizer {
 		// train instance
 		RecommenderSelector.getInstance().train(items, orders);
 		LOG.trace("Finished training, ready for recommendation.");
+		setReady(true);
 		return items.size() + orders.size();
 	}
 
@@ -200,7 +221,7 @@ public final class TrainingSynchronizer {
 				}
 				maxTime = Math.min(maxTime, milliTS);
 			} else {
-				//release connection by buffering entity
+				// release connection by buffering entity
 				response.bufferEntity();
 				LOG.warn("Service " + response + "was not available for time-check.");
 			}

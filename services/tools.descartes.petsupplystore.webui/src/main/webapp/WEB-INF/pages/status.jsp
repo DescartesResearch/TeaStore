@@ -35,14 +35,14 @@
 					</tr>
 					<tr>
 						<td>Auth</td>
-						<td <c:if test = "${authservers.size() < 1}"> class="danger" </c:if>>${storeservers.size()}</td>
+						<td <c:if test = "${authservers.size() < 1}"> class="danger" </c:if>>${authservers.size()}</td>
 						<td>
 							<c:forEach items="${authservers}" var="server" varStatus="loop">
 								${server.host}:${server.port}<br/>
 							</c:forEach>
 						</td>
 						<c:choose>
-							<c:when test = "${storeservers.size() > 0}">
+							<c:when test = "${authservers.size() > 0}">
 							   <td class="success">OK</td>
 							</c:when>
 							<c:otherwise>
@@ -82,12 +82,15 @@
    							<c:when test = "${recommenderservers.size() < 1}">
 							   <td class="danger">Offline</td>
 							</c:when>
-							<c:when test = "${dbfinished == true}">
-				            	<td class="info">Probably OK and trained</td>
-				         	</c:when>
-				         	<c:otherwise>
+				         	<c:when test = "${dbfinished == false}">
 				            	<td class="warning">Waiting for Persistence <span class="statusloader"></span></td>
-				         	</c:otherwise>
+				        	</c:when>
+				        	<c:when test = "${recommenderfinished == false}">
+				            	<td class="warning">Training <span class="statusloader"></span></td>
+				        	</c:when>
+				         	<c:otherwise>
+			            		<td class="success">OK and trained</td>
+				        	</c:otherwise>
 						</c:choose>
 					</tr>
 					<tr>
