@@ -74,6 +74,7 @@ public class StatusServlet extends AbstractUIServlet {
 					RegistryClient.getClient().getServersForService(Service.RECOMMENDER));
 			request.setAttribute("dbfinished", isDatabaseFinished());
 			request.setAttribute("imagefinished", isImageFinished());
+			request.setAttribute("recommenderfinished", isRecommenderFinished());
 		} catch (NullPointerException e) {
 			noregistry = true;
 		}
@@ -116,4 +117,19 @@ public class StatusServlet extends AbstractUIServlet {
 		return false;
 	}
 
+	/**
+	 * Checks if Recommender has finished training.
+	 * 
+	 * @return status
+	 */
+	private boolean isRecommenderFinished() {
+		List<String> finishedMessages = ServiceLoadBalancer.multicastRESTOperation(Service.RECOMMENDER, "train", String.class,
+				client -> client.getEndpointTarget().path("isready").request(MediaType.TEXT_PLAIN).get()
+						.readEntity(String.class));
+		if (finishedMessages != null && !finishedMessages.isEmpty()) {
+			return finishedMessages.stream().map(b -> Boolean.parseBoolean(b)).reduce(Boolean.TRUE, (a, b) -> a && b);
+		}
+		return false;
+	}
+	
 }

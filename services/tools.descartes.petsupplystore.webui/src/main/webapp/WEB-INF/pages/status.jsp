@@ -82,12 +82,15 @@
    							<c:when test = "${recommenderservers.size() < 1}">
 							   <td class="danger">Offline</td>
 							</c:when>
-							<c:when test = "${dbfinished == true}">
-				            	<td class="info">Probably OK and trained</td>
-				         	</c:when>
-				         	<c:otherwise>
+				         	<c:when test = "${dbfinished == false}">
 				            	<td class="warning">Waiting for Persistence <span class="statusloader"></span></td>
-				         	</c:otherwise>
+				        	</c:when>
+				        	<c:when test = "${recommenderfinished == false}">
+				            	<td class="warning">Training <span class="statusloader"></span></td>
+				        	</c:when>
+				         	<c:otherwise>
+			            		<td class="success">OK and trained</td>
+				        	</c:otherwise>
 						</c:choose>
 					</tr>
 					<tr>
