@@ -40,7 +40,7 @@ public class HttpWrapper {
 			nextESS = 1;
 		} else {
 //			entrypoint = false;
-			eoi = CF_REGISTRY.recallThreadLocalEOI();
+			eoi = CF_REGISTRY.incrementAndRecallThreadLocalEOI();
 			ess = CF_REGISTRY.recallAndIncrementThreadLocalESS();
 			nextESS = ess + 1;
 			if ((eoi == -1) || (ess == -1)) {
