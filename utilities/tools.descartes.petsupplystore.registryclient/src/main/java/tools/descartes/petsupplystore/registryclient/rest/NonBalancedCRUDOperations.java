@@ -19,6 +19,7 @@ import java.util.List;
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -218,11 +219,13 @@ public final class NonBalancedCRUDOperations {
 		if (limit >= 0) {
 			target = target.queryParam("max", limit);
 		}
+		
+		GenericType<List<T>> listType = client.getGenericListType();
 		Response response = HttpWrapper.wrap(target).get();
 		List<T> entities = new ArrayList<T>();
 		if (response != null && response.getStatus() == 200) {
 			try {
-				entities = response.readEntity(client.getGenericListType());
+				entities = response.readEntity(listType);
 			} catch (ProcessingException e) {
 				LOG.warn("Response did not conform to expected entity type. List expected.");
 			}
