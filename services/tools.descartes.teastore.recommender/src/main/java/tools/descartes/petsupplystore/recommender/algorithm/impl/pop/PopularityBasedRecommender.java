@@ -11,14 +11,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.recommender.algorithm.impl.pop;
+package tools.descartes.teastore.recommender.algorithm.impl.pop;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommender;
+import tools.descartes.teastore.recommender.algorithm.AbstractRecommender;
 
 /**
  * A simple Recommender that makes recommendations based on general popularity.
@@ -37,7 +37,7 @@ public class PopularityBasedRecommender extends AbstractRecommender {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommender#
+	 * tools.descartes.teastore.recommender.algorithm.AbstractRecommender#
 	 * execute( java.util.List)
 	 */
 	@Override

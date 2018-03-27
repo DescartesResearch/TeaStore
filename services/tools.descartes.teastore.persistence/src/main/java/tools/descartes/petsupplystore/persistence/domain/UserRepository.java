@@ -11,14 +11,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.persistence.domain;
+package tools.descartes.teastore.persistence.domain;
 
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import tools.descartes.petsupplystore.persistence.repository.AbstractPersistenceRepository;
+import tools.descartes.teastore.persistence.repository.AbstractPersistenceRepository;
 import tools.descartes.teastore.entities.User;
 
 /**

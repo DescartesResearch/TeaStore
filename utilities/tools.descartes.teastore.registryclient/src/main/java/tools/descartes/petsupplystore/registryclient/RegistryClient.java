@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.registryclient;
+package tools.descartes.teastore.registryclient;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 
 import com.netflix.loadbalancer.Server;
 
-import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerUpdaterDaemon;
+import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerUpdaterDaemon;
 
 /**
  * Client with common functionality for registering with the registry.
@@ -87,7 +87,7 @@ public class RegistryClient {
 			registryRESTURL = (String) new InitialContext().lookup("java:comp/env/registryURL");
 		} catch (NamingException e) {
 			LOG.warn("registryURL not set. Falling back to default registry URL (localhost, port " + port + ").");
-			registryRESTURL = "http://localhost:" + port + "/tools.descartes.petsupplystore.registry/rest/services/";
+			registryRESTURL = "http://localhost:" + port + "/tools.descartes.teastore.registry/rest/services/";
 		}
 	}
 	

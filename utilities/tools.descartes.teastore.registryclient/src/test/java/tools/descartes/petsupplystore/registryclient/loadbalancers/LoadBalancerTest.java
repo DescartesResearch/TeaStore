@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.registryclient.loadbalancers;
+package tools.descartes.teastore.registryclient.loadbalancers;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -29,13 +29,13 @@ import com.netflix.loadbalancer.Server;
 
 import org.junit.Assert;
 
-import tools.descartes.petsupplystore.registryclient.Service;
-import tools.descartes.petsupplystore.registryclient.rest.NonBalancedCRUDOperations;
-import tools.descartes.petsupplystore.registryclient.test.NotFoundServlet;
-import tools.descartes.petsupplystore.registryclient.test.SlowTimeoutingServlet;
-import tools.descartes.petsupplystore.registryclient.test.TestServlet;
-import tools.descartes.petsupplystore.registryclient.test.TimeoutStatusServlet;
-import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
+import tools.descartes.teastore.registryclient.Service;
+import tools.descartes.teastore.registryclient.rest.NonBalancedCRUDOperations;
+import tools.descartes.teastore.registryclient.test.NotFoundServlet;
+import tools.descartes.teastore.registryclient.test.SlowTimeoutingServlet;
+import tools.descartes.teastore.registryclient.test.TestServlet;
+import tools.descartes.teastore.registryclient.test.TimeoutStatusServlet;
+import tools.descartes.teastore.registryclient.util.NotFoundException;
 import tools.descartes.teastore.entities.Category;
 import tools.descartes.teastore.entities.Product;
 

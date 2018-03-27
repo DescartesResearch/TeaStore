@@ -11,14 +11,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.recommender.algorithm;
+package tools.descartes.teastore.recommender.algorithm;
 
 import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import tools.descartes.petsupplystore.recommender.algorithm.impl.cf.PreprocessedSlopeOneRecommender;
+import tools.descartes.teastore.recommender.algorithm.impl.cf.PreprocessedSlopeOneRecommender;
 
 /**
  * Test for the Dummy Recommender.
@@ -32,7 +32,7 @@ public class PreprocessedSlopeOneRecommenderTest extends SlopeOneRecommenderTest
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommenderTest#
+	 * tools.descartes.teastore.recommender.algorithm.AbstractRecommenderTest#
 	 * setupAlgo()
 	 */
 	@Override

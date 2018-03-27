@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.rest;
+package tools.descartes.teastore.rest;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -20,7 +20,7 @@ import java.util.List;
 
 import javax.ws.rs.Path;
 
-import tools.descartes.petsupplystore.registryclient.util.AbstractCRUDEndpoint;
+import tools.descartes.teastore.registryclient.util.AbstractCRUDEndpoint;
 
 /**
  * Endpoint for test entities.

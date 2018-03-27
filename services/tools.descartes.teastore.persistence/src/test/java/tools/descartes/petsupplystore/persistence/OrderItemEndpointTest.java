@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.persistence;
+package tools.descartes.teastore.persistence;
 
 import org.junit.After;
 import org.junit.Before;
@@ -19,14 +19,14 @@ import org.junit.Test;
 
 import org.junit.Assert;
 
-import tools.descartes.petsupplystore.persistence.rest.CategoryEndpoint;
-import tools.descartes.petsupplystore.persistence.rest.OrderEndpoint;
-import tools.descartes.petsupplystore.persistence.rest.OrderItemEndpoint;
-import tools.descartes.petsupplystore.persistence.rest.ProductEndpoint;
-import tools.descartes.petsupplystore.persistence.rest.UserEndpoint;
-import tools.descartes.petsupplystore.registryclient.rest.NonBalancedCRUDOperations;
-import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
-import tools.descartes.petsupplystore.registryclient.util.RESTClient;
+import tools.descartes.teastore.persistence.rest.CategoryEndpoint;
+import tools.descartes.teastore.persistence.rest.OrderEndpoint;
+import tools.descartes.teastore.persistence.rest.OrderItemEndpoint;
+import tools.descartes.teastore.persistence.rest.ProductEndpoint;
+import tools.descartes.teastore.persistence.rest.UserEndpoint;
+import tools.descartes.teastore.registryclient.rest.NonBalancedCRUDOperations;
+import tools.descartes.teastore.registryclient.util.NotFoundException;
+import tools.descartes.teastore.registryclient.util.RESTClient;
 import tools.descartes.teastore.entities.Category;
 import tools.descartes.teastore.entities.Order;
 import tools.descartes.teastore.entities.OrderItem;

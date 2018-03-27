@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.persistence.repository;
+package tools.descartes.teastore.persistence.repository;
 
 import java.util.List;
 
@@ -19,9 +19,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import tools.descartes.petsupplystore.persistence.domain.CategoryRepository;
-import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
-import tools.descartes.petsupplystore.registryclient.util.RESTClient;
+import tools.descartes.teastore.persistence.domain.CategoryRepository;
+import tools.descartes.teastore.registryclient.loadbalancers.ServiceLoadBalancer;
+import tools.descartes.teastore.registryclient.util.RESTClient;
 
 /**
  * Class for managing (mostly clearing) the persistence cache.

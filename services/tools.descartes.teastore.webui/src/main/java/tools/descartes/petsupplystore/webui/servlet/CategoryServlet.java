@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package tools.descartes.petsupplystore.webui.servlet;
+package tools.descartes.teastore.webui.servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,12 +25,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
 
-import tools.descartes.petsupplystore.registryclient.Service;
-import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
-import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
-import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;
-import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
-import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
+import tools.descartes.teastore.registryclient.Service;
+import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
+import tools.descartes.teastore.registryclient.loadbalancers.ServiceLoadBalancer;
+import tools.descartes.teastore.registryclient.rest.LoadBalancedCRUDOperations;
+import tools.descartes.teastore.registryclient.rest.LoadBalancedImageOperations;
+import tools.descartes.teastore.registryclient.rest.LoadBalancedStoreOperations;
 import tools.descartes.teastore.entities.Category;
 import tools.descartes.teastore.entities.ImageSizePreset;
 import tools.descartes.teastore.entities.Product;

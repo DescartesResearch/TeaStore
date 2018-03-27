@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.webui.servlet;
+package tools.descartes.teastore.webui.servlet;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -23,13 +23,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import tools.descartes.petsupplystore.registryclient.Service;
-import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
-import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;
-import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
-import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedRecommenderOperations;
-import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
-import tools.descartes.petsupplystore.webui.servlet.elhelper.ELHelperUtils;
+import tools.descartes.teastore.registryclient.Service;
+import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
+import tools.descartes.teastore.registryclient.rest.LoadBalancedCRUDOperations;
+import tools.descartes.teastore.registryclient.rest.LoadBalancedImageOperations;
+import tools.descartes.teastore.registryclient.rest.LoadBalancedRecommenderOperations;
+import tools.descartes.teastore.registryclient.rest.LoadBalancedStoreOperations;
+import tools.descartes.teastore.webui.servlet.elhelper.ELHelperUtils;
 import tools.descartes.teastore.entities.Category;
 import tools.descartes.teastore.entities.ImageSizePreset;
 import tools.descartes.teastore.entities.OrderItem;

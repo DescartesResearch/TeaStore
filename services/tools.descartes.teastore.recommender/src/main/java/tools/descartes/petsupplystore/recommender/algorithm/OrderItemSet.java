@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.recommender.algorithm;
+package tools.descartes.teastore.recommender.algorithm;
 
 import java.util.HashMap;
 import java.util.Map;

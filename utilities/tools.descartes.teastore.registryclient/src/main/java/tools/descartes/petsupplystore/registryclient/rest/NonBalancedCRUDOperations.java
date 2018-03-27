@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.registryclient.rest;
+package tools.descartes.teastore.registryclient.rest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +27,9 @@ import javax.ws.rs.core.Response.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
-import tools.descartes.petsupplystore.registryclient.util.RESTClient;
-import tools.descartes.petsupplystore.registryclient.util.TimeoutException;
+import tools.descartes.teastore.registryclient.util.NotFoundException;
+import tools.descartes.teastore.registryclient.util.RESTClient;
+import tools.descartes.teastore.registryclient.util.TimeoutException;
 
 /**
  * Default REST operations that transfer Entities to/from a service that has a

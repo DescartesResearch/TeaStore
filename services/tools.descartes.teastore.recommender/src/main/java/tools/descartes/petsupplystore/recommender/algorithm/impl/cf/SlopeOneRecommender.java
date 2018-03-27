@@ -11,15 +11,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.recommender.algorithm.impl.cf;
+package tools.descartes.teastore.recommender.algorithm.impl.cf;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommender;
-import tools.descartes.petsupplystore.recommender.algorithm.impl.UseFallBackException;
+import tools.descartes.teastore.recommender.algorithm.AbstractRecommender;
+import tools.descartes.teastore.recommender.algorithm.impl.UseFallBackException;
 
 /**
  * Recommender based on item-based collaborative filtering with the slope one
@@ -76,7 +76,7 @@ public class SlopeOneRecommender extends AbstractRecommender {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommender#
+	 * tools.descartes.teastore.recommender.algorithm.AbstractRecommender#
 	 * execute(java.util.List)
 	 */
 	@Override

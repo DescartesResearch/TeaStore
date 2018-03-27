@@ -1,4 +1,4 @@
-package tools.descartes.petsupplystore.webui.servlet;
+package tools.descartes.teastore.webui.servlet;
 
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
@@ -10,7 +10,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
-import tools.descartes.petsupplystore.registryclient.Service;
+import tools.descartes.teastore.registryclient.Service;
 import tools.descartes.teastore.entities.Category;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -51,7 +51,7 @@ public abstract class AbstractUiTest {
 		registryURL.setOverride(false);
 		registryURL.setType("java.lang.String");
 		registryURL.setName("registryURL");
-		registryURL.setValue("http://localhost:9001/tools.descartes.petsupplystore.registry/rest/services/");
+		registryURL.setValue("http://localhost:9001/tools.descartes.teastore.registry/rest/services/");
 		context.getNamingResources().addEnvironment(registryURL);
 		webUITomcat.addServlet(CONTEXT, "servlet", getServlet());
 		webUITomcat.addServlet(CONTEXT, "index", new IndexServlet());
@@ -69,16 +69,16 @@ public abstract class AbstractUiTest {
 		strings.add("localhost:9001");
 		String json = new ObjectMapper().writeValueAsString(strings);
 		wireMockRule.stubFor(get(urlEqualTo(
-				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.IMAGE.getServiceName() + "/"))
+				"/tools.descartes.teastore.registry/rest/services/" + Service.IMAGE.getServiceName() + "/"))
 						.willReturn(okJson(json)));
 		wireMockRule.stubFor(get(urlEqualTo(
-				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.AUTH.getServiceName() + "/"))
+				"/tools.descartes.teastore.registry/rest/services/" + Service.AUTH.getServiceName() + "/"))
 						.willReturn(okJson(json)));
 		wireMockRule.stubFor(get(urlEqualTo(
-				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.PERSISTENCE.getServiceName() + "/"))
+				"/tools.descartes.teastore.registry/rest/services/" + Service.PERSISTENCE.getServiceName() + "/"))
 						.willReturn(okJson(json)));
 		wireMockRule.stubFor(get(urlEqualTo(
-				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.RECOMMENDER.getServiceName() + "/"))
+				"/tools.descartes.teastore.registry/rest/services/" + Service.RECOMMENDER.getServiceName() + "/"))
 						.willReturn(okJson(json)));
 
 		// Mock images
@@ -90,7 +90,7 @@ public abstract class AbstractUiTest {
 		img.put("norbertSchmitt", "norbertSchmitt");
 		img.put("descartesLogo", "descartesLogo");
 		img.put("icon", "icon");
-		mockValidPostRestCall(img, "/tools.descartes.petsupplystore.image/rest/image/getWebImages");
+		mockValidPostRestCall(img, "/tools.descartes.teastore.image/rest/image/getWebImages");
 	}
 
 	protected void mockValidPostRestCall(Object input, String path) {
@@ -131,7 +131,7 @@ public abstract class AbstractUiTest {
 			category.setDescription("Description " + i);
 			categories.add(category);
 		}
-		mockValidGetRestCall(categories, "/tools.descartes.petsupplystore.persistence/rest/categories");
+		mockValidGetRestCall(categories, "/tools.descartes.teastore.persistence/rest/categories");
 	}
 
 	protected String doGet() {

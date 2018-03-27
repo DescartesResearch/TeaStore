@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package tools.descartes.petsupplystore.webui.servlet;
+package tools.descartes.teastore.webui.servlet;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -21,8 +21,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
-import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
+import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
+import tools.descartes.teastore.registryclient.rest.LoadBalancedImageOperations;
 import tools.descartes.teastore.entities.ImageSizePreset;
 
 /**

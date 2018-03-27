@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.recommender.algorithm.impl;
+package tools.descartes.teastore.recommender.algorithm.impl;
 
 /**
  * This exception signals a (mostly) conceptual error or lack of information,

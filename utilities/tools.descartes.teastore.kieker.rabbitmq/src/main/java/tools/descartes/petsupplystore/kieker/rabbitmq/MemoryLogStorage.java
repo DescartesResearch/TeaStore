@@ -1,4 +1,4 @@
-package tools.descartes.petsupplystore.kieker.rabbitmq;
+package tools.descartes.teastore.kieker.rabbitmq;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;

@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.persistence.repository;
+package tools.descartes.teastore.persistence.repository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -28,16 +28,16 @@ import org.eclipse.persistence.sessions.server.ServerSession;
 import org.eclipse.persistence.tools.schemaframework.SchemaManager;
 import org.mindrot.jbcrypt.BCrypt;
 
-import tools.descartes.petsupplystore.persistence.domain.CategoryRepository;
-import tools.descartes.petsupplystore.persistence.domain.OrderItemRepository;
-import tools.descartes.petsupplystore.persistence.domain.OrderRepository;
-import tools.descartes.petsupplystore.persistence.domain.PersistenceCategory;
-import tools.descartes.petsupplystore.persistence.domain.PersistenceOrder;
-import tools.descartes.petsupplystore.persistence.domain.PersistenceUser;
-import tools.descartes.petsupplystore.persistence.domain.ProductRepository;
-import tools.descartes.petsupplystore.persistence.domain.UserRepository;
-import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
-import tools.descartes.petsupplystore.registryclient.util.RESTClient;
+import tools.descartes.teastore.persistence.domain.CategoryRepository;
+import tools.descartes.teastore.persistence.domain.OrderItemRepository;
+import tools.descartes.teastore.persistence.domain.OrderRepository;
+import tools.descartes.teastore.persistence.domain.PersistenceCategory;
+import tools.descartes.teastore.persistence.domain.PersistenceOrder;
+import tools.descartes.teastore.persistence.domain.PersistenceUser;
+import tools.descartes.teastore.persistence.domain.ProductRepository;
+import tools.descartes.teastore.persistence.domain.UserRepository;
+import tools.descartes.teastore.registryclient.loadbalancers.ServiceLoadBalancer;
+import tools.descartes.teastore.registryclient.util.RESTClient;
 import tools.descartes.teastore.entities.Category;
 import tools.descartes.teastore.entities.Order;
 import tools.descartes.teastore.entities.OrderItem;
@@ -236,7 +236,7 @@ public final class DataGenerator {
 		for (int i = 0; i < users; i++) {
 			User user = new User();
 			user.setUserName("user" + i);
-			user.setEmail("user" + i + "@petsupplystore.com");
+			user.setEmail("user" + i + "@teastore.com");
 			user.setRealName(FIRSTNAMES[random.nextInt(FIRSTNAMES.length)]
 					+ " " + LASTNAMES[random.nextInt(LASTNAMES.length)]);
 			user.setPassword(BCrypt.hashpw(PASSWORD, BCrypt.gensalt()));

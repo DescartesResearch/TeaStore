@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.webui.servlet;
+package tools.descartes.teastore.webui.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -30,9 +30,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import tools.descartes.petsupplystore.registryclient.Service;
-import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
-import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
+import tools.descartes.teastore.registryclient.Service;
+import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
+import tools.descartes.teastore.registryclient.util.NotFoundException;
 import tools.descartes.teastore.entities.Category;
 import tools.descartes.teastore.entities.message.SessionBlob;
 
@@ -45,12 +45,12 @@ import tools.descartes.teastore.entities.message.SessionBlob;
 public abstract class AbstractUIServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	protected static final String MESSAGECOOKIE = "petsupplystoreMessageCookie";
-	protected static final String ERRORMESSAGECOOKIE = "petsupplystoreErrorMessageCookie";
+	protected static final String MESSAGECOOKIE = "teastoreMessageCookie";
+	protected static final String ERRORMESSAGECOOKIE = "teastoreErrorMessageCookie";
 	protected static final String SUCESSLOGIN = "You are logged in!";
 	protected static final String SUCESSLOGOUT = "You are logged out!";
 	protected static final String WRONGCREDENTIALS = "You used wrong credentials!";
-	protected static final String PRODUCTCOOKIE = "petsupplystorenumberProductsCookie";
+	protected static final String PRODUCTCOOKIE = "teastorenumberProductsCookie";
 	protected static final String BLOB = "sessionBlob";
 	protected static final String ORDERCONFIRMED = "Your order is confirmed!";
 	protected static final String CARTUPDATED = "Your cart is updated!";

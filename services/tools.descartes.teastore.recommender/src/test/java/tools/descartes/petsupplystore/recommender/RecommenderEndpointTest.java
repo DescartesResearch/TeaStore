@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.recommender;
+package tools.descartes.teastore.recommender;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,8 +26,8 @@ import javax.ws.rs.core.Response;
 import org.junit.Assert;
 import org.junit.Test;
 
-import tools.descartes.petsupplystore.recommender.servlet.TrainingSynchronizer;
-import tools.descartes.petsupplystore.registryclient.Service;
+import tools.descartes.teastore.recommender.servlet.TrainingSynchronizer;
+import tools.descartes.teastore.registryclient.Service;
 import tools.descartes.teastore.entities.OrderItem;
 
 /**

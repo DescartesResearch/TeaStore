@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.persistence.rest;
+package tools.descartes.teastore.persistence.rest;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.Path;
@@ -19,7 +19,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import tools.descartes.petsupplystore.persistence.repository.CacheManager;
+import tools.descartes.teastore.persistence.repository.CacheManager;
 
 /**
  * REST endpoint for cache clearing.

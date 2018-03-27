@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.registryclient.loadbalancers;
+package tools.descartes.teastore.registryclient.loadbalancers;
 
 /**
  * Daemon for updating load balancers using the registry.

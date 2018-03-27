@@ -1,4 +1,4 @@
-package tools.descartes.petsupplystore.registry.rest;
+package tools.descartes.teastore.registry.rest;
 
 /**
  * Datacontainer for the information about the heartbeats.

@@ -1,4 +1,4 @@
-package tools.descartes.petsupplystore.webui.servlet;
+package tools.descartes.teastore.webui.servlet;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -21,7 +21,7 @@ public class CartActionTest extends AbstractUiTest {
 	@Test
 	public void testCartAction() throws IOException, ServletException, InterruptedException {
 		mockCategories(1);
-		mockValidPostRestCall(null,  "/tools.descartes.petsupplystore.auth/rest/useractions/isloggedin");
+		mockValidPostRestCall(null,  "/tools.descartes.teastore.auth/rest/useractions/isloggedin");
 		
 		String html = doPost("proceedtoCheckout=");
 		Assert.assertEquals("User is not logged in, thus redirect to login", "Pet Supply Store Login", getWebSiteTitle(html));
@@ -31,7 +31,7 @@ public class CartActionTest extends AbstractUiTest {
 		List<OrderItem> orderItems = new ArrayList<OrderItem>();
 		orderItems.add(new OrderItem());
 		blob.setOrderItems(orderItems);
-		mockValidPostRestCall(blob,  "/tools.descartes.petsupplystore.auth/rest/useractions/isloggedin");
+		mockValidPostRestCall(blob,  "/tools.descartes.teastore.auth/rest/useractions/isloggedin");
 		ObjectMapper o = new ObjectMapper();
 		String value = URLEncoder.encode(o.writeValueAsString(blob), "UTF-8");
 		

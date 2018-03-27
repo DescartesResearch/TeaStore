@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.recommender.algorithm;
+package tools.descartes.teastore.recommender.algorithm;
 
 import static org.junit.Assert.assertEquals;
 
@@ -21,8 +21,8 @@ import java.util.Map;
 
 import org.junit.Assert;
 
-import tools.descartes.petsupplystore.recommender.algorithm.impl.UseFallBackException;
-import tools.descartes.petsupplystore.recommender.algorithm.impl.cf.SlopeOneRecommender;
+import tools.descartes.teastore.recommender.algorithm.impl.UseFallBackException;
+import tools.descartes.teastore.recommender.algorithm.impl.cf.SlopeOneRecommender;
 
 /**
  * Test for the Dummy Recommender.
@@ -36,7 +36,7 @@ public class SlopeOneRecommenderTest extends AbstractRecommenderFunctionalityTes
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommenderTest#
+	 * tools.descartes.teastore.recommender.algorithm.AbstractRecommenderTest#
 	 * setupAlgo()
 	 */
 	@Override
@@ -48,7 +48,7 @@ public class SlopeOneRecommenderTest extends AbstractRecommenderFunctionalityTes
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommenderTest#
+	 * tools.descartes.teastore.recommender.algorithm.AbstractRecommenderTest#
 	 * testResults()
 	 */
 	@Override
@@ -90,7 +90,7 @@ public class SlopeOneRecommenderTest extends AbstractRecommenderFunctionalityTes
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommenderTest#
+	 * tools.descartes.teastore.recommender.algorithm.AbstractRecommenderTest#
 	 * testResults()
 	 */
 	@Override

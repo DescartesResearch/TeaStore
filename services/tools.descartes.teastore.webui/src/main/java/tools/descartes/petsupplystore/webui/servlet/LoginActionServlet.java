@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.webui.servlet;
+package tools.descartes.teastore.webui.servlet;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -20,8 +20,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
-import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
+import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
+import tools.descartes.teastore.registryclient.rest.LoadBalancedStoreOperations;
 import tools.descartes.teastore.entities.message.SessionBlob;
 
 /**
@@ -66,7 +66,7 @@ public class LoginActionServlet extends AbstractUIServlet {
 			if (login) {
 				saveSessionBlob(blob, response);
 				if (request.getParameter("referer") != null
-						&& request.getParameter("referer").contains("tools.descartes.petsupplystore.webui/cart")) {
+						&& request.getParameter("referer").contains("tools.descartes.teastore.webui/cart")) {
 					redirect("/cart", response, MESSAGECOOKIE, SUCESSLOGIN);
 				} else {
 					redirect("/", response, MESSAGECOOKIE, SUCESSLOGIN);

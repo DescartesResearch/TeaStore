@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.persistence.domain;
+package tools.descartes.teastore.persistence.domain;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -29,7 +29,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.PostRemove;
 import javax.persistence.PreRemove;
 
-import tools.descartes.petsupplystore.persistence.repository.CacheManager;
+import tools.descartes.teastore.persistence.repository.CacheManager;
 import tools.descartes.teastore.entities.Order;
 
 /**

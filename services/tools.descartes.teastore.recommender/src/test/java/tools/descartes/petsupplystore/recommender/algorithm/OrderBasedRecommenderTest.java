@@ -11,15 +11,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.recommender.algorithm;
+package tools.descartes.teastore.recommender.algorithm;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
 
-import tools.descartes.petsupplystore.recommender.algorithm.impl.UseFallBackException;
-import tools.descartes.petsupplystore.recommender.algorithm.impl.orderbased.OrderBasedRecommender;
+import tools.descartes.teastore.recommender.algorithm.impl.UseFallBackException;
+import tools.descartes.teastore.recommender.algorithm.impl.orderbased.OrderBasedRecommender;
 import tools.descartes.teastore.entities.OrderItem;
 
 /**
@@ -34,7 +34,7 @@ public class OrderBasedRecommenderTest extends AbstractRecommenderFunctionalityT
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommenderTest#
+	 * tools.descartes.teastore.recommender.algorithm.AbstractRecommenderTest#
 	 * setupAlgo()
 	 */
 	@Override
@@ -46,7 +46,7 @@ public class OrderBasedRecommenderTest extends AbstractRecommenderFunctionalityT
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommenderTest#
+	 * tools.descartes.teastore.recommender.algorithm.AbstractRecommenderTest#
 	 * testResults()
 	 */
 	@Override
@@ -112,7 +112,7 @@ public class OrderBasedRecommenderTest extends AbstractRecommenderFunctionalityT
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommenderTest#
+	 * tools.descartes.teastore.recommender.algorithm.AbstractRecommenderTest#
 	 * testResults()
 	 */
 	@Override

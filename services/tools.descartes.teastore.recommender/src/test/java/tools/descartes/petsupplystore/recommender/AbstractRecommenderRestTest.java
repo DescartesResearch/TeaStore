@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.recommender;
+package tools.descartes.teastore.recommender;
 
 import java.util.Arrays;
 
@@ -28,11 +28,11 @@ import org.junit.Rule;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
-import tools.descartes.petsupplystore.recommender.rest.RecommendEndpoint;
-import tools.descartes.petsupplystore.recommender.rest.RecommendSingleEndpoint;
-import tools.descartes.petsupplystore.recommender.rest.TrainEndpoint;
-import tools.descartes.petsupplystore.recommender.servlet.RecommenderStartup;
-import tools.descartes.petsupplystore.registryclient.Service;
+import tools.descartes.teastore.recommender.rest.RecommendEndpoint;
+import tools.descartes.teastore.recommender.rest.RecommendSingleEndpoint;
+import tools.descartes.teastore.recommender.rest.TrainEndpoint;
+import tools.descartes.teastore.recommender.servlet.RecommenderStartup;
+import tools.descartes.teastore.registryclient.Service;
 
 /**
  * Abstract base for testing of the recommender rest functionality.
@@ -99,7 +99,7 @@ public abstract class AbstractRecommenderRestTest {
 		// debuggging response
 		// Response response0 = ClientBuilder.newBuilder().build()
 		// .target("http://localhost:" + MockRegistry.DEFAULT_MOCK_REGISTRY_PORT
-		// + "/tools.descartes.petsupplystore.registry/rest/services/"
+		// + "/tools.descartes.teastore.registry/rest/services/"
 		// + Service.PERSISTENCE.getServiceName() + "/")
 		// .request(MediaType.APPLICATION_JSON).get();
 		// System.out.println(response0.getStatus() + ":" +
@@ -107,7 +107,7 @@ public abstract class AbstractRecommenderRestTest {
 		//
 		// Response response1 = ClientBuilder.newBuilder().build()
 		// .target("http://localhost:" + persistence.getPort()
-		// + "/tools.descartes.petsupplystore.persistence/rest/orderitems")
+		// + "/tools.descartes.teastore.persistence/rest/orderitems")
 		// .request(MediaType.APPLICATION_JSON).get();
 		// System.out.println(response1.getStatus() + ":" +
 		// response1.readEntity(String.class));
@@ -124,7 +124,7 @@ public abstract class AbstractRecommenderRestTest {
 		registryURL3.setType("java.lang.String");
 		registryURL3.setName("registryURL");
 		registryURL3.setValue(
-				"http://localhost:" + registry.getPort() + "/tools.descartes.petsupplystore.registry/rest/services/");
+				"http://localhost:" + registry.getPort() + "/tools.descartes.teastore.registry/rest/services/");
 		context.getNamingResources().addEnvironment(registryURL3);
 		ContextEnvironment servicePort3 = new ContextEnvironment();
 		servicePort3.setDescription("");

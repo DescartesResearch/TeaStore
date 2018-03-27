@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.registryclient;
+package tools.descartes.teastore.registryclient;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,9 +34,9 @@ import org.junit.Before;
 import org.junit.Test;	
 import org.junit.Assert;
 
-import tools.descartes.petsupplystore.registry.rest.Registry;
-import tools.descartes.petsupplystore.registry.rest.RegistryREST;
-import tools.descartes.petsupplystore.registry.rest.RegistryStartup;
+import tools.descartes.teastore.registry.rest.Registry;
+import tools.descartes.teastore.registry.rest.RegistryREST;
+import tools.descartes.teastore.registry.rest.RegistryStartup;
 
 /**
  * Test for the Registry.

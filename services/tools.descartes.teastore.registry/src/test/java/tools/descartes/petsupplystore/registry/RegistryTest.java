@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.registry;
+package tools.descartes.teastore.registry;
 /**
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -44,8 +44,8 @@ import org.junit.Test;
 
 import org.junit.Assert;
 
-import tools.descartes.petsupplystore.registry.rest.Registry;
-import tools.descartes.petsupplystore.registry.rest.RegistryREST;
+import tools.descartes.teastore.registry.rest.Registry;
+import tools.descartes.teastore.registry.rest.RegistryREST;
 
 /**
  * Test for the Registry.

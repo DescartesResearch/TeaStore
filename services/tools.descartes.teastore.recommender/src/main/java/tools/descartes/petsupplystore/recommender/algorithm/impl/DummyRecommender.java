@@ -11,12 +11,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.recommender.algorithm.impl;
+package tools.descartes.teastore.recommender.algorithm.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommender;
+import tools.descartes.teastore.recommender.algorithm.AbstractRecommender;
 
 /**
  * Temporary class to be replaced by something actually useful.
@@ -27,7 +27,7 @@ import tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommender;
 public class DummyRecommender extends AbstractRecommender {
 	
 	/* (non-Javadoc)
-	 * @see tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommender#execute(java.util.List)
+	 * @see tools.descartes.teastore.recommender.algorithm.AbstractRecommender#execute(java.util.List)
 	 */
 	@Override
 	protected List<Long> execute(Long userid, List<Long> currentItems) {

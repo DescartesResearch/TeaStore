@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.persistence;
+package tools.descartes.teastore.persistence;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -31,9 +31,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
-import tools.descartes.petsupplystore.persistence.domain.CategoryRepository;
-import tools.descartes.petsupplystore.persistence.repository.EMFManagerInitializer;
-import tools.descartes.petsupplystore.registryclient.Service;
+import tools.descartes.teastore.persistence.domain.CategoryRepository;
+import tools.descartes.teastore.persistence.repository.EMFManagerInitializer;
+import tools.descartes.teastore.registryclient.Service;
 
 /**
  * Creates and manages an embedded Tomcat for testing.
@@ -83,7 +83,7 @@ public class TomcatTestHandler {
 				registryURL.setType("java.lang.String");
 				registryURL.setName("registryURL");
 				registryURL.setValue("http://localhost:" + wireMockRule.port()
-				+ "/tools.descartes.petsupplystore.registry/rest/services/");
+				+ "/tools.descartes.teastore.registry/rest/services/");
 				context.getNamingResources().addEnvironment(registryURL);
 				ContextEnvironment servicePort = new ContextEnvironment();
 				servicePort.setDescription("");
@@ -130,10 +130,10 @@ public class TomcatTestHandler {
 		}
 		String json = new ObjectMapper().writeValueAsString(strings);
 		wireMockRule.stubFor(WireMock.get(WireMock.urlEqualTo(
-				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.PERSISTENCE.getServiceName()))
+				"/tools.descartes.teastore.registry/rest/services/" + Service.PERSISTENCE.getServiceName()))
 						.willReturn(WireMock.okJson(json)));
 		wireMockRule.stubFor(WireMock.post(WireMock.urlEqualTo(
-				"/tools.descartes.petsupplystore.registry/rest/services/"
+				"/tools.descartes.teastore.registry/rest/services/"
 						+ Service.PERSISTENCE.getServiceName() + "/*"))
 		.willReturn(WireMock.ok()));
 	}

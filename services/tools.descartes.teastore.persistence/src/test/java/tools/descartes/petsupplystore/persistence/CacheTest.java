@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.persistence;
+package tools.descartes.teastore.persistence;
 
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
@@ -25,12 +25,12 @@ import org.junit.Test;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
-import tools.descartes.petsupplystore.persistence.rest.CacheManagerEndpoint;
-import tools.descartes.petsupplystore.persistence.rest.DatabaseGenerationEndpoint;
-import tools.descartes.petsupplystore.persistence.rest.ProductEndpoint;
-import tools.descartes.petsupplystore.registryclient.Service;
-import tools.descartes.petsupplystore.registryclient.rest.NonBalancedCRUDOperations;
-import tools.descartes.petsupplystore.registryclient.util.RESTClient;
+import tools.descartes.teastore.persistence.rest.CacheManagerEndpoint;
+import tools.descartes.teastore.persistence.rest.DatabaseGenerationEndpoint;
+import tools.descartes.teastore.persistence.rest.ProductEndpoint;
+import tools.descartes.teastore.registryclient.Service;
+import tools.descartes.teastore.registryclient.rest.NonBalancedCRUDOperations;
+import tools.descartes.teastore.registryclient.util.RESTClient;
 import tools.descartes.teastore.entities.Category;
 import tools.descartes.teastore.entities.Product;
 

@@ -11,12 +11,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.recommender.algorithm;
+package tools.descartes.teastore.recommender.algorithm;
 
 import java.util.List;
 
 import org.junit.Assert;
-import tools.descartes.petsupplystore.recommender.algorithm.impl.pop.PopularityBasedRecommender;
+import tools.descartes.teastore.recommender.algorithm.impl.pop.PopularityBasedRecommender;
 
 /**
  * Test for the Dummy Recommender.
@@ -30,7 +30,7 @@ public class PopularityBasedRecommenderTest extends AbstractRecommenderFunctiona
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommenderTest#
+	 * tools.descartes.teastore.recommender.algorithm.AbstractRecommenderTest#
 	 * setupAlgo()
 	 */
 	@Override
@@ -42,7 +42,7 @@ public class PopularityBasedRecommenderTest extends AbstractRecommenderFunctiona
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommenderTest#
+	 * tools.descartes.teastore.recommender.algorithm.AbstractRecommenderTest#
 	 * testResults()
 	 */
 	@Override
@@ -68,7 +68,7 @@ public class PopularityBasedRecommenderTest extends AbstractRecommenderFunctiona
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommenderTest#
+	 * tools.descartes.teastore.recommender.algorithm.AbstractRecommenderTest#
 	 * testResults()
 	 */
 	@Override

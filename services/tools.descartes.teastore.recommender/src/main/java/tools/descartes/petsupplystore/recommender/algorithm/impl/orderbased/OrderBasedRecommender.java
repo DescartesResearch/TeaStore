@@ -11,15 +11,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.recommender.algorithm.impl.orderbased;
+package tools.descartes.teastore.recommender.algorithm.impl.orderbased;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-import tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommender;
-import tools.descartes.petsupplystore.recommender.algorithm.OrderItemSet;
-import tools.descartes.petsupplystore.recommender.algorithm.impl.UseFallBackException;
+import tools.descartes.teastore.recommender.algorithm.AbstractRecommender;
+import tools.descartes.teastore.recommender.algorithm.OrderItemSet;
+import tools.descartes.teastore.recommender.algorithm.impl.UseFallBackException;
 
 /**
  * A simple Recommender that makes recommendations based on an order-based
@@ -34,7 +34,7 @@ public class OrderBasedRecommender extends AbstractRecommender {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * tools.descartes.petsupplystore.recommender.algorithm.AbstractRecommender#
+	 * tools.descartes.teastore.recommender.algorithm.AbstractRecommender#
 	 * execute( java.util.List)
 	 */
 	@Override

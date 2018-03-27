@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.persistence.repository;
+package tools.descartes.teastore.persistence.repository;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

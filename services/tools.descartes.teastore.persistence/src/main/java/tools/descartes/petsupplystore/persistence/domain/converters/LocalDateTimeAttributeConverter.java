@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.persistence.domain.converters;
+package tools.descartes.teastore.persistence.domain.converters;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;

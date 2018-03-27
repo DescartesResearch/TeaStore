@@ -11,15 +11,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.registryclient.rest;
+package tools.descartes.teastore.registryclient.rest;
 
 import java.util.List;
 import java.util.Optional;
 
-import tools.descartes.petsupplystore.registryclient.Service;
-import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
-import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
-import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
+import tools.descartes.teastore.registryclient.Service;
+import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
+import tools.descartes.teastore.registryclient.loadbalancers.ServiceLoadBalancer;
+import tools.descartes.teastore.registryclient.util.NotFoundException;
 
 /**
  * Default REST operations that transfer Entities to/from a service that has a

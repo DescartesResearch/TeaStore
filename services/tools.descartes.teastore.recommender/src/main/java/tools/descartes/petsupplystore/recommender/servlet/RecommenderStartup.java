@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.recommender.servlet;
+package tools.descartes.teastore.recommender.servlet;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -21,10 +21,10 @@ import javax.servlet.annotation.WebListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tools.descartes.petsupplystore.registryclient.RegistryClient;
-import tools.descartes.petsupplystore.registryclient.Service;
-import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
-import tools.descartes.petsupplystore.registryclient.util.RESTClient;
+import tools.descartes.teastore.registryclient.RegistryClient;
+import tools.descartes.teastore.registryclient.Service;
+import tools.descartes.teastore.registryclient.loadbalancers.ServiceLoadBalancer;
+import tools.descartes.teastore.registryclient.util.RESTClient;
 
 /**
  * Startup Handler for the Recommender Service.

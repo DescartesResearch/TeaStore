@@ -1,4 +1,4 @@
-package tools.descartes.petsupplystore.webui.servlet;
+package tools.descartes.teastore.webui.servlet;
 
 import java.io.IOException;
 import javax.servlet.Servlet;
@@ -14,7 +14,7 @@ public class HeaderTest extends AbstractUiTest {
 	@Test
 	public void testHeaderLogging() throws IOException, ServletException, InterruptedException {
 		mockCategories(1);
-		mockValidPostRestCall(null, "/tools.descartes.petsupplystore.auth/rest/useractions/isloggedin");
+		mockValidPostRestCall(null, "/tools.descartes.teastore.auth/rest/useractions/isloggedin");
 		String html = doGet();
 		
 		Assert.assertEquals("Test if header shows correct illustration: no Profile", 0,
@@ -24,7 +24,7 @@ public class HeaderTest extends AbstractUiTest {
 		
 		SessionBlob blob = new SessionBlob();
 		blob.setSID("1");
-		mockValidPostRestCall(blob, "/tools.descartes.petsupplystore.auth/rest/useractions/isloggedin");
+		mockValidPostRestCall(blob, "/tools.descartes.teastore.auth/rest/useractions/isloggedin");
 		html = doGet();
 		Assert.assertEquals("Test if header shows correct illustration: Profile", 1,
 				countString("glyphicon-user", html));

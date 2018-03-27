@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.recommender.rest;
+package tools.descartes.teastore.recommender.rest;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
-import tools.descartes.petsupplystore.recommender.algorithm.RecommenderSelector;
+import tools.descartes.teastore.recommender.algorithm.RecommenderSelector;
 import tools.descartes.teastore.entities.OrderItem;
 import tools.descartes.teastore.entities.Product;
 import tools.descartes.teastore.entities.User;

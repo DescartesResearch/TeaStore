@@ -1,4 +1,4 @@
-package tools.descartes.petsupplystore.webui.servlet;
+package tools.descartes.teastore.webui.servlet;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -19,20 +19,20 @@ public class PaginationTest extends AbstractUiTest {
 	@Test
 	public void testPagination() throws IOException, ServletException, InterruptedException {
 		mockCategories(1);
-		mockValidPostRestCall(null, "/tools.descartes.petsupplystore.auth/rest/useractions/isloggedin");
-		mockValidGetRestCall(new Category(), "/tools.descartes.petsupplystore.persistence/rest/categories/0");
-		mockValidGetRestCall(100, "/tools.descartes.petsupplystore.persistence/rest/products/count/0");
+		mockValidPostRestCall(null, "/tools.descartes.teastore.auth/rest/useractions/isloggedin");
+		mockValidGetRestCall(new Category(), "/tools.descartes.teastore.persistence/rest/categories/0");
+		mockValidGetRestCall(100, "/tools.descartes.teastore.persistence/rest/products/count/0");
 		List<Product> products = new LinkedList<Product>();
 		mockValidPostRestCall(new HashMap<Long, String>(),
-				"/tools.descartes.petsupplystore.image/rest/image/getProductImages");
+				"/tools.descartes.teastore.image/rest/image/getProductImages");
 		mockValidGetRestCall(products,
-				"/tools.descartes.petsupplystore.persistence/rest/products/category/0?start=0&max=20");
+				"/tools.descartes.teastore.persistence/rest/products/category/0?start=0&max=20");
 		mockValidGetRestCall(products,
-				"/tools.descartes.petsupplystore.persistence/rest/products/category/0?start=20&max=20");
+				"/tools.descartes.teastore.persistence/rest/products/category/0?start=20&max=20");
 		mockValidGetRestCall(products,
-				"/tools.descartes.petsupplystore.persistence/rest/products/category/0?start=40&max=20");
+				"/tools.descartes.teastore.persistence/rest/products/category/0?start=40&max=20");
 		mockValidGetRestCall(products,
-				"/tools.descartes.petsupplystore.persistence/rest/products/category/0?start=80&max=20");
+				"/tools.descartes.teastore.persistence/rest/products/category/0?start=80&max=20");
 
 		String html = doGet("?category=0&page=1");
 

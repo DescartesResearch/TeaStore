@@ -11,15 +11,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.recommender.rest;
+package tools.descartes.teastore.recommender.rest;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-import tools.descartes.petsupplystore.recommender.algorithm.IRecommender;
-import tools.descartes.petsupplystore.recommender.servlet.TrainingSynchronizer;
+import tools.descartes.teastore.recommender.algorithm.IRecommender;
+import tools.descartes.teastore.recommender.servlet.TrainingSynchronizer;
 import tools.descartes.teastore.entities.Order;
 import tools.descartes.teastore.entities.OrderItem;
 

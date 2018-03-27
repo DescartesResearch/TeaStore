@@ -11,14 +11,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.registryclient.loadbalancers;
+package tools.descartes.teastore.registryclient.loadbalancers;
 
 import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import com.netflix.loadbalancer.Server;
-import tools.descartes.petsupplystore.registryclient.Service;
-import tools.descartes.petsupplystore.registryclient.util.RESTClient;
+import tools.descartes.teastore.registryclient.Service;
+import tools.descartes.teastore.registryclient.util.RESTClient;
 
 /**
  * Load balancer for a REST endpoint. Balances between the different servers.

@@ -1,4 +1,4 @@
-package tools.descartes.petsupplystore.webui.servlet;
+package tools.descartes.teastore.webui.servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,11 +21,11 @@ public class ProductperPageTest extends AbstractUiTest {
 	@Test
 	public void testProductsperPage() throws IOException, ServletException, InterruptedException {
 		mockCategories(1);
-		mockValidPostRestCall(null, "/tools.descartes.petsupplystore.auth/rest/useractions/isloggedin");
-		mockValidGetRestCall(new Category(), "/tools.descartes.petsupplystore.persistence/rest/categories/0");
-		mockValidGetRestCall(100, "/tools.descartes.petsupplystore.persistence/rest/products/count/0");
+		mockValidPostRestCall(null, "/tools.descartes.teastore.auth/rest/useractions/isloggedin");
+		mockValidGetRestCall(new Category(), "/tools.descartes.teastore.persistence/rest/categories/0");
+		mockValidGetRestCall(100, "/tools.descartes.teastore.persistence/rest/products/count/0");
 		mockValidPostRestCall(new HashMap<Long, String>(),
-				"/tools.descartes.petsupplystore.image/rest/image/getProductImages");
+				"/tools.descartes.teastore.image/rest/image/getProductImages");
 
 		List<Product> products = new ArrayList<Product>();
 		for (int i = 0; i < 100; i++) {
@@ -76,7 +76,7 @@ public class ProductperPageTest extends AbstractUiTest {
 			products.add(productlist.get(i));
 		}
 
-		mockValidGetRestCall(products, "/tools.descartes.petsupplystore.persistence/rest/products/category/0?start=" + (page-1)*amount
+		mockValidGetRestCall(products, "/tools.descartes.teastore.persistence/rest/products/category/0?start=" + (page-1)*amount
 				+ "&max=" + amount);
 	}
 

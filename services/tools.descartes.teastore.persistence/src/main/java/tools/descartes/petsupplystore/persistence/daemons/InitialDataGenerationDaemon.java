@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.persistence.daemons;
+package tools.descartes.teastore.persistence.daemons;
 
 import javax.persistence.PersistenceException;
 import javax.servlet.ServletContextEvent;
@@ -21,8 +21,8 @@ import javax.servlet.annotation.WebListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tools.descartes.petsupplystore.persistence.repository.DataGenerator;
-import tools.descartes.petsupplystore.registryclient.RegistryClient;
+import tools.descartes.teastore.persistence.repository.DataGenerator;
+import tools.descartes.teastore.registryclient.RegistryClient;
 
 /**
  * Application Lifecycle Listener implementation class for data generation.

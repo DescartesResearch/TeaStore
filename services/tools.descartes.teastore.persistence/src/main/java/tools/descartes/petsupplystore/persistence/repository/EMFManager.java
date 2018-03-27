@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.persistence.repository;
+package tools.descartes.teastore.persistence.repository;
 
 import java.util.HashMap;
 
@@ -65,7 +65,7 @@ final class EMFManager {
 			if (persistenceProperties == null) {
 				persistenceProperties = createPersistencePropertiesFromJavaEnv();
 			}
-			emf = Persistence.createEntityManagerFactory("tools.descartes.petsupplystore.persistence",
+			emf = Persistence.createEntityManagerFactory("tools.descartes.teastore.persistence",
 					persistenceProperties);
 			
 		}

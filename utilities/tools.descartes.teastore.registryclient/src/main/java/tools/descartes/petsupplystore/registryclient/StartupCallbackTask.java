@@ -1,4 +1,4 @@
-package tools.descartes.petsupplystore.registryclient;
+package tools.descartes.teastore.registryclient;
 
 import java.util.List;
 

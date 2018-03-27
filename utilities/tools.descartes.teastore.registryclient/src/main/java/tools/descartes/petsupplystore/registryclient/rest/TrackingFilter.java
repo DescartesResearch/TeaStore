@@ -1,4 +1,4 @@
-package tools.descartes.petsupplystore.registryclient.rest;
+package tools.descartes.teastore.registryclient.rest;
 
 import java.io.IOException;
 

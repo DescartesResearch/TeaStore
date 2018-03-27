@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.recommender;
+package tools.descartes.teastore.recommender;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
-import tools.descartes.petsupplystore.registryclient.Service;
+import tools.descartes.teastore.registryclient.Service;
 
 /**
  * Mocks a persistence provider for Recommender testing.
@@ -61,7 +61,7 @@ public class MockRegistry {
 		}
 		String json = new ObjectMapper().writeValueAsString(persistences);
 		rule.stubFor(WireMock.get(WireMock.urlEqualTo(
-				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.PERSISTENCE.getServiceName() + "/"))
+				"/tools.descartes.teastore.registry/rest/services/" + Service.PERSISTENCE.getServiceName() + "/"))
 						.willReturn(WireMock.okJson(json)));
 		List<String> recommenders = new LinkedList<String>();
 		for (int recommenderPort: recommenderPorts) {
@@ -69,16 +69,16 @@ public class MockRegistry {
 		}
 		json = new ObjectMapper().writeValueAsString(recommenders);
 		rule.stubFor(WireMock.get(WireMock.urlEqualTo(
-				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.RECOMMENDER.getServiceName() + "/"))
+				"/tools.descartes.teastore.registry/rest/services/" + Service.RECOMMENDER.getServiceName() + "/"))
 						.willReturn(WireMock.okJson(json)));
 	}
 	
 	private void initializeUpdateAndHeartbeatStubs(WireMockRule rule) {
 		rule.stubFor(WireMock.put(WireMock.urlMatching(
-				"/tools.descartes.petsupplystore.registry/rest/services/.*"))
+				"/tools.descartes.teastore.registry/rest/services/.*"))
 						.willReturn(WireMock.ok()));
 		rule.stubFor(WireMock.delete(WireMock.urlMatching(
-				"/tools.descartes.petsupplystore.registry/rest/services/.*"))
+				"/tools.descartes.teastore.registry/rest/services/.*"))
 						.willReturn(WireMock.ok()));
 	}
 	

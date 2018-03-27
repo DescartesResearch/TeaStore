@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.persistence;
+package tools.descartes.teastore.persistence;
 
 import java.util.regex.Pattern;
 
@@ -19,14 +19,14 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import tools.descartes.petsupplystore.persistence.domain.CategoryRepository;
-import tools.descartes.petsupplystore.persistence.domain.OrderItemRepository;
-import tools.descartes.petsupplystore.persistence.domain.OrderRepository;
-import tools.descartes.petsupplystore.persistence.domain.PersistenceCategory;
-import tools.descartes.petsupplystore.persistence.domain.ProductRepository;
-import tools.descartes.petsupplystore.persistence.domain.UserRepository;
-import tools.descartes.petsupplystore.persistence.repository.DataGenerator;
-import tools.descartes.petsupplystore.persistence.repository.EMFManagerInitializer;
+import tools.descartes.teastore.persistence.domain.CategoryRepository;
+import tools.descartes.teastore.persistence.domain.OrderItemRepository;
+import tools.descartes.teastore.persistence.domain.OrderRepository;
+import tools.descartes.teastore.persistence.domain.PersistenceCategory;
+import tools.descartes.teastore.persistence.domain.ProductRepository;
+import tools.descartes.teastore.persistence.domain.UserRepository;
+import tools.descartes.teastore.persistence.repository.DataGenerator;
+import tools.descartes.teastore.persistence.repository.EMFManagerInitializer;
 
 /**
  * Test for the DataGenerator.

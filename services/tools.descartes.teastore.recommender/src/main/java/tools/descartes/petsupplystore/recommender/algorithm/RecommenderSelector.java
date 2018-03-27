@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.recommender.algorithm;
+package tools.descartes.teastore.recommender.algorithm;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,11 +23,11 @@ import javax.naming.NamingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tools.descartes.petsupplystore.recommender.algorithm.impl.UseFallBackException;
-import tools.descartes.petsupplystore.recommender.algorithm.impl.cf.PreprocessedSlopeOneRecommender;
-import tools.descartes.petsupplystore.recommender.algorithm.impl.cf.SlopeOneRecommender;
-import tools.descartes.petsupplystore.recommender.algorithm.impl.orderbased.OrderBasedRecommender;
-import tools.descartes.petsupplystore.recommender.algorithm.impl.pop.PopularityBasedRecommender;
+import tools.descartes.teastore.recommender.algorithm.impl.UseFallBackException;
+import tools.descartes.teastore.recommender.algorithm.impl.cf.PreprocessedSlopeOneRecommender;
+import tools.descartes.teastore.recommender.algorithm.impl.cf.SlopeOneRecommender;
+import tools.descartes.teastore.recommender.algorithm.impl.orderbased.OrderBasedRecommender;
+import tools.descartes.teastore.recommender.algorithm.impl.pop.PopularityBasedRecommender;
 import tools.descartes.teastore.entities.Order;
 import tools.descartes.teastore.entities.OrderItem;
 
@@ -141,7 +141,7 @@ public final class RecommenderSelector implements IRecommender {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * tools.descartes.petsupplystore.recommender.IRecommender#train(java.util.List,
+	 * tools.descartes.teastore.recommender.IRecommender#train(java.util.List,
 	 * java.util.List)
 	 */
 	@Override

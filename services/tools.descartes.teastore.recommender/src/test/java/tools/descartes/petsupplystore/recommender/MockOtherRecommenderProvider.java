@@ -11,12 +11,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.recommender;
+package tools.descartes.teastore.recommender;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
-import tools.descartes.petsupplystore.registryclient.Service;
+import tools.descartes.teastore.registryclient.Service;
 
 /**
  * Mocks another recommender instance for Recommender testing.

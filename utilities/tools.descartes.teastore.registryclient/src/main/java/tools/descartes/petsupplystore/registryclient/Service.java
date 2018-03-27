@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.registryclient;
+package tools.descartes.teastore.registryclient;
 
 /**
  * Enum of all services in the pet supply store.
@@ -22,23 +22,23 @@ public enum Service {
 	/**
 	 * Persistence service.
 	 */
-	PERSISTENCE("tools.descartes.petsupplystore.persistence"),
+	PERSISTENCE("tools.descartes.teastore.persistence"),
 	/**
 	 * Recommender service.
 	 */
-	RECOMMENDER("tools.descartes.petsupplystore.recommender"),
+	RECOMMENDER("tools.descartes.teastore.recommender"),
 	/**
 	 * Store service.
 	 */
-	AUTH("tools.descartes.petsupplystore.auth"),
+	AUTH("tools.descartes.teastore.auth"),
 	/**
 	 * WebUi service.
 	 */
-	WEBUI("tools.descartes.petsupplystore.webui"),
+	WEBUI("tools.descartes.teastore.webui"),
 	/**
 	 * Image Provider service.
 	 */
-	IMAGE("tools.descartes.petsupplystore.image");
+	IMAGE("tools.descartes.teastore.image");
 	
 	private String serviceName;
 	

@@ -1,4 +1,4 @@
-package tools.descartes.petsupplystore.persistence.repository;
+package tools.descartes.teastore.persistence.repository;
 
 import java.util.HashMap;
 

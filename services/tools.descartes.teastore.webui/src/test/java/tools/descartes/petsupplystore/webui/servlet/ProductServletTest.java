@@ -1,4 +1,4 @@
-package tools.descartes.petsupplystore.webui.servlet;
+package tools.descartes.teastore.webui.servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,12 +20,12 @@ public class ProductServletTest extends AbstractUiTest {
 	public void testCartAction() throws IOException, ServletException, InterruptedException {
 		mockCategories(1);
 		ArrayList<Long> ads = new ArrayList<Long>();
-		mockValidPostRestCall(ads, "/tools.descartes.petsupplystore.recommender/rest/recommend");
-		mockValidPostRestCall(null, "/tools.descartes.petsupplystore.auth/rest/useractions/isloggedin");
+		mockValidPostRestCall(ads, "/tools.descartes.teastore.recommender/rest/recommend");
+		mockValidPostRestCall(null, "/tools.descartes.teastore.auth/rest/useractions/isloggedin");
 		mockValidPostRestCall(new HashMap<Long, String>(),
-				"/tools.descartes.petsupplystore.image/rest/image/getProductImages");
+				"/tools.descartes.teastore.image/rest/image/getProductImages");
 		mockValidGetRestCall(new Product(),
-				"/tools.descartes.petsupplystore.persistence/rest/products/1"); 
+				"/tools.descartes.teastore.persistence/rest/products/1"); 
 		
 
 		String html = doGet();
@@ -43,9 +43,9 @@ public class ProductServletTest extends AbstractUiTest {
 			ads = new ArrayList<Long>();
 			for(int i = 0; i < ad; i++) {
 				ads.add((long) i);
-				mockValidGetRestCall(new Product(), "/tools.descartes.petsupplystore.persistence/rest/products/" + i);
+				mockValidGetRestCall(new Product(), "/tools.descartes.teastore.persistence/rest/products/" + i);
 			}
-			mockValidPostRestCall(ads, "/tools.descartes.petsupplystore.recommender/rest/recommend");
+			mockValidPostRestCall(ads, "/tools.descartes.teastore.recommender/rest/recommend");
 			html = doGet("?id=1");
 			// the maximum of shown ads is 3
 			Assert.assertEquals("There should be " + ad + " ads", Math.min(ad,3), countString("productid", html)-1);

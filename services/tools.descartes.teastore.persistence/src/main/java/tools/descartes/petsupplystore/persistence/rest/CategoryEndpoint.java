@@ -11,16 +11,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.persistence.rest;
+package tools.descartes.teastore.persistence.rest;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Path;
 
-import tools.descartes.petsupplystore.persistence.domain.CategoryRepository;
-import tools.descartes.petsupplystore.persistence.repository.DataGenerator;
-import tools.descartes.petsupplystore.registryclient.util.AbstractCRUDEndpoint;
+import tools.descartes.teastore.persistence.domain.CategoryRepository;
+import tools.descartes.teastore.persistence.repository.DataGenerator;
+import tools.descartes.teastore.registryclient.util.AbstractCRUDEndpoint;
 import tools.descartes.teastore.entities.Category;
 
 /**

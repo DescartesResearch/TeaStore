@@ -11,13 +11,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.registryclient.loadbalancers;
+package tools.descartes.teastore.registryclient.loadbalancers;
 
 import java.util.function.Function;
 
-import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
-import tools.descartes.petsupplystore.registryclient.util.RESTClient;
-import tools.descartes.petsupplystore.registryclient.util.TimeoutException;
+import tools.descartes.teastore.registryclient.util.NotFoundException;
+import tools.descartes.teastore.registryclient.util.RESTClient;
+import tools.descartes.teastore.registryclient.util.TimeoutException;
 
 /**
  * Wrapper for results from service load balancer calls.

@@ -1,4 +1,4 @@
-package tools.descartes.petsupplystore.kieker.rabbitmq;
+package tools.descartes.teastore.kieker.rabbitmq;
 
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
