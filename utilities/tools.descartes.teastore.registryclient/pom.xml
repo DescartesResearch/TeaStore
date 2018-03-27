@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>registryclient</artifactId>
 	<packaging>jar</packaging>
-	<name>PetSupplyStore Registry Client</name>
+	<name>TeaStore Registry Client</name>
 	<url>http://descartes.tools</url>
 
 	<properties>
@@ -19,9 +19,9 @@
 		</dependency>
 		<!-- Internal Dependencies -->
 		<dependency>
-			<groupId>tools.descartes.petsupplystore</groupId>
+			<groupId>tools.descartes.teastore</groupId>
 			<artifactId>entities</artifactId>
-			<version>${petsupplystoreversion}</version>
+			<version>${teastoreversion}</version>
 		</dependency>
 
 		<dependency>
@@ -107,15 +107,15 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>tools.descartes.petsupplystore</groupId>
+			<groupId>tools.descartes.teastore</groupId>
 			<artifactId>registry</artifactId>
-			<version>${petsupplystoreversion}</version>
+			<version>${teastoreversion}</version>
 			<classifier>classes</classifier>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>tools.descartes.petsupplystore.registryclient</finalName>
+		<finalName>tools.descartes.teastore.registryclient</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -129,9 +129,9 @@
 		</plugins>
 	</build>
 	<parent>
-		<groupId>tools.descartes.petsupplystore</groupId>
+		<groupId>tools.descartes.teastore</groupId>
 		<artifactId>parent</artifactId>
-		<version>${petsupplystoreversion}</version>
+		<version>${teastoreversion}</version>
 		<relativePath>../..</relativePath>
 	</parent>
 </project>
