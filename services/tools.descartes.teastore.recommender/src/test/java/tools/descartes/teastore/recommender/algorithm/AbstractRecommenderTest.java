@@ -23,6 +23,7 @@ import org.junit.Test;
 import tools.descartes.teastore.entities.Order;
 import tools.descartes.teastore.entities.OrderItem;
 import tools.descartes.teastore.entities.User;
+import tools.descartes.teastore.recommender.algorithm.AbstractRecommender;
 
 /**
  * Abstract Recommender Test.
