@@ -1,4 +1,4 @@
-package tools.descartes.petsupplystore.auth.security;
+package tools.descartes.teastore.auth.security;
 /**
  * Generator for Session ids.
  * @author Simon

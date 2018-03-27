@@ -1,4 +1,4 @@
-package tools.descartes.petsupplystore.auth.rest;
+package tools.descartes.teastore.auth.rest;
 
 
 import javax.ws.rs.core.Response.Status;
@@ -10,9 +10,9 @@ import org.mindrot.jbcrypt.BCrypt;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sun.mail.iap.Response;
 
-import tools.descartes.petsupplystore.entities.User;
-import tools.descartes.petsupplystore.entities.message.SessionBlob;
-import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
+import tools.descartes.teastore.entities.User;
+import tools.descartes.teastore.entities.message.SessionBlob;
+import tools.descartes.teastore.registryclient.rest.LoadBalancedStoreOperations;
 
 
 
@@ -37,7 +37,7 @@ public class LoginLogoutTest extends AbstractStoreRestTest {
 		SessionBlob blob = new SessionBlob();
 		Assert.assertFalse(LoadBalancedStoreOperations.isLoggedIn(blob));
 		
-		mockInValidGetRestCall(Status.NOT_FOUND, "/tools.descartes.petsupplystore.persistence/rest/users/name/notauser");
+		mockInValidGetRestCall(Status.NOT_FOUND, "/tools.descartes.teastore.persistence/rest/users/name/notauser");
 		blob = LoadBalancedStoreOperations.login(blob, "notauser", "notapassword");
 		Assert.assertFalse(LoadBalancedStoreOperations.isLoggedIn(blob));
 
@@ -69,11 +69,11 @@ public class LoginLogoutTest extends AbstractStoreRestTest {
 	}
 
 	private void mockCreateOrderItems() {
-		mockValidPostRestCall(Response.OK, "/tools.descartes.petsupplystore.persistence/rest/orderitems");
+		mockValidPostRestCall(Response.OK, "/tools.descartes.teastore.persistence/rest/orderitems");
 	}
 
 	private void mockCreateOrder() {
-		mockValidPostRestCall(7, "/tools.descartes.petsupplystore.persistence/rest/orders");
+		mockValidPostRestCall(7, "/tools.descartes.teastore.persistence/rest/orders");
 	}
 
 	private void mockUser1() {
@@ -83,6 +83,6 @@ public class LoginLogoutTest extends AbstractStoreRestTest {
 		u.setUserName("user1");
 		u.setPassword(BCrypt.hashpw("password", BCrypt.gensalt()));
 		u.setId(1231245125);
-		mockValidGetRestCall(u, "/tools.descartes.petsupplystore.persistence/rest/users/name/user1");
+		mockValidGetRestCall(u, "/tools.descartes.teastore.persistence/rest/users/name/user1");
 	}
 }

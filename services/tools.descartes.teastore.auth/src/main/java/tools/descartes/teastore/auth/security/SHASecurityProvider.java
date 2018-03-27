@@ -1,4 +1,4 @@
-package tools.descartes.petsupplystore.auth.security;
+package tools.descartes.teastore.auth.security;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import tools.descartes.petsupplystore.entities.message.SessionBlob;
+import tools.descartes.teastore.entities.message.SessionBlob;
 
 /**
  * Secruity provider using AES.

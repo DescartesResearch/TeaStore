@@ -1,4 +1,4 @@
-package tools.descartes.petsupplystore.auth.security;
+package tools.descartes.teastore.auth.security;
 
 import java.util.Random;
 

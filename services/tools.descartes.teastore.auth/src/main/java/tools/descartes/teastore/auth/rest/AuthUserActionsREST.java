@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.auth.rest;
+package tools.descartes.teastore.auth.rest;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -25,17 +25,17 @@ import javax.ws.rs.core.Response;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-import tools.descartes.petsupplystore.entities.Order;
-import tools.descartes.petsupplystore.entities.OrderItem;
-import tools.descartes.petsupplystore.entities.User;
-import tools.descartes.petsupplystore.entities.message.SessionBlob;
-import tools.descartes.petsupplystore.registryclient.Service;
-import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
-import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;
-import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
-import tools.descartes.petsupplystore.registryclient.util.TimeoutException;
-import tools.descartes.petsupplystore.auth.security.SHASecurityProvider;
-import tools.descartes.petsupplystore.auth.security.RandomSessionIdGenerator;
+import tools.descartes.teastore.entities.Order;
+import tools.descartes.teastore.entities.OrderItem;
+import tools.descartes.teastore.entities.User;
+import tools.descartes.teastore.entities.message.SessionBlob;
+import tools.descartes.teastore.registryclient.Service;
+import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
+import tools.descartes.teastore.registryclient.rest.LoadBalancedCRUDOperations;
+import tools.descartes.teastore.registryclient.util.NotFoundException;
+import tools.descartes.teastore.registryclient.util.TimeoutException;
+import tools.descartes.teastore.auth.security.RandomSessionIdGenerator;
+import tools.descartes.teastore.auth.security.SHASecurityProvider;
 
 /**
  * Rest endpoint for the store user actions.

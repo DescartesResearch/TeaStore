@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.auth.rest;
+package tools.descartes.teastore.auth.rest;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -22,14 +22,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
-import tools.descartes.petsupplystore.entities.OrderItem;
-import tools.descartes.petsupplystore.entities.Product;
-import tools.descartes.petsupplystore.entities.message.SessionBlob;
-import tools.descartes.petsupplystore.registryclient.Service;
-import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;
-import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
-import tools.descartes.petsupplystore.registryclient.util.TimeoutException;
-import tools.descartes.petsupplystore.auth.security.SHASecurityProvider;
+import tools.descartes.teastore.entities.OrderItem;
+import tools.descartes.teastore.entities.Product;
+import tools.descartes.teastore.entities.message.SessionBlob;
+import tools.descartes.teastore.registryclient.Service;
+import tools.descartes.teastore.registryclient.rest.LoadBalancedCRUDOperations;
+import tools.descartes.teastore.registryclient.util.NotFoundException;
+import tools.descartes.teastore.registryclient.util.TimeoutException;
+import tools.descartes.teastore.auth.security.SHASecurityProvider;
 
 /**
  * Rest endpoint for the store cart.

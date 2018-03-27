@@ -1,4 +1,4 @@
-package tools.descartes.petsupplystore.auth.rest;
+package tools.descartes.teastore.auth.rest;
 
 import javax.ws.rs.core.Response;
 
@@ -8,10 +8,10 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import tools.descartes.petsupplystore.entities.User;
-import tools.descartes.petsupplystore.entities.message.SessionBlob;
-import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
-import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
+import tools.descartes.teastore.entities.User;
+import tools.descartes.teastore.entities.message.SessionBlob;
+import tools.descartes.teastore.registryclient.rest.LoadBalancedStoreOperations;
+import tools.descartes.teastore.registryclient.util.NotFoundException;
 
 
 
@@ -176,24 +176,24 @@ public class CartTest extends AbstractStoreRestTest {
 		u.setUserName("user1");
 		u.setPassword(BCrypt.hashpw("password", BCrypt.gensalt()));
 		u.setId(1231245125);
-		mockValidGetRestCall(u, "/tools.descartes.petsupplystore.persistence/rest/users/name/user1");
+		mockValidGetRestCall(u, "/tools.descartes.teastore.persistence/rest/users/name/user1");
 	}
 	
 	private void mockInvalidUser() {
-		mockInValidGetRestCall(Response.Status.NOT_FOUND, "/tools.descartes.petsupplystore.persistence/rest/users/name/user/-1");
+		mockInValidGetRestCall(Response.Status.NOT_FOUND, "/tools.descartes.teastore.persistence/rest/users/name/user/-1");
 	}
 
 	/**
 	 * Returns id of newly created object
 	 */
 	private void mockCreateOrderItems() {
-		mockValidPostRestCall(8, "/tools.descartes.petsupplystore.persistence/rest/orderitems");
+		mockValidPostRestCall(8, "/tools.descartes.teastore.persistence/rest/orderitems");
 	}
 
 	/**
 	 * Returns id of newly created object
 	 */
 	private void mockCreateOrder() {
-		mockValidPostRestCall(7, "/tools.descartes.petsupplystore.persistence/rest/orders");
+		mockValidPostRestCall(7, "/tools.descartes.teastore.persistence/rest/orders");
 	}
 }

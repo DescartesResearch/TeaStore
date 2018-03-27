@@ -11,9 +11,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.auth.security;
+package tools.descartes.teastore.auth.security;
 
-import tools.descartes.petsupplystore.entities.message.SessionBlob;
+import tools.descartes.teastore.entities.message.SessionBlob;
 
 /**
  * Utilities for securing (e.g. encrypting) session blobs.

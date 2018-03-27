@@ -1,11 +1,11 @@
-package tools.descartes.petsupplystore.auth.security;
+package tools.descartes.teastore.auth.security;
 
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import tools.descartes.petsupplystore.entities.message.SessionBlob;
-import tools.descartes.petsupplystore.auth.security.ConstantKeyProvider;
+import tools.descartes.teastore.entities.message.SessionBlob;
+import tools.descartes.teastore.auth.security.ConstantKeyProvider;
 
 /**
  * Test for the ConstantKeyProvider.

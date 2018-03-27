@@ -1,4 +1,4 @@
-package tools.descartes.petsupplystore.auth.rest;
+package tools.descartes.teastore.auth.rest;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
@@ -27,11 +27,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
-import tools.descartes.petsupplystore.entities.Category;
-import tools.descartes.petsupplystore.entities.Product;
-import tools.descartes.petsupplystore.registryclient.Service;
-import tools.descartes.petsupplystore.auth.rest.AuthCartREST;
-import tools.descartes.petsupplystore.auth.rest.AuthUserActionsREST;
+import tools.descartes.teastore.entities.Category;
+import tools.descartes.teastore.entities.Product;
+import tools.descartes.teastore.registryclient.Service;
+import tools.descartes.teastore.auth.rest.AuthCartREST;
+import tools.descartes.teastore.auth.rest.AuthUserActionsREST;
 
 
 
@@ -58,13 +58,13 @@ public abstract class AbstractStoreRestTest {
 		storeTomcat.setPort(3000);
 		storeTomcat.setBaseDir(testWorkingDir);
 		storeTomcat.enableNaming();
-		Context context3 = storeTomcat.addWebapp("/tools.descartes.petsupplystore.auth", testWorkingDir);
+		Context context3 = storeTomcat.addWebapp("/tools.descartes.teastore.auth", testWorkingDir);
 		ContextEnvironment registryURL3 = new ContextEnvironment();
 		registryURL3.setDescription("");
 		registryURL3.setOverride(false);
 		registryURL3.setType("java.lang.String");
 		registryURL3.setName("registryURL");
-		registryURL3.setValue("http://localhost:18080/tools.descartes.petsupplystore.registry/rest/services/");
+		registryURL3.setValue("http://localhost:18080/tools.descartes.teastore.registry/rest/services/");
 		context3.getNamingResources().addEnvironment(registryURL3);
 		ContextEnvironment servicePort3 = new ContextEnvironment();
 		servicePort3.setDescription("");
@@ -77,7 +77,7 @@ public abstract class AbstractStoreRestTest {
 		restServletConfig3.register(AuthCartREST.class);
 		restServletConfig3.register(AuthUserActionsREST.class);
 		ServletContainer restServlet3 = new ServletContainer(restServletConfig3);
-		storeTomcat.addServlet("/tools.descartes.petsupplystore.auth", "restServlet", restServlet3);
+		storeTomcat.addServlet("/tools.descartes.teastore.auth", "restServlet", restServlet3);
 		context3.addServletMappingDecoded("/rest/*", "restServlet");
 		context3.addApplicationListener(EmptyAuthStartup.class.getName());
 
@@ -89,22 +89,22 @@ public abstract class AbstractStoreRestTest {
 		strings2.add("localhost:3000");
 		String json2 = new ObjectMapper().writeValueAsString(strings2);
 		wireMockRule.stubFor(get(urlEqualTo(
-				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.IMAGE.getServiceName() + "/"))
+				"/tools.descartes.teastore.registry/rest/services/" + Service.IMAGE.getServiceName() + "/"))
 						.willReturn(okJson(json)));
 		wireMockRule.stubFor(get(urlEqualTo(
-				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.AUTH.getServiceName() + "/"))
+				"/tools.descartes.teastore.registry/rest/services/" + Service.AUTH.getServiceName() + "/"))
 						.willReturn(okJson(json2)));
 		wireMockRule.stubFor(WireMock.put(WireMock.urlMatching(
-				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.AUTH.getServiceName() + "/.*"))
+				"/tools.descartes.teastore.registry/rest/services/" + Service.AUTH.getServiceName() + "/.*"))
 						.willReturn(okJson(json2)));
 		wireMockRule.stubFor(WireMock.delete(WireMock.urlMatching(
-				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.AUTH.getServiceName() + "/.*"))
+				"/tools.descartes.teastore.registry/rest/services/" + Service.AUTH.getServiceName() + "/.*"))
 						.willReturn(okJson(json2)));
 		wireMockRule.stubFor(get(urlEqualTo(
-				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.PERSISTENCE.getServiceName() + "/"))
+				"/tools.descartes.teastore.registry/rest/services/" + Service.PERSISTENCE.getServiceName() + "/"))
 						.willReturn(okJson(json)));
 		wireMockRule.stubFor(get(urlEqualTo(
-				"/tools.descartes.petsupplystore.registry/rest/services/" + Service.RECOMMENDER.getServiceName() + "/"))
+				"/tools.descartes.teastore.registry/rest/services/" + Service.RECOMMENDER.getServiceName() + "/"))
 						.willReturn(okJson(json)));
 
 		// Mock images
@@ -116,7 +116,7 @@ public abstract class AbstractStoreRestTest {
 		img.put("norbertSchmitt", "norbertSchmitt");
 		img.put("descartesLogo", "descartesLogo");
 		img.put("icon", "icon");
-		mockValidPostRestCall(img, "/tools.descartes.petsupplystore.image/rest/image/getWebImages");
+		mockValidPostRestCall(img, "/tools.descartes.teastore.image/rest/image/getWebImages");
 		
 		storeTomcat.start();
 	}
@@ -166,7 +166,7 @@ public abstract class AbstractStoreRestTest {
 			category.setDescription("Description " + i);
 			categories.add(category);
 		}
-		mockValidGetRestCall(categories, "/tools.descartes.petsupplystore.auth/rest/categories");
+		mockValidGetRestCall(categories, "/tools.descartes.teastore.auth/rest/categories");
 	}
 
 	protected void mockProduct106() {
@@ -176,11 +176,11 @@ public abstract class AbstractStoreRestTest {
 		p.setId(106);
 		p.setListPriceInCents(99);
 		p.setName("a product");
-		mockValidGetRestCall(p, "/tools.descartes.petsupplystore.persistence/rest/products/106");
+		mockValidGetRestCall(p, "/tools.descartes.teastore.persistence/rest/products/106");
 	}
 	
 	protected void mockInvalidProduct() {
-		mockInValidGetRestCall(Response.Status.NOT_FOUND, "/tools.descartes.petsupplystore.persistence/rest/products/-1");
+		mockInValidGetRestCall(Response.Status.NOT_FOUND, "/tools.descartes.teastore.persistence/rest/products/-1");
 	}
 
 	protected void mockProduct107() {
@@ -190,6 +190,6 @@ public abstract class AbstractStoreRestTest {
 		p.setId(107);
 		p.setListPriceInCents(99);
 		p.setName("another product");
-		mockValidGetRestCall(p, "/tools.descartes.petsupplystore.persistence/rest/products/107");
+		mockValidGetRestCall(p, "/tools.descartes.teastore.persistence/rest/products/107");
 	}
 }

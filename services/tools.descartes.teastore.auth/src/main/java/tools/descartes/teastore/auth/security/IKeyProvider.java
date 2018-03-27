@@ -11,24 +11,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.descartes.petsupplystore.auth.security;
+package tools.descartes.teastore.auth.security;
 
-import tools.descartes.petsupplystore.entities.message.SessionBlob;
+import tools.descartes.teastore.entities.message.SessionBlob;
 
 /**
- * Class for testing. Provides a constant key.
- * DO NOT ADOPT THIS FOR ANY REAL PRODUCTION WORKLOAD!
+ * Provides keys for the security provider.
+ * The key provider must ensure that keys accross
+ * replicated stores are consistent.
  * @author Joakim von Kistowski
  *
  */
-public class ConstantKeyProvider implements IKeyProvider {
+public interface IKeyProvider {
 
 	/**
-	 * {@inheritDoc}
+	 * Returns a key for a session blob.
+	 * Key must be the same, regardless of the
+	 * store instance upon which this call is made.
+	 * @param blob The blob to secure.
+	 * @return The key.
 	 */
-	@Override
-	public String getKey(SessionBlob blob) {
-		return "thebestsecretkey";
-	}
-
+	public String getKey(SessionBlob blob);
+	
 }
