@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import tools.descartes.teastore.entities.OrderItem;
 import tools.descartes.teastore.entities.message.SessionBlob;
+import tools.descartes.teastore.webui.servlet.CartActionServlet;
 
 public class CartActionTest extends AbstractUiTest {
 

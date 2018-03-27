@@ -13,6 +13,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import tools.descartes.teastore.entities.Product;
+import tools.descartes.teastore.webui.servlet.ProductServlet;
 
 public class ProductServletTest extends AbstractUiTest {
 

@@ -15,6 +15,8 @@ import org.junit.Test;
 
 import tools.descartes.teastore.entities.Category;
 import tools.descartes.teastore.entities.Product;
+import tools.descartes.teastore.webui.servlet.AbstractUIServlet;
+import tools.descartes.teastore.webui.servlet.CategoryServlet;
 
 public class ProductperPageTest extends AbstractUiTest {
 

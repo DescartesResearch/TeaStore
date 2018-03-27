@@ -11,6 +11,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
 import tools.descartes.teastore.registryclient.Service;
+import tools.descartes.teastore.webui.servlet.IndexServlet;
+import tools.descartes.teastore.webui.servlet.LoginServlet;
+import tools.descartes.teastore.webui.servlet.OrderServlet;
 import tools.descartes.teastore.entities.Category;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;

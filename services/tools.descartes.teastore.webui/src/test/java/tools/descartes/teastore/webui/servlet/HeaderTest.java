@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import tools.descartes.teastore.entities.message.SessionBlob;
+import tools.descartes.teastore.webui.servlet.IndexServlet;
 
 public class HeaderTest extends AbstractUiTest {
 
