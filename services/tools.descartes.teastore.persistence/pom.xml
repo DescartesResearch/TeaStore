@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>persistence</artifactId>
 	<packaging>war</packaging>
-	<name>PetSupplyStore Persistence</name>
+	<name>TeaStore Persistence</name>
 	<url>http://descartes.tools</url>
 
 	<properties>
@@ -15,9 +15,9 @@
 
 		<!-- Internal Dependencies -->
 		<dependency>
-			<groupId>tools.descartes.petsupplystore</groupId>
+			<groupId>tools.descartes.teastore</groupId>
 			<artifactId>registryclient</artifactId>
-			<version>${petsupplystoreversion}</version>
+			<version>${teastoreversion}</version>
 		</dependency>
 
 
@@ -84,7 +84,7 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>tools.descartes.petsupplystore.persistence</finalName>
+		<finalName>tools.descartes.teastore.persistence</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -106,9 +106,9 @@
 			</activation>
 			<dependencies>
 				<dependency>
-					<groupId>tools.descartes.petsupplystore</groupId>
+					<groupId>tools.descartes.teastore</groupId>
 					<artifactId>dockerbase</artifactId>
-					<version>${petsupplystoreversion}</version>
+					<version>${teastoreversion}</version>
 					<type>pom</type>
 				</dependency>
 			</dependencies>
@@ -129,7 +129,7 @@
 									<overwrite>true</overwrite>
 									<resources>
 										<resource>
-											<directory>../../utilities/tools.descartes.petsupplystore.dockerbase/ServiceDockerfile/</directory>
+											<directory>../../utilities/tools.descartes.teastore.dockerbase/ServiceDockerfile/</directory>
 											<includes>
 												<include>Dockerfile</include>
 											</includes>
@@ -158,7 +158,7 @@
 									<goal>push</goal>
 								</goals>
 								<configuration>
-									<repository>${dockerrepository}/petsupplystore-persistence</repository>
+									<repository>${dockerrepository}/teastore-persistence</repository>
 									<tag>latest</tag>
 								</configuration>
 								<phase>package</phase>
@@ -170,7 +170,7 @@
 									<goal>push</goal>
 								</goals>
 								<configuration>
-									<repository>${dockerrepository}/petsupplystore-persistence</repository>
+									<repository>${dockerrepository}/teastore-persistence</repository>
 									<tag>${project.version}</tag>
 								</configuration>
 								<phase>package</phase>
@@ -204,7 +204,7 @@
 									<overwrite>true</overwrite>
 									<resources>
 										<resource>
-											<directory>../../utilities/tools.descartes.petsupplystore.kieker/</directory>
+											<directory>../../utilities/tools.descartes.teastore.kieker/</directory>
 											<includes>
 												<include>kieker.monitoring.properties</include>
 												<include>Dockerfile</include>
@@ -226,7 +226,7 @@
 									<overwrite>true</overwrite>
 									<resources>
 										<resource>
-											<directory>../../utilities/tools.descartes.petsupplystore.kieker/</directory>
+											<directory>../../utilities/tools.descartes.teastore.kieker/</directory>
 											<includes>
 												<include>aop.xml</include>
 											</includes>
@@ -246,7 +246,7 @@
 									<overwrite>true</overwrite>
 									<resources>
 										<resource>
-											<directory>../../utilities/tools.descartes.petsupplystore.kieker/src/main/webapp/WEB-INF/lib</directory>
+											<directory>../../utilities/tools.descartes.teastore.kieker/src/main/webapp/WEB-INF/lib</directory>
 											<includes>
 												<include>libsigar-amd64-linux.so</include>
 												<include>libsigar-x86-linux.so</include>
@@ -275,7 +275,7 @@
 										var content = new
 										java.lang.String(Files.readAllBytes(Paths.get($basedir+'/src/main/webapp/WEB-INF/web.xml')));
 										var insert = new
-										java.lang.String(Files.readAllBytes(Paths.get($basedir+'/../../utilities/tools.descartes.petsupplystore.kieker/src/main/webapp/WEB-INF/web_kieker.txt')));
+										java.lang.String(Files.readAllBytes(Paths.get($basedir+'/../../utilities/tools.descartes.teastore.kieker/src/main/webapp/WEB-INF/web_kieker.txt')));
 
 										content = content.replaceAll("./web-app>", '') + insert;
 										Files.write(Paths.get($basedir +
@@ -309,7 +309,7 @@
 									<goal>push</goal>
 								</goals>
 								<configuration>
-									<repository>${dockerrepository}/petsupplystore-persistence-kieker</repository>
+									<repository>${dockerrepository}/teastore-persistence-kieker</repository>
 									<tag>latest</tag>
 								</configuration>
 								<phase>package</phase>
@@ -321,7 +321,7 @@
 									<goal>push</goal>
 								</goals>
 								<configuration>
-									<repository>${dockerrepository}/petsupplystore-persistence-kieker</repository>
+									<repository>${dockerrepository}/teastore-persistence-kieker</repository>
 									<tag>${project.version}</tag>
 								</configuration>
 								<phase>package</phase>
@@ -333,9 +333,9 @@
 		</profile>
 	</profiles>
 	<parent>
-		<groupId>tools.descartes.petsupplystore</groupId>
+		<groupId>tools.descartes.teastore</groupId>
 		<artifactId>parent</artifactId>
-		<version>${petsupplystoreversion}</version>
+		<version>${teastoreversion}</version>
 		<relativePath>../..</relativePath>
 	</parent>
 </project>
