@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
-  <display-name>Descartes PetSupplyStore Recommender</display-name>
+  <display-name>Descartes TeaStore Recommender</display-name>
   <welcome-file-list>
     <welcome-file>index</welcome-file>
   </welcome-file-list>
@@ -11,7 +11,7 @@
 		</servlet-class>
     <init-param>
       <param-name>jersey.config.server.provider.packages</param-name>
-      <param-value>tools.descartes.petsupplystore.recommender.rest</param-value>
+      <param-value>tools.descartes.teastore.recommender.rest</param-value>
     </init-param>
     <load-on-startup>2</load-on-startup>
   </servlet>
@@ -27,6 +27,6 @@
   <env-entry>
     <env-entry-name>registryURL</env-entry-name>
     <env-entry-type>java.lang.String</env-entry-type>
-    <env-entry-value>http://localhost:8080/tools.descartes.petsupplystore.registry/rest/services/</env-entry-value>
+    <env-entry-value>http://localhost:8080/tools.descartes.teastore.registry/rest/services/</env-entry-value>
   </env-entry>
 </web-app>
