@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>entities</artifactId>
 	<packaging>jar</packaging>
-	<name>PetSupplyStore Entities</name>
+	<name>TeaStore Entities</name>
 	<url>http://descartes.tools</url>
 
 	<properties>
@@ -31,12 +31,12 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>tools.descartes.petsupplystore.entities</finalName>
+		<finalName>tools.descartes.teastore.entities</finalName>
 	</build>
 	<parent>
-		<groupId>tools.descartes.petsupplystore</groupId>
+		<groupId>tools.descartes.teastore</groupId>
 		<artifactId>parent</artifactId>
-		<version>${petsupplystoreversion}</version>
+		<version>${teastoreversion}</version>
 		<relativePath>../..</relativePath>
 	</parent>
 </project>

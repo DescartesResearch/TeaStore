@@ -19,8 +19,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.PostRemove;
 
-import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.persistence.repository.CacheManager;
+import tools.descartes.teastore.entities.OrderItem;
 
 /**
  * Persistence entity Class for OrderItems (item with quantity in shopping cart or order).

@@ -22,7 +22,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tools.descartes.petsupplystore.entities.ImageSize;
+import tools.descartes.teastore.entities.ImageSize;
 
 /**
  * Image database storing the relation between image names, product IDs and image IDs as well as the available image 

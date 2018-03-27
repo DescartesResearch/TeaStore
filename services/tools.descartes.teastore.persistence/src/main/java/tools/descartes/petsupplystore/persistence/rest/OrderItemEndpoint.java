@@ -21,10 +21,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
-import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.persistence.domain.OrderItemRepository;
 import tools.descartes.petsupplystore.persistence.repository.DataGenerator;
 import tools.descartes.petsupplystore.registryclient.util.AbstractCRUDEndpoint;
+import tools.descartes.teastore.entities.OrderItem;
 
 /**
  * Persistence endpoint for for CRUD operations on orders.

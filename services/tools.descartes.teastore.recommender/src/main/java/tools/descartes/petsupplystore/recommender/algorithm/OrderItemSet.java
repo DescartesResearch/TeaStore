@@ -16,9 +16,9 @@ package tools.descartes.petsupplystore.recommender.algorithm;
 import java.util.HashMap;
 import java.util.Map;
 
-import tools.descartes.petsupplystore.entities.Order;
-import tools.descartes.petsupplystore.entities.Product;
-import tools.descartes.petsupplystore.entities.User;
+import tools.descartes.teastore.entities.Order;
+import tools.descartes.teastore.entities.Product;
+import tools.descartes.teastore.entities.User;
 
 /**
  * Objects of this class holds a mapping of {@link Product} IDs to quantities

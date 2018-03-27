@@ -18,10 +18,10 @@ import java.util.List;
 
 import javax.ws.rs.Path;
 
-import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.persistence.domain.CategoryRepository;
 import tools.descartes.petsupplystore.persistence.repository.DataGenerator;
 import tools.descartes.petsupplystore.registryclient.util.AbstractCRUDEndpoint;
+import tools.descartes.teastore.entities.Category;
 
 /**
  * Persistence endpoint for CRUD operations on Categories.

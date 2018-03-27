@@ -8,12 +8,12 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import tools.descartes.petsupplystore.entities.Category;
-import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
 import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
+import tools.descartes.teastore.entities.Category;
+import tools.descartes.teastore.entities.OrderItem;
 
 /**
  * Container class for the static calls to the Store service.

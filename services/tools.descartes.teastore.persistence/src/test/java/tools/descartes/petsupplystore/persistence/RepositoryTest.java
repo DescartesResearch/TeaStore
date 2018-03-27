@@ -20,11 +20,6 @@ import java.util.List;
 
 import org.junit.Assert;
 
-import tools.descartes.petsupplystore.entities.Category;
-import tools.descartes.petsupplystore.entities.Order;
-import tools.descartes.petsupplystore.entities.OrderItem;
-import tools.descartes.petsupplystore.entities.Product;
-import tools.descartes.petsupplystore.entities.User;
 import tools.descartes.petsupplystore.persistence.domain.CategoryRepository;
 import tools.descartes.petsupplystore.persistence.domain.OrderItemRepository;
 import tools.descartes.petsupplystore.persistence.domain.OrderRepository;
@@ -34,6 +29,11 @@ import tools.descartes.petsupplystore.persistence.domain.PersistenceProduct;
 import tools.descartes.petsupplystore.persistence.domain.ProductRepository;
 import tools.descartes.petsupplystore.persistence.domain.UserRepository;
 import tools.descartes.petsupplystore.persistence.repository.EMFManagerInitializer;
+import tools.descartes.teastore.entities.Category;
+import tools.descartes.teastore.entities.Order;
+import tools.descartes.teastore.entities.OrderItem;
+import tools.descartes.teastore.entities.Product;
+import tools.descartes.teastore.entities.User;
 
 /**
  * Test for the ProductEndpoint.

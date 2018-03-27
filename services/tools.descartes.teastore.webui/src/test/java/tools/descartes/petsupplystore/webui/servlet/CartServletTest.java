@@ -15,9 +15,9 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import tools.descartes.petsupplystore.entities.OrderItem;
-import tools.descartes.petsupplystore.entities.Product;
-import tools.descartes.petsupplystore.entities.message.SessionBlob;
+import tools.descartes.teastore.entities.OrderItem;
+import tools.descartes.teastore.entities.Product;
+import tools.descartes.teastore.entities.message.SessionBlob;
 
 public class CartServletTest extends AbstractUiTest {
 

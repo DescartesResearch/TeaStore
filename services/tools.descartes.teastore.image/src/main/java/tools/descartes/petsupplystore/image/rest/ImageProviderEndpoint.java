@@ -23,9 +23,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-import tools.descartes.petsupplystore.entities.ImageSize;
 import tools.descartes.petsupplystore.image.ImageProvider;
 import tools.descartes.petsupplystore.image.setup.SetupController;
+import tools.descartes.teastore.entities.ImageSize;
 
 @Path("image")
 @Produces({ "application/json" })

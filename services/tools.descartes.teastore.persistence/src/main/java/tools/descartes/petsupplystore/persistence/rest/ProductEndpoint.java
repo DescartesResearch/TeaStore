@@ -23,10 +23,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
-import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.persistence.domain.ProductRepository;
 import tools.descartes.petsupplystore.persistence.repository.DataGenerator;
 import tools.descartes.petsupplystore.registryclient.util.AbstractCRUDEndpoint;
+import tools.descartes.teastore.entities.Product;
 
 /**
  * Persistence endpoint for for CRUD operations on products.

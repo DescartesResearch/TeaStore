@@ -25,9 +25,9 @@ import java.util.function.Predicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tools.descartes.petsupplystore.entities.ImageSize;
 import tools.descartes.petsupplystore.image.ImageDB;
 import tools.descartes.petsupplystore.image.StoreImage;
+import tools.descartes.teastore.entities.ImageSize;
 
 public class DriveStorage implements IDataStorage<StoreImage> {
 

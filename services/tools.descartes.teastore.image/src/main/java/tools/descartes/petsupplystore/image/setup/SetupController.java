@@ -43,10 +43,6 @@ import javax.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tools.descartes.petsupplystore.entities.Category;
-import tools.descartes.petsupplystore.entities.ImageSize;
-import tools.descartes.petsupplystore.entities.ImageSizePreset;
-import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.image.ImageDB;
 import tools.descartes.petsupplystore.image.ImageProvider;
 import tools.descartes.petsupplystore.image.StoreImage;
@@ -67,6 +63,10 @@ import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
 import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
+import tools.descartes.teastore.entities.Category;
+import tools.descartes.teastore.entities.ImageSize;
+import tools.descartes.teastore.entities.ImageSizePreset;
+import tools.descartes.teastore.entities.Product;
 
 public enum SetupController {
 

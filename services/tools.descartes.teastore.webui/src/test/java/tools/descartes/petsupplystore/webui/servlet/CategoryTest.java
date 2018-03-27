@@ -7,7 +7,7 @@ import javax.servlet.Servlet;
 import org.junit.Assert;
 import org.junit.Test;
 
-import tools.descartes.petsupplystore.entities.message.SessionBlob;
+import tools.descartes.teastore.entities.message.SessionBlob;
 
 public class CategoryTest extends AbstractUiTest {
 

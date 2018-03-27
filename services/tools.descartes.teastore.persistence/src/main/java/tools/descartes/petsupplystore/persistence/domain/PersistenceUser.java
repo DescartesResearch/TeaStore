@@ -24,8 +24,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.PostRemove;
 import javax.persistence.PreRemove;
-import tools.descartes.petsupplystore.entities.User;
+
 import tools.descartes.petsupplystore.persistence.repository.CacheManager;
+import tools.descartes.teastore.entities.User;
 
 /**
  * Persistence entity for user.

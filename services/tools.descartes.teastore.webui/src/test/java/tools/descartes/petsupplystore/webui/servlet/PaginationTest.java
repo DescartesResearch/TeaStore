@@ -11,8 +11,8 @@ import javax.servlet.ServletException;
 import org.junit.Assert;
 import org.junit.Test;
 
-import tools.descartes.petsupplystore.entities.Category;
-import tools.descartes.petsupplystore.entities.Product;
+import tools.descartes.teastore.entities.Category;
+import tools.descartes.teastore.entities.Product;
 
 public class PaginationTest extends AbstractUiTest {
 

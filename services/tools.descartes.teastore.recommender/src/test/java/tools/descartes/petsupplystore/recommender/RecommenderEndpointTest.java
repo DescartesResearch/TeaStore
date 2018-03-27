@@ -26,9 +26,9 @@ import javax.ws.rs.core.Response;
 import org.junit.Assert;
 import org.junit.Test;
 
-import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.recommender.servlet.TrainingSynchronizer;
 import tools.descartes.petsupplystore.registryclient.Service;
+import tools.descartes.teastore.entities.OrderItem;
 
 /**
  * Test for the RecommenderEndpoint.

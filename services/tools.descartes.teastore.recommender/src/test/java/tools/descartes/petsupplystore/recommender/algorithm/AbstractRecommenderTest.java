@@ -20,9 +20,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import tools.descartes.petsupplystore.entities.Order;
-import tools.descartes.petsupplystore.entities.OrderItem;
-import tools.descartes.petsupplystore.entities.User;
+import tools.descartes.teastore.entities.Order;
+import tools.descartes.teastore.entities.OrderItem;
+import tools.descartes.teastore.entities.User;
 
 /**
  * Abstract Recommender Test.

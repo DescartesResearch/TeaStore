@@ -25,9 +25,9 @@ import javax.imageio.ImageIO;
 import org.junit.Before;
 import org.junit.Test;
 
-import tools.descartes.petsupplystore.entities.ImageSize;
-import tools.descartes.petsupplystore.entities.ImageSizePreset;
 import tools.descartes.petsupplystore.image.ImageScaler;
+import tools.descartes.teastore.entities.ImageSize;
+import tools.descartes.teastore.entities.ImageSizePreset;
 
 public class TestImageScaler {
 

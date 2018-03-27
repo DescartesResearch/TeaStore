@@ -1,10 +1,10 @@
-package tools.descartes.petsupplystore.entities.message;
+package tools.descartes.teastore.entities.message;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import tools.descartes.petsupplystore.entities.Order;
-import tools.descartes.petsupplystore.entities.OrderItem;
+import tools.descartes.teastore.entities.Order;
+import tools.descartes.teastore.entities.OrderItem;
 
 /**
  * Blob containing all information about the user session.

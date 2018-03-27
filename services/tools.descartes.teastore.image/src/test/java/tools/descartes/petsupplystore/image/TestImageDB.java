@@ -25,10 +25,10 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import tools.descartes.petsupplystore.entities.ImageSize;
-import tools.descartes.petsupplystore.entities.ImageSizePreset;
 import tools.descartes.petsupplystore.image.ImageDB;
 import tools.descartes.petsupplystore.image.ImageDBKey;
+import tools.descartes.teastore.entities.ImageSize;
+import tools.descartes.teastore.entities.ImageSizePreset;
 
 public class TestImageDB {
 

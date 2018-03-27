@@ -18,10 +18,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-import tools.descartes.petsupplystore.entities.Order;
-import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.recommender.algorithm.IRecommender;
 import tools.descartes.petsupplystore.recommender.servlet.TrainingSynchronizer;
+import tools.descartes.teastore.entities.Order;
+import tools.descartes.teastore.entities.OrderItem;
 
 /**
  * REST endpoint to trigger the (re)training of the Recommender.

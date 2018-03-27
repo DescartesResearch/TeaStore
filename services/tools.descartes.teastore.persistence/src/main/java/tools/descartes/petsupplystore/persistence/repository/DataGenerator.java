@@ -28,11 +28,6 @@ import org.eclipse.persistence.sessions.server.ServerSession;
 import org.eclipse.persistence.tools.schemaframework.SchemaManager;
 import org.mindrot.jbcrypt.BCrypt;
 
-import tools.descartes.petsupplystore.entities.Category;
-import tools.descartes.petsupplystore.entities.Order;
-import tools.descartes.petsupplystore.entities.OrderItem;
-import tools.descartes.petsupplystore.entities.Product;
-import tools.descartes.petsupplystore.entities.User;
 import tools.descartes.petsupplystore.persistence.domain.CategoryRepository;
 import tools.descartes.petsupplystore.persistence.domain.OrderItemRepository;
 import tools.descartes.petsupplystore.persistence.domain.OrderRepository;
@@ -43,6 +38,11 @@ import tools.descartes.petsupplystore.persistence.domain.ProductRepository;
 import tools.descartes.petsupplystore.persistence.domain.UserRepository;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.ServiceLoadBalancer;
 import tools.descartes.petsupplystore.registryclient.util.RESTClient;
+import tools.descartes.teastore.entities.Category;
+import tools.descartes.teastore.entities.Order;
+import tools.descartes.teastore.entities.OrderItem;
+import tools.descartes.teastore.entities.Product;
+import tools.descartes.teastore.entities.User;
 
 /**
  * Class for generating data in the database.

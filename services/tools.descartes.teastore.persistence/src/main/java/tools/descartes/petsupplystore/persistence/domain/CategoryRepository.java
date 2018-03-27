@@ -15,8 +15,8 @@ package tools.descartes.petsupplystore.persistence.domain;
 
 import javax.persistence.EntityManager;
 
-import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.persistence.repository.AbstractPersistenceRepository;
+import tools.descartes.teastore.entities.Category;
 
 /**
  * Repository that performs transactional CRUD operations cor Categories on database.

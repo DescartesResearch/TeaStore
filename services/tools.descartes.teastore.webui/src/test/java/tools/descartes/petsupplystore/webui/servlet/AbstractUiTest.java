@@ -10,8 +10,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
-import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.registryclient.Service;
+import tools.descartes.teastore.entities.Category;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 

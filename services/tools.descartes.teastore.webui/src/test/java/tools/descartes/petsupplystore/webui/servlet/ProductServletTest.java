@@ -12,7 +12,7 @@ import javax.servlet.ServletException;
 import org.junit.Assert;
 import org.junit.Test;
 
-import tools.descartes.petsupplystore.entities.Product;
+import tools.descartes.teastore.entities.Product;
 
 public class ProductServletTest extends AbstractUiTest {
 

@@ -20,10 +20,10 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tools.descartes.petsupplystore.entities.ImageSize;
-import tools.descartes.petsupplystore.entities.ImageSizePreset;
 import tools.descartes.petsupplystore.image.setup.ImageIDFactory;
 import tools.descartes.petsupplystore.image.storage.IDataStorage;
+import tools.descartes.teastore.entities.ImageSize;
+import tools.descartes.teastore.entities.ImageSizePreset;
 
 public enum ImageProvider {
 

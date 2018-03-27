@@ -21,16 +21,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import tools.descartes.petsupplystore.entities.Category;
-import tools.descartes.petsupplystore.entities.ImageSizePreset;
-import tools.descartes.petsupplystore.entities.Order;
-import tools.descartes.petsupplystore.entities.User;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedCRUDOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedImageOperations;
 import tools.descartes.petsupplystore.registryclient.rest.LoadBalancedStoreOperations;
 import tools.descartes.petsupplystore.webui.servlet.elhelper.ELHelperUtils;
+import tools.descartes.teastore.entities.Category;
+import tools.descartes.teastore.entities.ImageSizePreset;
+import tools.descartes.teastore.entities.Order;
+import tools.descartes.teastore.entities.User;
 
 /**
  * Servlet implementation for the web view of "Profile"

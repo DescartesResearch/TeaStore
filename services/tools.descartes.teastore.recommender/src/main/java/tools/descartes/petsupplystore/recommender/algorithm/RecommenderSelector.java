@@ -23,13 +23,13 @@ import javax.naming.NamingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tools.descartes.petsupplystore.entities.Order;
-import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.recommender.algorithm.impl.UseFallBackException;
 import tools.descartes.petsupplystore.recommender.algorithm.impl.cf.PreprocessedSlopeOneRecommender;
 import tools.descartes.petsupplystore.recommender.algorithm.impl.cf.SlopeOneRecommender;
 import tools.descartes.petsupplystore.recommender.algorithm.impl.orderbased.OrderBasedRecommender;
 import tools.descartes.petsupplystore.recommender.algorithm.impl.pop.PopularityBasedRecommender;
+import tools.descartes.teastore.entities.Order;
+import tools.descartes.teastore.entities.OrderItem;
 
 /**
  * A strategy selector for the Recommender functionality.

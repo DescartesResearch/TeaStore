@@ -22,10 +22,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import tools.descartes.petsupplystore.entities.User;
 import tools.descartes.petsupplystore.persistence.domain.UserRepository;
 import tools.descartes.petsupplystore.persistence.repository.DataGenerator;
 import tools.descartes.petsupplystore.registryclient.util.AbstractCRUDEndpoint;
+import tools.descartes.teastore.entities.User;
 
 /**
  * Persistence endpoint for CRUD operations on Categories.

@@ -25,8 +25,8 @@ import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.PostRemove;
 
-import tools.descartes.petsupplystore.entities.Category;
 import tools.descartes.petsupplystore.persistence.repository.CacheManager;
+import tools.descartes.teastore.entities.Category;
 
 /**
  * Entity for persisting Categories in database.

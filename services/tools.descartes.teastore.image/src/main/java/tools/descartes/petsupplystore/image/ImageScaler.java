@@ -20,7 +20,7 @@ import java.awt.image.BufferedImage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tools.descartes.petsupplystore.entities.ImageSize;
+import tools.descartes.teastore.entities.ImageSize;
 
 /**
  * Utility class with static methods to scale a {@link java.awt.image.BufferedImage} to a given size or by a 
@@ -35,11 +35,11 @@ public final class ImageScaler {
 
 	/**
 	 * Scales a given image by rendering the supplied image to the size, determined by the given 
-	 * {@link tools.descartes.petsupplystore.entities.ImageSize}. The method will throw a 
+	 * {@link tools.descartes.teastore.entities.ImageSize}. The method will throw a 
 	 * {@link java.lang.NullPointerException} if the supplied image or size is null.
 	 * @param image Image to scale to the given size
 	 * @param size Size to scale image to
-	 * @return New image scaled to the given {@link tools.descartes.petsupplystore.entities.ImageSize}
+	 * @return New image scaled to the given {@link tools.descartes.teastore.entities.ImageSize}
 	 */
 	public static BufferedImage scale(BufferedImage image, ImageSize size) {
 		if (size == null) {

@@ -29,11 +29,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import tools.descartes.petsupplystore.entities.Category;
-import tools.descartes.petsupplystore.entities.message.SessionBlob;
+
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
+import tools.descartes.teastore.entities.Category;
+import tools.descartes.teastore.entities.message.SessionBlob;
 
 /**
  * Abstract servlet for the webUI

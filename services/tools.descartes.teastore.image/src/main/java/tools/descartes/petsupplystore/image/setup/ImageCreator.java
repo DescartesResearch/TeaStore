@@ -22,7 +22,7 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 import java.util.stream.Stream;
 
-import tools.descartes.petsupplystore.entities.ImageSize;
+import tools.descartes.teastore.entities.ImageSize;
 
 public class ImageCreator {
 	

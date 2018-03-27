@@ -29,8 +29,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.PostRemove;
 import javax.persistence.PreRemove;
 
-import tools.descartes.petsupplystore.entities.Order;
 import tools.descartes.petsupplystore.persistence.repository.CacheManager;
+import tools.descartes.teastore.entities.Order;
 
 /**
  * Entity for persisting Orders in database.

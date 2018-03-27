@@ -25,14 +25,14 @@ import org.junit.Test;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
-import tools.descartes.petsupplystore.entities.Category;
-import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.persistence.rest.CacheManagerEndpoint;
 import tools.descartes.petsupplystore.persistence.rest.DatabaseGenerationEndpoint;
 import tools.descartes.petsupplystore.persistence.rest.ProductEndpoint;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.rest.NonBalancedCRUDOperations;
 import tools.descartes.petsupplystore.registryclient.util.RESTClient;
+import tools.descartes.teastore.entities.Category;
+import tools.descartes.teastore.entities.Product;
 
 /**
  * Test for the all federated cache utilities.

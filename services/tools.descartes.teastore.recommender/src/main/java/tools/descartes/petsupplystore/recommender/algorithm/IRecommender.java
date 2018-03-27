@@ -15,10 +15,10 @@ package tools.descartes.petsupplystore.recommender.algorithm;
 
 import java.util.List;
 
-import tools.descartes.petsupplystore.entities.Order;
-import tools.descartes.petsupplystore.entities.OrderItem;
-import tools.descartes.petsupplystore.entities.Product;
-import tools.descartes.petsupplystore.entities.User;
+import tools.descartes.teastore.entities.Order;
+import tools.descartes.teastore.entities.OrderItem;
+import tools.descartes.teastore.entities.Product;
+import tools.descartes.teastore.entities.User;
 
 /**
  * Interface providing the recommender functionality.

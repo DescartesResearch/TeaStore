@@ -18,9 +18,9 @@ import java.util.List;
 
 import org.junit.Assert;
 
-import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.recommender.algorithm.impl.UseFallBackException;
 import tools.descartes.petsupplystore.recommender.algorithm.impl.orderbased.OrderBasedRecommender;
+import tools.descartes.teastore.entities.OrderItem;
 
 /**
  * Test for the Dummy Recommender.

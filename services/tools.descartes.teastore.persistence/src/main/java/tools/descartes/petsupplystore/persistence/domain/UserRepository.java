@@ -18,8 +18,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import tools.descartes.petsupplystore.entities.User;
 import tools.descartes.petsupplystore.persistence.repository.AbstractPersistenceRepository;
+import tools.descartes.teastore.entities.User;
 
 /**
  * Repository that performs transactional CRUD operations for users on database.

@@ -1,4 +1,4 @@
-package tools.descartes.petsupplystore.entities;
+package tools.descartes.teastore.entities;
 
 
 public enum ImageSizePreset {

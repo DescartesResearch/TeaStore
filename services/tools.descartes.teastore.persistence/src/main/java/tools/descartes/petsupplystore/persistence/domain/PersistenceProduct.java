@@ -26,8 +26,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PostRemove;
 
-import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.persistence.repository.CacheManager;
+import tools.descartes.teastore.entities.Product;
 
 /**
  * Persistence entity for products.

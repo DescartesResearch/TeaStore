@@ -29,8 +29,6 @@ import com.netflix.loadbalancer.Server;
 
 import org.junit.Assert;
 
-import tools.descartes.petsupplystore.entities.Category;
-import tools.descartes.petsupplystore.entities.Product;
 import tools.descartes.petsupplystore.registryclient.Service;
 import tools.descartes.petsupplystore.registryclient.rest.NonBalancedCRUDOperations;
 import tools.descartes.petsupplystore.registryclient.test.NotFoundServlet;
@@ -38,6 +36,8 @@ import tools.descartes.petsupplystore.registryclient.test.SlowTimeoutingServlet;
 import tools.descartes.petsupplystore.registryclient.test.TestServlet;
 import tools.descartes.petsupplystore.registryclient.test.TimeoutStatusServlet;
 import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
+import tools.descartes.teastore.entities.Category;
+import tools.descartes.teastore.entities.Product;
 
 /**
  * Test the load balancer.

@@ -32,8 +32,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import tools.descartes.petsupplystore.entities.ImageSizePreset;
 import tools.descartes.petsupplystore.image.StoreImage;
+import tools.descartes.teastore.entities.ImageSizePreset;
 
 public class TestStoreImage {
 

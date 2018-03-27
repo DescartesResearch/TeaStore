@@ -19,8 +19,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import tools.descartes.petsupplystore.entities.OrderItem;
 import tools.descartes.petsupplystore.persistence.repository.AbstractPersistenceRepository;
+import tools.descartes.teastore.entities.OrderItem;
 
 /**
  * Repository that performs transactional CRUD operations for order items on database.

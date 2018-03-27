@@ -19,11 +19,11 @@ import org.junit.Test;
 
 import org.junit.Assert;
 
-import tools.descartes.petsupplystore.entities.User;
 import tools.descartes.petsupplystore.persistence.rest.UserEndpoint;
 import tools.descartes.petsupplystore.registryclient.rest.NonBalancedCRUDOperations;
 import tools.descartes.petsupplystore.registryclient.util.NotFoundException;
 import tools.descartes.petsupplystore.registryclient.util.RESTClient;
+import tools.descartes.teastore.entities.User;
 
 /**
  * Test for the UserEndpoint.

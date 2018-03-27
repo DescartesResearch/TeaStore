@@ -25,8 +25,8 @@ import javax.imageio.ImageIO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tools.descartes.petsupplystore.entities.ImageSize;
 import tools.descartes.petsupplystore.image.cache.entry.ICachable;
+import tools.descartes.teastore.entities.ImageSize;
 
 /**
  * Entity for images provided by the image-provider service.
