@@ -4,7 +4,7 @@
 
 	<artifactId>dockermemoryconfigurator</artifactId>
 	<packaging>jar</packaging>
-	<name>PetSupplyStore Memory Configurator</name>
+	<name>TeaStore Memory Configurator</name>
 	<url>http://descartes.tools</url>
 
 	<properties>
@@ -23,7 +23,7 @@
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<mainClass>tools.descartes.petsupplystore.dockermemoryconfigurator.Configurator</mainClass>
+							<mainClass>tools.descartes.teastore.dockermemoryconfigurator.Configurator</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
@@ -32,9 +32,9 @@
 		<finalName>dockermemoryconfigurator</finalName>
 	</build>
 	<parent>
-		<groupId>tools.descartes.petsupplystore</groupId>
+		<groupId>tools.descartes.teastore</groupId>
 		<artifactId>parent</artifactId>
-		<version>${petsupplystoreversion}</version>
+		<version>${teastoreversion}</version>
 		<relativePath>../..</relativePath>
 	</parent>
 </project>

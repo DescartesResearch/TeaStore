@@ -1,4 +1,4 @@
-package tools.descartes.petsupplystore.dockermemoryconfigurator;
+package tools.descartes.teastore.dockermemoryconfigurator;
 
 import java.io.BufferedReader;
 import java.io.File;
