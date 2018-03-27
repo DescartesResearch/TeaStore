@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>kieker.rabbitmq</artifactId>
-	<name>PetSupplyStore Kieker RabbitMQ</name>
+	<name>TeaStore Kieker RabbitMQ</name>
 	<url>http://descartes.tools</url>
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
@@ -31,7 +31,7 @@
 							<goal>push</goal>
 						</goals>
 						<configuration>
-							<repository>${dockerrepository}/petsupplystore-kieker-rabbitmq</repository>
+							<repository>${dockerrepository}/teastore-kieker-rabbitmq</repository>
 							<tag>latest</tag>
 						</configuration>
 						<phase>package</phase>
@@ -43,7 +43,7 @@
 							<goal>push</goal>
 						</goals>
 						<configuration>
-							<repository>${dockerrepository}/petsupplystore-base</repository>
+							<repository>${dockerrepository}/teastore-base</repository>
 							<tag>${project.version}</tag>
 						</configuration>
 						<phase>package</phase>
@@ -51,7 +51,7 @@
 				</executions>
 			</plugin>
 		</plugins>
-		<finalName>tools.descartes.petsupplystore.kieker.rabbitmq</finalName>
+		<finalName>tools.descartes.teastore.kieker.rabbitmq</finalName>
 	</build>
 
 	<dependencies>
@@ -97,9 +97,9 @@
 
 	<packaging>war</packaging>
 	<parent>
-		<groupId>tools.descartes.petsupplystore</groupId>
+		<groupId>tools.descartes.teastore</groupId>
 		<artifactId>parent</artifactId>
-		<version>${petsupplystoreversion}</version>
+		<version>${teastoreversion}</version>
 		<relativePath>../..</relativePath>
 	</parent>
 </project>

@@ -12,7 +12,7 @@ RUN chmod -R +x /apache-tomcat-8.5.24
 RUN mkdir /usr/share/man/man1
 RUN apt-get -y install default-jre-headless
 
-COPY target/tools.descartes.petsupplystore.kieker.rabbitmq.war /apache-tomcat-8.5.24/webapps/logs.war
+COPY target/tools.descartes.teastore.kieker.rabbitmq.war /apache-tomcat-8.5.24/webapps/logs.war
 
 EXPOSE 8080
 
