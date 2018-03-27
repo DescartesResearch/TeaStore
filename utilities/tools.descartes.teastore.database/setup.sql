@@ -1,4 +1,4 @@
-CREATE DATABASE petsupplydb;
-CREATE USER 'petsupplyuser'@'%' IDENTIFIED BY 'petsupplypassword';
-GRANT ALL PRIVILEGES ON petsupplydb.* TO 'petsupplyuser'@'%';
+CREATE DATABASE teadb;
+CREATE USER 'teauser'@'%' IDENTIFIED BY 'teapassword';
+GRANT ALL PRIVILEGES ON teadb.* TO 'teauser'@'%';
 FLUSH PRIVILEGES;

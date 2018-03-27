@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>database</artifactId>
-	<name>PetSupplyStore Database Docker Container</name>
+	<name>TeaStore Database Docker Container</name>
 	<url>http://descartes.tools</url>
 	<packaging>pom</packaging>
 
@@ -33,7 +33,7 @@
 							<goal>push</goal>
 						</goals>
 						<configuration>
-							<repository>${dockerrepository}/petsupplystore-db</repository>
+							<repository>${dockerrepository}/teastore-db</repository>
 							<tag>latest</tag>
 						</configuration>
 						<phase>package</phase>
@@ -45,7 +45,7 @@
 							<goal>push</goal>
 						</goals>
 						<configuration>
-							<repository>${dockerrepository}/petsupplystore-db</repository>
+							<repository>${dockerrepository}/teastore-db</repository>
 							<tag>${project.version}</tag>
 						</configuration>
 						<phase>package</phase>
@@ -53,12 +53,12 @@
 				</executions>
 			</plugin>
 		</plugins>
-		<finalName>tools.descartes.petsupplystore.database</finalName>
+		<finalName>tools.descartes.teastore.database</finalName>
 	</build>
 	<parent>
-		<groupId>tools.descartes.petsupplystore</groupId>
+		<groupId>tools.descartes.teastore</groupId>
 		<artifactId>parent</artifactId>
-		<version>${petsupplystoreversion}</version>
+		<version>${teastoreversion}</version>
 		<relativePath>../..</relativePath>
 	</parent>
 </project>
