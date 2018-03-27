@@ -14,7 +14,7 @@
 </listener>
 <filter>
 	<filter-name>TrackingFilter</filter-name>
-	<filter-class>tools.descartes.petsupplystore.registryclient.rest.TrackingFilter</filter-class>
+	<filter-class>tools.descartes.teastore.registryclient.rest.TrackingFilter</filter-class>
 </filter>
 <filter-mapping>
 	<filter-name>TrackingFilter</filter-name>
