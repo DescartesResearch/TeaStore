@@ -36,7 +36,7 @@ final class EMFManager {
 	private static final Logger LOG = LoggerFactory.getLogger(EMFManager.class);
 	
 	private static final String MYSQL_URL_PREFIX = "jdbc:mysql://";
-	private static final String MYSQL_URL_POSTFIX = "/petsupplydb";
+	private static final String MYSQL_URL_POSTFIX = "/teadb";
 	private static final String MYSQL_DEFAULT_HOST = "localhost";
 	private static final String MYSQL_DEFAULT_PORT = "3306";
 	
