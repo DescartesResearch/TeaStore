@@ -6,7 +6,6 @@
         <wb-resource deploy-path="/WEB-INF/lib" source-path="/src/dev/webapp/WEB-INF/lib"/>
         <wb-resource deploy-path="/WEB-INF/classes/META-INF" source-path="/src/dev/resources/META-INF"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/dev/resources"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <dependent-module archiveName="registryclient-1.1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.teastore.registryclient/tools.descartes.teastore.registryclient">
             <dependency-type>uses</dependency-type>
         </dependent-module>
