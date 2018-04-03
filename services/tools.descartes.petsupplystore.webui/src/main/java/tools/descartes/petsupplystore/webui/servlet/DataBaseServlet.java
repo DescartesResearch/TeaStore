@@ -50,7 +50,7 @@ public class DataBaseServlet extends AbstractUIServlet {
 		checkforCookie(request, response);
 		request.setAttribute("storeIcon", 
 				LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
-		request.setAttribute("title", "Pet Supply Store Database");
+		request.setAttribute("title", "Tea Store Database");
 		request.getRequestDispatcher("WEB-INF/pages/database.jsp").forward(request, response);
 	}
 

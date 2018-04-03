@@ -254,7 +254,7 @@ public abstract class AbstractUIServlet extends HttpServlet {
 		request.setAttribute("CategoryList", new ArrayList<Category>());
 		request.setAttribute("storeIcon", "");
 		request.setAttribute("errorImage", "");
-		request.setAttribute("title", "Pet Supply Store Timeout");
+		request.setAttribute("title", "Tea Store Timeout");
 		request.setAttribute("messagetitle", "408: Timout waiting for Service: " + service.getServiceName());
 		request.setAttribute("messageparagraph", "WebUI got a timeout waiting for service \"" + service.getServiceName()
 				+ "\" to respond. Note the that service may itself have been waiting for another service.");
@@ -271,7 +271,7 @@ public abstract class AbstractUIServlet extends HttpServlet {
 		request.setAttribute("CategoryList", new ArrayList<Category>());
 		request.setAttribute("storeIcon", "");
 		request.setAttribute("errorImage", "");
-		request.setAttribute("title", "Pet Supply Store Timeout");
+		request.setAttribute("title", "Tea Store Timeout");
 		request.setAttribute("messagetitle", "500: Internal Exception: " + e.getMessage());
 		request.setAttribute("messageparagraph", exceptionAsString);
 		request.setAttribute("login", false);
@@ -287,7 +287,7 @@ public abstract class AbstractUIServlet extends HttpServlet {
 		request.setAttribute("CategoryList", new ArrayList<Category>());
 		request.setAttribute("storeIcon", "");
 		request.setAttribute("errorImage", "");
-		request.setAttribute("title", "Pet Supply Store Timeout");
+		request.setAttribute("title", "Tea Store Timeout");
 		request.setAttribute("messagetitle", "404: Not Found Exception: " + e.getMessage());
 		request.setAttribute("messageparagraph", exceptionAsString);
 		request.setAttribute("login", false);

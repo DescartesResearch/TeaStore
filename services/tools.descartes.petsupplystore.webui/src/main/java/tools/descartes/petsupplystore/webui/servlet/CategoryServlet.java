@@ -85,7 +85,7 @@ public class CategoryServlet extends AbstractUIServlet {
 			request.setAttribute("storeIcon", 
 					LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
 			request.setAttribute("CategoryList", LoadBalancedStoreOperations.getCategories());
-			request.setAttribute("title", "Pet Supply Store Categorie " + category.getName());
+			request.setAttribute("title", "Tea Store Categorie " + category.getName());
 
 			request.setAttribute("Productslist", productlist);
 
