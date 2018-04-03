@@ -238,7 +238,7 @@ public final class DataGenerator {
 					product.setName(PRODUCTNAMES[productTypeIndex][productIndex] + ", v" + version);
 				}
 				product.setDescription(
-						"The best " + PRODUCTNAMES[productTypeIndex][productIndex] + " for " + category.getName());
+						"Great " + category.getName() + ": " + PRODUCTNAMES[productTypeIndex][productIndex]);
 				product.setListPriceInCents(95 + random.nextInt(12000));
 				product.setCategoryId(category.getId());
 				ProductRepository.REPOSITORY.createEntity(product);
