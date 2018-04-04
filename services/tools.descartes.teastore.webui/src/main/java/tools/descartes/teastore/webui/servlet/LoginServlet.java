@@ -55,7 +55,7 @@ public class LoginServlet extends AbstractUIServlet {
 				LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "categories", Category.class, -1, -1));
 		request.setAttribute("storeIcon",
 				LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
-		request.setAttribute("title", "Pet Supply Store Login");
+		request.setAttribute("title", "Tea Store Login");
 		request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
 
 		request.setAttribute("referer", request.getHeader("Referer"));

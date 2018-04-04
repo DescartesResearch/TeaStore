@@ -13,7 +13,7 @@
 				<li><a href="<c:url value="/status"/>">Status</a></li>
 				<li><a href="<c:url value="/about"/>">About us</a></li>
 				<li><a
-					href="https://github.com/DescartesResearch/Pet-Supply-Store/wiki"><span
+					href="https://github.com/DescartesResearch/TeaStore/wiki"><span
 						class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a></li>
 			</ul>
 		</div>
@@ -21,8 +21,8 @@
 </nav><%-- Bootstrap core JavaScript
     ==================================================
 Placed at the end of the document so the pages load faster --%>
-<script src="<c:url value="bootstrap/js/jquery.min.js"/>"></script>
-<script src="<c:url value="bootstrap/js/bootstrap.min.js"/>"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="<c:url value="/resizingscript.js"/>"></script>
 </body>
 </html>

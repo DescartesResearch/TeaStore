@@ -94,7 +94,7 @@ public class CategoryServlet extends AbstractUIServlet {
 					LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
 			request.setAttribute("CategoryList",
 					LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "categories", Category.class, -1, -1));
-			request.setAttribute("title", "Pet Supply Store Categorie " + category.getName());
+			request.setAttribute("title", "Tea Store Categorie " + category.getName());
 
 			request.setAttribute("Productslist", productlist);
 

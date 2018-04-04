@@ -54,7 +54,7 @@ public class IndexServlet extends AbstractUIServlet {
 		checkforCookie(request, response);
 		request.setAttribute("CategoryList",
 				LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "categories", Category.class, -1, -1));
-		request.setAttribute("title", "Pet Supply Store Home");
+		request.setAttribute("title", "Tea Store Home");
 		request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
 		request.setAttribute("storeIcon",
 				LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));

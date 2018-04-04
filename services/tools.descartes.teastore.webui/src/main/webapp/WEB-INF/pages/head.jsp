@@ -9,8 +9,8 @@
 <meta name="author" content="">
 <link rel="icon" href="<c:url value="/images/icon.ico" />" >
 <title>${title}</title>
-<%-- Bootstrap core CSS --%> 
-<link rel="stylesheet" href="<c:url value="bootstrap/css/bootstrap.min.css"/>" type="text/css" />
-<link rel="StyleSheet" href="<c:url value="/jpetstore.css"/>" type="text/css" media="screen" />
+<%-- Bootstrap core CSS --%>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="StyleSheet" href="<c:url value="/teastore.css"/>" type="text/css" media="screen" />
 </head>
 <body>
