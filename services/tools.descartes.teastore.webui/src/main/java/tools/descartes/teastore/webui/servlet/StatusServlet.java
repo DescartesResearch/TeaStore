@@ -61,7 +61,7 @@ public class StatusServlet extends AbstractUIServlet {
 
 		}
 		request.setAttribute("storeIcon", iconImage);
-		request.setAttribute("title", "Tea Store Status");
+		request.setAttribute("title", "TeaStore Status");
 
 		boolean noregistry = false;
 		try {

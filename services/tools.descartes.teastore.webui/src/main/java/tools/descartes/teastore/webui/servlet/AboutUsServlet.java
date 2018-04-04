@@ -64,7 +64,7 @@ public class AboutUsServlet extends AbstractUIServlet {
 				LoadBalancedImageOperations.getWebImage("descartesLogo", ImageSizePreset.LOGO.getSize()));
 		request.setAttribute("storeIcon", 
 				LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
-		request.setAttribute("title", "Tea Store About Us");
+		request.setAttribute("title", "TeaStore About Us");
 		request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
 
 		request.getRequestDispatcher("WEB-INF/pages/about.jsp").forward(request, response);

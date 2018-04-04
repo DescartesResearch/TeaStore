@@ -63,7 +63,7 @@ public class ProductServlet extends AbstractUIServlet {
 			long id = Long.valueOf(request.getParameter("id"));
 			request.setAttribute("CategoryList",
 					LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "categories", Category.class, -1, -1));
-			request.setAttribute("title", "Tea Store Product");
+			request.setAttribute("title", "TeaStore Product");
 			SessionBlob blob = getSessionBlob(request);
 			request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(blob));
 			Product p = LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "products", Product.class, id);

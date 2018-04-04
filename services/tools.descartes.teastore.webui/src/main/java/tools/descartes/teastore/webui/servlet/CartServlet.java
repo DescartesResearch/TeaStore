@@ -77,7 +77,7 @@ public class CartServlet extends AbstractUIServlet {
 
 		request.setAttribute("storeIcon",
 				LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
-		request.setAttribute("title", "Tea Store Cart");
+		request.setAttribute("title", "TeaStore Cart");
 		request.setAttribute("CategoryList",
 				LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "categories", Category.class, -1, -1));
 		request.setAttribute("OrderItems", orderItems);

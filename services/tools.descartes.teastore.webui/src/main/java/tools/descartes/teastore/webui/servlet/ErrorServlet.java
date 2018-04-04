@@ -63,7 +63,7 @@ public class ErrorServlet extends AbstractUIServlet {
 					LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
 			request.setAttribute("errorImage",
 					LoadBalancedImageOperations.getWebImage("error", ImageSizePreset.ERROR.getSize()));
-			request.setAttribute("title", "Tea Store Error ");
+			request.setAttribute("title", "TeaStore Error ");
 			request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
 			request.getRequestDispatcher("WEB-INF/pages/error.jsp").forward(request, response);
 

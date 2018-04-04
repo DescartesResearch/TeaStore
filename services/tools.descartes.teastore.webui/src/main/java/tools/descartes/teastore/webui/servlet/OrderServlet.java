@@ -69,7 +69,7 @@ public class OrderServlet extends AbstractUIServlet {
 				LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "categories", Category.class, -1, -1));
 		request.setAttribute("storeIcon",
 				LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
-		request.setAttribute("title", "Tea Store Order");
+		request.setAttribute("title", "TeaStore Order");
 		request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
 		request.getRequestDispatcher("WEB-INF/pages/order.jsp").forward(request, response);
 	}
