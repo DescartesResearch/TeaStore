@@ -58,7 +58,7 @@ public class ProfileServlet extends AbstractUIServlet {
 			request.setAttribute("storeIcon", 
 					LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
 			request.setAttribute("CategoryList", LoadBalancedStoreOperations.getCategories());
-			request.setAttribute("title", "Tea Store Home");
+			request.setAttribute("title", "Pet Supply Store Home");
 			request.setAttribute("User", LoadBalancedStoreOperations.getUser(getSessionBlob(request).getUID()));
 			request.setAttribute("Orders",
 					LoadBalancedStoreOperations.getOrdersForUser(getSessionBlob(request).getUID()));

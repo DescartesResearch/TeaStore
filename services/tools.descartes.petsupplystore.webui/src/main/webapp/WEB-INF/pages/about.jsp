@@ -24,7 +24,7 @@
 			<img src="${portraitSimon}" alt="Simon Eismann" class="img-rounded img-responsive" />
 			<blockquote>
 				<p><a class="name" target="_blank" href="https://se.informatik.uni-wuerzburg.de/staff/simon_eismann/">Simon Eisman</a></p>
-				<small><cite title="Source Title">Authentication Service, Docker, Kieker</cite></small>
+				<small><cite title="Source Title">Store Service, Docker, Kieker</cite></small>
 			</blockquote>
 		</div>
 		<div class="col-sm-4 col-md-4">

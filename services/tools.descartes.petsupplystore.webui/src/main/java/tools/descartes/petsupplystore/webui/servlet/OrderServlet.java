@@ -65,7 +65,7 @@ public class OrderServlet extends AbstractUIServlet {
 		request.setAttribute("CategoryList", LoadBalancedStoreOperations.getCategories());
 		request.setAttribute("storeIcon", 
 				LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
-		request.setAttribute("title", "Tea Store Order");
+		request.setAttribute("title", "Pet Supply Store Order");
 		request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
 		request.getRequestDispatcher("WEB-INF/pages/order.jsp").forward(request, response);
 	}

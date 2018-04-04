@@ -13,7 +13,7 @@
 				<li><a href="<c:url value="/status"/>">Status</a></li>
 				<li><a href="<c:url value="/about"/>">About us</a></li>
 				<li><a
-					href="https://github.com/DescartesResearch/TeaStore/wiki"><span
+					href="https://github.com/DescartesResearch/Pet-Supply-Store/wiki"><span
 						class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a></li>
 			</ul>
 		</div>

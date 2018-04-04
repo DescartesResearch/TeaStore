@@ -61,12 +61,12 @@ public class StatusServlet extends AbstractUIServlet {
 
 		}
 		request.setAttribute("storeIcon", iconImage);
-		request.setAttribute("title", "Tea Store Status");
+		request.setAttribute("title", "Pet Supply Store Status");
 
 		boolean noregistry = false;
 		try {
 			request.setAttribute("webuiservers", RegistryClient.getClient().getServersForService(Service.WEBUI));
-			request.setAttribute("authenticationservers", RegistryClient.getClient().getServersForService(Service.STORE));
+			request.setAttribute("storeservers", RegistryClient.getClient().getServersForService(Service.STORE));
 			request.setAttribute("persistenceservers",
 					RegistryClient.getClient().getServersForService(Service.PERSISTENCE));
 			request.setAttribute("imageservers", RegistryClient.getClient().getServersForService(Service.IMAGE));

@@ -56,7 +56,7 @@ public class ProductServlet extends AbstractUIServlet {
 		if (request.getParameter("id") != null) {
 			long id = Long.valueOf(request.getParameter("id"));
 			request.setAttribute("CategoryList", LoadBalancedStoreOperations.getCategories());
-			request.setAttribute("title", "Tea Store Product");
+			request.setAttribute("title", "Pet Supply Store Product");
 			SessionBlob blob = getSessionBlob(request);
 			request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(blob));
 			Product p = LoadBalancedStoreOperations.getProduct(id);

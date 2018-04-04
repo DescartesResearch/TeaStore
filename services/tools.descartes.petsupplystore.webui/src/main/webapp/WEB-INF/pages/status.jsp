@@ -5,14 +5,14 @@
 <div class="container" id="main">
 	<div class="row">
 			<div class="col-sm-12 col-lg-8 col-lg-offset-2">
-				<h2 class="minipage-title">Tea Store Service Status</h2>
+				<h2 class="minipage-title">Pet Supply Store Service Status</h2>
 				<br/>
 				<c:if test = "${noregistry == true}"> <h2>Load Balancer does not work. Is Registry offline?</h2> <br/></c:if>
 				<p><b>This page does not auto refresh!</b> Refresh manually when checking the current status (e.g. to see if database generation has finished).</p>
 				<p>
 					<b>Note:</b> Database and image generation may take a while.
-					Leave the Tea Store in a stable and unused state while the database is generating.
-					You may use the Tea Store once the database has finished generating.
+					Leave the Pet Supply Store in a stable and unused state while the database is generating.
+					You may use the Pet Supply Store once the database has finished generating.
 					Please wait for the image provider to finish as well before running any performance tests.
 				</p>
 				<br/>
@@ -34,15 +34,15 @@
 						<td class="success">OK</td>
 					</tr>
 					<tr>
-						<td>Authentication</td>
-						<td <c:if test = "${authenticationservers.size() < 1}"> class="danger" </c:if>>${authenticationservers.size()}</td>
+						<td>Store</td>
+						<td <c:if test = "${storeservers.size() < 1}"> class="danger" </c:if>>${storeservers.size()}</td>
 						<td>
-							<c:forEach items="${authenticationservers}" var="server" varStatus="loop">
+							<c:forEach items="${storeservers}" var="server" varStatus="loop">
 								${server.host}:${server.port}<br/>
 							</c:forEach>
 						</td>
 						<c:choose>
-							<c:when test = "${authenticationservers.size() > 0}">
+							<c:when test = "${storeservers.size() > 0}">
 							   <td class="success">OK</td>
 							</c:when>
 							<c:otherwise>

@@ -10,7 +10,7 @@
 			</button>
 			<a class="navbar-brand" href="<c:url value="/"/>">
     <img src="${storeIcon}" width="30" height="30" class="d-inline-block align-top" alt="">
-    Tea Store</a>
+    Pet Supply Store</a>
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav navbar-right headnavbarlist">
