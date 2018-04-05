@@ -254,7 +254,7 @@ public enum SetupController {
 	public void detectCategoryImages() {
 		log.info("Trying to find images that indicate categories in generated images.");
 
-		String resPath = "categoryimg" + File.separator + "dogs.png";
+		String resPath = "categoryimg" + File.separator + "black-tea.png";
 		File dir = getPathToResource(resPath).toFile();
 
 		if (dir != null) {
