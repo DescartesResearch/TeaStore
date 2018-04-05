@@ -34,7 +34,7 @@
 						<td class="success">OK</td>
 					</tr>
 					<tr>
-						<td>Authentication</td>
+						<td>Auth</td>
 						<td <c:if test = "${authenticationservers.size() < 1}"> class="danger" </c:if>>${authenticationservers.size()}</td>
 						<td>
 							<c:forEach items="${authenticationservers}" var="server" varStatus="loop">
