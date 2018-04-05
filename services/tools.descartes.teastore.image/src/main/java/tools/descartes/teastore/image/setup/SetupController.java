@@ -218,7 +218,7 @@ public enum SetupController {
 		for (String name : imageNames) {
 			for (Category category : categories) {
 				String[] tmp = category.getName().split(",");
-				if (tmp[0].toLowerCase().equals(name)) {
+				if (tmp[0].toLowerCase().replace(" ", "-").equals(name)) {
 					log.info("Found matching category {} ({}) for image {}.", category.getName(), category.getId(),
 							name + "." + StoreImage.STORE_IMAGE_FORMAT);
 					result.put(category, categoryImages.get(name));
