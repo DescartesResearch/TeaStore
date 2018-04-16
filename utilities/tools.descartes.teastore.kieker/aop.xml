@@ -2,7 +2,7 @@
 <aspectj>
 	<weaver options="-Xlint:ignore">
 		<include within="tools.descartes.teastore..*"/>
-<!-- 		<exclude within="tools.descartes.teastore.entities..*" />
+ 		<exclude within="tools.descartes.teastore.entities..*" />
 		<exclude within="tools.descartes.teastore.rest..*" />
 		<exclude within="tools.descartes.teastore.registryclient.loadbalancers..*" />
 		<exclude within="tools.descartes.teastore.registryclient.RegistryClient" />
@@ -43,12 +43,12 @@
 		<exclude within="tools.descartes.teastore.image.cache.MostRecentlyUsed" />
 		<exclude within="tools.descartes.teastore.image.cache.RandomReplacement" />
 		<exclude within="tools.descartes.teastore.registryclient.rest.HttpWrapper" />
-		<exclude within="tools.descartes.teastore.registryclient.rest.NonBalancedCRUDOperations" />-->
+		<exclude within="tools.descartes.teastore.registryclient.rest.NonBalancedCRUDOperations" />
 		</weaver>
 	<aspects>
 		<concrete-aspect name="kieker.monitoring.probe.aspectj.operationExecution.TargetedAspect" extends="kieker.monitoring.probe.aspectj.operationExecution.AbstractOperationExecutionAspect">
 			<pointcut name="monitoredOperation" expression="execution(* *(..))"></pointcut>
-<!--			<pointcut name="monitoredOperation" expression="execution(* *(..)) 
+			<pointcut name="monitoredOperation" expression="execution(* *(..)) 
 			&amp;&amp; !execution(private static * *..lambda*(..)) 
 			&amp;&amp; !execution(private * *..lambda*(..)) 
 			&amp;&amp; !execution(* *..getEntityClass*(..)) 
@@ -144,7 +144,7 @@
 			&amp;&amp; !execution(* tools.descartes.teastore.registryclient.rest.LoadBalancedImageOperations.getProductImage(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.registryclient.rest.LoadBalancedImageOperations.getProductPreviewImages(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.registryclient.rest.LoadBalancedImageOperations.getWebImage(..))
-			" />-->
+			" />
 		</concrete-aspect>
 	</aspects>
 </aspectj>
