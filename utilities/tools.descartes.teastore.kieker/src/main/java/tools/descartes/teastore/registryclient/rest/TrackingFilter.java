@@ -1,5 +1,6 @@
 package tools.descartes.teastore.registryclient.rest;
 
+
 import java.io.IOException;
 
 import javax.servlet.Filter;
@@ -31,12 +32,10 @@ public class TrackingFilter implements Filter {
 	private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 	public static final String HEADER_FIELD = "KiekerTracingInfo";
 
-	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		
 	}
 
-	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		if (request instanceof HttpServletRequest && response instanceof HttpServletResponse) {
@@ -119,7 +118,6 @@ public class TrackingFilter implements Filter {
 		chain.doFilter(request, response);
 	}
 
-	@Override
 	public void destroy() {
 		CF_REGISTRY.unsetThreadLocalTraceId();
 		CF_REGISTRY.unsetThreadLocalEOI();

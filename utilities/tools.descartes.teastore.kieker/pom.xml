@@ -13,6 +13,19 @@
 	<build>
 		<finalName>tools.descartes.teastore.kieker</finalName>
 	</build>
+	<dependencies>
+		<dependency>
+			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>kieker</artifactId>
+			<version>1.13</version>
+		</dependency>
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>7.0</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
 
 	<packaging>pom</packaging>
 	<parent>

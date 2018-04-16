@@ -12,11 +12,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>net.kieker-monitoring</groupId>
-			<artifactId>kieker</artifactId>
-			<version>1.13</version>
-		</dependency>
 		<!-- Internal Dependencies -->
 		<dependency>
 			<groupId>tools.descartes.teastore</groupId>
@@ -40,9 +35,9 @@
 			<version>2.25.1</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.glassfish.jersey.connectors</groupId>
-		    <artifactId>jersey-grizzly-connector</artifactId>
-		    <version>2.25.1</version>
+			<groupId>org.glassfish.jersey.connectors</groupId>
+			<artifactId>jersey-grizzly-connector</artifactId>
+			<version>2.25.1</version>
 		</dependency>
 		<!-- WebApp Dependencies -->
 		<!-- jackson, slf4j, and rx must be included before ribbon to avoid version 
@@ -114,6 +109,7 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
 	<build>
 		<finalName>tools.descartes.teastore.registryclient</finalName>
 		<plugins>
@@ -128,6 +124,54 @@
 			</plugin>
 		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>kieker</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>net.kieker-monitoring</groupId>
+					<artifactId>kieker</artifactId>
+					<version>1.13</version>
+				</dependency>
+			</dependencies>
+			<build>
+				<!-- Copy Kieker files -->
+				<plugins>
+					<plugin>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>3.0.2</version>
+						<executions>
+							<execution>
+								<id>copy-aop</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.basedir}/src/main/java/tools/descartes/teastore/registryclient/rest</outputDirectory>
+									<overwrite>true</overwrite>
+									<resources>
+										<resource>
+											<directory>../../utilities/tools.descartes.teastore.kieker/tools/descartes/teastore/registryclient/rest</directory>
+											<includes>
+												<include>HttpWrapper.java</include>
+												<include>TrackingFiler.java</include>
+											</includes>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+
 	<parent>
 		<groupId>tools.descartes.teastore</groupId>
 		<artifactId>parent</artifactId>
