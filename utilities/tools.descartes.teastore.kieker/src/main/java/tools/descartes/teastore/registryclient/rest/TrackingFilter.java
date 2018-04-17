@@ -38,6 +38,7 @@ public class TrackingFilter implements Filter {
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
+		LOG.warn(request.getServletContext().getContextPath());
 		if (request instanceof HttpServletRequest && response instanceof HttpServletResponse) {
 			HttpServletRequest req = (HttpServletRequest) request;
 	        String sessionId = SESSION_REGISTRY.recallThreadLocalSessionId();
