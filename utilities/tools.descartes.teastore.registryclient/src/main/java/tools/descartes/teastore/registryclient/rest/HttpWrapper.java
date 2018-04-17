@@ -11,6 +11,5 @@ public class HttpWrapper {
 		Builder builder = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
 
 		return builder;
-
 	}
 }

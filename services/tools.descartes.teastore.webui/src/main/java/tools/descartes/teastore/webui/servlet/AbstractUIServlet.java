@@ -186,7 +186,6 @@ public abstract class AbstractUIServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			
 			doGetInternal(request, response);
 		} catch (LoadBalancerTimeoutException e) {
 			serveTimoutResponse(request, response, e.getTargetService());

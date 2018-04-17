@@ -183,7 +183,7 @@
 			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.waitAndStopImageCreation(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.isFirstImageProvider(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.teardown(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.reconfiguration(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.configureImageProvider(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.registryclient.rest.LoadBalancedImageOperations.getProductImage(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.registryclient.rest.LoadBalancedImageOperations.getProductPreviewImages(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.registryclient.rest.LoadBalancedImageOperations.getWebImage(..))
