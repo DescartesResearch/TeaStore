@@ -45,6 +45,7 @@
 		<exclude within="tools.descartes.teastore.registryclient.rest.HttpWrapper" />
 		<exclude within="tools.descartes.teastore.registryclient.rest.NonBalancedCRUDOperations" />
 		<exclude within="tools.descartes.teastore.registryclient.util.RESTClient" />
+		<exclude within="tools.descartes.teastore.registryclient.util.RESTClient$1" />
 		<exclude within="tools.descartes.teastore.registryclient.util.AbstractCRUDEndpoint" />
 		</weaver>
 	<aspects>
@@ -53,7 +54,6 @@
 			<pointcut name="monitoredOperation" expression="execution(* *(..)) 
 			&amp;&amp; !execution(private static * *..lambda*(..)) 
 			&amp;&amp; !execution(private * *..lambda*(..))
-			&amp;&amp; !within(ParameterizedType+)) 
 			&amp;&amp; !execution(* *..getEntityClass*(..)) 
 			&amp;&amp; !execution(* tools.descartes.teastore.auth.security.SHASecurityProvider.blobToString(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.auth.security.SHASecurityProvider.getSHA512(..))
