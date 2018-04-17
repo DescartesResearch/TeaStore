@@ -38,21 +38,21 @@ public class TrackingFilter implements Filter {
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-        String sessionId = SESSION_REGISTRY.recallThreadLocalSessionId();
-        long traceId = -1L;
-        int eoi = -1;
-        int ess = -1;
-        
 		if (request instanceof HttpServletRequest && response instanceof HttpServletResponse) {
 			HttpServletRequest req = (HttpServletRequest) request;
+	        String sessionId = SESSION_REGISTRY.recallThreadLocalSessionId();
+	        long traceId = -1L;
+	        int eoi;
+	        int ess;
 	
 			final String operationExecutionHeader = req.getHeader(HEADER_FIELD);
 
 			if ((operationExecutionHeader == null) || (operationExecutionHeader.equals(""))) {
 				LOG.debug("No monitoring data found in the incoming request header");
+				// LOG.info("Will continue without sending back reponse header");
 				traceId = CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
 				CF_REGISTRY.storeThreadLocalEOI(0);
-				CF_REGISTRY.storeThreadLocalESS(1); //
+				CF_REGISTRY.storeThreadLocalESS(1); // next operation is ess + 1
 				eoi = 0;
 				ess = 0;
 			} else {
@@ -112,6 +112,12 @@ public class TrackingFilter implements Filter {
 			LOG.error("Something went wrong");
 		}
 		chain.doFilter(request, response);
+		
+
+        String sessionId = SESSION_REGISTRY.recallThreadLocalSessionId();
+        long traceId = CF_REGISTRY.recallThreadLocalTraceId();
+        int eoi = CF_REGISTRY.recallThreadLocalEOI();
+        int ess = CF_REGISTRY.recallThreadLocalESS();
 		((HttpServletResponse)response).addHeader(HEADER_FIELD, traceId + "," + sessionId + "," + (eoi+1) + "," + Integer.toString(CF_REGISTRY.recallThreadLocalESS()));
 	}
 
