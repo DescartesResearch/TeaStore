@@ -27,7 +27,15 @@
 		<exclude within="tools.descartes.teastore.webui.startup..*" />
 		<exclude within="tools.descartes.teastore.webui.servlet.elhelper..*" />
 		<exclude within="tools.descartes.teastore.webui.servlet.AbstractUIServlet" />
-		<exclude within="tools.descartes.teastore.image.setup..*" />
+		<exclude within="tools.descartes.teastore.image.setup.CachingMode" />
+		<exclude within="tools.descartes.teastore.image.setup.CachingRule" />
+		<exclude within="tools.descartes.teastore.image.setup.CreatorFactory" />
+		<exclude within="tools.descartes.teastore.image.setup.CreatorRunner" />
+		<exclude within="tools.descartes.teastore.image.setup.ImageCreator" />
+		<exclude within="tools.descartes.teastore.image.setup.ImageIDFactory" />
+		<exclude within="tools.descartes.teastore.image.setup.ImageProviderStartup" />
+		<exclude within="tools.descartes.teastore.image.setup.StorageMode" />
+		<exclude within="tools.descartes.teastore.image.setup.StorageRule" />
 		<exclude within="tools.descartes.teastore.image.storage.rules..*" />
 		<exclude within="tools.descartes.teastore.image.cache.rules..*" />
 		<exclude within="tools.descartes.teastore.image.cache.entry..*" />
@@ -153,6 +161,29 @@
 			&amp;&amp; !execution(* tools.descartes.teastore.image.cache.AbstractCache.saveData(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.image.cache.AbstractCache.cacheData(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.image.cache.AbstractCache.findInEntries(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.waitForPersistence(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.fetchProductsForCategory(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.fetchCategories(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.convertToIDs(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.matchCategoriesToImage(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.generateImages(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.detectCategoryImages(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.createWorkingDir(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.getPathToResource(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.detectExistingImages(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.setCacheSize(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.deleteImages(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.deleteUnusedImages(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.deleteWorkingDir(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.setupStorage(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.configureImageProvider(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.getWorkingDir(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.isFinished(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.getState(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.waitAndStopImageCreation(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.isFirstImageProvider(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.teardown(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.Setupcontroller.reconfiguration(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.registryclient.rest.LoadBalancedImageOperations.getProductImage(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.registryclient.rest.LoadBalancedImageOperations.getProductPreviewImages(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.registryclient.rest.LoadBalancedImageOperations.getWebImage(..))
