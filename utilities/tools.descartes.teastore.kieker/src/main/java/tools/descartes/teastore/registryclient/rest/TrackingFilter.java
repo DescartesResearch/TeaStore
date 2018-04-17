@@ -9,8 +9,10 @@ import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
@@ -147,6 +149,21 @@ public class TrackingFilter implements Filter {
 
 	    public PrintWriter getWriter() {
 	        return new PrintWriter(output);
+	    }
+	    
+	    @Override
+	    public ServletOutputStream getOutputStream() throws IOException {
+	        //This is the magic to prevent closing stream, create a "virtual" stream that does nothing..
+	        return new ServletOutputStream() {
+	            @Override
+	            public void write(int b) throws IOException {}
+	            @Override
+	            public void setWriteListener(WriteListener writeListener) {}
+	            @Override
+	            public boolean isReady() {
+	                return true;
+	            }
+	        };
 	    }
 	}
 }
