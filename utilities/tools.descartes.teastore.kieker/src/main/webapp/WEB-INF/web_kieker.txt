@@ -18,6 +18,9 @@
 </filter>
 <filter-mapping>
 	<filter-name>TrackingFilter</filter-name>
-	<url-pattern>/*</url-pattern>
+	<url-pattern>/tools.descartes.teastore.auth/*</url-pattern>
+	<url-pattern>/tools.descartes.teastore.image/*</url-pattern>
+	<url-pattern>/tools.descartes.teastore.persistence/*</url-pattern>
+	<url-pattern>/tools.descartes.teastore.recommender/*</url-pattern>
 </filter-mapping>
 </web-app>
