@@ -54,7 +54,7 @@
 			<pointcut name="monitoredOperation" expression="execution(* *(..)) 
 			&amp;&amp; !execution(private static * *..lambda*(..)) 
 			&amp;&amp; !execution(private * *..lambda*(..))
-			&amp;&amp; !execution(* *..getEntityClass*(..)) 
+			&amp;&amp; !within(is(AnonymousType)) 
 			&amp;&amp; !execution(* tools.descartes.teastore.auth.security.SHASecurityProvider.blobToString(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.auth.security.SHASecurityProvider.getSHA512(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.auth.security.SHASecurityProvider.getKeyProvider(..))
