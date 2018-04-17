@@ -37,8 +37,6 @@ import tools.descartes.teastore.registryclient.RegistryClient;
  *
  */
 @Path("generatedb")
-@Produces("text/plain")
-@Consumes("text/plain")
 public class DatabaseGenerationEndpoint {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(DatabaseGenerationEndpoint.class);
