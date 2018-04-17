@@ -6,7 +6,7 @@
 		<exclude within="tools.descartes.teastore.rest..*" />
 		<exclude within="tools.descartes.teastore.registryclient.loadbalancers..*" />
 		<exclude within="tools.descartes.teastore.registryclient.RegistryClient" />
-		<exclude within="tools.descartes.teastore.auth.startup.StoreStartup" />
+		<exclude within="tools.descartes.teastore.auth.startup.AuthStartup" />
 		<exclude within="tools.descartes.teastore.registryclient.StartupCallbackTask" />
 		<exclude within="tools.descartes.teastore.registryclient.RegistryClientHeartbeatDaemon" />
 		<exclude within="tools.descartes.teastore.registryclient.Service" />
@@ -42,6 +42,7 @@
 		<exclude within="tools.descartes.teastore.image.ImageDB" />
 		<exclude within="tools.descartes.teastore.image.ImageDBKey" />
 		<exclude within="tools.descartes.teastore.image.ImageScaler" />
+		<exclude within="descartes.teastore.registryclient.rest.TrackingFilter" />
 		<exclude within="tools.descartes.teastore.image.StoreImage" />
 		<exclude within="tools.descartes.teastore.image.cache.AbstractQueueCache" />
 		<exclude within="tools.descartes.teastore.image.cache.AbstractTreeCache" />
@@ -125,6 +126,7 @@
 			&amp;&amp; !execution(* tools.descartes.teastore.recommender.servlet.TrainingSynchronizer.toMillis(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.recommender.servlet.TrainingSynchronizer.setReady(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.recommender.servlet.TrainingSynchronizer.waitForPersistence(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.recommender.servlet.TrainingSynchronizer.getInstance(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.recommender.servlet.TrainingSynchronizer.filterForMaxtimeStamp(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.recommender.algorithm.RecommenderSelector.getInstance(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.recommender.algorithm.RecommenderSelector.train(..))
