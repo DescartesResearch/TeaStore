@@ -156,7 +156,9 @@ public class TrackingFilter implements Filter {
 	        //This is the magic to prevent closing stream, create a "virtual" stream that does nothing..
 	        return new ServletOutputStream() {
 	            @Override
-	            public void write(int b) throws IOException {}
+	            public void write(int b) throws IOException {
+	            	output.write(b);
+	            }
 	            @Override
 	            public void setWriteListener(WriteListener writeListener) {}
 	            @Override
