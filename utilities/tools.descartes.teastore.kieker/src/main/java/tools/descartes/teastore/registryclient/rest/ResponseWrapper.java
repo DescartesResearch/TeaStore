@@ -13,7 +13,7 @@ public class ResponseWrapper {
 	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 	public static final String HEADER_FIELD = "KiekerTracingInfo";
-	private static final Log LOG = LogFactory.getLog(TrackingFilter.class);
+	private static final Log LOG = LogFactory.getLog(ResponseWrapper.class);
 	public static final String SESSION_ID_ASYNC_TRACE = "NOSESSION-ASYNCIN";
 	/**
 	 * Hook for monitoring

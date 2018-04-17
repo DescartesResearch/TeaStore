@@ -114,10 +114,10 @@ public class TrackingFilter implements Filter {
 		chain.doFilter(request, response);
 		
 
+		LOG.warn("It happend!");
         String sessionId = SESSION_REGISTRY.recallThreadLocalSessionId();
         long traceId = CF_REGISTRY.recallThreadLocalTraceId();
         int eoi = CF_REGISTRY.recallThreadLocalEOI();
-        int ess = CF_REGISTRY.recallThreadLocalESS();
 		((HttpServletResponse)response).addHeader(HEADER_FIELD, traceId + "," + sessionId + "," + (eoi+1) + "," + Integer.toString(CF_REGISTRY.recallThreadLocalESS()));
 	}
 
