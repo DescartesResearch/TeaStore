@@ -26,7 +26,6 @@
 		<exclude within="tools.descartes.teastore.recommender.algorithm.AbstractRecommender" />
 		<exclude within="tools.descartes.teastore.webui.startup..*" />
 		<exclude within="tools.descartes.teastore.webui.servlet.elhelper..*" />
-		<exclude within="tools.descartes.teastore.webui.servlet.AbstractUIServlet" />
 		<exclude within="tools.descartes.teastore.image.setup.CachingMode" />
 		<exclude within="tools.descartes.teastore.image.setup.CachingRule" />
 		<exclude within="tools.descartes.teastore.image.setup.CreatorFactory" />
