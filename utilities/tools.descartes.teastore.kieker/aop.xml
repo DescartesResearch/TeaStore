@@ -45,13 +45,16 @@
 		<exclude within="tools.descartes.teastore.registryclient.rest.HttpWrapper" />
 		<exclude within="tools.descartes.teastore.registryclient.rest.NonBalancedCRUDOperations" />
 		<exclude within="tools.descartes.teastore.registryclient.util.RESTClient" />
+		<exclude within="tools.descartes.teastore.registryclient.util.AbstractCRUDEndpoint" />
 		</weaver>
 	<aspects>
 		<concrete-aspect name="kieker.monitoring.probe.aspectj.operationExecution.TargetedAspect" extends="kieker.monitoring.probe.aspectj.operationExecution.AbstractOperationExecutionAspect">
 			<!--<pointcut name="monitoredOperation" expression="execution(* *(..))"></pointcut>-->
 			<pointcut name="monitoredOperation" expression="execution(* *(..)) 
 			&amp;&amp; !execution(private static * *..lambda*(..)) 
+			&amp;&amp; !execution(public static * *..lambda*(..)) 
 			&amp;&amp; !execution(private * *..lambda*(..)) 
+			&amp;&amp; !execution(public * *..lambda*(..)) 
 			&amp;&amp; !execution(* *..getEntityClass*(..)) 
 			&amp;&amp; !execution(* tools.descartes.teastore.auth.security.SHASecurityProvider.blobToString(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.auth.security.SHASecurityProvider.getSHA512(..))
