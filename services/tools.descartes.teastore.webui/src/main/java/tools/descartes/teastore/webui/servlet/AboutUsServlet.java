@@ -41,7 +41,7 @@ public class AboutUsServlet extends AbstractUIServlet {
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public AboutUsServlet() {
-		super();
+		super(); 
 	}
 
 	/**
