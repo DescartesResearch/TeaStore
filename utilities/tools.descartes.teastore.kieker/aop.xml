@@ -117,6 +117,7 @@
 			&amp;&amp; !execution(* tools.descartes.teastore.recommender.servlet.TrainingSynchronizer.waitForPersistence(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.recommender.algorithm.RecommenderSelector.getInstance(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.recommender.algorithm.RecommenderSelector.train(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.recommender.algorithm.RecommenderSelector.filterForMaxtimeStamp(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.recommender.algorithm.impl.cf.SlopeOneRecommender.executePreprocessing(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.recommender.algorithm.impl.cf.SlopeOneRecommender.getUserVector(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.recommender.algorithm.impl.cf.SlopeOneRecommender.calculateScoreForItem(..))
