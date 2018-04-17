@@ -130,13 +130,6 @@
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
-			<dependencies>
-				<dependency>
-					<groupId>net.kieker-monitoring</groupId>
-					<artifactId>kieker</artifactId>
-					<version>1.13</version>
-				</dependency>
-			</dependencies>
 			<build>
 				<!-- Copy Kieker files -->
 				<plugins>
