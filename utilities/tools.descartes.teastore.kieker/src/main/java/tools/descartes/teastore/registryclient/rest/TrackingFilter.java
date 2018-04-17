@@ -74,7 +74,7 @@ public class TrackingFilter implements Filter {
 				final String eoiStr = headerArray[2];
 				eoi = -1;
 				try {
-					eoi = 1 + Integer.parseInt(eoiStr);
+					eoi = Integer.parseInt(eoiStr);
 				} catch (final NumberFormatException exc) {
 					LOG.warn("Invalid eoi", exc);
 				}
