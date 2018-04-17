@@ -1,7 +1,9 @@
 package tools.descartes.teastore.registryclient.rest;
 
 
+import java.io.CharArrayWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -112,18 +114,38 @@ public class TrackingFilter implements Filter {
 		} else {
 			LOG.error("Something went wrong");
 		}
-		HttpServletResponseWrapper wrappedResponse = new HttpServletResponseWrapper((HttpServletResponse) response);
+		CharResponseWrapper wrappedResponse = new CharResponseWrapper((HttpServletResponse) response);
 		chain.doFilter(request, wrappedResponse);
 		
         String sessionId = SESSION_REGISTRY.recallThreadLocalSessionId();
         long traceId = CF_REGISTRY.recallThreadLocalTraceId();
         int eoi = CF_REGISTRY.recallThreadLocalEOI();
         wrappedResponse.addHeader(HEADER_FIELD, traceId + "," + sessionId + "," + (eoi+1) + "," + Integer.toString(CF_REGISTRY.recallThreadLocalESS()));
+        PrintWriter out = response.getWriter();
+        out.write(wrappedResponse.toString());
+        LOG.warn(wrappedResponse.toString());
 	}
 
 	public void destroy() {
 		CF_REGISTRY.unsetThreadLocalTraceId();
 		CF_REGISTRY.unsetThreadLocalEOI();
 		CF_REGISTRY.unsetThreadLocalESS();
+	}
+	
+	public class CharResponseWrapper extends HttpServletResponseWrapper {
+	    private CharArrayWriter output;
+
+	    public String toString() {
+	        return output.toString();
+	    }
+
+	    public CharResponseWrapper(HttpServletResponse response) {
+	        super(response);
+	        output = new CharArrayWriter();
+	    }
+
+	    public PrintWriter getWriter() {
+	        return new PrintWriter(output);
+	    }
 	}
 }
