@@ -11,6 +11,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -111,14 +112,13 @@ public class TrackingFilter implements Filter {
 		} else {
 			LOG.error("Something went wrong");
 		}
-		chain.doFilter(request, response);
+		HttpServletResponseWrapper wrappedResponse = new HttpServletResponseWrapper((HttpServletResponse) response);
+		chain.doFilter(request, wrappedResponse);
 		
-
-		LOG.warn("It happend!");
         String sessionId = SESSION_REGISTRY.recallThreadLocalSessionId();
         long traceId = CF_REGISTRY.recallThreadLocalTraceId();
         int eoi = CF_REGISTRY.recallThreadLocalEOI();
-		((HttpServletResponse)response).addHeader(HEADER_FIELD, traceId + "," + sessionId + "," + (eoi+1) + "," + Integer.toString(CF_REGISTRY.recallThreadLocalESS()));
+        wrappedResponse.setHeader(HEADER_FIELD, traceId + "," + sessionId + "," + (eoi+1) + "," + Integer.toString(CF_REGISTRY.recallThreadLocalESS()));
 	}
 
 	public void destroy() {
@@ -126,5 +126,4 @@ public class TrackingFilter implements Filter {
 		CF_REGISTRY.unsetThreadLocalEOI();
 		CF_REGISTRY.unsetThreadLocalESS();
 	}
-
 }
