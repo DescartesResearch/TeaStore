@@ -126,7 +126,6 @@ public class TrackingFilter implements Filter {
         int eoi = CF_REGISTRY.recallThreadLocalEOI();
         wrappedResponse.addHeader(HEADER_FIELD, traceId + "," + sessionId + "," + (eoi+1) + "," + Integer.toString(CF_REGISTRY.recallThreadLocalESS()));
         out.write(wrappedResponse.toString());
-        LOG.warn(wrappedResponse.toString());
 	}
 
 	public void destroy() {
