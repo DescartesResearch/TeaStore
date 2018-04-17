@@ -148,7 +148,7 @@
 									<overwrite>true</overwrite>
 									<resources>
 										<resource>
-											<directory>../../utilities/tools.descartes.teastore.kieker/tools/descartes/teastore/registryclient/rest</directory>
+											<directory>../../utilities/tools.descartes.teastore.kieker/src/main/java/tools/descartes/teastore/registryclient/rest</directory>
 											<includes>
 												<include>HttpWrapper.java</include>
 												<include>TrackingFiler.java</include>
