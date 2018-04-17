@@ -1,7 +1,6 @@
 package tools.descartes.teastore.registryclient.rest;
 
 
-import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -9,14 +8,10 @@ import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
-
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
@@ -124,7 +119,7 @@ public class TrackingFilter implements Filter {
         String sessionId = SESSION_REGISTRY.recallThreadLocalSessionId();
         long traceId = CF_REGISTRY.recallThreadLocalTraceId();
         int eoi = CF_REGISTRY.recallThreadLocalEOI();
-        wrappedResponse.addHeader(HEADER_FIELD, traceId + "," + sessionId + "," + (eoi+1) + "," + Integer.toString(CF_REGISTRY.recallThreadLocalESS()));
+        wrappedResponse.addHeader(HEADER_FIELD, traceId + "," + sessionId + "," + (eoi) + "," + Integer.toString(CF_REGISTRY.recallThreadLocalESS()));
         out.write(wrappedResponse.toString());
 	}
 
