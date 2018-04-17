@@ -159,6 +159,7 @@
 											<includes>
 												<include>HttpWrapper.java</include>
 												<include>ResponseWrapper.java</include>
+												<include>CharResponseWrapper.java</include>
 												<include>TrackingFilter.java</include>
 											</includes>
 										</resource>
