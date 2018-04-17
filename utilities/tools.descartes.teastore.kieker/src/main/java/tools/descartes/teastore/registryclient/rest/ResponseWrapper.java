@@ -72,6 +72,7 @@ public class ResponseWrapper {
 			ess = 0; // ESS of this execution
 		}
 
+		LOG.info("traceId " + traceId + " sessionId " + sessionId + " eoi " + eoi + " ess " + ess);
 		// Store thread-local values
 		CF_REGISTRY.storeThreadLocalTraceId(traceId);
 		CF_REGISTRY.storeThreadLocalEOI(eoi); // this execution has EOI=eoi; next execution will get eoi with incrementAndRecall
