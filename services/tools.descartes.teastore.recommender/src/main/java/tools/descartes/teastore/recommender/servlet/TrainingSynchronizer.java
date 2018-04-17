@@ -185,6 +185,13 @@ public final class TrainingSynchronizer {
 			items = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "orderitems", OrderItem.class, -1, -1);
 			long noItems = items.size();
 			LOG.trace("Retrieved " + noItems + " orderItems, starting retrieving of orders now.");
+		} catch (Exception e) {
+			// set ready anyway to avoid deadlocks
+			setReady(true);
+			LOG.error("Database retrieving failed.");
+			return -1;
+		}
+		try {
 			orders = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "orders", Order.class, -1, -1);
 			long noOrders = orders.size();
 			LOG.trace("Retrieved " + noOrders + " orders, starting training now.");
