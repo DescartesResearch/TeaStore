@@ -43,7 +43,7 @@ public class HttpWrapper {
 //			entrypoint = false;
 			eoi = CF_REGISTRY.recallThreadLocalEOI();
 			ess = CF_REGISTRY.recallThreadLocalESS();
-			nextESS = ess + 1;
+			nextESS = ess;
 			if ((eoi == -1) || (ess == -1)) {
 				LOG.error("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
 //				CTRLINST.terminateMonitoring();
