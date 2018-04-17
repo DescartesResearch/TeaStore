@@ -42,7 +42,6 @@
 		<exclude within="tools.descartes.teastore.image.ImageDB" />
 		<exclude within="tools.descartes.teastore.image.ImageDBKey" />
 		<exclude within="tools.descartes.teastore.image.ImageScaler" />
-		<exclude within="descartes.teastore.registryclient.rest.TrackingFilter" />
 		<exclude within="tools.descartes.teastore.image.StoreImage" />
 		<exclude within="tools.descartes.teastore.image.cache.AbstractQueueCache" />
 		<exclude within="tools.descartes.teastore.image.cache.AbstractTreeCache" />
@@ -54,6 +53,7 @@
 		<exclude within="tools.descartes.teastore.image.cache.MostRecentlyUsed" />
 		<exclude within="tools.descartes.teastore.image.cache.RandomReplacement" />
 		<exclude within="tools.descartes.teastore.registryclient.rest.HttpWrapper" />
+		<exclude within="tools.descartes.teastore.registryclient.rest.TrackingFilter" />
 		<exclude within="tools.descartes.teastore.registryclient.rest.ResponseWrapper" />
 		<exclude within="tools.descartes.teastore.registryclient.rest.CharResponseWrapper" />
 		<exclude within="tools.descartes.teastore.registryclient.rest.NonBalancedCRUDOperations" />
