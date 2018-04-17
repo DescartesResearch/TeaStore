@@ -115,13 +115,14 @@ public class TrackingFilter implements Filter {
 			LOG.error("Something went wrong");
 		}
 		CharResponseWrapper wrappedResponse = new CharResponseWrapper((HttpServletResponse) response);
+        PrintWriter out = response.getWriter();
+        
 		chain.doFilter(request, wrappedResponse);
 		
         String sessionId = SESSION_REGISTRY.recallThreadLocalSessionId();
         long traceId = CF_REGISTRY.recallThreadLocalTraceId();
         int eoi = CF_REGISTRY.recallThreadLocalEOI();
         wrappedResponse.addHeader(HEADER_FIELD, traceId + "," + sessionId + "," + (eoi+1) + "," + Integer.toString(CF_REGISTRY.recallThreadLocalESS()));
-        PrintWriter out = response.getWriter();
         out.write(wrappedResponse.toString());
         LOG.warn(wrappedResponse.toString());
 	}
