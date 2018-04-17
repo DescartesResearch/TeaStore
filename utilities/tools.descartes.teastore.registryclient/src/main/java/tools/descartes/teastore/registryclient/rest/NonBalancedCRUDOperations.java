@@ -65,8 +65,8 @@ public final class NonBalancedCRUDOperations {
 	 */
 	public static <T> long sendEntityForCreation(RESTClient<T> client, T entity)
 			throws NotFoundException, TimeoutException {
-		Response response = HttpWrapper.wrap(client.getEndpointTarget())
-				.post(Entity.entity(entity, MediaType.APPLICATION_JSON), Response.class);
+		Response response = ResponseWrapper.wrap(HttpWrapper.wrap(client.getEndpointTarget())
+				.post(Entity.entity(entity, MediaType.APPLICATION_JSON), Response.class));
 		long id = -1L;
 		// If resource was created successfully
 		if (response != null && response.getStatus() == 201) {
@@ -110,8 +110,8 @@ public final class NonBalancedCRUDOperations {
 	 */
 	public static <T> boolean sendEntityForUpdate(RESTClient<T> client, long id, T entity)
 			throws NotFoundException, TimeoutException {
-		Response response = HttpWrapper.wrap(client.getEndpointTarget().path(String.valueOf(id)))
-				.put(Entity.entity(entity, MediaType.APPLICATION_JSON), Response.class);
+		Response response = ResponseWrapper.wrap(HttpWrapper.wrap(client.getEndpointTarget().path(String.valueOf(id)))
+				.put(Entity.entity(entity, MediaType.APPLICATION_JSON), Response.class));
 		if (response != null) {
 			response.bufferEntity();
 		}
@@ -142,7 +142,7 @@ public final class NonBalancedCRUDOperations {
 	 * @return True, if deletion succeeded; false otherwise.
 	 */
 	public static <T> boolean deleteEntity(RESTClient<T> client, long id) throws NotFoundException, TimeoutException {
-		Response response = HttpWrapper.wrap(client.getEndpointTarget().path(String.valueOf(id))).delete();
+		Response response = ResponseWrapper.wrap(HttpWrapper.wrap(client.getEndpointTarget().path(String.valueOf(id))).delete());
 		if (response != null) {
 			response.bufferEntity();
 		}
@@ -173,7 +173,7 @@ public final class NonBalancedCRUDOperations {
 	 * @return The entity; null if it does not exist.
 	 */
 	public static <T> T getEntity(RESTClient<T> client, long id) throws NotFoundException, TimeoutException {
-		Response response = HttpWrapper.wrap(client.getEndpointTarget().path(String.valueOf(id))).get();
+		Response response = ResponseWrapper.wrap(HttpWrapper.wrap(client.getEndpointTarget().path(String.valueOf(id))).get());
 		T entity = null;
 		if (response != null && response.getStatus() < 400) {
 			try {
@@ -221,7 +221,7 @@ public final class NonBalancedCRUDOperations {
 		}
 		
 		GenericType<List<T>> listType = client.getGenericListType();
-		Response response = HttpWrapper.wrap(target).get();
+		Response response = ResponseWrapper.wrap(HttpWrapper.wrap(target).get());
 		List<T> entities = new ArrayList<T>();
 		if (response != null && response.getStatus() == 200) {
 			try {
@@ -274,7 +274,7 @@ public final class NonBalancedCRUDOperations {
 		if (limit >= 0) {
 			target = target.queryParam("max", limit);
 		}
-		Response response = HttpWrapper.wrap(target).get();
+		Response response = ResponseWrapper.wrap(HttpWrapper.wrap(target).get());
 		List<T> entities = new ArrayList<T>();
 		if (response != null && response.getStatus() == 200) {
 			try {
@@ -316,7 +316,7 @@ public final class NonBalancedCRUDOperations {
 	public static <T> T getEntityWithProperty(RESTClient<T> client, String propertyURI, String propertyValue)
 			throws NotFoundException, TimeoutException {
 		WebTarget target = client.getEndpointTarget().path(propertyURI).path(propertyValue);
-		Response response = HttpWrapper.wrap(target).get();
+		Response response = ResponseWrapper.wrap(HttpWrapper.wrap(target).get());
 		T entity = null;
 		if (response != null && response.getStatus() < 400) {
 			try {

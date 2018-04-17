@@ -158,6 +158,7 @@
 											<directory>../../utilities/tools.descartes.teastore.kieker/src/main/java/tools/descartes/teastore/registryclient/rest</directory>
 											<includes>
 												<include>HttpWrapper.java</include>
+												<include>ResponseWrapper.java</include>
 												<include>TrackingFilter.java</include>
 											</includes>
 										</resource>

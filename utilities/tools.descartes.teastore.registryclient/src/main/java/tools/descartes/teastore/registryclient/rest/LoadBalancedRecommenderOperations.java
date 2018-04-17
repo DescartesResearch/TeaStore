@@ -42,8 +42,8 @@ public final class LoadBalancedRecommenderOperations {
 	public static List<Long> getRecommendations(List<OrderItem> order, Long uid)
 			throws NotFoundException, LoadBalancerTimeoutException {
 		Response r = ServiceLoadBalancer.loadBalanceRESTOperation(Service.RECOMMENDER, "recommend", Category.class,
-				client -> HttpWrapper.wrap(client.getEndpointTarget().queryParam("uid", uid))
-						.post(Entity.entity(order, MediaType.APPLICATION_JSON)));
+				client -> ResponseWrapper.wrap(HttpWrapper.wrap(client.getEndpointTarget().queryParam("uid", uid))
+						.post(Entity.entity(order, MediaType.APPLICATION_JSON))));
 		if (r != null) {
 			if (r.getStatus() < 400) {
 				return r.readEntity(new GenericType<List<Long>>() {
