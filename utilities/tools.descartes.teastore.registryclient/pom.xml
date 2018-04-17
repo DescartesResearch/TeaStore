@@ -145,7 +145,7 @@
 						<version>3.0.2</version>
 						<executions>
 							<execution>
-								<id>copy-aop</id>
+								<id>copy-kieker-files</id>
 								<phase>generate-resources</phase>
 								<goals>
 									<goal>copy-resources</goal>
@@ -158,7 +158,7 @@
 											<directory>../../utilities/tools.descartes.teastore.kieker/src/main/java/tools/descartes/teastore/registryclient/rest</directory>
 											<includes>
 												<include>HttpWrapper.java</include>
-												<include>TrackingFiler.java</include>
+												<include>TrackingFilter.java</include>
 											</includes>
 										</resource>
 									</resources>
