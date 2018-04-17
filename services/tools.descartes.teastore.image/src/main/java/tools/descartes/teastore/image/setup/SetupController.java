@@ -47,6 +47,8 @@ import tools.descartes.teastore.registryclient.RegistryClient;
 import tools.descartes.teastore.registryclient.Service;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.teastore.registryclient.loadbalancers.ServiceLoadBalancer;
+import tools.descartes.teastore.registryclient.rest.HttpWrapper;
+import tools.descartes.teastore.registryclient.rest.ResponseWrapper;
 import tools.descartes.teastore.registryclient.util.NotFoundException;
 import tools.descartes.teastore.entities.Category;
 import tools.descartes.teastore.entities.ImageSize;
@@ -123,8 +125,8 @@ public enum SetupController {
 			Response result = null;
 			try {
 				result = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "generatedb", 
-						String.class, client -> client.getService().path(client.getApplicationURI())
-							.path(client.getEndpointURI()).path("finished").request().get());
+						String.class, client -> ResponseWrapper.wrap(HttpWrapper.wrap(client.getService().path(client.getApplicationURI())
+							.path(client.getEndpointURI()).path("finished")).get()));
 			} catch (NotFoundException notFound) {
 				log.info("No persistence found.", notFound);
 			} catch (LoadBalancerTimeoutException timeout) {
@@ -155,9 +157,9 @@ public enum SetupController {
 		Response result = null;
 		try {
 			result = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "products", Product.class,
-					client -> client.getService().path(client.getApplicationURI()).path(client.getEndpointURI())
+					client -> ResponseWrapper.wrap(HttpWrapper.wrap(client.getService().path(client.getApplicationURI()).path(client.getEndpointURI())
 						.path("category").path(String.valueOf(category.getId())).queryParam("start", 0)
-						.queryParam("max", -1).request().get());
+						.queryParam("max", -1)).get()));
 		} catch (NotFoundException notFound) {
 			log.error("No persistence found but should be online.", notFound);
 			throw notFound;
@@ -184,8 +186,8 @@ public enum SetupController {
 		Response result = null;
 		try {
 			result = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "categories",
-					Category.class, client -> client.getService().path(client.getApplicationURI())
-						.path(client.getEndpointURI()).request().get());
+					Category.class, client -> ResponseWrapper.wrap(HttpWrapper.wrap(client.getService().path(client.getApplicationURI())
+						.path(client.getEndpointURI())).get()));
 		} catch (NotFoundException notFound) {
 			log.error("No persistence found but should be online.", notFound);
 			throw notFound;
