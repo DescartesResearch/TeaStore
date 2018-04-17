@@ -106,7 +106,7 @@ public class TrackingFilter implements Filter {
 				// Store thread-local values
 				CF_REGISTRY.storeThreadLocalTraceId(traceId);
 				CF_REGISTRY.storeThreadLocalEOI(eoi); // this execution has EOI=eoi; next execution will get eoi with incrementAndRecall
-				CF_REGISTRY.storeThreadLocalESS(ess + 1); // this execution has ESS=ess
+				CF_REGISTRY.storeThreadLocalESS(ess); // this execution has ESS=ess
 				SESSION_REGISTRY.storeThreadLocalSessionId(sessionId);
 			}
 
