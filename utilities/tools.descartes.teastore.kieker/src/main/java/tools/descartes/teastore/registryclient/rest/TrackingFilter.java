@@ -38,6 +38,11 @@ public class TrackingFilter implements Filter {
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
+		 String url = ((HttpServletRequest)request).getRequestURL().toString();
+		 if (url.contains("webui")) {
+		     chain.doFilter(request, response);
+		     return;
+		 }
 		if (request instanceof HttpServletRequest && response instanceof HttpServletResponse) {
 			HttpServletRequest req = (HttpServletRequest) request;
 	        String sessionId = SESSION_REGISTRY.recallThreadLocalSessionId();
@@ -47,7 +52,18 @@ public class TrackingFilter implements Filter {
 	
 			final String operationExecutionHeader = req.getHeader(HEADER_FIELD);
 
-			if ((operationExecutionHeader != null) && (!operationExecutionHeader.equals(""))) {
+			if ((operationExecutionHeader == null) || (operationExecutionHeader.equals(""))) {
+				LOG.debug("No monitoring data found in the incoming request header");
+				// LOG.info("Will continue without sending back reponse header");
+				traceId = CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
+				CF_REGISTRY.storeThreadLocalEOI(0);
+				CF_REGISTRY.storeThreadLocalESS(1); // next operation is ess + 1
+				eoi = 0;
+				ess = 0;
+			} else {
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("Received request: " + req.getMethod() + "with header = " + operationExecutionHeader);
+				}
 				final String[] headerArray = operationExecutionHeader.split(",");
 
 				// Extract session id
@@ -82,13 +98,18 @@ public class TrackingFilter implements Filter {
 					} catch (final NumberFormatException exc) {
 						LOG.warn("Invalid trace id", exc);
 					}
+				} else {
+					traceId = CF_REGISTRY.getUniqueTraceId();
+					sessionId = SESSION_ID_ASYNC_TRACE;
+					eoi = 0; // EOI of this execution
+					ess = 0; // ESS of this execution
+				}
+
 				// Store thread-local values
 				CF_REGISTRY.storeThreadLocalTraceId(traceId);
 				CF_REGISTRY.storeThreadLocalEOI(eoi); // this execution has EOI=eoi; next execution will get eoi with incrementAndRecall
 				CF_REGISTRY.storeThreadLocalESS(ess); // this execution has ESS=ess
 				SESSION_REGISTRY.storeThreadLocalSessionId(sessionId);
-				}
-
 			}
 
 			
