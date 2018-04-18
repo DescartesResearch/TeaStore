@@ -69,7 +69,7 @@ public class CategoryServlet extends AbstractUIServlet {
 
 			int products = Integer.valueOf(ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "products", Product.class,
 					client -> client.getEndpointTarget().path("count").path(String.valueOf(categoryID))
-					.request(MediaType.TEXT_PLAIN).get().readEntity(String.class)));
+					.request(MediaType.APPLICATION_JSON).get().readEntity(String.class)));
 
 			int numberProducts = INITIAL_PRODUCT_DISPLAY_COUNT;
 			if (request.getAttribute("numberProducts") != null) {
