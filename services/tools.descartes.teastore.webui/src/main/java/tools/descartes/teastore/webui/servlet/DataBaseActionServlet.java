@@ -53,7 +53,7 @@ public class DataBaseActionServlet extends AbstractUIServlet {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void doGetInternal(HttpServletRequest request, HttpServletResponse response)
+	protected void handleGETRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, LoadBalancerTimeoutException {
 
 		if (request.getParameter("confirm") != null) {

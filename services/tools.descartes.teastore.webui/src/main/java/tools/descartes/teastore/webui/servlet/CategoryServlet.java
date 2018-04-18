@@ -58,7 +58,7 @@ public class CategoryServlet extends AbstractUIServlet {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void doGetInternal(HttpServletRequest request, HttpServletResponse response)
+	protected void handleGETRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, LoadBalancerTimeoutException {
 		if (request.getParameter("category") != null) {
 			checkforCookie(request, response);
@@ -115,14 +115,14 @@ public class CategoryServlet extends AbstractUIServlet {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void doPostInternal(HttpServletRequest request, HttpServletResponse response)
+	protected void handlePOSTRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, LoadBalancerTimeoutException {
 		if (request.getParameter("number") != null && request.getParameter("page") != null
 				&& request.getParameter("category") != null) {
 			redirect("/category?category=" + request.getParameter("category") + "&page=" + request.getParameter("page"),
 					response, PRODUCTCOOKIE, request.getParameter("number"));
 		} else {
-			doGetInternal(request, response);
+			handleGETRequest(request, response);
 		}
 	}
 

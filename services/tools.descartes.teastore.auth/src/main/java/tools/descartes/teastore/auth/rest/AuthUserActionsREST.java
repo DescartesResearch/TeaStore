@@ -23,8 +23,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
-import org.mindrot.jbcrypt.BCrypt;
-
 import tools.descartes.teastore.entities.Order;
 import tools.descartes.teastore.entities.OrderItem;
 import tools.descartes.teastore.entities.User;
@@ -34,6 +32,7 @@ import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeout
 import tools.descartes.teastore.registryclient.rest.LoadBalancedCRUDOperations;
 import tools.descartes.teastore.registryclient.util.NotFoundException;
 import tools.descartes.teastore.registryclient.util.TimeoutException;
+import tools.descartes.teastore.auth.security.BCryptProvider;
 import tools.descartes.teastore.auth.security.RandomSessionIdGenerator;
 import tools.descartes.teastore.auth.security.SHASecurityProvider;
 
@@ -139,7 +138,7 @@ public class AuthUserActionsREST {
 		} catch (NotFoundException e) {
 			return Response.status(Response.Status.OK).entity(blob).build();
 		}
-		if (user != null && BCrypt.checkpw(password, user.getPassword())) {
+		if (user != null && BCryptProvider.checkPassword(password, user.getPassword())) {
 			blob.setUID(user.getId());
 			blob.setSID(new RandomSessionIdGenerator().getSessionID());
 			blob = new SHASecurityProvider().secure(blob);

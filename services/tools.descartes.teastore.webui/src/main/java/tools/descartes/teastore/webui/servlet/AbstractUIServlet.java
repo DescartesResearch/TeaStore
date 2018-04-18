@@ -186,7 +186,7 @@ public abstract class AbstractUIServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			doGetInternal(request, response);
+			handleGETRequest(request, response);
 		} catch (LoadBalancerTimeoutException e) {
 			serveTimoutResponse(request, response, e.getTargetService());
 		} catch (NotFoundException e) {
@@ -205,7 +205,7 @@ public abstract class AbstractUIServlet extends HttpServlet {
 			throws ServletException, IOException {
 		try {
 
-			doPostInternal(request, response);
+			handlePOSTRequest(request, response);
 		} catch (LoadBalancerTimeoutException e) {
 			serveTimoutResponse(request, response, e.getTargetService());
 		} catch (NotFoundException e) {
@@ -229,9 +229,9 @@ public abstract class AbstractUIServlet extends HttpServlet {
 	 * @throws LoadBalancerTimeoutException
 	 *             Exception on timeouts and load balancer errors.
 	 */
-	protected void doPostInternal(HttpServletRequest request, HttpServletResponse response)
+	protected void handlePOSTRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, LoadBalancerTimeoutException {
-		doGetInternal(request, response);
+		handleGETRequest(request, response);
 	}
 
 	/**
@@ -248,7 +248,7 @@ public abstract class AbstractUIServlet extends HttpServlet {
 	 * @throws LoadBalancerTimeoutException
 	 *             Exception on timeouts and load balancer errors.
 	 */
-	protected abstract void doGetInternal(HttpServletRequest request, HttpServletResponse response)
+	protected abstract void handleGETRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, LoadBalancerTimeoutException;
 
 	private void serveTimoutResponse(HttpServletRequest request, HttpServletResponse response, Service service)

@@ -45,7 +45,7 @@ public class DataBaseServlet extends AbstractUIServlet {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void doGetInternal(HttpServletRequest request, HttpServletResponse response)
+	protected void handleGETRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, LoadBalancerTimeoutException {
 		checkforCookie(request, response);
 		request.setAttribute("storeIcon", 

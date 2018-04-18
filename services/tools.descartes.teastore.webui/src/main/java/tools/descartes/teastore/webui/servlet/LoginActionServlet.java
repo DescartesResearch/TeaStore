@@ -44,7 +44,7 @@ public class LoginActionServlet extends AbstractUIServlet {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void doGetInternal(HttpServletRequest request, HttpServletResponse response)
+	protected void handleGETRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, LoadBalancerTimeoutException {
 
 		redirect("/", response);
@@ -55,7 +55,7 @@ public class LoginActionServlet extends AbstractUIServlet {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void doPostInternal(HttpServletRequest request, HttpServletResponse response)
+	protected void handlePOSTRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, LoadBalancerTimeoutException {
 		boolean login = false;
 		if (request.getParameter("username") != null && request.getParameter("password") != null) {
@@ -83,7 +83,7 @@ public class LoginActionServlet extends AbstractUIServlet {
 			redirect("/", response, MESSAGECOOKIE, SUCESSLOGOUT);
 
 		} else {
-			doGetInternal(request, response);
+			handleGETRequest(request, response);
 		}
 
 	}

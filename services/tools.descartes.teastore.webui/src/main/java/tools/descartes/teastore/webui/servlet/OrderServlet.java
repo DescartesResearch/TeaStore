@@ -49,7 +49,7 @@ public class OrderServlet extends AbstractUIServlet {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void doGetInternal(HttpServletRequest request, HttpServletResponse response)
+	protected void handleGETRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, LoadBalancerTimeoutException {
 		checkforCookie(request, response);
 		if (getSessionBlob(request).getOrderItems().size() == 0) {
@@ -63,7 +63,7 @@ public class OrderServlet extends AbstractUIServlet {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void doPostInternal(HttpServletRequest request, HttpServletResponse response)
+	protected void handlePOSTRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, LoadBalancerTimeoutException {
 		request.setAttribute("CategoryList",
 				LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "categories", Category.class, -1, -1));
