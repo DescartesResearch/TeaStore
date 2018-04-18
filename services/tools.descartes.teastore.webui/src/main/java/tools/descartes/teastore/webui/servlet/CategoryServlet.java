@@ -23,14 +23,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.MediaType;
-
 import tools.descartes.teastore.registryclient.Service;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.teastore.registryclient.loadbalancers.ServiceLoadBalancer;
+import tools.descartes.teastore.registryclient.rest.HttpWrapper;
 import tools.descartes.teastore.registryclient.rest.LoadBalancedCRUDOperations;
 import tools.descartes.teastore.registryclient.rest.LoadBalancedImageOperations;
 import tools.descartes.teastore.registryclient.rest.LoadBalancedStoreOperations;
+import tools.descartes.teastore.registryclient.rest.ResponseWrapper;
 import tools.descartes.teastore.entities.Category;
 import tools.descartes.teastore.entities.ImageSizePreset;
 import tools.descartes.teastore.entities.Product;
@@ -68,8 +68,8 @@ public class CategoryServlet extends AbstractUIServlet {
 					categoryID);
 
 			int products = Integer.valueOf(ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "products", Product.class,
-					client -> client.getEndpointTarget().path("count").path(String.valueOf(categoryID))
-					.request(MediaType.APPLICATION_JSON).get().readEntity(String.class)));
+					client -> ResponseWrapper.wrap(HttpWrapper.wrap(client.getEndpointTarget().path("count")
+							.path(String.valueOf(categoryID))).get()).readEntity(String.class)));
 
 			int numberProducts = INITIAL_PRODUCT_DISPLAY_COUNT;
 			if (request.getAttribute("numberProducts") != null) {
