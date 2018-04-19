@@ -42,7 +42,7 @@ public class ProductperPageTest extends AbstractUiTest {
 
 		String html = doGet();
 
-		Assert.assertEquals("No category parameter should redirect to home", "Tea Store Home",
+		Assert.assertEquals("No category parameter should redirect to home", "TeaStore Home",
 				getWebSiteTitle(html));
 
 		List<Integer> productsPerPage = Arrays.asList(5, 10, 20, 30, 50);
