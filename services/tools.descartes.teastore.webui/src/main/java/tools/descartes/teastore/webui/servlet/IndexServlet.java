@@ -58,6 +58,8 @@ public class IndexServlet extends AbstractUIServlet {
 		request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
 		request.setAttribute("storeIcon",
 				LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
+		request.setAttribute("logo",
+				LoadBalancedImageOperations.getWebImage("front", ImageSizePreset.LOGO.getSize()));
 
 		request.getRequestDispatcher("WEB-INF/pages/index.jsp").forward(request, response);
 	}
