@@ -25,7 +25,7 @@ public class CartActionTest extends AbstractUiTest {
 		mockValidPostRestCall(null,  "/tools.descartes.teastore.auth/rest/useractions/isloggedin");
 		
 		String html = doPost("proceedtoCheckout=");
-		Assert.assertEquals("User is not logged in, thus redirect to login", "Pet Supply Store Login", getWebSiteTitle(html));
+		Assert.assertEquals("User is not logged in, thus redirect to login", "Tea Store Login", getWebSiteTitle(html));
 		
 		SessionBlob blob = new SessionBlob();
 		blob.setSID("1");
@@ -38,7 +38,7 @@ public class CartActionTest extends AbstractUiTest {
 		
 		
 		html = doPost("proceedtoCheckout=", "sessionBlob", value);
-		Assert.assertEquals("User should be redirect to order", "Pet Supply Store Order", getWebSiteTitle(html));
+		Assert.assertEquals("User should be redirect to order", "Tea Store Order", getWebSiteTitle(html));
 
 
 	}

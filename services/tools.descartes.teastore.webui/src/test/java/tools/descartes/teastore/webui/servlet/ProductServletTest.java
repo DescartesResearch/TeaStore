@@ -31,7 +31,7 @@ public class ProductServletTest extends AbstractUiTest {
 
 		String html = doGet();
 		
-		Assert.assertEquals("No product id should redirect to home", "Pet Supply Store Home",
+		Assert.assertEquals("No product id should redirect to home", "Tea Store Home",
 				getWebSiteTitle(html));
 		
 		html = doGet("?id=1");
