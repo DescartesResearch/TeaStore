@@ -114,9 +114,9 @@ public class ProductEndpointTest {
 		Assert.assertEquals(NonBalancedCRUDOperations.getEntities(client, "category", categoryId, -1, -1).size(), 3);
 		Assert.assertEquals(NonBalancedCRUDOperations.getEntities(client, "category", 99999, -1, -1).size(), 0);
 		Assert.assertEquals("3", client.getEndpointTarget().path("count").path("" + categoryId)
-				.request(MediaType.TEXT_PLAIN).get().readEntity(String.class));
+				.request(MediaType.APPLICATION_JSON).get().readEntity(String.class));
 		Assert.assertEquals(404, client.getEndpointTarget().path("count").path("99999")
-				.request(MediaType.TEXT_PLAIN).get().getStatus());
+				.request(MediaType.APPLICATION_JSON).get().getStatus());
 		
 		//delete product
 		NonBalancedCRUDOperations.deleteEntity(client, id2);
