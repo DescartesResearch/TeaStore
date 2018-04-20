@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<Context>
+
+    <!-- Default configuration and other configuration values here.    -->
+
+    <!-- Service registration settings, almost always required. -->
+    <Environment name="servicePort" value="%%PLACEHOLDER%%"
+    	type="java.lang.String" override="false"/>
+    <Environment name="hostName" value="%%PLACEHOLDER%%" type="java.lang.String" override="false"/>
+    <Environment name="registryURL" value="%%PLACEHOLDER%%"
+    		type="java.lang.String" override="false"/>
+
+    <!-- Database settings, specify if not localhost:3306 -->
+    <Environment name="databaseHost" value="%%PLACEHOLDER%%"
+    	type="java.lang.String" override="false"/>
+    <Environment name="databasePort" value="%%PLACEHOLDER%%"
+    	type="java.lang.String" override="false"/>
+    
+    <!-- Recommender settings, specify loop time in ms if periodic retraining is required -->
+    <Environment name="recommenderLoopTime" value="0"
+    	type="java.lang.Long" override="false"/>
+	<Environment name="recommenderAlgorithm" value="SlopeOne"
+    	type="java.lang.String" override="false"/>
+    	
+    <!-- General Tomcat setting: disable session persistence; improves startup times. -->
+    <Manager pathname="" />
+</Context>

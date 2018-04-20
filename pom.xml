@@ -3,17 +3,17 @@
   <modelVersion>4.0.0</modelVersion>
 
     <properties>
-        <petsupplystoreversion>1.0.0</petsupplystoreversion>
+        <teastoreversion>1.0.0</teastoreversion>
     </properties>
   
 	<prerequisites>
 		<maven>3.0</maven>
 	</prerequisites>
   
-	<groupId>tools.descartes.petsupplystore</groupId>
+	<groupId>tools.descartes.teastore</groupId>
 	<artifactId>parent</artifactId>
 	<packaging>pom</packaging>
-	<version>${petsupplystoreversion}</version>
+	<version>${teastoreversion}</version>
 
 	<profiles>
 	    <profile>
@@ -22,8 +22,8 @@
             	<activeByDefault>false</activeByDefault>
         	</activation>
 	        <modules>
-				<module>./utilities/tools.descartes.petsupplystore.dockerbase</module>  
-				<module>./utilities/tools.descartes.petsupplystore.database</module>
+				<module>./utilities/tools.descartes.teastore.dockerbase</module>  
+				<module>./utilities/tools.descartes.teastore.database</module>
 			</modules>
 	    </profile>
 		<profile>
@@ -32,33 +32,34 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<modules>
-				<module>./utilities/tools.descartes.petsupplystore.kieker</module>
+				<module>./utilities/tools.descartes.teastore.kieker</module>
+				<module>./utilities/tools.descartes.teastore.kieker.rabbitmq</module>
 			</modules>
 		</profile>
 	</profiles>
 
 	<modules>
 		<module>
-			utilities/tools.descartes.petsupplystore.dockermemoryconfigurator
+			utilities/tools.descartes.teastore.dockermemoryconfigurator
 		</module>
 		<module>
-			interfaces/tools.descartes.petsupplystore.entities
+			interfaces/tools.descartes.teastore.entities
 		</module>
-		<module>services/tools.descartes.petsupplystore.image</module>
+		<module>services/tools.descartes.teastore.image</module>
 		<module>
-			services/tools.descartes.petsupplystore.persistence
-		</module>
-		<module>
-			services/tools.descartes.petsupplystore.recommender
+			services/tools.descartes.teastore.persistence
 		</module>
 		<module>
-			services/tools.descartes.petsupplystore.registry
+			services/tools.descartes.teastore.recommender
 		</module>
 		<module>
-			utilities/tools.descartes.petsupplystore.registryclient
+			services/tools.descartes.teastore.registry
 		</module>
-		<module>utilities/tools.descartes.petsupplystore.rest</module>
-		<module>services/tools.descartes.petsupplystore.store</module>
-		<module>services/tools.descartes.petsupplystore.webui</module>
+		<module>
+			utilities/tools.descartes.teastore.registryclient
+		</module>
+		
+		<module>services/tools.descartes.teastore.auth</module>
+		<module>services/tools.descartes.teastore.webui</module>
 	</modules>
 </project>

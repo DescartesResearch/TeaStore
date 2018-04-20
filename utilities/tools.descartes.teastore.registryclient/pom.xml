@@ -1,0 +1,183 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>registryclient</artifactId>
+	<packaging>jar</packaging>
+	<name>TeaStore Registry Client</name>
+	<url>http://descartes.tools</url>
+
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	<dependencies>
+		<!-- Internal Dependencies -->
+		<dependency>
+			<groupId>tools.descartes.teastore</groupId>
+			<artifactId>entities</artifactId>
+			<version>${teastoreversion}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.glassfish.jersey.containers</groupId>
+			<artifactId>jersey-container-servlet</artifactId>
+			<version>2.25.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.media</groupId>
+			<artifactId>jersey-media-json-jackson</artifactId>
+			<version>2.25.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.core</groupId>
+			<artifactId>jersey-server</artifactId>
+			<version>2.25.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.connectors</groupId>
+			<artifactId>jersey-grizzly-connector</artifactId>
+			<version>2.25.1</version>
+		</dependency>
+		<!-- WebApp Dependencies -->
+		<!-- jackson, slf4j, and rx must be included before ribbon to avoid version 
+			conflicts. -->
+		<dependency>
+			<groupId>org.glassfish.jersey.media</groupId>
+			<artifactId>jersey-media-json-jackson</artifactId>
+			<version>2.25.1</version>
+		</dependency>
+		<dependency> <!-- Logging framework also used by ribbon -->
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.25</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.25</version>
+		</dependency>
+		<dependency>
+			<groupId>io.reactivex</groupId>
+			<artifactId>rxjava</artifactId>
+			<version>1.3.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.netflix.ribbon</groupId>
+			<artifactId>ribbon-loadbalancer</artifactId>
+			<version>2.2.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.netflix.ribbon</groupId>
+			<artifactId>ribbon-core</artifactId>
+			<version>2.2.4</version>
+		</dependency>
+
+		<!-- JavaEE Dependencies -->
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>7.0</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- Test Dependencies -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-core</artifactId>
+			<version>8.5.24</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+			<version>8.5.24</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>tools.descartes.teastore</groupId>
+			<artifactId>registry</artifactId>
+			<version>${teastoreversion}</version>
+			<classifier>classes</classifier>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>tools.descartes.teastore.registryclient</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.20.1</version>
+				<configuration>
+					<reuseForks>false</reuseForks>
+					<forkCount>1</forkCount>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<profiles>
+		<profile>
+			<id>kieker</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>net.kieker-monitoring</groupId>
+					<artifactId>kieker</artifactId>
+					<version>1.13</version>
+				</dependency>
+			</dependencies>
+			<build>
+				<!-- Copy Kieker files -->
+				<plugins>
+					<plugin>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>3.0.2</version>
+						<executions>
+							<execution>
+								<id>copy-kieker-files</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.basedir}/src/main/java/tools/descartes/teastore/registryclient/rest</outputDirectory>
+									<overwrite>true</overwrite>
+									<resources>
+										<resource>
+											<directory>../../utilities/tools.descartes.teastore.kieker/src/main/java/tools/descartes/teastore/registryclient/rest</directory>
+											<includes>
+												<include>HttpWrapper.java</include>
+												<include>ResponseWrapper.java</include>
+												<include>CharResponseWrapper.java</include>
+												<include>TrackingFilter.java</include>
+											</includes>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+
+	<parent>
+		<groupId>tools.descartes.teastore</groupId>
+		<artifactId>parent</artifactId>
+		<version>${teastoreversion}</version>
+		<relativePath>../..</relativePath>
+	</parent>
+</project>
