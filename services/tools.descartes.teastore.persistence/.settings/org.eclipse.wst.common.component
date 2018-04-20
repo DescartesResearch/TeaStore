@@ -6,13 +6,17 @@
         <wb-resource deploy-path="/WEB-INF/lib" source-path="/src/dev/webapp/WEB-INF/lib"/>
         <wb-resource deploy-path="/WEB-INF/classes/META-INF" source-path="/src/dev/resources/META-INF"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/dev/resources"/>
-        <dependent-module archiveName="registryclient-1.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.teastore.registryclient/tools.descartes.teastore.registryclient">
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <dependent-module archiveName="registryclient-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.registryclient/tools.descartes.petsupplystore.registryclient">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="entities-1.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.teastore.entities/tools.descartes.teastore.entities">
+        <dependent-module archiveName="rest-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.rest/tools.descartes.petsupplystore.rest">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <property name="java-output-path" value="/tools.descartes.teastore.persistence/build/classes"/>
-        <property name="context-root" value="tools.descartes.teastore.persistence"/>
+        <dependent-module archiveName="entities-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tools.descartes.petsupplystore.entities/tools.descartes.petsupplystore.entities">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="java-output-path" value="/tools.descartes.petsupplystore.persistence/build/classes"/>
+        <property name="context-root" value="tools.descartes.petsupplystore.persistence"/>
     </wb-module>
 </project-modules>
