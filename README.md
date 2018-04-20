@@ -1,8 +1,8 @@
 # TeaStore #
 
-The TeaStore is a micro-service reference and test application developed by the Descartes Research Group at the University of Würzburg. The TeaStore emulates a basic web store for automatically generated, fictitious pet supplies. As it is primarily a test application, it features UI elements for database generation and service resetting in addition to the store itself. 
+The TeaStore is a micro-service reference and test application developed by the Descartes Research Group at the University of Würzburg. The TeaStore emulates a basic web store for automatically generated, tea and tea supplies. As it is primarily a test application, it features UI elements for database generation and service resetting in addition to the store itself. 
 
-The TeaStore is a distributed micro-service application featuring five distinct services plus a registry. Each service may be replicated without limit and deployed on separate devices as desired. Services communicate using REST and using the Netflix "[Ribbon](https://github.com/Netflix/ribbon)" client side load balancer.
+The TeaStore is a distributed micro-service application featuring five distinct services plus a registry. Each service may be replicated without limit and deployed on separate devices as desired. Services communicate using REST and using the Netflix "[Ribbon](https://github.com/Netflix/ribbon)" client side load balancer. Each service also comes in a pre-instrumented variant that uses [Kieker](http://kieker-monitoring.net) to provide detailed information about the TeaStore's actions and behavior.
 
 The TeaStore is designed to be a reference / test application to be used in benchmarks and tests. Some of its envisioned use-cases are:
 * Testing performance model extractors and predictors for distributed applications
