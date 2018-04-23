@@ -68,36 +68,42 @@
 		                <artifactItem>
 		                  <groupId>tools.descartes.teastore</groupId>
 						  <artifactId>registry</artifactId>
+						  <type>war</type>
 		                  <overWrite>true</overWrite>
 		                  <outputDirectory>${project.build.directory}/</outputDirectory>
 		                </artifactItem>
 		                <artifactItem>
 		                  <groupId>tools.descartes.teastore</groupId>
 						  <artifactId>persistence</artifactId>
+						  <type>war</type>
 		                  <overWrite>true</overWrite>
 		                  <outputDirectory>${project.build.directory}/</outputDirectory>
 		                </artifactItem>
 		                <artifactItem>
 		                  <groupId>tools.descartes.teastore</groupId>
 						  <artifactId>image</artifactId>
+						  <type>war</type>
 		                  <overWrite>true</overWrite>
 		                  <outputDirectory>${project.build.directory}/</outputDirectory>
 		                </artifactItem>
 		                <artifactItem>
 		                  <groupId>tools.descartes.teastore</groupId>
 						  <artifactId>recommender</artifactId>
+						  <type>war</type>
 		                  <overWrite>true</overWrite>
 		                  <outputDirectory>${project.build.directory}/</outputDirectory>
 		                </artifactItem>
 		                <artifactItem>
 		                  <groupId>tools.descartes.teastore</groupId>
 						  <artifactId>auth</artifactId>
+						  <type>war</type>
 		                  <overWrite>true</overWrite>
 		                  <outputDirectory>${project.build.directory}/</outputDirectory>
 		                </artifactItem>
 		                <artifactItem>
 		                  <groupId>tools.descartes.teastore</groupId>
 						  <artifactId>webui</artifactId>
+						  <type>war</type>
 		                  <overWrite>true</overWrite>
 		                  <outputDirectory>${project.build.directory}/</outputDirectory>
 		                </artifactItem>
