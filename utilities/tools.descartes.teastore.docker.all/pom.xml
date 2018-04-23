@@ -71,6 +71,7 @@
 						  <type>war</type>
 		                  <overWrite>true</overWrite>
 		                  <outputDirectory>${project.build.directory}/</outputDirectory>
+		                  <destFileName>tools.descartes.teastore.registry.war</destFileName>
 		                </artifactItem>
 		                <artifactItem>
 		                  <groupId>tools.descartes.teastore</groupId>
@@ -78,6 +79,7 @@
 						  <type>war</type>
 		                  <overWrite>true</overWrite>
 		                  <outputDirectory>${project.build.directory}/</outputDirectory>
+		                  <destFileName>tools.descartes.teastore.persistence.war</destFileName>
 		                </artifactItem>
 		                <artifactItem>
 		                  <groupId>tools.descartes.teastore</groupId>
@@ -85,6 +87,7 @@
 						  <type>war</type>
 		                  <overWrite>true</overWrite>
 		                  <outputDirectory>${project.build.directory}/</outputDirectory>
+		                  <destFileName>tools.descartes.teastore.image.war</destFileName>
 		                </artifactItem>
 		                <artifactItem>
 		                  <groupId>tools.descartes.teastore</groupId>
@@ -92,6 +95,7 @@
 						  <type>war</type>
 		                  <overWrite>true</overWrite>
 		                  <outputDirectory>${project.build.directory}/</outputDirectory>
+		                  <destFileName>tools.descartes.teastore.recommender.war</destFileName>
 		                </artifactItem>
 		                <artifactItem>
 		                  <groupId>tools.descartes.teastore</groupId>
@@ -99,6 +103,7 @@
 						  <type>war</type>
 		                  <overWrite>true</overWrite>
 		                  <outputDirectory>${project.build.directory}/</outputDirectory>
+		                  <destFileName>tools.descartes.teastore.auth.war</destFileName>
 		                </artifactItem>
 		                <artifactItem>
 		                  <groupId>tools.descartes.teastore</groupId>
@@ -106,6 +111,7 @@
 						  <type>war</type>
 		                  <overWrite>true</overWrite>
 		                  <outputDirectory>${project.build.directory}/</outputDirectory>
+		                  <destFileName>tools.descartes.teastore.webui.war</destFileName>
 		                </artifactItem>
 		              </artifactItems>
 		              <outputDirectory>${project.build.directory}/</outputDirectory>
