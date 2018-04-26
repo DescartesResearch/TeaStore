@@ -24,15 +24,19 @@ public class StartupCallbackTask implements Runnable {
 	public void run() {
 		try {
 	    	List<Server> servers;
+	    	boolean msgLogged = false;
 	    	do {
 	    		servers = RegistryClient.getClient().getServersForService(requestedService);
 	    		if (servers == null || servers.isEmpty()) {
 	    			try {
-	    				if (servers == null) {
-	    					LOG.info("Registry not online. " + myService + " is waiting for it to come online");
-	    				} else {
-	    					LOG.info(requestedService.getServiceName() + " not online. "
-	    							+ myService + " is waiting for it to come online");
+	    				if (!msgLogged) {
+		    				if (servers == null) {
+		    					LOG.info("Registry not online. " + myService + " is waiting for it to come online");
+		    				} else {
+		    					LOG.info(requestedService.getServiceName() + " not online. "
+		    							+ myService + " is waiting for it to come online");
+		    				}
+		    				msgLogged = true;
 	    				}
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {
@@ -40,11 +44,13 @@ public class StartupCallbackTask implements Runnable {
 					}
 	    		}
 	    	} while (servers == null || servers.isEmpty());
-	    		callback.callback();
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw(e);
-			}
+	    	
+	    	callback.callback();
+	    		
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw(e);
+		}
 	}
 
 }
