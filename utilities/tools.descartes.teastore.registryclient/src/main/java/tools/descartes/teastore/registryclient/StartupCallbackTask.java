@@ -40,7 +40,7 @@ public class StartupCallbackTask implements Runnable {
 					}
 	    		}
 	    	} while (servers == null || servers.isEmpty());
-	    	callback.callback();
+	    		callback.callback();
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw(e);
