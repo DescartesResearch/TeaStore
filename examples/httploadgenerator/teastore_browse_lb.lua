@@ -1,5 +1,5 @@
 --[[
-	Load Balancing version of the petsupply_browse profile.
+	Load Balancing version of the teastore_browse profile.
 	Use in case of multiple WebUI instances in the absense of front-end load balancers.
 --]]
 
@@ -11,8 +11,8 @@
 		URLS of all WebUI instances. Used as prefix for further requests.
 	--]]
 webuis = {
-	"http://10.1.1.1:8080/tools.descartes.petsupplystore.webui/",
-	"http://10.1.1.2:8080/tools.descartes.petsupplystore.webui/",
+	"http://10.1.1.1:8080/tools.descartes.teastore.webui/",
+	"http://10.1.1.2:8080/tools.descartes.teastore.webui/",
 }
 productviewcount = 30
 postIndex = {3, 11}
