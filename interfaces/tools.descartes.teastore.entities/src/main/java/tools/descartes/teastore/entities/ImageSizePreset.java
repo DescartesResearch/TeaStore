@@ -4,8 +4,8 @@ package tools.descartes.teastore.entities;
 public enum ImageSizePreset {
 	ICON(new ImageSize(64, 64)),
 	PORTRAIT(new ImageSize(160, 240)),
-	LOGO(new ImageSize(400, 310)),
-	MAIN_IMAGE(new ImageSize(450, 450)),
+	LOGO(new ImageSize(600, 195)),
+	MAIN_IMAGE(new ImageSize(400, 310)),
 	PREVIEW(new ImageSize(64, 64)),
 	RECOMMENDATION(new ImageSize(125, 125)),
 	FULL(new ImageSize(300, 300)),
