@@ -236,10 +236,11 @@ public class RecommenderEndpointTest extends AbstractRecommenderRestTest {
 		response = ClientBuilder.newBuilder().build().target(ISREADY_TARGET).request(MediaType.TEXT_PLAIN).delete();
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_METHOD_NOT_ALLOWED, response.getStatus());
 
+		// Wait for training to finish
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(10000);
 		} catch (InterruptedException ex) {
-			
+			Assert.fail();
 		}
 		
 		// Assert calling train via GET is OK
