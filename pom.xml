@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
     <properties>
-        <teastoreversion>1.0.0</teastoreversion>
+        <teastoreversion>1.0.1</teastoreversion>
     </properties>
   
 	<prerequisites>
@@ -24,6 +24,7 @@
 	        <modules>
 				<module>./utilities/tools.descartes.teastore.dockerbase</module>  
 				<module>./utilities/tools.descartes.teastore.database</module>
+				<module>./utilities/tools.descartes.teastore.docker.all</module>
 			</modules>
 	    </profile>
 		<profile>
