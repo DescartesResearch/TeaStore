@@ -69,12 +69,7 @@
 		<dependency>
 			<groupId>com.rabbitmq</groupId>
 			<artifactId>amqp-client</artifactId>
-			<version>5.2.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.rabbitmq</groupId>
-			<artifactId>rabbitmq-client</artifactId>
-			<version>1.3.0</version>
+			<version>4.2.1</version>
 		</dependency>
 		<dependency>
 			<groupId>net.kieker-monitoring</groupId>
