@@ -254,7 +254,7 @@ public final class DataGenerator {
 			user.setEmail("user" + i + "@teastore.com");
 			user.setRealName(FIRSTNAMES[random.nextInt(FIRSTNAMES.length)]
 					+ " " + LASTNAMES[random.nextInt(LASTNAMES.length)]);
-			user.setPassword(BCrypt.hashpw(PASSWORD, BCrypt.gensalt()));
+			user.setPassword(BCrypt.hashpw(PASSWORD, BCrypt.gensalt(5)));
 			UserRepository.REPOSITORY.createEntity(user);
 		}
 	}
