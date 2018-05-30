@@ -10,6 +10,9 @@
     <Environment name="hostName" value="%%PLACEHOLDER%%" type="java.lang.String" override="false"/>
     <Environment name="registryURL" value="%%PLACEHOLDER%%"
     		type="java.lang.String" override="false"/>
+  	<!-- Override hostName by using the IP, as reported by the OS. Use for KUBERNETES. -->
+  	<Environment name="useHostIP" value="false"
+  		type="java.lang.String" override="false"/>
 
     <!-- Database settings, specify if not localhost:3306 -->
     <Environment name="databaseHost" value="%%PLACEHOLDER%%"
