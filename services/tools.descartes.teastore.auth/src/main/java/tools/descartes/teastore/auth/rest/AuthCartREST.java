@@ -21,44 +21,39 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
-
 import tools.descartes.teastore.entities.OrderItem;
 import tools.descartes.teastore.entities.Product;
 import tools.descartes.teastore.entities.message.SessionBlob;
 import tools.descartes.teastore.registryclient.Service;
 import tools.descartes.teastore.registryclient.rest.LoadBalancedCRUDOperations;
-import tools.descartes.teastore.registryclient.util.NotFoundException;
-import tools.descartes.teastore.registryclient.util.TimeoutException;
 import tools.descartes.teastore.auth.security.SHASecurityProvider;
 
 /**
  * Rest endpoint for the store cart.
+ * 
  * @author Simon
  */
 @Path("cart")
 @Produces({ "application/json" })
 @Consumes({ "application/json" })
 public class AuthCartREST {
-	
+
 	/**
-	 * Adds product to cart. If the product is already in the cart the quantity is increased.
-	 * @param blob Sessionblob
-	 * @param pid productid
+	 * Adds product to cart. If the product is already in the cart the quantity is
+	 * increased.
+	 * 
+	 * @param blob
+	 *            Sessionblob
+	 * @param pid
+	 *            productid
 	 * @return Response containing session blob with updated cart
 	 */
 	@POST
 	@Path("add/{pid}")
 	public Response addProductToCart(SessionBlob blob, @PathParam("pid") final Long pid) {
-		Product product;
-		try {
-			product = LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "products", Product.class, pid);
-		} catch (TimeoutException e) {
-			return Response.status(408).build();
-		} catch (NotFoundException e) {
-			return Response.status(404).build();
-		}
-		
-		for (OrderItem oItem: blob.getOrderItems()) {
+		Product product = LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "products", Product.class, pid);
+
+		for (OrderItem oItem : blob.getOrderItems()) {
 			if (oItem.getProductId() == pid) {
 				oItem.setQuantity(oItem.getQuantity() + 1);
 				return Response.status(Response.Status.OK).entity(blob).build();
@@ -72,18 +67,21 @@ public class AuthCartREST {
 		blob = new SHASecurityProvider().secure(blob);
 		return Response.status(Response.Status.OK).entity(blob).build();
 	}
-	
+
 	/**
 	 * Remove product from cart.
-	 * @param blob Sessionblob
-	 * @param pid product id
+	 * 
+	 * @param blob
+	 *            Sessionblob
+	 * @param pid
+	 *            product id
 	 * @return Response containing Sessionblob with updated cart
 	 */
 	@POST
 	@Path("remove/{pid}")
 	public Response removeProductFromCart(SessionBlob blob, @PathParam("pid") final Long pid) {
 		OrderItem toRemove = null;
-		for (OrderItem item: blob.getOrderItems()) {
+		for (OrderItem item : blob.getOrderItems()) {
 			if (item.getProductId() == pid) {
 				toRemove = item;
 			}
@@ -96,19 +94,23 @@ public class AuthCartREST {
 			return Response.status(Response.Status.NOT_FOUND).build();
 		}
 	}
-	
+
 	/**
 	 * Updates quantity of product in cart.
-	 * @param blob Sessionblob
-	 * @param pid Productid
-	 * @param quantity New quantity
+	 * 
+	 * @param blob
+	 *            Sessionblob
+	 * @param pid
+	 *            Productid
+	 * @param quantity
+	 *            New quantity
 	 * @return Response containing Sessionblob with updated cart
 	 */
 	@PUT
 	@Path("{pid}")
 	public Response updateQuantity(SessionBlob blob, @PathParam("pid") final Long pid,
 			@QueryParam("quantity") int quantity) {
-		for (OrderItem item: blob.getOrderItems()) {
+		for (OrderItem item : blob.getOrderItems()) {
 			if (item.getProductId() == pid) {
 				item.setQuantity(quantity);
 				blob = new SHASecurityProvider().secure(blob);
@@ -117,5 +119,5 @@ public class AuthCartREST {
 		}
 		return Response.status(Response.Status.NOT_FOUND).build();
 	}
-	
+
 }

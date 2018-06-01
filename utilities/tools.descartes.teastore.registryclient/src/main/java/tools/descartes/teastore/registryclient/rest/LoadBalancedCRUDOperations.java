@@ -16,6 +16,10 @@ package tools.descartes.teastore.registryclient.rest;
 import java.util.List;
 import java.util.Optional;
 
+import javax.ws.rs.ProcessingException;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import tools.descartes.teastore.registryclient.Service;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.teastore.registryclient.loadbalancers.ServiceLoadBalancer;
@@ -142,8 +146,25 @@ public final class LoadBalancedCRUDOperations {
 	 */
 	public static <T> T getEntity(Service service, String endpointURI, Class<T> entityClass, long id)
 			throws NotFoundException, LoadBalancerTimeoutException {
-		return ServiceLoadBalancer.loadBalanceRESTOperation(service, endpointURI, entityClass,
+		Response response = ServiceLoadBalancer.loadBalanceRESTOperation(service, endpointURI, Response.class,
 				client -> NonBalancedCRUDOperations.getEntity(client, id));
+
+		if (response == null)
+			throw new NullPointerException();
+		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+			response.bufferEntity();
+			throw new NotFoundException();
+		}
+		if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
+			response.bufferEntity();
+			throw new LoadBalancerTimeoutException(endpointURI, service);
+		}
+
+		try {
+			return response.readEntity(entityClass);
+		} catch (ProcessingException e) {
+			throw new IllegalStateException("Could not parse entity!");
+		}
 	}
 
 	/**
@@ -170,8 +191,25 @@ public final class LoadBalancedCRUDOperations {
 	 */
 	public static <T> T getEntityWithProperties(Service service, String endpointURI, Class<T> entityClass,
 			String propertyName, String propertyValue) throws NotFoundException, LoadBalancerTimeoutException {
-		return ServiceLoadBalancer.loadBalanceRESTOperation(service, endpointURI, entityClass,
+		Response response = ServiceLoadBalancer.loadBalanceRESTOperation(service, endpointURI, Response.class,
 				client -> NonBalancedCRUDOperations.getEntityWithProperty(client, propertyName, propertyValue));
+
+		if (response == null)
+			throw new NullPointerException();
+		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+			response.bufferEntity();
+			throw new NotFoundException();
+		}
+		if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
+			response.bufferEntity();
+			throw new LoadBalancerTimeoutException(endpointURI, service);
+		}
+
+		try {
+			return response.readEntity(entityClass);
+		} catch (ProcessingException e) {
+			throw new IllegalStateException("Could not parse entity!");
+		}
 	}
 
 	/**

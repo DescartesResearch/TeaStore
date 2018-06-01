@@ -172,24 +172,9 @@ public final class NonBalancedCRUDOperations {
 	 *             If 408 was returned.
 	 * @return The entity; null if it does not exist.
 	 */
-	public static <T> T getEntity(RESTClient<T> client, long id) throws NotFoundException, TimeoutException {
+	public static Response getEntity(RESTClient<Response> client, long id) throws NotFoundException, TimeoutException {
 		Response response = ResponseWrapper.wrap(HttpWrapper.wrap(client.getEndpointTarget().path(String.valueOf(id))).get());
-		T entity = null;
-		if (response != null && response.getStatus() < 400) {
-			try {
-				entity = response.readEntity(client.getEntityClass());
-			} catch (NullPointerException | ProcessingException e) {
-				LOG.warn("Response did not conform to expected entity type.");
-			}
-		} else if (response != null) {
-			response.bufferEntity();
-		}
-		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
-			throw new NotFoundException();
-		} else if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
-			throw new TimeoutException();
-		}
-		return entity;
+		return response;
 	}
 
 	/**
@@ -313,26 +298,10 @@ public final class NonBalancedCRUDOperations {
 	 *             If 408 was returned.
 	 * @return The entity; null if it does not exist.
 	 */
-	public static <T> T getEntityWithProperty(RESTClient<T> client, String propertyURI, String propertyValue)
+	public static Response getEntityWithProperty(RESTClient<Response> client, String propertyURI, String propertyValue)
 			throws NotFoundException, TimeoutException {
 		WebTarget target = client.getEndpointTarget().path(propertyURI).path(propertyValue);
-		Response response = ResponseWrapper.wrap(HttpWrapper.wrap(target).get());
-		T entity = null;
-		if (response != null && response.getStatus() < 400) {
-			try {
-				entity = response.readEntity(client.getEntityClass());
-			} catch (NullPointerException | ProcessingException e) {
-				// This happens if no entity was found
-			}
-		} else if (response != null) {
-			response.bufferEntity();
-		}
-		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
-			throw new NotFoundException();
-		} else if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
-			throw new TimeoutException();
-		}
-		return entity;
+		return ResponseWrapper.wrap(HttpWrapper.wrap(target).get());
 	}
 
 }
