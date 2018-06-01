@@ -103,11 +103,14 @@ public class UserEndpoint extends AbstractCRUDEndpoint<User> {
 	@GET
 	@Path("name/{name}")
 	public Response findById(@PathParam("name") final String name) {
+		System.out.println("starting");
 		if (name == null || name.isEmpty()) {
+			System.out.println("name was null");
 			return Response.status(Status.NOT_FOUND).build();
 		}
 		User entity = UserRepository.REPOSITORY.getUserByName(name);
 		if (entity == null) {
+			System.out.println("user was null");
 			return Response.status(Status.NOT_FOUND).build();
 		}
 		return Response.ok(new User(entity)).build();
