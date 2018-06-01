@@ -140,6 +140,15 @@ public class AuthUserActionsREST {
 			System.out.println("End Login");
 			return Response.status(Response.Status.OK).entity(blob).build();
 		}
+		for (int i = 0; i < 100; i++) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		if (user != null 
 //				&& BCryptProvider.checkPassword(password, user.getPassword())
 				) {
