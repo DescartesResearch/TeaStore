@@ -220,7 +220,7 @@ public final class ServiceLoadBalancer {
                         				(RESTClient<T>) getEndpointClientCollection(endpointURI, entityClass)
                 				.getRESTClient(server), operation)
                         		))
-                        .onErrorReturn((Throwable e) -> {e.printStackTrace(); return null;}).toBlocking().first();
+                        .onErrorReturn((Throwable e) -> null).toBlocking().first();
         		if (slbr == null) {
         			throw new NullPointerException("ServiceLoadBalancerResult was null!");
         		}
