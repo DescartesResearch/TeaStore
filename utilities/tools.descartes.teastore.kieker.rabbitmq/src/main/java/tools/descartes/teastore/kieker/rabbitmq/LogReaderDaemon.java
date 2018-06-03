@@ -1,8 +1,5 @@
 package tools.descartes.teastore.kieker.rabbitmq;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
 import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
@@ -36,11 +33,7 @@ public class LogReaderDaemon implements Runnable {
                     LogConsumer.INPUT_PORT_NAME);
             analysisInstance.run();
         } catch (final AnalysisConfigurationException e) {
-            final StringWriter sw = new StringWriter();
-            final PrintWriter pw = new PrintWriter(sw);
-            e.printStackTrace(pw);
-            final String sStackTrace = sw.toString();
-            throw new IllegalStateException(sStackTrace);
+        	System.out.println("AMQP Reader was interupted, probably due to reset");
         }
 	}
 
