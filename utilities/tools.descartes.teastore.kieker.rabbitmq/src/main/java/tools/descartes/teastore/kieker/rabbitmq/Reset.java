@@ -20,6 +20,7 @@ public class Reset extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		LogReaderStartup.stop();
 		
+		MemoryLogStorage.clearMemoryStorage();
 		deleteFolder(new File("apache-tomcat-8.5.24/webapps/logs"));
 
 		LogReaderStartup.start();
