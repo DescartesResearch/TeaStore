@@ -30,8 +30,8 @@ import org.apache.log4j.BasicConfigurator;
  */
 @WebListener
 public class LogReaderStartup implements ServletContextListener {
-	private static ScheduledExecutorService logReaderStarter = Executors.newSingleThreadScheduledExecutor();
-	private static ScheduledExecutorService fileWriterStarter = Executors.newSingleThreadScheduledExecutor();
+	private static ScheduledExecutorService logReaderStarter;
+	private static ScheduledExecutorService fileWriterStarter;
 	
 	/**
 	 * Also set this accordingly in RegistryClientStartup.
@@ -72,6 +72,8 @@ public class LogReaderStartup implements ServletContextListener {
     }
     
     public static void start() {
+    	logReaderStarter = Executors.newSingleThreadScheduledExecutor();
+    	fileWriterStarter = Executors.newSingleThreadScheduledExecutor();
 		BasicConfigurator.configure();
     	logReaderStarter.schedule(new LogReaderDaemon(), 10, TimeUnit.SECONDS);
     	fileWriterStarter.schedule(new FileWriterDaemon(), 10, TimeUnit.SECONDS);
