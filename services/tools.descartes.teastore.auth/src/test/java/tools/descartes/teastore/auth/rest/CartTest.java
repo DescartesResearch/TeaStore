@@ -4,9 +4,9 @@ import javax.ws.rs.core.Response;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.mindrot.jbcrypt.BCrypt;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.lambdaworks.crypto.SCryptUtil;
 
 import tools.descartes.teastore.entities.User;
 import tools.descartes.teastore.entities.message.SessionBlob;
@@ -174,7 +174,7 @@ public class CartTest extends AbstractStoreRestTest {
 		u.setEmail("asdas@asda.de");
 		u.setRealName("asdas asdasd");
 		u.setUserName("user1");
-		u.setPassword(SCryptUtil.scrypt("password", 16384, 8, 1));
+		u.setPassword(BCrypt.hashpw("password", BCrypt.gensalt()));
 		u.setId(1231245125);
 		mockValidGetRestCall(u, "/tools.descartes.teastore.persistence/rest/users/name/user1");
 	}

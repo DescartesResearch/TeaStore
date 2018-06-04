@@ -21,9 +21,9 @@
 
 		<!-- WebApp Dependencies -->
 		<dependency>
-			<groupId>com.lambdaworks</groupId>
-			<artifactId>scrypt</artifactId>
-			<version>1.4.0</version>
+			<groupId>org.mindrot</groupId>
+			<artifactId>jbcrypt</artifactId>
+			<version>0.4</version>
 		</dependency>
 
 
