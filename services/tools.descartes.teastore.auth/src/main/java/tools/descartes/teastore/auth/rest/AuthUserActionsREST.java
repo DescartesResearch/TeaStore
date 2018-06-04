@@ -131,13 +131,11 @@ public class AuthUserActionsREST {
 	public Response login(SessionBlob blob, @QueryParam("name") String name, @QueryParam("password") String password) {
 		User user;
 		try {
-			System.out.println("Starting Login");
 			user = LoadBalancedCRUDOperations.getEntityWithProperties(Service.PERSISTENCE, "users", User.class, "name",
 					name);
 		} catch (TimeoutException e) {
 			return Response.status(408).build();
 		} catch (NotFoundException e) {
-			System.out.println("End Login");
 			return Response.status(Response.Status.OK).entity(blob).build();
 		}
 		long tic = System.currentTimeMillis();
@@ -150,10 +148,8 @@ public class AuthUserActionsREST {
 			blob.setUID(user.getId());
 			blob.setSID(new RandomSessionIdGenerator().getSessionID());
 			blob = new SHASecurityProvider().secure(blob);
-			System.out.println("End Login");
 			return Response.status(Response.Status.OK).entity(blob).build();
 		}
-		System.out.println("End Login");
 		return Response.status(Response.Status.OK).entity(blob).build();
 	}
 
