@@ -138,7 +138,7 @@ public class AuthUserActionsREST {
 		} catch (NotFoundException e) {
 			return Response.status(Response.Status.OK).entity(blob).build();
 		}
-		System.out.println(user.getPassword());
+		
 		if (user != null && SCryptProvider.checkPassword(password, user.getPassword())
 				) {
 			blob.setUID(user.getId());
