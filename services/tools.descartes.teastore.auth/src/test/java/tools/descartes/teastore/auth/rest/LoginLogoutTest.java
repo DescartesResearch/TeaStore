@@ -5,9 +5,9 @@ import javax.ws.rs.core.Response.Status;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.mindrot.jbcrypt.BCrypt;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.lambdaworks.crypto.SCryptUtil;
 import com.sun.mail.iap.Response;
 
 import tools.descartes.teastore.entities.User;
@@ -81,7 +81,7 @@ public class LoginLogoutTest extends AbstractStoreRestTest {
 		u.setEmail("asdas@asda.de");
 		u.setRealName("asdas asdasd");
 		u.setUserName("user1");
-		u.setPassword(BCrypt.hashpw("password", BCrypt.gensalt()));
+		u.setPassword(SCryptUtil.scrypt("password", 16384, 8, 1));
 		u.setId(1231245125);
 		mockValidGetRestCall(u, "/tools.descartes.teastore.persistence/rest/users/name/user1");
 	}

@@ -26,7 +26,8 @@ import javax.ws.rs.core.Response;
 
 import org.eclipse.persistence.sessions.server.ServerSession;
 import org.eclipse.persistence.tools.schemaframework.SchemaManager;
-import org.mindrot.jbcrypt.BCrypt;
+
+import com.lambdaworks.crypto.SCryptUtil;
 
 import tools.descartes.teastore.persistence.domain.CategoryRepository;
 import tools.descartes.teastore.persistence.domain.OrderItemRepository;
@@ -254,7 +255,7 @@ public final class DataGenerator {
 			user.setEmail("user" + i + "@teastore.com");
 			user.setRealName(FIRSTNAMES[random.nextInt(FIRSTNAMES.length)]
 					+ " " + LASTNAMES[random.nextInt(LASTNAMES.length)]);
-			user.setPassword(BCrypt.hashpw(PASSWORD, BCrypt.gensalt()));
+			user.setPassword(SCryptUtil.scrypt("password", 16384, 8, 1));
 			UserRepository.REPOSITORY.createEntity(user);
 		}
 	}
