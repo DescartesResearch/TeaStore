@@ -62,7 +62,7 @@
 		<exclude within="tools.descartes.teastore.registryclient.util.AbstractCRUDEndpoint" />
 		</weaver>
 	<aspects>
-		<concrete-aspect name="kieker.monitoring.probe.aspectj.operationExecution.TargetedAspect" extends="kieker.monitoring.probe.aspectj.operationExecution.AbstractOperationExecutionAspect">
+		<concrete-aspect name="kieker.monitoring.probe.aspectj.operationExecution.TargetedAspect" extends="tools.descartes.teastore.kieker.probes.AbstractOperationExecutionWithParameterAspect">
 			<!--<pointcut name="monitoredOperation" expression="execution(* *(..))"></pointcut>-->
 			<pointcut name="monitoredOperation" expression="execution(* *(..)) 
 			&amp;&amp; !execution(private static * *..lambda*(..)) 
