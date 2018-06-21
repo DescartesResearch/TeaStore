@@ -92,47 +92,6 @@ public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent impleme
 	}
 
 	/**
-	 * This constructor converts the given array into a record. It is recommended to
-	 * use the array which is the result of a call to {@link #toArray()}.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 *
-	 * @deprecated since 1.13. Use
-	 *             {@link #EntryLevelBeforeOperationEvent(IValueDeserializer)}
-	 *             instead.
-	 */
-	@Deprecated
-	public EntryLevelBeforeOperationEvent(final Object[] values) { // NOPMD (direct store of values)
-		super(values, TYPES);
-		this.parameters = (String[]) values[5];
-		this.values = (String[]) values[6];
-		this.requestType = (Integer) values[7];
-	}
-
-	/**
-	 * This constructor uses the given array to initialize the fields of this
-	 * record.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 * @param valueTypes
-	 *            The types of the elements in the first array.
-	 *
-	 * @deprecated since 1.13. Use
-	 *             {@link #EntryLevelBeforeOperationEvent(IValueDeserializer)}
-	 *             instead.
-	 */
-	@Deprecated
-	protected EntryLevelBeforeOperationEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values
-																									// stored directly)
-		super(values, valueTypes);
-		this.parameters = (String[]) values[5];
-		this.values = (String[]) values[6];
-		this.requestType = (Integer) values[7];
-	}
-
-	/**
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException
@@ -153,20 +112,6 @@ public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent impleme
 			this.values[i0] = deserializer.getString();
 
 		this.requestType = deserializer.getInt();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an
-	 *             array serializer instead.
-	 */
-	@Override
-	@Deprecated
-	public Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(),
-				this.getOperationSignature(), this.getClassSignature(), this.getParameters(), this.getValues(),
-				this.getRequestType(), };
 	}
 
 	/**
@@ -217,19 +162,6 @@ public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent impleme
 	@Override
 	public int getSize() {
 		return SIZE;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the
-	 *             {@link kieker.common.record.IMonitoringRecord.Factory} mechanism.
-	 *             Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
 	}
 
 	/**

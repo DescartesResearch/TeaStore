@@ -177,6 +177,14 @@
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>tools.descartes.teastore</groupId>
+					<artifactId>dockerbase</artifactId>
+					<version>${teastoreversion}</version>
+					<type>pom</type>
+				</dependency>
+			</dependencies>
 			<build>
 				<!-- RENAME DOCKER FILE -->
 				<plugins>
