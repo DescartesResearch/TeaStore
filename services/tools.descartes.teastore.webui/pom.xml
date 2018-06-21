@@ -197,9 +197,8 @@
 			<dependencies>
 				<dependency>
 					<groupId>tools.descartes.teastore</groupId>
-					<artifactId>dockerbase</artifactId>
+					<artifactId>kieker.probes</artifactId>
 					<version>${teastoreversion}</version>
-					<type>pom</type>
 				</dependency>
 			</dependencies>
 			<build>
