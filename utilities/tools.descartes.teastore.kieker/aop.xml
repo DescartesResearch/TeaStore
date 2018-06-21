@@ -2,6 +2,7 @@
 <aspectj>
 	<weaver options="-Xlint:ignore">
 		<include within="tools.descartes.teastore..*"/>
+		<exclude within="tools.descartes.teastore.kieker..*"/>
  		<exclude within="tools.descartes.teastore.entities..*" />
 		<exclude within="tools.descartes.teastore.rest..*" />
 		<exclude within="tools.descartes.teastore.registryclient.loadbalancers..*" />
