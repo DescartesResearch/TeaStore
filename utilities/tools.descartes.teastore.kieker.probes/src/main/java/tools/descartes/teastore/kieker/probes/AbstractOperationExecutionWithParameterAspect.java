@@ -1,18 +1,3 @@
-/***************************************************************************
- * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ***************************************************************************/
 package tools.descartes.teastore.kieker.probes;
 
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -23,25 +8,23 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 
 import kieker.common.record.flow.trace.TraceMetadata;
-import kieker.common.record.flow.trace.operation.AfterOperationEvent;
-import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
-import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.TraceRegistry;
 import kieker.monitoring.probe.aspectj.AbstractAspectJProbe;
 import kieker.monitoring.timer.ITimeSource;
-import tools.descartes.teastore.kieker.events.EntryLevelBeforeOperationEvent;
+import tools.descartes.teastore.kieker.events.OperationExecutionWithParametersRecord;
 
 /**
  * Based on Jan Waller's
  * kieker.monitoring.probe.aspectj.flow.operationExecution.AbstractAspect class.
- * Took this class from the IObserve project (https://www.iobserve-devops.net)
- * in order to realize parameter logging with Kieker.
+ * Took parts from this class from the IObserve project
+ * (https://www.iobserve-devops.net). in order to realize parameter logging with
+ * Kieker. This class represents the probe, that does the actual logging.
  *
- * @author Reiner Jung, Johannes Grohmann
+ * @author Johannes Grohmann, Reiner Jung
  *
- * @since 0.0.3
+ * @since 1.0
  */
 @Aspect
 public abstract class AbstractOperationExecutionWithParameterAspect extends AbstractAspectJProbe { // NOPMD
@@ -79,45 +62,8 @@ public abstract class AbstractOperationExecutionWithParameterAspect extends Abst
 
 		final long traceId = trace.getTraceId();
 		final String clazz = thisObject.getClass().getName();
+		return logOperation(thisJoinPoint, traceId, trace, operationSignature, clazz, newTrace);
 
-		/** extension over the original routine. */
-		final String[] names = ((MethodSignature) thisJoinPoint.getSignature()).getParameterNames();
-
-		final Object[] arguments = thisJoinPoint.getArgs();
-		final String[] values = new String[arguments.length];
-
-		int i = 0;
-		for (final Object argument : arguments) {
-			values[i++] = argument.toString();
-		}
-
-		/** exchanged return type. */
-		// measure before execution
-		AbstractOperationExecutionWithParameterAspect.CTRLINST.newMonitoringRecord(
-				new EntryLevelBeforeOperationEvent(AbstractOperationExecutionWithParameterAspect.TIME.getTime(),
-						traceId, trace.getNextOrderId(), operationSignature, clazz, names, values, 0));
-		// execution of the called method
-
-		final Object retval;
-
-		try {
-			retval = thisJoinPoint.proceed();
-		} catch (final Throwable th) { // NOPMD NOCS (catch throw might ok here)
-			// measure after failed execution
-			AbstractOperationExecutionWithParameterAspect.CTRLINST.newMonitoringRecord(
-					new AfterOperationFailedEvent(AbstractOperationExecutionWithParameterAspect.TIME.getTime(), traceId,
-							trace.getNextOrderId(), operationSignature, clazz, th.toString()));
-			throw th;
-		} finally {
-			if (newTrace) { // close the trace
-				AbstractOperationExecutionWithParameterAspect.TRACEREGISTRY.unregisterTrace();
-			}
-		}
-		// measure after successful execution
-		AbstractOperationExecutionWithParameterAspect.CTRLINST.newMonitoringRecord(
-				new AfterOperationEvent(AbstractOperationExecutionWithParameterAspect.TIME.getTime(), traceId,
-						trace.getNextOrderId(), operationSignature, clazz));
-		return retval;
 	}
 
 	@Around("monitoredOperation() && !this(java.lang.Object) && notWithinKieker()")
@@ -143,21 +89,37 @@ public abstract class AbstractOperationExecutionWithParameterAspect extends Abst
 		final long traceId = trace.getTraceId();
 		final String clazz = sig.getDeclaringTypeName();
 
-		// measure before execution
-		AbstractOperationExecutionWithParameterAspect.CTRLINST.newMonitoringRecord(
-				new BeforeOperationEvent(AbstractOperationExecutionWithParameterAspect.TIME.getTime(), traceId,
-						trace.getNextOrderId(), operationSignature, clazz));
+		return logOperation(thisJoinPoint, traceId, trace, operationSignature, clazz, newTrace);
+	}
 
+	// Just a wrapper to save some space
+	private Object logOperation(final ProceedingJoinPoint thisJoinPoint, long traceId, TraceMetadata trace,
+			String operationSignature, String clazz, boolean newTrace) throws Throwable {
+
+		/** extension over the original routine. */
+		final String[] names = ((MethodSignature) thisJoinPoint.getSignature()).getParameterNames();
+
+		final Object[] arguments = thisJoinPoint.getArgs();
+		final String[] values = new String[arguments.length];
+
+		int i = 0;
+		for (final Object argument : arguments) {
+			values[i++] = argument.toString();
+		}
+
+		/** exchanged return type. */
 		// execution of the called method
+
 		final Object retval;
 
 		try {
 			retval = thisJoinPoint.proceed();
 		} catch (final Throwable th) { // NOPMD NOCS (catch throw might ok here)
 			// measure after failed execution
-			AbstractOperationExecutionWithParameterAspect.CTRLINST.newMonitoringRecord(
-					new AfterOperationFailedEvent(AbstractOperationExecutionWithParameterAspect.TIME.getTime(), traceId,
-							trace.getNextOrderId(), operationSignature, clazz, th.toString()));
+			AbstractOperationExecutionWithParameterAspect.CTRLINST
+					.newMonitoringRecord(new OperationExecutionWithParametersRecord(
+							AbstractOperationExecutionWithParameterAspect.TIME.getTime(), traceId,
+							trace.getNextOrderId(), operationSignature, clazz, names, values, null, null, 1));
 			throw th;
 		} finally {
 			if (newTrace) { // close the trace
@@ -165,9 +127,18 @@ public abstract class AbstractOperationExecutionWithParameterAspect extends Abst
 			}
 		}
 		// measure after successful execution
-		AbstractOperationExecutionWithParameterAspect.CTRLINST.newMonitoringRecord(
-				new AfterOperationEvent(AbstractOperationExecutionWithParameterAspect.TIME.getTime(), traceId,
-						trace.getNextOrderId(), operationSignature, clazz));
+		if (retval != null) {
+			AbstractOperationExecutionWithParameterAspect.CTRLINST
+					.newMonitoringRecord(new OperationExecutionWithParametersRecord(
+							AbstractOperationExecutionWithParameterAspect.TIME.getTime(), traceId,
+							trace.getNextOrderId(), operationSignature, clazz, names, values,
+							retval.getClass().toString(), retval.toString(), 0));
+		} else {
+			AbstractOperationExecutionWithParameterAspect.CTRLINST
+					.newMonitoringRecord(new OperationExecutionWithParametersRecord(
+							AbstractOperationExecutionWithParameterAspect.TIME.getTime(), traceId,
+							trace.getNextOrderId(), operationSignature, clazz, names, values, null, null, 1));
+		}
 		return retval;
 	}
 }

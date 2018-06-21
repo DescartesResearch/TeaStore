@@ -1,36 +1,22 @@
-/***************************************************************************
- * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ***************************************************************************/
 package tools.descartes.teastore.kieker.events;
 
 import java.nio.BufferOverflowException;
 
 import kieker.common.exception.RecordInstantiationException;
-import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
+import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
+import kieker.common.util.registry.IRegistry;
 
 /**
- * Took this class from the IObserve project (https://www.iobserve-devops.net)
- * in order to realize parameter logging with Kieker.
+ * Class to store parameter logging with Kieker. Took parts of this class from
+ * the IObserve project (https://www.iobserve-devops.net).
  * 
- * @author Reiner Jung API compatibility: Kieker 1.14.0
+ * @author Johannes Grohmann, Reiner Jung API compatibility: Kieker 1.14.0
  * 
- * @since 0.0.2
+ * @since 1.0
  */
-public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent implements IPayloadCharacterization {
+public class OperationExecutionWithParametersRecord extends AbstractOperationEvent implements IPayloadCharacterization {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			+ TYPE_SIZE_LONG // ITraceRecord.traceId
@@ -39,6 +25,8 @@ public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent impleme
 			+ TYPE_SIZE_STRING // IClassSignature.classSignature
 			+ TYPE_SIZE_STRING // IPayloadCharacterization.parameters
 			+ TYPE_SIZE_STRING // IPayloadCharacterization.values
+			+ TYPE_SIZE_STRING // IPayloadCharacterization.returnType
+			+ TYPE_SIZE_STRING // IPayloadCharacterization.returnVal
 			+ TYPE_SIZE_INT; // IPayloadCharacterization.requestType
 
 	public static final Class<?>[] TYPES = { long.class, // IEventRecord.timestamp
@@ -48,6 +36,8 @@ public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent impleme
 			String.class, // IClassSignature.classSignature
 			String[].class, // IPayloadCharacterization.parameters
 			String[].class, // IPayloadCharacterization.values
+			String.class, // IPayloadCharacterization.returnType
+			String.class, // IPayloadCharacterization.returnVal
 			int.class, // IPayloadCharacterization.requestType
 	};
 
@@ -55,11 +45,13 @@ public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent impleme
 
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = { "timestamp", "traceId", "orderIndex", "operationSignature",
-			"classSignature", "parameters", "values", "requestType", };
+			"classSignature", "parameters", "values", "returnType", "returnVal", "requestType", };
 
 	/** property declarations. */
 	private final String[] parameters;
 	private final String[] values;
+	private final String returnType;
+	private final String returnVal;
 	private final int requestType;
 
 	/**
@@ -79,15 +71,21 @@ public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent impleme
 	 *            parameters
 	 * @param values
 	 *            values
+	 * @param returnType
+	 *            the return type
+	 * @param returnVal
+	 *            return value
 	 * @param requestType
 	 *            requestType
 	 */
-	public EntryLevelBeforeOperationEvent(final long timestamp, final long traceId, final int orderIndex,
+	public OperationExecutionWithParametersRecord(final long timestamp, final long traceId, final int orderIndex,
 			final String operationSignature, final String classSignature, final String[] parameters,
-			final String[] values, final int requestType) {
+			final String[] values, final String returnType, final String returnVal, final int requestType) {
 		super(timestamp, traceId, orderIndex, operationSignature, classSignature);
 		this.parameters = parameters;
 		this.values = values;
+		this.returnType = returnType;
+		this.returnVal = returnVal;
 		this.requestType = requestType;
 	}
 
@@ -97,7 +95,8 @@ public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent impleme
 	 * @throws RecordInstantiationException
 	 *             when the record could not be deserialized
 	 */
-	public EntryLevelBeforeOperationEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
+	public OperationExecutionWithParametersRecord(final IValueDeserializer deserializer)
+			throws RecordInstantiationException {
 		super(deserializer);
 		// load array sizes
 		int _parameters_size0 = deserializer.getInt();
@@ -111,13 +110,14 @@ public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent impleme
 		for (int i0 = 0; i0 < _values_size0; i0++)
 			this.values[i0] = deserializer.getString();
 
+		this.returnType = deserializer.getString();
+		this.returnVal = deserializer.getString();
 		this.requestType = deserializer.getInt();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
 		// super.serialize(serializer);
 		serializer.putLong(this.getTimestamp());
@@ -137,13 +137,14 @@ public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent impleme
 		for (int i0 = 0; i0 < _values_size0; i0++)
 			serializer.putString(this.getValues()[i0]);
 
+		serializer.putString(this.getReturnType());
+		serializer.putString(this.getReturnValue());
 		serializer.putInt(this.getRequestType());
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -151,7 +152,6 @@ public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent impleme
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public String[] getValueNames() {
 		return PROPERTY_NAMES; // NOPMD
 	}
@@ -159,7 +159,6 @@ public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent impleme
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public int getSize() {
 		return SIZE;
 	}
@@ -179,7 +178,7 @@ public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent impleme
 			return false;
 		}
 
-		final EntryLevelBeforeOperationEvent castedRecord = (EntryLevelBeforeOperationEvent) obj;
+		final OperationExecutionWithParametersRecord castedRecord = (OperationExecutionWithParametersRecord) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
 		}
@@ -196,6 +195,12 @@ public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent impleme
 			return false;
 		}
 		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) {
+			return false;
+		}
+		if (!this.getReturnType().equals(castedRecord.getReturnType())) {
+			return false;
+		}
+		if (!this.getReturnValue().equals(castedRecord.getReturnValue())) {
 			return false;
 		}
 		// get array length
@@ -235,6 +240,53 @@ public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent impleme
 
 	public final int getRequestType() {
 		return this.requestType;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
+		stringRegistry.get(this.getOperationSignature());
+		stringRegistry.get(this.getClassSignature());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the
+	 *             {@link kieker.common.record.IMonitoringRecord.Factory} mechanism.
+	 *             Hence, this method is not implemented.
+	 */
+	@Override
+	@Deprecated
+	public void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an
+	 *             array serializer instead.
+	 */
+	@Deprecated
+	public Object[] toArray() {
+		throw new UnsupportedOperationException();
+		// return new Object[] {
+		// this.getTimestamp(),
+		// this.getTraceId(),
+		// this.getOrderIndex(),
+		// this.getOperationSignature(),
+		// this.getClassSignature()
+		// };
+	}
+
+	public String getReturnType() {
+		return this.returnType;
+	}
+
+	public String getReturnValue() {
+		return this.returnVal;
 	}
 
 }
