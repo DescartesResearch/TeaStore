@@ -1,4 +1,4 @@
-package tools.descartes.teastore.kieker.events;
+package tools.descartes.teastore.kieker.probes.records;
 
 import java.nio.BufferOverflowException;
 

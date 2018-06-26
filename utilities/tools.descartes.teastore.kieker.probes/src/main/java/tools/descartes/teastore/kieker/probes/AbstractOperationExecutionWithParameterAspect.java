@@ -13,7 +13,7 @@ import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.TraceRegistry;
 import kieker.monitoring.probe.aspectj.AbstractAspectJProbe;
 import kieker.monitoring.timer.ITimeSource;
-import tools.descartes.teastore.kieker.events.OperationExecutionWithParametersRecord;
+import tools.descartes.teastore.kieker.probes.records.OperationExecutionWithParametersRecord;
 
 /**
  * Based on Jan Waller's
