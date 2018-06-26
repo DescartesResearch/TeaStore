@@ -8,8 +8,6 @@ import kieker.common.record.IMonitoringRecord;
  * @author Johannes Grohmann, Reiner Jung
  * 
  * 
- * 
- * @since 1.0
  */
 public interface IPayloadCharacterization extends IMonitoringRecord {
 	public String[] getParameterTypes();
