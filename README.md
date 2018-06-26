@@ -22,6 +22,13 @@ To get started, we recommend running the TeaStore in an environment of your choi
 
 If you use the TeaStore please consider citing us in your work:
 
+    Jóakim von Kistowski, Simon Eismann, Norbert Schmitt, André Bauer, Johannes Grohmann, and Samuel Kounev.
+    TeaStore: A Micro-Service Reference Application for Benchmarking, Modeling and Resource Management Research.
+    In Proceedings of the 26th IEEE International Symposium on the Modelling, Analysis, and Simulation of
+    Computer and Telecommunication Systems, Milwaukee, WI, USA, September 2018, MASCOTS '18.
+
+**Bibtex**:
+
     @inproceedings{KiEiScBaGrKo2018-MASCOTS-TeaStore,
       author = {J{\'o}akim von Kistowski and Simon Eismann and Norbert Schmitt and Andr{\'e} Bauer and Johannes Grohmann and Samuel Kounev},
       title = {{TeaStore: A Micro-Service Reference Application for Benchmarking, Modeling and Resource Management Research}},
