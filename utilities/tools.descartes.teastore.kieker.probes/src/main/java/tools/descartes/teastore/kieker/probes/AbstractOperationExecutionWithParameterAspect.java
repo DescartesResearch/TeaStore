@@ -24,7 +24,6 @@ import org.aspectj.lang.reflect.MethodSignature;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;

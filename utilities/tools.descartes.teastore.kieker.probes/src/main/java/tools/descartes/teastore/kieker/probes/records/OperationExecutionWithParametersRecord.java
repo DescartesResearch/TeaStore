@@ -2,7 +2,6 @@ package tools.descartes.teastore.kieker.probes.records;
 
 import java.nio.BufferOverflowException;
 
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
