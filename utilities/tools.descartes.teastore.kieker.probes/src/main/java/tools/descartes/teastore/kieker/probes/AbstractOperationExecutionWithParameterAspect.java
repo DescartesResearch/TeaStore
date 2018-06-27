@@ -91,7 +91,8 @@ public abstract class AbstractOperationExecutionWithParameterAspect extends Abst
 			int i = 0;
 			for (final Object argument : arguments) {
 				values[i] = parseObjectToString(argument);
-				names[i] = "Collection: "+names[i] + ".size()";
+				if (argument instanceof java.util.Collection)
+					names[i] = "Collection: " + names[i] + ".size()";
 				i++;
 			}
 			// get return type
