@@ -90,7 +90,9 @@ public abstract class AbstractOperationExecutionWithParameterAspect extends Abst
 
 			int i = 0;
 			for (final Object argument : arguments) {
-				values[i++] = parseObjectToString(argument);
+				values[i] = parseObjectToString(argument);
+				names[i] = "Collection: "+names[i] + ".size()";
+				i++;
 			}
 			// get return type
 			Class<?> returnClass = ((MethodSignature) thisJoinPoint.getSignature()).getReturnType();
@@ -126,7 +128,7 @@ public abstract class AbstractOperationExecutionWithParameterAspect extends Abst
 		}
 		if (argument instanceof java.util.Collection) {
 			// log collection size
-			return "Size=" + String.valueOf(((java.util.Collection<?>) argument).size());
+			return String.valueOf(((java.util.Collection<?>) argument).size());
 		}
 		// all others are just to string
 		return argument.toString();
