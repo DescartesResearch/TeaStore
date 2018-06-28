@@ -211,6 +211,7 @@ public final class ServiceLoadBalancer {
         	if (loadBalancer == null || loadBalancer.getAllServers().isEmpty()) {
         		LOG.warn("No Server registered for Service: " + targetService.getServiceName());
         	} else {
+        		long tic = System.currentTimeMillis();
         		ServiceLoadBalancerResult<R> slbr = LoadBalancerCommand.<ServiceLoadBalancerResult<R>>builder()
                         .withLoadBalancer(loadBalancer)
                         .withRetryHandler(retryHandler)
@@ -221,7 +222,10 @@ public final class ServiceLoadBalancer {
                 				.getRESTClient(server), operation)
                         		))
                         .onErrorReturn((Throwable e) -> null).toBlocking().first();
-        		if (slbr == null || slbr.getStatusCode() == Status.REQUEST_TIMEOUT.getStatusCode()) {
+        		if (slbr == null) {
+        			throw new NullPointerException("ServiceLoadBalancerResult was null!");
+        		}
+        		if (slbr.getStatusCode() == Status.REQUEST_TIMEOUT.getStatusCode()) {
         			throw new LoadBalancerTimeoutException("Timout at endpoint: "
         					+ endpointURI + ", with target service: " + targetService.getServiceName(),
         					targetService);

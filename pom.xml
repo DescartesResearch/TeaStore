@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
     <properties>
-        <teastoreversion>1.0.2</teastoreversion>
+        <teastoreversion>1.0.3-SNAPSHOT</teastoreversion>
     </properties>
   
 	<prerequisites>
@@ -34,6 +34,7 @@
 			</activation>
 			<modules>
 				<module>./utilities/tools.descartes.teastore.kieker</module>
+				<module>./utilities/tools.descartes.teastore.kieker.probes</module>
 				<module>./utilities/tools.descartes.teastore.kieker.rabbitmq</module>
 			</modules>
 		</profile>

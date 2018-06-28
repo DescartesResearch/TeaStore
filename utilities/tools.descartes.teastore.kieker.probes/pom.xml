@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>kieker</artifactId>
+	<artifactId>kieker.probes</artifactId>
 	<name>TeaStore Kieker Instrumentation</name>
 	<url>http://descartes.tools</url>
 	<properties>
@@ -11,7 +11,7 @@
 	</properties>
 
 	<build>
-		<finalName>tools.descartes.teastore.kieker</finalName>
+		<finalName>tools.descartes.teastore.kieker.probes</finalName>
 	</build>
 	<dependencies>
 		<dependency>
@@ -19,26 +19,14 @@
 			<artifactId>kieker</artifactId>
 			<version>1.13</version>
 		</dependency>
-		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-api</artifactId>
-			<version>7.0</version>
-			<scope>provided</scope>
-		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.aspectj/aspectjrt -->
 		<dependency>
 		    <groupId>org.aspectj</groupId>
 		    <artifactId>aspectjrt</artifactId>
 		    <version>1.9.1</version>
 		</dependency>
-		<dependency>
-			<groupId>tools.descartes.teastore</groupId>
-			<artifactId>kieker.probes</artifactId>
-			<version>${teastoreversion}</version>
-		</dependency>
 	</dependencies>
 
-	<packaging>pom</packaging>
 	<parent>
 		<groupId>tools.descartes.teastore</groupId>
 		<artifactId>parent</artifactId>

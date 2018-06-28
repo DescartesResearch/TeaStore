@@ -177,6 +177,13 @@
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>tools.descartes.teastore</groupId>
+					<artifactId>kieker.probes</artifactId>
+					<version>${teastoreversion}</version>
+				</dependency>
+			</dependencies>
 			<build>
 				<!-- RENAME DOCKER FILE -->
 				<plugins>

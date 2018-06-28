@@ -5,6 +5,7 @@ import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.system.CPUUtilizationRecord;
 
 public class LogConsumer extends AbstractFilterPlugin {
 
@@ -17,6 +18,10 @@ public class LogConsumer extends AbstractFilterPlugin {
 	@InputPort(name = LogConsumer.INPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
 	public void newMonitoringRecord(final Object record) {
 		if (record instanceof IMonitoringRecord) {
+			if (record instanceof CPUUtilizationRecord) {
+				CPUUtilizationRecord cpu = (CPUUtilizationRecord)record;
+				System.out.println(cpu.getHostname() + cpu.getTotalUtilization());
+			}
 			IMonitoringRecord monitoringRecord = (IMonitoringRecord)record;
 			MemoryLogStorage.storeRecord(monitoringRecord);
 		} else {

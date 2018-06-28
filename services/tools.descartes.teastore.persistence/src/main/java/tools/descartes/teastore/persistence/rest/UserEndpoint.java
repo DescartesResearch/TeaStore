@@ -29,6 +29,7 @@ import tools.descartes.teastore.entities.User;
 
 /**
  * Persistence endpoint for CRUD operations on Categories.
+ * 
  * @author Joakim von Kistowski
  *
  */
@@ -46,10 +47,10 @@ public class UserEndpoint extends AbstractCRUDEndpoint<User> {
 		try {
 			return UserRepository.REPOSITORY.createEntity(category);
 		} catch (Exception e) {
-			//SQL errors, especially for duplicate user names
-			return  -1L;
+			// SQL errors, especially for duplicate user names
+			return -1L;
 		}
-		
+
 	}
 
 	/**
@@ -94,10 +95,12 @@ public class UserEndpoint extends AbstractCRUDEndpoint<User> {
 		}
 		return UserRepository.REPOSITORY.removeEntity(id);
 	}
-	
+
 	/**
 	 * Retreive user with the provided name.
-	 * @param name name of the entity to find.
+	 * 
+	 * @param name
+	 *            name of the entity to find.
 	 * @return A Response containing the entity.
 	 */
 	@GET
@@ -107,9 +110,8 @@ public class UserEndpoint extends AbstractCRUDEndpoint<User> {
 			return Response.status(Status.NOT_FOUND).build();
 		}
 		User entity = UserRepository.REPOSITORY.getUserByName(name);
-		if (entity == null) {
+		if (entity == null)
 			return Response.status(Status.NOT_FOUND).build();
-		}
 		return Response.ok(new User(entity)).build();
 	}
 }

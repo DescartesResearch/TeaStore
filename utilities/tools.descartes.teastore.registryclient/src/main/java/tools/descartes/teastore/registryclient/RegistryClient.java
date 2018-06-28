@@ -72,10 +72,22 @@ public class RegistryClient {
 	 */
 	protected RegistryClient() {
 		System.setProperty("org.slf4j.simpleLogger.logFile", "System.out");
+		String useHostIP = "false"; 
 		try {
-			hostName = (String) new InitialContext().lookup("java:comp/env/hostName");
+			useHostIP = (String) new InitialContext().lookup("java:comp/env/useHostIP");
+		} catch (NamingException e) {
+			LOG.warn("useHostIP not set. Not using host ip as hostname.");
+		}
+		try {
+			if (useHostIP.equalsIgnoreCase("true")) {
+				hostName = InetAddress.getLocalHost().getHostAddress();
+			} else {
+				hostName = (String) new InitialContext().lookup("java:comp/env/hostName");
+			}
 		} catch (NamingException e) {
 			LOG.warn("hostName not set. Using default OS-provided hostname.");
+		} catch (UnknownHostException e) {
+			LOG.error("could not resolve host IP. Using default OS-provided hostname: " + e.getMessage());
 		}
 		try {
 			port = Integer.parseInt((String) new InitialContext().lookup("java:comp/env/servicePort"));
