@@ -91,7 +91,7 @@ public abstract class AbstractOperationExecutionWithParameterAspect extends Abst
 			int i = 0;
 			for (final Object argument : arguments) {
 				values[i] = parseObjectToString(argument);
-				if (argument instanceof java.util.Collection)
+				if (argument instanceof java.util.Collection && !names[i].endsWith(".size()"))
 					names[i] = names[i] + ".size()";
 				i++;
 			}
