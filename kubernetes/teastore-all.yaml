@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: teastore-all
+  labels:
+    run: teastore-all
+spec:
+  containers:
+  - name: teastore-all
+    image: descartesresearch/teastore-all
+    ports:
+    - containerPort: 8080
+    env:
+    - name: USE_POD_IP
+      value: "true"
+    - name: DB_HOST
+      value: "teastore-db"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: teastore-all
+  labels:
+    run: teastore-all
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+  selector:
+    run: teastore-all
