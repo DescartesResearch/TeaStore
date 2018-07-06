@@ -84,7 +84,8 @@ public abstract class AbstractOperationExecutionWithParameterAspect extends Abst
 			final long tout = TIME.getTime();
 			// get parameters
 
-			if (System.getenv("flag").equals("true")) {
+			String flag = System.getenv("LOG_PARAMETERS");
+			if (flag != null && (flag.equals("true") || flag.equals("TRUE"))) {
 				logWithParameter(thisJoinPoint, signature, sessionId, traceId, tin, tout, hostname, eoi, ess, retval);
 			} else {
 				logWithoutParameters(thisJoinPoint, signature, sessionId, traceId, tin, tout, hostname, eoi, ess, retval);
