@@ -66,7 +66,6 @@
 		<concrete-aspect name="kieker.monitoring.probe.aspectj.operationExecution.TargetedAspect" extends="tools.descartes.teastore.kieker.probes.AbstractOperationExecutionWithParameterAspect">
 			<!--<pointcut name="monitoredOperation" expression="execution(* *(..))"></pointcut>-->
 			<pointcut name="monitoredOperation" expression="execution(* *(..)) 
-			&amp;&amp; if(System.getEnv('Flag') == true)
 			&amp;&amp; !execution(private static * *..lambda*(..)) 
 			&amp;&amp; !execution(private * *..lambda*(..))
 			&amp;&amp; !within(is(AnonymousType)) 

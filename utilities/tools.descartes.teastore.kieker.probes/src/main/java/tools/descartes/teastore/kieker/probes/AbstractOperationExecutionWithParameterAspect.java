@@ -8,6 +8,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
@@ -82,35 +83,13 @@ public abstract class AbstractOperationExecutionWithParameterAspect extends Abst
 			// measure after
 			final long tout = TIME.getTime();
 			// get parameters
-			/** extension over the original routine. */
-			final String[] names = ((MethodSignature) thisJoinPoint.getSignature()).getParameterNames();
 
-			final Object[] arguments = thisJoinPoint.getArgs();
-			final String[] values = new String[arguments.length];
-
-			int i = 0;
-			for (final Object argument : arguments) {
-				values[i] = parseObjectToString(argument);
-				if (argument instanceof java.util.Collection && !names[i].endsWith(".size()"))
-					names[i] = names[i] + ".size()";
-				i++;
-			}
-			// get return type
-			Class<?> returnClass = ((MethodSignature) thisJoinPoint.getSignature()).getReturnType();
-			final String returnType;
-			final String returnValue;
-			if (returnClass.equals(Void.TYPE)) {
-				// return type is void
-				returnType = "void";
-				returnValue = "";
+			if (System.getenv("flag").equals("true")) {
+				logWithParameter(thisJoinPoint, signature, sessionId, traceId, tin, tout, hostname, eoi, ess, retval);
 			} else {
-				// we have a return type
-				returnType = returnClass.getName();
-				returnValue = parseObjectToString(retval);
+				logWithoutParameters(thisJoinPoint, signature, sessionId, traceId, tin, tout, hostname, eoi, ess, retval);
 			}
 
-			CTRLINST.newMonitoringRecord(new OperationExecutionWithParametersRecord(signature, sessionId, traceId, tin,
-					tout, hostname, eoi, ess, names, values, returnType, returnValue));
 			// cleanup
 			if (entrypoint) {
 				CFREGISTRY.unsetThreadLocalTraceId();
@@ -123,6 +102,40 @@ public abstract class AbstractOperationExecutionWithParameterAspect extends Abst
 		return retval;
 	}
 
+	private void logWithParameter(final ProceedingJoinPoint thisJoinPoint, String signature, String sessionId,
+			long traceId, long tin, long tout, String hostname, int eoi, int ess, Object retval) {
+		/** extension over the original routine. */
+		final String[] names = ((MethodSignature) thisJoinPoint.getSignature()).getParameterNames();
+
+		final Object[] arguments = thisJoinPoint.getArgs();
+		final String[] values = new String[arguments.length];
+
+		int i = 0;
+		for (final Object argument : arguments) {
+			values[i] = parseObjectToString(argument);
+			if (argument instanceof java.util.Collection && !names[i].endsWith(".size()"))
+				names[i] = names[i] + ".size()";
+			i++;
+		}
+		// get return type
+		Class<?> returnClass = ((MethodSignature) thisJoinPoint.getSignature()).getReturnType();
+		final String returnType;
+		final String returnValue;
+		if (returnClass.equals(Void.TYPE)) {
+			// return type is void
+			returnType = "void";
+			returnValue = "";
+		} else {
+			// we have a return type
+			returnType = returnClass.getName();
+			returnValue = parseObjectToString(retval);
+		}
+
+		CTRLINST.newMonitoringRecord(new OperationExecutionWithParametersRecord(signature, sessionId, traceId, tin,
+				tout, hostname, eoi, ess, names, values, returnType, returnValue));
+
+	}
+
 	private String parseObjectToString(Object argument) {
 		if (argument == null) {
 			return "null";
@@ -133,5 +146,12 @@ public abstract class AbstractOperationExecutionWithParameterAspect extends Abst
 		}
 		// all others are just to string
 		return argument.toString();
+	}
+
+	private void logWithoutParameters(final ProceedingJoinPoint thisJoinPoint, String signature, String sessionId,
+			long traceId, long tin, long tout, String hostname, int eoi, int ess, Object retval) {
+		CTRLINST.newMonitoringRecord(
+				new OperationExecutionRecord(signature, sessionId, traceId, tin, tout, hostname, eoi, ess));
+
 	}
 }
