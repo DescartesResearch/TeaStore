@@ -1,0 +1,247 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: teastore-db
+spec:
+  template:
+    metadata:
+      labels:
+        app: teastore
+        run: teastore-db
+    spec:
+      containers:
+      - name: teastore-db
+        image: descartesresearch/teastore-db
+        ports:
+        - containerPort: 3306
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: teastore-db
+  labels:
+    app: teastore
+    run: teastore-db
+spec:
+  ports:
+  - port: 3306
+    protocol: TCP
+  selector:
+    run: teastore-db
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: teastore-registry
+spec:
+  template:
+    metadata:
+      labels:
+        app: teastore
+        run: teastore-registry
+    spec:
+      containers:
+      - name: teastore-registry
+        image: descartesresearch/teastore-registry
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: teastore-registry
+  labels:
+    app: teastore
+    run: teastore-registry
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+  selector:
+    run: teastore-registry
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: teastore-persistence
+spec:
+  template:
+    metadata:
+      labels:
+        app: teastore
+        run: teastore-persistence
+    spec:
+      containers:
+      - name: teastore-persistence
+        image: descartesresearch/teastore-persistence
+        ports:
+        - containerPort: 8080
+        env:
+        - name: HOST_NAME
+          value: "teastore-persistence"
+        - name: REGISTRY_HOST
+          value: "teastore-registry"
+        - name: DB_HOST
+          value: "teastore-db"
+        - name: DB_PORT
+          value: "3306"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: teastore-persistence
+  labels:
+    app: teastore
+    run: teastore-persistence
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+  selector:
+    run: teastore-persistence
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: teastore-auth
+spec:
+  template:
+    metadata:
+      labels:
+        app: teastore
+        run: teastore-auth
+    spec:
+      containers:
+      - name: teastore-auth
+        image: descartesresearch/teastore-auth
+        ports:
+        - containerPort: 8080
+        env:
+        - name: HOST_NAME
+          value: "teastore-auth"
+        - name: REGISTRY_HOST
+          value: "teastore-registry"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: teastore-auth
+  labels:
+    app: teastore
+    run: teastore-auth
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+  selector:
+    run: teastore-auth
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: teastore-image
+spec:
+  template:
+    metadata:
+      labels:
+        app: teastore
+        run: teastore-image
+    spec:
+      containers:
+      - name: teastore-image
+        image: descartesresearch/teastore-image
+        ports:
+        - containerPort: 8080
+        env:
+        - name: HOST_NAME
+          value: "teastore-image"
+        - name: REGISTRY_HOST
+          value: "teastore-registry"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: teastore-image
+  labels:
+    app: teastore
+    run: teastore-image
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+  selector:
+    run: teastore-image
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: teastore-recommender
+spec:
+  template:
+    metadata:
+      labels:
+        app: teastore
+        run: teastore-recommender
+    spec:
+      containers:
+      - name: teastore-recommender
+        image: descartesresearch/teastore-recommender
+        ports:
+        - containerPort: 8080
+        env:
+        - name: HOST_NAME
+          value: "teastore-recommender"
+        - name: REGISTRY_HOST
+          value: "teastore-registry"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: teastore-recommender
+  labels:
+    app: teastore
+    run: teastore-recommender
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+  selector:
+    run: teastore-recommender
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: teastore-webui
+spec:
+  template:
+    metadata:
+      labels:
+        app: teastore
+        run: teastore-webui
+    spec:
+      containers:
+      - name: teastore-webui
+        image: descartesresearch/teastore-webui
+        ports:
+        - containerPort: 8080
+        env:
+        - name: HOST_NAME
+          value: "teastore-webui"
+        - name: REGISTRY_HOST
+          value: "teastore-registry"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: teastore-webui
+  labels:
+    app: teastore
+    run: teastore-webui
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    nodePort: 30080
+    protocol: TCP
+  selector:
+    run: teastore-webui
