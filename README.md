@@ -14,6 +14,27 @@ Check out our **[wiki](https://github.com/DescartesResearch/TeaStore/wiki)** wit
 ## Getting Started
 
 To get started, we recommend running the TeaStore in an environment of your choice. We offer three ways of deploying and running the TeaStore:
-* The easiest way: [Run TeaStore Container(s) using Docker](https://github.com/DescartesResearch/TeaStore/wiki/Getting-Started#run-pet-supply-store-containers-using-docker) (Recommended)
+* The easiest way: [Run TeaStore Container(s) using Docker](https://github.com/DescartesResearch/TeaStore/wiki/Getting-Started#run-pet-supply-store-containers-using-docker) (Recommended, we also provide [configs for Kubernetes](https://github.com/DescartesResearch/TeaStore/wiki/Getting-Started#3-run-the-teastore-on-a-kubernetes-cluster))
 * [Deploy the TeaStore in one or several Java Application Container(s)](https://github.com/DescartesResearch/TeaStore/wiki/Getting-Started#deploy-the-pet-supply-store-in-java-application-containers)
 * [Setup and run the TeaStore Development Environment](https://github.com/DescartesResearch/TeaStore/wiki/Getting-Started#setup-and-run-the-pet-supply-store-development-environment)
+
+## Cite Us
+
+If you use the TeaStore please consider citing us in your work:
+
+    Jóakim von Kistowski, Simon Eismann, Norbert Schmitt, André Bauer, Johannes Grohmann, and Samuel Kounev.
+    TeaStore: A Micro-Service Reference Application for Benchmarking, Modeling and Resource Management Research.
+    In Proceedings of the 26th IEEE International Symposium on the Modelling, Analysis, and Simulation of
+    Computer and Telecommunication Systems, Milwaukee, WI, USA, September 2018, MASCOTS '18.
+
+**Bibtex**:
+
+    @inproceedings{KiEiScBaGrKo2018-MASCOTS-TeaStore,
+      author = {J{\'o}akim von Kistowski and Simon Eismann and Norbert Schmitt and Andr{\'e} Bauer and Johannes Grohmann and Samuel Kounev},
+      title = {{TeaStore: A Micro-Service Reference Application for Benchmarking, Modeling and Resource Management Research}},
+      booktitle = {Proceedings of the 26th IEEE International Symposium on the Modelling, Analysis, and Simulation of Computer and Telecommunication Systems},
+      series = {MASCOTS '18},
+      year = {2018},
+      month = {September},
+      location = {Milwaukee, WI, USA},
+    }

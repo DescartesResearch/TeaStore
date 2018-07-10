@@ -16,8 +16,10 @@ package tools.descartes.teastore.persistence.repository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.IntStream;
 
 import javax.persistence.EntityManager;
 import javax.ws.rs.client.Entity;
@@ -33,7 +35,6 @@ import tools.descartes.teastore.persistence.domain.OrderItemRepository;
 import tools.descartes.teastore.persistence.domain.OrderRepository;
 import tools.descartes.teastore.persistence.domain.PersistenceCategory;
 import tools.descartes.teastore.persistence.domain.PersistenceOrder;
-import tools.descartes.teastore.persistence.domain.PersistenceUser;
 import tools.descartes.teastore.persistence.domain.ProductRepository;
 import tools.descartes.teastore.persistence.domain.UserRepository;
 import tools.descartes.teastore.registryclient.loadbalancers.ServiceLoadBalancer;
@@ -226,41 +227,45 @@ public final class DataGenerator {
 
 	private void generateProducts(int productsPerCategory) {
 		int categoryIndex = 0;
+		HashMap<Category, Integer> categoryIndices = new HashMap<>();
 		for (PersistenceCategory category : CategoryRepository.REPOSITORY.getAllEntities()) {
-			for (int i = 0; i < productsPerCategory; i++) {
-				int productTypeIndex = categoryIndex % PRODUCTNAMES.length;
-				int productIndex = i % PRODUCTNAMES[productTypeIndex].length;
-				int version = i / PRODUCTNAMES[productTypeIndex].length;
-				Product product = new Product();
-				if (version == 0) {
-					product.setName(PRODUCTNAMES[productTypeIndex][productIndex]);
-				} else {
-					product.setName(PRODUCTNAMES[productTypeIndex][productIndex] + ", v" + version);
-				}
-				product.setDescription(
-						"Great " + category.getName() + ": " + PRODUCTNAMES[productTypeIndex][productIndex]);
-				product.setListPriceInCents(95 + random.nextInt(12000));
-				product.setCategoryId(category.getId());
-				ProductRepository.REPOSITORY.createEntity(product);
-			}
+			categoryIndices.put(category, categoryIndex);
 			categoryIndex++;
 		}
+		CategoryRepository.REPOSITORY.getAllEntities().parallelStream().forEach( category -> {
+				for (int i = 0; i < productsPerCategory; i++) {
+					int productTypeIndex = categoryIndices.get(category) % PRODUCTNAMES.length;
+					int productIndex = i % PRODUCTNAMES[productTypeIndex].length;
+					int version = i / PRODUCTNAMES[productTypeIndex].length;
+					Product product = new Product();
+					if (version == 0) {
+						product.setName(PRODUCTNAMES[productTypeIndex][productIndex]);
+					} else {
+						product.setName(PRODUCTNAMES[productTypeIndex][productIndex] + ", v" + version);
+					}
+					product.setDescription(
+							"Great " + category.getName() + ": " + PRODUCTNAMES[productTypeIndex][productIndex]);
+					product.setListPriceInCents(95 + random.nextInt(12000));
+					product.setCategoryId(category.getId());
+					ProductRepository.REPOSITORY.createEntity(product);
+				}
+			});
 	}
 
 	private void generateUsers(int users) {
-		for (int i = 0; i < users; i++) {
+		IntStream.range(0, users).parallel().forEach(i -> {
 			User user = new User();
 			user.setUserName("user" + i);
 			user.setEmail("user" + i + "@teastore.com");
 			user.setRealName(FIRSTNAMES[random.nextInt(FIRSTNAMES.length)]
 					+ " " + LASTNAMES[random.nextInt(LASTNAMES.length)]);
-			user.setPassword(BCrypt.hashpw(PASSWORD, BCrypt.gensalt(5)));
+			user.setPassword(BCrypt.hashpw(PASSWORD, BCrypt.gensalt(6)));
 			UserRepository.REPOSITORY.createEntity(user);
-		}
+		});
 	}
 	
 	private void generateOrders(int maxOrdersPerUser, int productsPerCategory) {
-		for (PersistenceUser user : UserRepository.REPOSITORY.getAllEntities()) {
+		UserRepository.REPOSITORY.getAllEntities().parallelStream().forEach(user -> {
 			for (int i = 0; i < random.nextInt(maxOrdersPerUser + 1); i++) {
 				Order order = new Order();
 				order.setAddressName(user.getRealName());
@@ -298,7 +303,7 @@ public final class DataGenerator {
 				createdOrder.setTotalPriceInCents(price);
 				OrderRepository.REPOSITORY.updateEntity(orderId, createdOrder);
 			}
-		}
+		});
 	}
 	
 	//Order and preferred category must have a valid id!

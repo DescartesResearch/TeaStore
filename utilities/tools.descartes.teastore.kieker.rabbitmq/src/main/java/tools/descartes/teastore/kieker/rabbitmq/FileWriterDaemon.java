@@ -27,20 +27,16 @@ public class FileWriterDaemon implements Runnable {
 		configuration.setProperty(AsciiFileWriter.CONFIG_FLUSH_MAPFILE, "true");
 
 		AsciiFileWriter writer = new AsciiFileWriter(configuration);
-		try {
-			while (true) {
-				for (IMonitoringRecord record : MemoryLogStorage.getRecords()) {
-					writer.writeMonitoringRecord(record);
-				}
-				MemoryLogStorage.clearMemoryStorage();
-				try {
-					Thread.sleep(5000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+		while (true) {
+			for (IMonitoringRecord record : MemoryLogStorage.getRecords()) {
+				writer.writeMonitoringRecord(record);
 			}
-		} catch (Throwable t) {
-			logger.error("Error!", t);
+			MemoryLogStorage.clearMemoryStorage();
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				break;
+			}
 		}
 	}
 }

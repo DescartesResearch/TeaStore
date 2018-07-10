@@ -20,6 +20,7 @@ RUN chmod +x /usr/local/tomcat/bin/start.sh
 # is the IP address or hostname of the host running the docker container
 ENV SERVICE_PORT 8080
 ENV HOST_NAME unset
+ENV USE_POD_IP false
 ENV REGISTRY_HOST 127.0.0.1
 ENV REGISTRY_PORT 8080
 ENV DB_HOST 127.0.0.1
