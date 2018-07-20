@@ -7,6 +7,11 @@ import org.slf4j.LoggerFactory;
 
 import com.netflix.loadbalancer.Server;
 
+/**
+ * Runnable to get callback once service is online.
+ * @author Simon
+ *
+ */
 public class StartupCallbackTask implements Runnable {
 	private static final Logger LOG = LoggerFactory.getLogger(RegistryClient.class);
 	
@@ -14,6 +19,12 @@ public class StartupCallbackTask implements Runnable {
 	private StartupCallback callback;
 	private Service myService;
 	
+	/**
+	 * Constructor.
+	 * @param requestedService service
+	 * @param callback callback object
+	 * @param myService service
+	 */
 	public StartupCallbackTask(Service requestedService, StartupCallback callback, Service myService) {
 		this.requestedService = requestedService;
 		this.callback = callback;

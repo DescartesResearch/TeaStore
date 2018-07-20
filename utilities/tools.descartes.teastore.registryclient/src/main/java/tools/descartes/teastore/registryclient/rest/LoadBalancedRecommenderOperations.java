@@ -32,6 +32,7 @@ public final class LoadBalancedRecommenderOperations {
 	 * 
 	 * @param order
 	 *            list of order items
+	 * @param uid userId
 	 * @throws NotFoundException
 	 *             If 404 was returned.
 	 * @throws LoadBalancerTimeoutException
