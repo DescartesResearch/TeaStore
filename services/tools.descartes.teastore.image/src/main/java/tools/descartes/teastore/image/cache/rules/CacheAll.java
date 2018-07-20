@@ -19,9 +19,9 @@ import tools.descartes.teastore.image.cache.entry.ICachable;
 
 public class CacheAll<T extends ICachable<T>> implements Predicate<T> {
 
-	@Override
-	public boolean test(T t) {
-		return true;
-	}
+  @Override
+  public boolean test(T t) {
+    return true;
+  }
 
 }

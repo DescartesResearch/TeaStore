@@ -25,33 +25,33 @@ import tools.descartes.teastore.image.cache.entry.CountedEntry;
 
 public class TestCountedEntry {
 
-	@Mock
-	private StoreImage mockedImg; 
+  @Mock
+  private StoreImage mockedImg;
 
-	@Before
-	public void initialize() {
-		MockitoAnnotations.initMocks(this);
-	}
-	
-	@Test
-	public void testConstructor() {
-		new CountedEntry<>(mockedImg);
-	}
-	
-	@Test(expected = NullPointerException.class)
-	public void testConstructorNull() {
-		new CountedEntry<StoreImage>(null);
-	}
+  @Before
+  public void initialize() {
+    MockitoAnnotations.initMocks(this);
+  }
 
-	@Test
-	public void testUseCount() {
-		CountedEntry<StoreImage> uut = new CountedEntry<>(mockedImg);
-		assertEquals(0, uut.getUseCount());
-		uut.wasUsed();
-		assertEquals(1, uut.getUseCount());
-		uut.wasUsed();
-		uut.wasUsed();
-		assertEquals(3, uut.getUseCount());
-	}
-	
+  @Test
+  public void testConstructor() {
+    new CountedEntry<>(mockedImg);
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void testConstructorNull() {
+    new CountedEntry<StoreImage>(null);
+  }
+
+  @Test
+  public void testUseCount() {
+    CountedEntry<StoreImage> uut = new CountedEntry<>(mockedImg);
+    assertEquals(0, uut.getUseCount());
+    uut.wasUsed();
+    assertEquals(1, uut.getUseCount());
+    uut.wasUsed();
+    uut.wasUsed();
+    assertEquals(3, uut.getUseCount());
+  }
+
 }

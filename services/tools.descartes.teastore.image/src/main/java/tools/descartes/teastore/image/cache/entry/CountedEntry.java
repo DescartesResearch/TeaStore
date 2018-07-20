@@ -16,36 +16,43 @@ package tools.descartes.teastore.image.cache.entry;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Wrapper class for caches with a replacement strategy that relies on counting how often the entry was retrieved
- * from cache. For example the {@link tools.descartes.teastore.image.cache.LeastFrequentlyUsed}.
+ * Wrapper class for caches with a replacement strategy that relies on counting
+ * how often the entry was retrieved from cache. For example the
+ * {@link tools.descartes.teastore.image.cache.LeastFrequentlyUsed}.
+ * 
  * @author Norbert Schmitt
  *
- * @param <D> Cachable data that must implement {@link tools.descartes.teastore.image.cache.entry.ICachable}
+ * @param <D>
+ *          Cachable data that must implement
+ *          {@link tools.descartes.teastore.image.cache.entry.ICachable}
  */
 public class CountedEntry<D extends ICachable<D>> extends AbstractEntry<D> {
-	
-	private AtomicInteger useCount = new AtomicInteger();
-	
-	/**
-	 * Basic constructor storing the cachable data. If the cachable data supplied is null, a 
-	 * {@link java.lang.NullPointerException} is thrown.
-	 * @param data Cachable data
-	 */
-	public CountedEntry(D data) {
-		super(data);
-	}
-	
-	/**
-	 * Returns how often the entry was retrieved from cache.
-	 * @return Number of times this entry was retrieved from cache
-	 */
-	public int getUseCount() {
-		return useCount.get();
-	}
-	
-	@Override
-	public void wasUsed() {
-		useCount.incrementAndGet();
-	}
+
+  private AtomicInteger useCount = new AtomicInteger();
+
+  /**
+   * Basic constructor storing the cachable data. If the cachable data supplied is
+   * null, a {@link java.lang.NullPointerException} is thrown.
+   * 
+   * @param data
+   *          Cachable data
+   */
+  public CountedEntry(D data) {
+    super(data);
+  }
+
+  /**
+   * Returns how often the entry was retrieved from cache.
+   * 
+   * @return Number of times this entry was retrieved from cache
+   */
+  public int getUseCount() {
+    return useCount.get();
+  }
+
+  @Override
+  public void wasUsed() {
+    useCount.incrementAndGet();
+  }
 
 }

@@ -30,8 +30,8 @@ public class MostRecentlyUsed<T extends ICachable<T>> extends AbstractTreeCache<
 		this(maxCacheSize, new CacheAll<T>());
 	}
 	
-	public MostRecentlyUsed(long maxCacheSize, Predicate<T> cachingRule) {
-		this(null, maxCacheSize, cachingRule);
+  public MostRecentlyUsed(long maxCacheSize, Predicate<T> cachingRule) {
+    this(null, maxCacheSize, cachingRule);
 	}
 	
 	public MostRecentlyUsed(IDataStorage<T> cachedStorage, long maxCacheSize, Predicate<T> cachingRule) {

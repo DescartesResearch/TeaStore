@@ -32,44 +32,48 @@ import tools.descartes.teastore.image.setup.SetupController;
 @Consumes({ "application/json" })
 public class ImageProviderEndpoint {
 
-	@POST
-	@Path("getProductImages")
-	public Response getProductImages(HashMap<Long, String> images) {
-		return Response.ok().entity(ImageProvider.IP.getProductImages(images.entrySet().parallelStream()
-				.collect(Collectors.toMap(e -> e.getKey(), e -> ImageSize.parseImageSize(e.getValue()))))).build();
-	}
-	
-	@POST
-	@Path("getWebImages")
-	public Response getWebUIImages(HashMap<String, String> images) {
-		return Response.ok().entity(ImageProvider.IP.getWebUIImages(images.entrySet().parallelStream()
-				.collect(Collectors.toMap(e -> e.getKey(), e -> ImageSize.parseImageSize(e.getValue()))))).build();
-	}
-	
-	@GET
-	@Path("regenerateImages")
-	public Response regenerateImages() {
-		SetupController.SETUP.reconfiguration();
-		return Response.ok().build();
-	}
-	
-	@GET
-	@Path("finished")
-	public Response isFinished() {
-		return Response.ok().entity(SetupController.SETUP.isFinished()).build();
-	}
-	
-	@GET
-	@Path("state")
-	@Produces({ "text/plain" })
-	public Response getState() {
-		return Response.ok().entity(SetupController.SETUP.getState()).build();
-	}
-	
-	@POST
-	@Path("setCacheSize")
-	public Response setCacheSize(long cacheSize) {
-		return Response.ok().entity(SetupController.SETUP.setCacheSize(cacheSize)).build();
-	}
-	
+  @POST
+  @Path("getProductImages")
+  public Response getProductImages(HashMap<Long, String> images) {
+    return Response.ok()
+        .entity(ImageProvider.IP.getProductImages(images.entrySet().parallelStream().collect(
+            Collectors.toMap(e -> e.getKey(), e -> ImageSize.parseImageSize(e.getValue())))))
+        .build();
+  }
+
+  @POST
+  @Path("getWebImages")
+  public Response getWebUIImages(HashMap<String, String> images) {
+    return Response.ok()
+        .entity(ImageProvider.IP.getWebUIImages(images.entrySet().parallelStream().collect(
+            Collectors.toMap(e -> e.getKey(), e -> ImageSize.parseImageSize(e.getValue())))))
+        .build();
+  }
+
+  @GET
+  @Path("regenerateImages")
+  public Response regenerateImages() {
+    SetupController.SETUP.reconfiguration();
+    return Response.ok().build();
+  }
+
+  @GET
+  @Path("finished")
+  public Response isFinished() {
+    return Response.ok().entity(SetupController.SETUP.isFinished()).build();
+  }
+
+  @GET
+  @Path("state")
+  @Produces({ "text/plain" })
+  public Response getState() {
+    return Response.ok().entity(SetupController.SETUP.getState()).build();
+  }
+
+  @POST
+  @Path("setCacheSize")
+  public Response setCacheSize(long cacheSize) {
+    return Response.ok().entity(SetupController.SETUP.setCacheSize(cacheSize)).build();
+  }
+
 }

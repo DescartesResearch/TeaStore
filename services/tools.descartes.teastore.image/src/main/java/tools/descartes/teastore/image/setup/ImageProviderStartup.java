@@ -24,42 +24,46 @@ import tools.descartes.teastore.registryclient.loadbalancers.ServiceLoadBalancer
 
 /**
  * Application Lifecycle Listener implementation class Registry Client Startup.
+ * 
  * @author Simon Eismann
  *
  */
 @WebListener
 public class ImageProviderStartup implements ServletContextListener {
-	
-	/**
-	 * Empty constructor.
-	 */
-    public ImageProviderStartup() {
-    	
-    }
-    
-	/**
-     * @see ServletContextListener#contextDestroyed(ServletContextEvent)
-     * @param event The servlet context event at destruction.
-     */
-    public void contextDestroyed(ServletContextEvent event)  { 
-		RegistryClient.getClient().unregister(event.getServletContext().getContextPath());
-		SetupController.SETUP.teardown();
-    }
 
-	/**
-     * @see ServletContextListener#contextInitialized(ServletContextEvent)
-     * @param event The servlet context event at initialization.
-     */
-    public void contextInitialized(ServletContextEvent event)  {
-    	ServiceLoadBalancer.preInitializeServiceLoadBalancers(Service.PERSISTENCE);
-    	RegistryClient.getClient().runAfterServiceIsAvailable(Service.PERSISTENCE, new StartupCallback() {
-			
-			@Override
-			public void callback() {
-				SetupController.SETUP.startup();
-				RegistryClient.getClient().register(event.getServletContext().getContextPath());
-			}
-		}, Service.IMAGE);
-    }
-    
+  /**
+   * Empty constructor.
+   */
+  public ImageProviderStartup() {
+
+  }
+
+  /**
+   * @see ServletContextListener#contextDestroyed(ServletContextEvent)
+   * @param event
+   *          The servlet context event at destruction.
+   */
+  public void contextDestroyed(ServletContextEvent event) {
+    RegistryClient.getClient().unregister(event.getServletContext().getContextPath());
+    SetupController.SETUP.teardown();
+  }
+
+  /**
+   * @see ServletContextListener#contextInitialized(ServletContextEvent)
+   * @param event
+   *          The servlet context event at initialization.
+   */
+  public void contextInitialized(ServletContextEvent event) {
+    ServiceLoadBalancer.preInitializeServiceLoadBalancers(Service.PERSISTENCE);
+    RegistryClient.getClient().runAfterServiceIsAvailable(Service.PERSISTENCE,
+        new StartupCallback() {
+
+          @Override
+          public void callback() {
+            SetupController.SETUP.startup();
+            RegistryClient.getClient().register(event.getServletContext().getContextPath());
+          }
+        }, Service.IMAGE);
+  }
+
 }

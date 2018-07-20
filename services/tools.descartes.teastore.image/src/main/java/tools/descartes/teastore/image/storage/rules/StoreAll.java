@@ -17,11 +17,17 @@ import java.util.function.Predicate;
 
 import tools.descartes.teastore.image.cache.entry.ICachable;
 
+/**
+ * Rule for all images.
+ * @author Norbert
+ *
+ * @param <T> cachable class
+ */
 public class StoreAll<T extends ICachable<T>> implements Predicate<T> {
 
-	@Override
-	public boolean test(T t) {
-		return true;
-	}
+  @Override
+  public boolean test(T t) {
+    return true;
+  }
 
 }
