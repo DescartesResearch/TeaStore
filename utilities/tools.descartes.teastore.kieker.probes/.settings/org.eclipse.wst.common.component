@@ -2,6 +2,7 @@
     <wb-module deploy-name="kieker-${petsupplystoreversion}">
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <property name="java-output-path" value="/kieker/target/classes"/>
         <property name="context-root" value="tools.descartes.teastore.kieker"/>
     </wb-module>
