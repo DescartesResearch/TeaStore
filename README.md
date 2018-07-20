@@ -14,7 +14,7 @@ Check out our **[wiki](https://github.com/DescartesResearch/TeaStore/wiki)** wit
 ## Getting Started
 
 To get started, we recommend running the TeaStore in an environment of your choice. We offer three ways of deploying and running the TeaStore:
-* The easiest way: [Run TeaStore Container(s) using Docker](https://github.com/DescartesResearch/TeaStore/wiki/Getting-Started#run-pet-supply-store-containers-using-docker) (Recommended)
+* The easiest way: [Run TeaStore Container(s) using Docker](https://github.com/DescartesResearch/TeaStore/wiki/Getting-Started#run-pet-supply-store-containers-using-docker) (Recommended, we also provide [configs for Kubernetes](https://github.com/DescartesResearch/TeaStore/wiki/Getting-Started#3-run-the-teastore-on-a-kubernetes-cluster))
 * [Deploy the TeaStore in one or several Java Application Container(s)](https://github.com/DescartesResearch/TeaStore/wiki/Getting-Started#deploy-the-pet-supply-store-in-java-application-containers)
 * [Setup and run the TeaStore Development Environment](https://github.com/DescartesResearch/TeaStore/wiki/Getting-Started#setup-and-run-the-pet-supply-store-development-environment)
 
