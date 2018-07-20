@@ -211,7 +211,6 @@ public final class ServiceLoadBalancer {
         	if (loadBalancer == null || loadBalancer.getAllServers().isEmpty()) {
         		LOG.warn("No Server registered for Service: " + targetService.getServiceName());
         	} else {
-        		long tic = System.currentTimeMillis();
         		ServiceLoadBalancerResult<R> slbr = LoadBalancerCommand.<ServiceLoadBalancerResult<R>>builder()
                         .withLoadBalancer(loadBalancer)
                         .withRetryHandler(retryHandler)

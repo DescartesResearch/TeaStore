@@ -11,24 +11,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package tools.descartes.teastore.auth.security;
 
 import tools.descartes.teastore.entities.message.SessionBlob;
 
 /**
- * Class for testing. Provides a constant key.
- * DO NOT ADOPT THIS FOR ANY REAL PRODUCTION WORKLOAD!
+ * Class for testing. Provides a constant key. DO NOT ADOPT THIS FOR ANY REAL
+ * PRODUCTION WORKLOAD!
+ * 
  * @author Joakim von Kistowski
  *
  */
 public class ConstantKeyProvider implements IKeyProvider {
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getKey(SessionBlob blob) {
-		return "thebestsecretkey";
-	}
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getKey(SessionBlob blob) {
+    return "thebestsecretkey";
+  }
 
 }

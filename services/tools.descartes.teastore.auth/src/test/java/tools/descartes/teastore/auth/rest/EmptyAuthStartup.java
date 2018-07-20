@@ -11,6 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package tools.descartes.teastore.auth.rest;
 
 import javax.servlet.ServletContextEvent;
@@ -22,41 +23,44 @@ import tools.descartes.teastore.registryclient.util.RESTClient;
 
 /**
  * Application Lifecycle Listener implementation class Registry Client Startup.
+ * 
  * @author Simon Eismann
  *
  */
 @WebListener
 public class EmptyAuthStartup implements ServletContextListener {
-	
-	private static final int TEST_REST_READ_TIMOUT = 5000;
-	private static final int TEST_REST_CONNECT_TIMOUT = 3000;
-	
-	/**
-	 * Also set this accordingly in RegistryClientStartup.
-	 */
-	
-	/**
-	 * Empty constructor.
-	 */
-    public EmptyAuthStartup() {
-    	
-    }
 
-	/**
-     * @see ServletContextListener#contextDestroyed(ServletContextEvent)
-     * @param arg0 The servlet context event at destruction.
-     */
-    public void contextDestroyed(ServletContextEvent event)  { 
-    }
+  private static final int TEST_REST_READ_TIMOUT = 5000;
+  private static final int TEST_REST_CONNECT_TIMOUT = 3000;
 
-	/**
-     * @see ServletContextListener#contextInitialized(ServletContextEvent)
-     * @param arg0 The servlet context event at initialization.
-     */
-    public void contextInitialized(ServletContextEvent event)  {
-    	RESTClient.setGlobalConnectTimeout(TEST_REST_CONNECT_TIMOUT);
-    	RESTClient.setGlobalReadTimeout(TEST_REST_READ_TIMOUT);
-    	ServiceLoadBalancer.preInitializeServiceLoadBalancers(Service.PERSISTENCE, Service.RECOMMENDER);
-    }
-    
+  /**
+   * Also set this accordingly in RegistryClientStartup.
+   */
+
+  /**
+   * Empty constructor.
+   */
+  public EmptyAuthStartup() {
+
+  }
+
+  /**
+   * shutdown routine.
+   * @see ServletContextListener#contextDestroyed(ServletContextEvent)
+   * @param event The servlet context event at destruction.
+   */
+  public void contextDestroyed(ServletContextEvent event) {
+  }
+
+  /**
+   * startup routine.
+   * @see ServletContextListener#contextInitialized(ServletContextEvent)
+   * @param event The servlet context event at initialization.
+   */
+  public void contextInitialized(ServletContextEvent event) {
+    RESTClient.setGlobalConnectTimeout(TEST_REST_CONNECT_TIMOUT);
+    RESTClient.setGlobalReadTimeout(TEST_REST_READ_TIMOUT);
+    ServiceLoadBalancer.preInitializeServiceLoadBalancers(Service.PERSISTENCE, Service.RECOMMENDER);
+  }
+
 }
