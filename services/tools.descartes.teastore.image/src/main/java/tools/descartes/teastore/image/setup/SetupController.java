@@ -75,21 +75,21 @@ public enum SetupController {
   SETUP;
 
   private interface SetupControllerConstants {
-    public final static Path STD_WORKING_DIR = Paths.get("images");
+    public  static final Path STD_WORKING_DIR = Paths.get("images");
     // Longest wait period before querying the persistence again if it is finished
     // creating entries
-    public final static int PERSISTENCE_CREATION_MAX_WAIT_TIME = 120000;
+    public final int PERSISTENCE_CREATION_MAX_WAIT_TIME = 120000;
     // Wait time in ms before checking again for an existing persistence service
-    public final static List<Integer> PERSISTENCE_CREATION_WAIT_TIME = Arrays.asList(1000, 2000,
+    public static final List<Integer> PERSISTENCE_CREATION_WAIT_TIME = Arrays.asList(1000, 2000,
         5000, 10000, 30000, 60000);
     // Number of available logical cpus for image creation
-    public final static int CREATION_THREAD_POOL_SIZE = Runtime.getRuntime().availableProcessors();
+    public static final int CREATION_THREAD_POOL_SIZE = Runtime.getRuntime().availableProcessors();
     // Wait time in ms for the image creation thread pool to terminate all threads.
-    public final static long CREATION_THREAD_POOL_WAIT = 500;
+    public static final long CREATION_THREAD_POOL_WAIT = 500;
     // Wait time in ms (per image to generate) before an image provider service is
     // registered if there is another
     // image provider service registered.
-    public final static long CREATION_THREAD_POOL_WAIT_PER_IMG_NR = 70;
+    public static final long CREATION_THREAD_POOL_WAIT_PER_IMG_NR = 70;
   }
 
   private StorageRule storageRule = StorageRule.STD_STORAGE_RULE;

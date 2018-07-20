@@ -68,7 +68,11 @@ public abstract class AbstractEntry<D extends ICachable<D>> implements ICacheEnt
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((data == null) ? 0 : data.hashCode());
+    if (data == null) {
+      result = prime * result + 0;
+    } else {
+      result = prime * result + data.hashCode();
+    }
     return result;
   }
 

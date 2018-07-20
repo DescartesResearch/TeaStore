@@ -208,8 +208,14 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
     boolean result = false;
     lock.readLock().lock();
     try {
-      result = dataIsInCache(id) ? true : cachedStorage.dataExists(id);
-    } finally {
+      if (dataIsInCache(id)) {
+        result = true;
+      } else {
+        result = cachedStorage.dataExists(id);
+      }
+    } finally
+
+    {
       lock.readLock().unlock();
     }
     return result;

@@ -35,7 +35,7 @@ public class MostRecentlyUsed<T extends ICachable<T>> extends AbstractTreeCache<
 	}
 	
 	public MostRecentlyUsed(IDataStorage<T> cachedStorage, long maxCacheSize, Predicate<T> cachingRule) {
-		super(cachedStorage, maxCacheSize, cachingRule, (a,b) -> a.getTime() - b.getTime() < 0 
+		super(cachedStorage, maxCacheSize, cachingRule, (a, b) -> a.getTime() - b.getTime() < 0 
 				? 1 : (a.getTime() - b.getTime() > 0 ? -1 : (a.getId() < b.getId() 
 						? -1 : (a.getId() == b.getId() ? 0 : 1))));
 	}
