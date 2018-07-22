@@ -33,47 +33,48 @@ import tools.descartes.teastore.entities.Order;
 import tools.descartes.teastore.entities.User;
 
 /**
- * Servlet implementation for the web view of "Profile"
+ * Servlet implementation for the web view of "Profile".
  * 
  * @author Andre Bauer
  */
 @WebServlet("/profile")
 public class ProfileServlet extends AbstractUIServlet {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public ProfileServlet() {
-		super();
-	}
+  /**
+   * @see HttpServlet#HttpServlet()
+   */
+  public ProfileServlet() {
+    super();
+  }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected void handleGETRequest(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, LoadBalancerTimeoutException {
-		checkforCookie(request, response);
-		if (!LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request))) {
-			redirect("/", response);
-		} else {
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void handleGETRequest(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException, LoadBalancerTimeoutException {
+    checkforCookie(request, response);
+    if (!LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request))) {
+      redirect("/", response);
+    } else {
 
-			request.setAttribute("storeIcon",
-					LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
-			request.setAttribute("CategoryList",
-					LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "categories", Category.class, -1, -1));
-			request.setAttribute("title", "TeaStore Home");
-			request.setAttribute("User", LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "users", User.class, getSessionBlob(request).getUID()));
-			request.setAttribute("Orders",
-					LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "orders", Order.class, "user", getSessionBlob(request).getUID(), -1,
-							-1));
-			request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
-			request.setAttribute("helper", ELHelperUtils.UTILS);
+      request.setAttribute("storeIcon",
+          LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
+      request.setAttribute("CategoryList", LoadBalancedCRUDOperations
+          .getEntities(Service.PERSISTENCE, "categories", Category.class, -1, -1));
+      request.setAttribute("title", "TeaStore Home");
+      request.setAttribute("User", LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE,
+          "users", User.class, getSessionBlob(request).getUID()));
+      request.setAttribute("Orders", LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE,
+          "orders", Order.class, "user", getSessionBlob(request).getUID(), -1, -1));
+      request.setAttribute("login",
+          LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
+      request.setAttribute("helper", ELHelperUtils.UTILS);
 
-			request.getRequestDispatcher("WEB-INF/pages/profile.jsp").forward(request, response);
-		}
-	}
+      request.getRequestDispatcher("WEB-INF/pages/profile.jsp").forward(request, response);
+    }
+  }
 
 }

@@ -37,7 +37,7 @@ import tools.descartes.teastore.entities.Category;
 import tools.descartes.teastore.entities.message.SessionBlob;
 
 /**
- * Abstract servlet for the webUI
+ * Abstract servlet for the webUI.
  * 
  * @author Andre Bauer
  * @author Simon Eismann
@@ -45,16 +45,49 @@ import tools.descartes.teastore.entities.message.SessionBlob;
 public abstract class AbstractUIServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+	/**
+	 * Text for message cookie.
+	 */
 	protected static final String MESSAGECOOKIE = "teastoreMessageCookie";
+	/**
+	 * Text for error message cookie.
+	 */
 	protected static final String ERRORMESSAGECOOKIE = "teastoreErrorMessageCookie";
+	/**
+	 * Text for successful login. 
+	 */
 	protected static final String SUCESSLOGIN = "You are logged in!";
+	/**
+	 * Text for logout.
+	 */
 	protected static final String SUCESSLOGOUT = "You are logged out!";
+	/**
+	 * Text for wrong credentials.
+	 */
 	protected static final String WRONGCREDENTIALS = "You used wrong credentials!";
+	/**
+	 * Text for number products cookie.
+	 */
 	protected static final String PRODUCTCOOKIE = "teastorenumberProductsCookie";
+	/**
+	 * Text for session blob.
+	 */
 	protected static final String BLOB = "sessionBlob";
+	/**
+	 * Text for confirmed order.
+	 */
 	protected static final String ORDERCONFIRMED = "Your order is confirmed!";
+	/**
+	 * Text for updated cart.
+	 */
 	protected static final String CARTUPDATED = "Your cart is updated!";
+	/**
+	 * Text for added product.
+	 */
 	protected static final String ADDPRODUCT = "Product %s is added to cart!";
+	/**
+	 * Text for removed product.
+	 */
 	protected static final String REMOVEPRODUCT = "Product %s is removed from cart!";
 
 	/**
@@ -62,7 +95,7 @@ public abstract class AbstractUIServlet extends HttpServlet {
 	 * SessionBlob is created. If the SessionBlob is corrupted, an
 	 * IlligalStateException is thrown.
 	 * 
-	 * @param request
+	 * @param request servlet request
 	 * @return SessionBlob
 	 */
 	protected SessionBlob getSessionBlob(HttpServletRequest request) {
@@ -72,7 +105,7 @@ public abstract class AbstractUIServlet extends HttpServlet {
 					ObjectMapper o = new ObjectMapper();
 					try {
 						SessionBlob blob = o.readValue(URLDecoder.decode(cook.getValue(), "UTF-8"), SessionBlob.class);
-						if(blob != null) {
+						if (blob != null) {
 						return blob;
 						} 
 					} catch (IOException e) {
@@ -88,8 +121,8 @@ public abstract class AbstractUIServlet extends HttpServlet {
 	 * Saves the SessionBlob as Cookie. Throws an IllegalStateException if the
 	 * SessionBlob is corrupted.
 	 * 
-	 * @param blob
-	 * @param response
+	 * @param blob session blob
+	 * @param response servlet response
 	 */
 	protected void saveSessionBlob(SessionBlob blob, HttpServletResponse response) {
 		ObjectMapper o = new ObjectMapper();
@@ -105,8 +138,8 @@ public abstract class AbstractUIServlet extends HttpServlet {
 	 * Destroys the SessionBlob. Throws an IllegalStateException if the SessionBlob
 	 * is corrupted.
 	 * 
-	 * @param blob
-	 * @param response
+	 * @param blob session blob
+	 * @param response servlet response
 	 */
 	protected void destroySessionBlob(SessionBlob blob, HttpServletResponse response) {
 		ObjectMapper o = new ObjectMapper();
@@ -122,12 +155,11 @@ public abstract class AbstractUIServlet extends HttpServlet {
 	/**
 	 * Redirects to the target and creates an Cookie.
 	 * 
-	 * @param target
-	 * @param response
-	 * @param cookiename
-	 * @param value
-	 * @return if redirect was successful
-	 * @throws IOException
+	 * @param target webtarget
+	 * @param response servlet response
+	 * @param cookiename name of cookie
+	 * @param value cookie value
+	 * @throws IOException cookie exception
 	 */
 	protected void redirect(String target, HttpServletResponse response, String cookiename, String value)
 			throws IOException {
@@ -142,10 +174,9 @@ public abstract class AbstractUIServlet extends HttpServlet {
 	/**
 	 * Redirects to the target.
 	 * 
-	 * @param target
-	 * @param response
-	 * @return if redirect was successful
-	 * @throws IOException
+	 * @param target webtarget
+	 * @param response servlet response
+	 * @throws IOException redirect exception
 	 */
 	protected void redirect(String target, HttpServletResponse response) throws IOException {
 		if (!target.startsWith("/")) {
@@ -158,8 +189,8 @@ public abstract class AbstractUIServlet extends HttpServlet {
 	/**
 	 * Checks if specific cookies exist and save their value as message.
 	 * 
-	 * @param request
-	 * @param response
+	 * @param request servlet request
+	 * @param response servlet response
 	 */
 	protected void checkforCookie(HttpServletRequest request, HttpServletResponse response) {
 		if (request.getCookies() != null) {
@@ -180,8 +211,12 @@ public abstract class AbstractUIServlet extends HttpServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
+   * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+   *      response)
+	 * @param request servlet request
+	 * @param response servlet response
+	 * @throws IOException external call exception
+	 * @throws ServletException exception servlet exception     
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -200,6 +235,10 @@ public abstract class AbstractUIServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
+   * @param request servlet request
+   * @param response servlet response
+   * @throws IOException external call exception
+   * @throws ServletException exception servlet exception    
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {

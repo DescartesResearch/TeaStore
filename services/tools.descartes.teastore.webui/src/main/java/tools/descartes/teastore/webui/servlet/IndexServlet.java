@@ -29,7 +29,7 @@ import tools.descartes.teastore.entities.Category;
 import tools.descartes.teastore.entities.ImageSizePreset;
 
 /**
- * Servlet implementation for the web view of "Index"
+ * Servlet implementation for the web view of "Index".
  * 
  * @author Andre Bauer
  */

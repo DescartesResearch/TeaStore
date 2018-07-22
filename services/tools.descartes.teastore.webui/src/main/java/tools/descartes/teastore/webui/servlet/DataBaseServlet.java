@@ -26,7 +26,7 @@ import tools.descartes.teastore.registryclient.rest.LoadBalancedImageOperations;
 import tools.descartes.teastore.entities.ImageSizePreset;
 
 /**
- * Servlet implementation for the web view of "Database"
+ * Servlet implementation for the web view of "Database".
  * 
  * @author Andre Bauer
  */

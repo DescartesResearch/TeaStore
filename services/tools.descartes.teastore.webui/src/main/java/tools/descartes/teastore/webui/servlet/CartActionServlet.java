@@ -31,14 +31,14 @@ import tools.descartes.teastore.entities.OrderItem;
 import tools.descartes.teastore.entities.message.SessionBlob;
 
 /**
- * Servlet for handling all cart actions
+ * Servlet for handling all cart actions.
  * 
  * @author Andre Bauer
  */
 @WebServlet("/cartAction")
 public class CartActionServlet extends AbstractUIServlet {
 	private static final long serialVersionUID = 1L;
-	final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/yyyy");
+	private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/yyyy");
 
 	/**
 	 * @see HttpServlet#HttpServlet()

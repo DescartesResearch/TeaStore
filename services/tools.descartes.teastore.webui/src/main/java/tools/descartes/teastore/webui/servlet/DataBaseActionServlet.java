@@ -34,7 +34,8 @@ import tools.descartes.teastore.registryclient.loadbalancers.ServiceLoadBalancer
 import tools.descartes.teastore.registryclient.rest.LoadBalancedImageOperations;
 
 /**
- * Servlet implementation for handling the data base action
+ * Servlet implementation for handling the data base action.
+ * @author Andre
  */
 @WebServlet("/dataBaseAction")
 public class DataBaseActionServlet extends AbstractUIServlet {

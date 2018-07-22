@@ -39,67 +39,69 @@ import tools.descartes.teastore.entities.Product;
 import tools.descartes.teastore.entities.message.SessionBlob;
 
 /**
- * Servlet implementation for the web view of "Cart"
+ * Servlet implementation for the web view of "Cart".
  * 
  * @author Andre Bauer
  */
 @WebServlet("/cart")
 public class CartServlet extends AbstractUIServlet {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public CartServlet() {
-		super();
-	}
+  /**
+   * @see HttpServlet#HttpServlet()
+   */
+  public CartServlet() {
+    super();
+  }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected void handleGETRequest(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, LoadBalancerTimeoutException {
-		checkforCookie(request, response);
-		SessionBlob blob = getSessionBlob(request);
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void handleGETRequest(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException, LoadBalancerTimeoutException {
+    checkforCookie(request, response);
+    SessionBlob blob = getSessionBlob(request);
 
-		List<OrderItem> orderItems = blob.getOrderItems();
-		ArrayList<Long> ids = new ArrayList<Long>();
-		for (OrderItem orderItem : orderItems) {
-			ids.add(orderItem.getProductId());
-		}
+    List<OrderItem> orderItems = blob.getOrderItems();
+    ArrayList<Long> ids = new ArrayList<Long>();
+    for (OrderItem orderItem : orderItems) {
+      ids.add(orderItem.getProductId());
+    }
 
-		HashMap<Long, Product> products = new HashMap<Long, Product>();
-		for (Long id : ids) {
-			Product product = LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "products", Product.class, id);
-			products.put(product.getId(), product);
-		}
+    HashMap<Long, Product> products = new HashMap<Long, Product>();
+    for (Long id : ids) {
+      Product product = LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "products",
+          Product.class, id);
+      products.put(product.getId(), product);
+    }
 
-		request.setAttribute("storeIcon",
-				LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
-		request.setAttribute("title", "TeaStore Cart");
-		request.setAttribute("CategoryList",
-				LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "categories", Category.class, -1, -1));
-		request.setAttribute("OrderItems", orderItems);
-		request.setAttribute("Products", products);
-		request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
+    request.setAttribute("storeIcon",
+        LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
+    request.setAttribute("title", "TeaStore Cart");
+    request.setAttribute("CategoryList", LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE,
+        "categories", Category.class, -1, -1));
+    request.setAttribute("OrderItems", orderItems);
+    request.setAttribute("Products", products);
+    request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
 
-		
-		List<Long> productIds = LoadBalancedRecommenderOperations.getRecommendations(blob.getOrderItems(), blob.getUID());
-		List<Product> ads = new LinkedList<Product>();
-		for (Long productId : productIds) {
-			ads.add(LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "products", Product.class, productId));
-		}
-		
-		if (ads.size() > 3) {
-			ads.subList(3, ads.size()).clear();
-		}
-		request.setAttribute("Advertisment", ads);
+    List<Long> productIds = LoadBalancedRecommenderOperations
+        .getRecommendations(blob.getOrderItems(), blob.getUID());
+    List<Product> ads = new LinkedList<Product>();
+    for (Long productId : productIds) {
+      ads.add(LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "products", Product.class,
+          productId));
+    }
 
-		request.setAttribute("productImages", LoadBalancedImageOperations.getProductPreviewImages(ads));
+    if (ads.size() > 3) {
+      ads.subList(3, ads.size()).clear();
+    }
+    request.setAttribute("Advertisment", ads);
 
-		request.getRequestDispatcher("WEB-INF/pages/cart.jsp").forward(request, response);
+    request.setAttribute("productImages", LoadBalancedImageOperations.getProductPreviewImages(ads));
 
-	}
+    request.getRequestDispatcher("WEB-INF/pages/cart.jsp").forward(request, response);
+
+  }
 
 }
