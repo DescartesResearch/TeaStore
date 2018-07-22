@@ -110,8 +110,9 @@ public class UserEndpoint extends AbstractCRUDEndpoint<User> {
 			return Response.status(Status.NOT_FOUND).build();
 		}
 		User entity = UserRepository.REPOSITORY.getUserByName(name);
-		if (entity == null)
+		if (entity == null) {
 			return Response.status(Status.NOT_FOUND).build();
+		}
 		return Response.ok(new User(entity)).build();
 	}
 }
