@@ -80,9 +80,9 @@ public final class NonBalancedCRUDOperations {
     } else if (response != null) {
       response.bufferEntity();
     }
-    if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+    if (response != null && response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
       throw new NotFoundException();
-    } else if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
+    } else if (response != null && response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
       throw new TimeoutException();
     }
     return id;
@@ -116,9 +116,9 @@ public final class NonBalancedCRUDOperations {
     if (response != null) {
       response.bufferEntity();
     }
-    if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+    if (response != null && response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
       throw new NotFoundException();
-    } else if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
+    } else if (response != null && response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
       throw new TimeoutException();
     }
     if (response != null && response.getStatus() == 200) {
@@ -146,15 +146,16 @@ public final class NonBalancedCRUDOperations {
       throws NotFoundException, TimeoutException {
     Response response = ResponseWrapper
         .wrap(HttpWrapper.wrap(client.getEndpointTarget().path(String.valueOf(id))).delete());
+
     if (response != null) {
       response.bufferEntity();
     }
     if (response != null && response.getStatus() == 200) {
       return true;
     }
-    if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+    if (response != null && response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
       throw new NotFoundException();
-    } else if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
+    } else if (response != null && response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
       throw new TimeoutException();
     }
     return false;
@@ -189,9 +190,9 @@ public final class NonBalancedCRUDOperations {
     } else if (response != null) {
       response.bufferEntity();
     }
-    if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+    if (response != null && response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
       throw new NotFoundException();
-    } else if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
+    } else if (response != null && response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
       throw new TimeoutException();
     }
     return entity;
@@ -228,6 +229,7 @@ public final class NonBalancedCRUDOperations {
     GenericType<List<T>> listType = client.getGenericListType();
     Response response = ResponseWrapper.wrap(HttpWrapper.wrap(target).get());
     List<T> entities = new ArrayList<T>();
+    
     if (response != null && response.getStatus() == 200) {
       try {
         entities = response.readEntity(listType);
@@ -237,9 +239,9 @@ public final class NonBalancedCRUDOperations {
     } else if (response != null) {
       response.bufferEntity();
     }
-    if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+    if (response != null && response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
       throw new NotFoundException();
-    } else if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
+    } else if (response != null && response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
       throw new TimeoutException();
     }
     return entities;
@@ -291,9 +293,9 @@ public final class NonBalancedCRUDOperations {
     } else if (response != null) {
       response.bufferEntity();
     }
-    if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+    if (response != null && response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
       throw new NotFoundException();
-    } else if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
+    } else if (response != null && response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
       throw new TimeoutException();
     }
     return entities;
@@ -332,9 +334,9 @@ public final class NonBalancedCRUDOperations {
     } else if (response != null) {
       response.bufferEntity();
     }
-    if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+    if (response != null && response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
       throw new NotFoundException();
-    } else if (response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
+    } else if (response != null && response.getStatus() == Status.REQUEST_TIMEOUT.getStatusCode()) {
       throw new TimeoutException();
     }
     return entity;

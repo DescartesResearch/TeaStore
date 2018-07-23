@@ -331,7 +331,11 @@ public enum SetupController {
 
     nrOfImagesForCategory = 0;
     if (dir != null && dir.exists() && dir.isDirectory()) {
-      for (File file : dir.listFiles()) {
+      File[] fileList = dir.listFiles();
+      if (fileList == null) {
+    	  return;
+      }
+      for (File file : fileList) {
         if (file.isFile() && file.getName().endsWith(StoreImage.STORE_IMAGE_FORMAT)) {
           try {
             categoryImages.put(file.getName().substring(0, file.getName().length() - 4),
@@ -421,7 +425,11 @@ public enum SetupController {
     File currentDir = dir.toFile();
 
     if (currentDir.exists() && currentDir.isDirectory()) {
-      for (File file : currentDir.listFiles()) {
+      File[] fileList = currentDir.listFiles();
+      if (fileList == null) {
+    	  return;
+      }
+      for (File file : fileList) {
         if (file.isFile() && file.getName().endsWith(StoreImage.STORE_IMAGE_FORMAT)) {
           long imageID = ImageIDFactory.ID.getNextImageID();
 
@@ -429,13 +437,15 @@ public enum SetupController {
           // Copy files to correct file with the image id number
           try {
             buffImg = ImageIO.read(file);
+            
+          } catch (IOException ioException) {
+            log.warn("An IOException occured while reading the file " + file.getAbsolutePath()
+                + " from disk.", ioException.getMessage());
+          } finally {
             if (buffImg == null) {
               log.warn("The file \"" + file.toPath().toAbsolutePath() + "\" could not be read.");
               continue;
             }
-          } catch (IOException ioException) {
-            log.warn("An IOException occured while reading the file " + file.getAbsolutePath()
-                + " from disk.", ioException.getMessage());
           }
 
           db.setImageMapping(
@@ -497,7 +507,11 @@ public enum SetupController {
     int nrOfImagesDeleted = 0;
 
     if (currentDir.exists() && currentDir.isDirectory()) {
-      for (File file : currentDir.listFiles()) {
+      File[] fileList = currentDir.listFiles();
+      if (fileList == null) {
+        return;
+      }
+      for (File file : fileList) {
         if (file.isFile() && !imagesToKeep.contains(Long.parseLong(file.getName()))) {
           file.delete();
           nrOfImagesDeleted++;
