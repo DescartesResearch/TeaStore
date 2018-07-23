@@ -20,26 +20,64 @@ import tools.descartes.teastore.image.cache.entry.TimedEntry;
 import tools.descartes.teastore.image.cache.rules.CacheAll;
 import tools.descartes.teastore.image.storage.IDataStorage;
 
+/**
+ * Least recently used (LRU) cache implementation.
+ * @author Norbert Schmitt
+ *
+ * @param <T> Entry Type implementing ICachable.
+ */
 public class LeastRecentlyUsed<T extends ICachable<T>> extends AbstractTreeCache<T, TimedEntry<T>> {
 
+  /**
+   * LRU cache standard constructor setting the maximum cache size to the standard value 
+   * {@link tools.descartes.teastore.image.cache.IDataCache.STD_MAX_CACHE_SIZE} and allowing all data to be cached.
+   */
   public LeastRecentlyUsed() {
     this(IDataCache.STD_MAX_CACHE_SIZE);
   }
 
+  /**
+   * LRU cache constructor setting the maximum cache size to the given size and allowing all data to be cached.
+   * @param maxCacheSize Maximum cache size in bytes.
+   */
   public LeastRecentlyUsed(long maxCacheSize) {
     this(maxCacheSize, new CacheAll<T>());
   }
 
+  /**
+   * LRU cache constructor setting the maximum cache size to the given size and caching only data that is tested true 
+   * for the given caching rule.
+   * @param maxCacheSize Maximum cache size in bytes.
+   * @param cachingRule Cache rule determining which data will be cached.
+   */
   public LeastRecentlyUsed(long maxCacheSize, Predicate<T> cachingRule) {
     this(null, maxCacheSize, cachingRule);
   }
 
+  /**
+   * LRU cache constructor setting the maximum cache size to the given size and caching only data that is tested true 
+   * for the given caching rule. This constructor also lets you set the underlying storage, queried if an entry is not 
+   * found in the cache.
+   * @param cachedStorage Storage object to query if an entry is not found in the cache.
+   * @param maxCacheSize Maximum cache size in bytes.
+   * @param cachingRule Cache rule determining which data will be cached.
+   */
   public LeastRecentlyUsed(IDataStorage<T> cachedStorage, long maxCacheSize,
       Predicate<T> cachingRule) {
     super(cachedStorage, maxCacheSize, cachingRule,
-        (a, b) -> a.getTime() - b.getTime() < 0 ? -1
-            : (a.getTime() - b.getTime() > 0 ? 1
-                : (a.getId() < b.getId() ? -1 : (a.getId() == b.getId() ? 0 : 1))));
+        (a, b) -> {
+          if (a.getTime() - b.getTime() < 0) {
+        	return -1;
+          } else if (a.getTime() - b.getTime() > 0) {
+        	return 1;
+          } else if (a.getId() < b.getId()) {
+        	return -1;
+          } else if (a.getId() == b.getId()) {
+        	return 0;
+          } else {
+        	return 1;
+          }
+        });
   }
 
   @Override

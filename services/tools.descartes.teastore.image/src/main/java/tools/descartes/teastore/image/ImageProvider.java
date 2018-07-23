@@ -25,10 +25,21 @@ import tools.descartes.teastore.entities.ImageSizePreset;
 import tools.descartes.teastore.image.setup.ImageIDFactory;
 import tools.descartes.teastore.image.storage.IDataStorage;
 
+/**
+ * The actual image provider class containing the mapping between products, web interface static images, the 
+ * cache and underlying storage. Only one instance of an image provider can exist.
+ * @author Norbert Schmitt
+ */
 public enum ImageProvider {
 
+  /**
+   * Instance of the image provider.
+   */
   IP;
 
+  /**
+   * Standard image identifier if a product or web interface image cannot be found in the cache and storage.
+   */
   public static final String IMAGE_NOT_FOUND = "notFound";
 
   private ImageDB db;
@@ -39,14 +50,29 @@ public enum ImageProvider {
 
   }
 
+  /**
+   * Assign the image provider the mapping between products and web interface static images.
+   * @param imgDB Image database, mapping between products and web interface static images.
+   */
   public void setImageDB(ImageDB imgDB) {
     db = imgDB;
   }
 
+  /**
+   * Assign the storage containing all available images. This can either be a cache or the actual hard drive storage.
+   * @param imgStorage Image storage containing all available images.
+   */
   public void setStorage(IDataStorage<StoreImage> imgStorage) {
     storage = imgStorage;
   }
 
+  /**
+   * Searches and returns the requested product images in the requested sizes. If an image can not be found, the 
+   * standard "not found" image is returned. If an image is found in the incorrect size, the largest size of this image 
+   * will be scaled and the scaled version will be moved to storage and returned.
+   * @param images Map of product IDs and image sizes to search for.
+   * @return Map between product IDs and base64 encoded image data as string.
+   */
   public Map<Long, String> getProductImages(Map<Long, ImageSize> images) {
     Map<Long, String> result = new HashMap<>();
     for (Map.Entry<Long, ImageSize> entry : images.entrySet()) {
@@ -59,6 +85,13 @@ public enum ImageProvider {
     return result;
   }
 
+  /**
+   * Searches and returns the requested web interface images in the requested sizes. If an image can not be found, the 
+   * standard "not found" image is returned. If an image is found in the incorrect size, the largest size of this image 
+   * will be scaled and the scaled version will be moved to storage and returned.
+   * @param images Map of product IDs and image sizes to search for.
+   * @return Map between product IDs and base64 encoded image data as string.
+   */
   public Map<String, String> getWebUIImages(Map<String, ImageSize> images) {
     Map<String, String> result = new HashMap<>();
     for (Map.Entry<String, ImageSize> entry : images.entrySet()) {

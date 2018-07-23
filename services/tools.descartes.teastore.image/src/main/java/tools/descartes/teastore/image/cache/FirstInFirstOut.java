@@ -19,20 +19,48 @@ import tools.descartes.teastore.image.cache.entry.ICachable;
 import tools.descartes.teastore.image.cache.rules.CacheAll;
 import tools.descartes.teastore.image.storage.IDataStorage;
 
+/**
+ * FIFO cache implementation.
+ * @author Norbert Schmitt
+ *
+ * @param <T> Entry Type implementing ICachable.
+ */
 public class FirstInFirstOut<T extends ICachable<T>> extends AbstractQueueCache<T> {
 
+  /**
+   * FIFO cache standard constructor setting the maximum cache size to the standard value 
+   * {@link tools.descartes.teastore.image.cache.IDataCache.STD_MAX_CACHE_SIZE} and allowing all data to be cached.
+   */
   public FirstInFirstOut() {
     this(IDataCache.STD_MAX_CACHE_SIZE);
   }
 
+  /**
+   * FIFO cache constructor setting the maximum cache size to the given size and allowing all data to be cached.
+   * @param maxCacheSize Maximum cache size in bytes.
+   */
   public FirstInFirstOut(long maxCacheSize) {
     this(maxCacheSize, new CacheAll<T>());
   }
 
+  /**
+   * FIFO cache constructor setting the maximum cache size to the given size and caching only data that is tested true 
+   * for the given caching rule.
+   * @param maxCacheSize Maximum cache size in bytes.
+   * @param cachingRule Cache rule determining which data will be cached.
+   */
   public FirstInFirstOut(long maxCacheSize, Predicate<T> cachingRule) {
     this(null, maxCacheSize, cachingRule);
   }
 
+  /**
+   * FIFO cache constructor setting the maximum cache size to the given size and caching only data that is tested true 
+   * for the given caching rule. This constructor also lets you set the underlying storage, queried if an entry is not 
+   * found in the cache.
+   * @param cachedStorage Storage object to query if an entry is not found in the cache.
+   * @param maxCacheSize Maximum cache size in bytes.
+   * @param cachingRule Cache rule determining which data will be cached.
+   */
   public FirstInFirstOut(IDataStorage<T> cachedStorage, long maxCacheSize,
       Predicate<T> cachingRule) {
     super(cachedStorage, maxCacheSize, cachingRule);
@@ -40,7 +68,7 @@ public class FirstInFirstOut<T extends ICachable<T>> extends AbstractQueueCache<
 
   @Override
   protected void removeEntryByCachingStrategy() {
-    dataRemovedFromCache(entries.pollFirst().getData().getByteSize());
+    dataRemovedFromCache(getEntries().pollFirst().getData().getByteSize());
   }
 
 }

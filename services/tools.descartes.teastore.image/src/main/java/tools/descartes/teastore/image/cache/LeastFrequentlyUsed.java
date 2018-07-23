@@ -20,27 +20,63 @@ import tools.descartes.teastore.image.cache.entry.ICachable;
 import tools.descartes.teastore.image.cache.rules.CacheAll;
 import tools.descartes.teastore.image.storage.IDataStorage;
 
+/**
+ * Least frequently used (LFU) cache implementation.
+ * @author Norbert Schmitt
+ *
+ * @param <T> Entry Type implementing ICachable.
+ */
 public class LeastFrequentlyUsed<T extends ICachable<T>>
     extends AbstractTreeCache<T, CountedEntry<T>> {
 
+  /**
+   * LFU cache standard constructor setting the maximum cache size to the standard value 
+   * {@link tools.descartes.teastore.image.cache.IDataCache.STD_MAX_CACHE_SIZE} and allowing all data to be cached.
+   */
   public LeastFrequentlyUsed() {
     this(IDataCache.STD_MAX_CACHE_SIZE);
   }
 
+  /**
+   * LFU cache constructor setting the maximum cache size to the given size and allowing all data to be cached.
+   * @param maxCacheSize Maximum cache size in bytes.
+   */
   public LeastFrequentlyUsed(long maxCacheSize) {
     this(maxCacheSize, new CacheAll<T>());
   }
 
+  /**
+   * LFU cache constructor setting the maximum cache size to the given size and caching only data that is tested true 
+   * for the given caching rule.
+   * @param maxCacheSize Maximum cache size in bytes.
+   * @param cachingRule Cache rule determining which data will be cached.
+   */
   public LeastFrequentlyUsed(long maxCacheSize, Predicate<T> cachingRule) {
     this(null, maxCacheSize, cachingRule);
   }
 
+  /**
+   * LFU cache constructor setting the maximum cache size to the given size and caching only data that is tested true 
+   * for the given caching rule. This constructor also lets you set the underlying storage, queried if an entry is not 
+   * found in the cache.
+   * @param cachedStorage Storage object to query if an entry is not found in the cache.
+   * @param maxCacheSize Maximum cache size in bytes.
+   * @param cachingRule Cache rule determining which data will be cached.
+   */
   public LeastFrequentlyUsed(IDataStorage<T> cachedStorage, long maxCacheSize,
       Predicate<T> cachingRule) {
     super(cachedStorage, maxCacheSize, cachingRule,
-        (a, b) -> a.getId() == b.getId() ? 0
-            : (a.getUseCount() - b.getUseCount() != 0 ? a.getUseCount() - b.getUseCount()
-                : (a.getId() < b.getId() ? -1 : 1)));
+        (a, b) -> {
+          if (a.getId() == b.getId()) {
+            return 0;
+          } else if (a.getUseCount() - b.getUseCount() != 0) {
+        	  return a.getUseCount() - b.getUseCount();
+          } else if (a.getId() < b.getId()) {
+        	  return -1;
+          } else {
+        	  return 1;
+          }
+        });
   }
 
   @Override

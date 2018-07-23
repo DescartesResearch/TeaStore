@@ -297,6 +297,11 @@ public class ImageDB {
     }
   }
 
+  /**
+   * Removes an image id from the database. This will not delete an image but just remove all connections between a 
+   * product or WebUI id and the given image id.
+   * @param imageID Image ID to remove from this database.
+   */
   public void removeImageMapping(long imageID) {
     lock.writeLock().lock();
     try {
@@ -315,103 +320,4 @@ public class ImageDB {
       webui.remove(img.getKey());
     }
   }
-
-  // public static class TestRunner implements Runnable {
-  //
-  // long id;
-  // String name;
-  // ImageDB db;
-  // int nr;
-  //
-  // public TestRunner(int nr, long id, String name, ImageDB db) {
-  // this.id = id;
-  // this.name = name;
-  // this.db = db;
-  // this.nr = nr;
-  // }
-  //
-  // @Override
-  // public void run() {
-  // ThreadLocalRandom tlr = ThreadLocalRandom.current();
-  // int repeat = 100;
-  // for (int i = 0; i < repeat; i++) {
-  // ImageSize size = ImageSize.STD_IMAGE_SIZE;
-  // switch(tlr.nextInt(6)) {
-  // case 0: size = ImageSize.FULL; break;
-  // case 1: size = ImageSize.ICON; break;
-  // case 2: size = ImageSize.LOGO; break;
-  // case 3: size = ImageSize.MAIN_IMAGE; break;
-  // case 4: size = ImageSize.PORTRAIT; break;
-  // case 5: size = ImageSize.PREVIEW; break;
-  // }
-  //
-  // switch(tlr.nextInt(8)) {
-  // case 0: System.out.println(nr + "/" + Thread.currentThread().getName() + ":
-  // hasID_ID");db.hasImageID(id, size); break;
-  // case 1: System.out.println(nr + "/" + Thread.currentThread().getName() + ":
-  // hasID_NAME");db.hasImageID(name, size); break;
-  // case 2: System.out.println(nr + "/" + Thread.currentThread().getName() + ":
-  // getID_ID");db.getImageID(id, size); break;
-  // case 3: System.out.println(nr + "/" + Thread.currentThread().getName() + ":
-  // getID_NAME");db.getImageID(name, size); break;
-  // case 4: System.out.println(nr + "/" + Thread.currentThread().getName() + ":
-  // getSize");db.getImageSize(tlr.nextLong()); break;
-  // case 5: System.out.println(nr + "/" + Thread.currentThread().getName() + ":
-  // set_ID");db.setImageMapping(id, tlr.nextLong(), size); break;
-  // case 6: System.out.println(nr + "/" + Thread.currentThread().getName() + ":
-  // set_NAME");db.setImageMapping(name, tlr.nextLong(), size); break;
-  // case 7: System.out.println(nr + "/" + Thread.currentThread().getName() + ":
-  // remove");db.removeImageMapping(id); break;
-  // }}
-  // }
-  // }
-
-  // public static void main(String[] args) {
-  // ImageDB db = new ImageDB();
-  // Random r = new Random(800);
-  // // Fill image db
-  // int nrOfEntries = 100000;
-  // for (int i = 0; i < nrOfEntries; i++) {
-  // ImageSize size = ImageSize.STD_IMAGE_SIZE;
-  // switch(r.nextInt(6)) {
-  // case 0: size = ImageSize.FULL; break;
-  // case 1: size = ImageSize.ICON; break;
-  // case 2: size = ImageSize.LOGO; break;
-  // case 3: size = ImageSize.MAIN_IMAGE; break;
-  // case 4: size = ImageSize.PORTRAIT; break;
-  // case 5: size = ImageSize.PREVIEW; break;
-  // }
-  // switch(r.nextInt(2)) {
-  // case 0: db.setImageMapping(r.nextLong(), r.nextLong(), size); break;
-  // case 1: db.setImageMapping(Stream.generate(() -> r.nextInt(255))
-  // .limit(100)
-  // .map(ii -> (char)ii.intValue())
-  // .collect(StringBuilder::new, StringBuilder::append,
-  // StringBuilder::append).toString(), r.nextLong(), size); break;
-  // }
-  // }
-  // System.out.println("Filled image db");
-  //
-  // // Create runnables
-  // int runnables = 5000;
-  // ScheduledThreadPoolExecutor pool = new ScheduledThreadPoolExecutor(100);
-  // for (int i = 0; i < runnables; i++) {
-  // TestRunner tmp = new TestRunner(i, r.nextLong(), Stream.generate(() ->
-  // r.nextInt(255))
-  // .limit(100)
-  // .map(ii -> (char)ii.intValue())
-  // .collect(StringBuilder::new, StringBuilder::append,
-  // StringBuilder::append).toString(), db);
-  // pool.schedule(tmp, r.nextInt(5000), TimeUnit.MILLISECONDS);
-  // }
-  // System.out.println("All threads started");
-  // try {
-  // System.out.println(pool.awaitTermination(60, TimeUnit.SECONDS));
-  // } catch (InterruptedException e) {
-  // // NOTODO Auto-generated catch block
-  // e.printStackTrace();
-  // }
-  // System.out.println(pool.shutdownNow().size());
-  // System.out.println("All threads finished");
-  // }
 }

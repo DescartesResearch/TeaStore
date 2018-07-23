@@ -2,6 +2,12 @@ package tools.descartes.teastore.image.storage;
 
 import tools.descartes.teastore.image.cache.entry.ICachable;
 
+/**
+ * This is a dummy implementations to allows the image provider to be used as a cache only.
+ * @author Norbert Schmitt
+ *
+ * @param <T> Entry Type implementing ICachable.
+ */
 public class NoStorage<T extends ICachable<T>> implements IDataStorage<T> {
 
   @Override

@@ -26,19 +26,32 @@ import tools.descartes.teastore.image.cache.entry.ICacheEntry;
 import tools.descartes.teastore.image.storage.IDataStorage;
 import tools.descartes.teastore.image.storage.NoStorage;
 
+/**
+ * Abstract base class for all cache implementations.
+ * @author Norbert Schmitt
+ *
+ * @param <S> Internal Storage Type.
+ * @param <T> Entry Type implementing ICachable.
+ * @param <F> Entry Wrapper Type.
+ */
 public abstract class AbstractCache<S extends Collection<F>, T extends ICachable<T>, F extends ICacheEntry<T>>
     implements IDataCache<T> {
 
-  protected IDataStorage<T> cachedStorage;
-  protected S entries;
-
+  private IDataStorage<T> cachedStorage;
+  private S entries;
   private long maxCacheSize;
   private long currentCacheSize;
   private Predicate<T> cachingRule;
   private Logger log = LoggerFactory.getLogger(AbstractCache.class);
-
   private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
+  /**
+   * Basic abstract cache constructor for subclasses.  
+   * @param entries Collection to store entries.
+   * @param cachedStorage Storage object to query if an entry is not found in the cache.
+   * @param maxCacheSize Maximum memory used by the cache in bytes.
+   * @param cachingRule Caching rule determining if data should be cached.
+   */
   public AbstractCache(S entries, IDataStorage<T> cachedStorage, long maxCacheSize,
       Predicate<T> cachingRule) {
     if (entries == null) {
@@ -59,6 +72,22 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
     this.entries = entries;
     this.cachingRule = cachingRule;
     setMaxCacheSize(maxCacheSize);
+  }
+  
+  /**
+   * Returns the storage object queried if entry cannot be found in the cache.
+   * @return Storage object.
+   */
+  protected IDataStorage<T> getCachedStorage() {
+	  return cachedStorage;
+  }
+  
+  /**
+   * Returns the collection containing all cached entries.
+   * @return Entry collection.
+   */
+  protected S getEntries() {
+	  return entries;
   }
 
   private F findInEntries(long id) {
@@ -213,9 +242,7 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
       } else {
         result = cachedStorage.dataExists(id);
       }
-    } finally
-
-    {
+    } finally {
       lock.readLock().unlock();
     }
     return result;
@@ -262,6 +289,10 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
    * Modifier for current cache size
    */
 
+  /**
+   * Changes the current memory size of this cache by subtracting the given byte size from the current size.
+   * @param size Bytes removed from cache.
+   */
   protected void dataRemovedFromCache(long size) {
     lock.writeLock().lock();
     try {
@@ -275,6 +306,10 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
     }
   }
 
+  /**
+   * Changes the current memory size of this cache by adding the given byte size to the current size.
+   * @param size Bytes added to cache.
+   */
   protected void dataAddedToCache(long size) {
     lock.writeLock().lock();
     try {
@@ -288,16 +323,32 @@ public abstract class AbstractCache<S extends Collection<F>, T extends ICachable
    * Abstract methods to store data that is implementation specific
    */
 
+  /**
+   * Creates a wrapper object that can be stored in the cache, containing the given data.
+   * @param data Data to wrap in cache entry wrapper object.
+   * @return Wrapped cache entry.
+   */
   protected abstract F createEntry(T data);
 
+  /**
+   * Inserts a given entry wrapper object into the cache.
+   * @param data Wrapper object to insert into internal collection.
+   */
   protected void addEntry(F data) {
     if (entries.add(data)) {
       dataAddedToCache(data.getByteSize());
     }
   }
 
+  /**
+   * Evicts one entry in the cache according to the caching strategy of a specific implementation.
+   */
   protected abstract void removeEntryByCachingStrategy();
 
+  /**
+   * Tags an element as used and restores order in the entry collection as the wrapper object has changed.
+   * @param data Wrapper object to tag as used.
+   */
   protected void reorderAndTag(F data) {
     // In the best case, we only have to tag the data as used
     data.wasUsed();

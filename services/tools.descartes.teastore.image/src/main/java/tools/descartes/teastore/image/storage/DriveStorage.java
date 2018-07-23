@@ -168,14 +168,6 @@ public class DriveStorage implements IDataStorage<StoreImage> {
       l.writeLock().unlock();
     }
 
-    // Deliberately do not delete the locks from the map
-    // mapLock.writeLock().lock();
-    // try {
-    // lockedIDs.remove(data.getId());
-    // } finally {
-    // mapLock.writeLock().unlock();
-    // }
-
     return result;
   }
 

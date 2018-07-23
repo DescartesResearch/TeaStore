@@ -35,6 +35,10 @@ public final class ImageScaler {
 
   private static Logger log = LoggerFactory.getLogger(ImageScaler.class);
 
+  private ImageScaler() {
+	  
+  }
+  
   /**
    * Scales a given image by rendering the supplied image to the size, determined
    * by the given {@link tools.descartes.teastore.entities.ImageSize}. The method
@@ -113,8 +117,16 @@ public final class ImageScaler {
     }
 
     int newWidth = (int) (image.getWidth() * widthScaling);
+    if (newWidth == 0) {
+      newWidth = 1;
+    }
+    
     int newHeight = (int) (image.getHeight() * heightScaling);
-    return scale(image, newWidth == 0 ? 1 : newWidth, newHeight == 0 ? 1 : newHeight);
+    if (newHeight == 0) {
+      newHeight = 1;
+    }
+    
+    return scale(image, newWidth, newHeight);
   }
 
   /**
