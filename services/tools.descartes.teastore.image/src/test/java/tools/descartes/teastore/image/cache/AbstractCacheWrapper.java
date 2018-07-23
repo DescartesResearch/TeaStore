@@ -19,7 +19,7 @@ public final class AbstractCacheWrapper
 
   @Override
   protected void removeEntryByCachingStrategy() {
-    dataRemovedFromCache(entries.remove(0).getByteSize());
+    dataRemovedFromCache(getEntries().remove(0).getByteSize());
   }
 
   @Override

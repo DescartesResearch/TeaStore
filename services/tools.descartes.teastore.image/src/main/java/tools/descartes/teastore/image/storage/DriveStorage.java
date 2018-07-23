@@ -29,9 +29,13 @@ import tools.descartes.teastore.entities.ImageSize;
 import tools.descartes.teastore.image.ImageDB;
 import tools.descartes.teastore.image.StoreImage;
 
+/**
+ * Storage implementation that saves data in a directory on the physical disc.
+ * @author Norbert Schmitt
+ */
 public class DriveStorage implements IDataStorage<StoreImage> {
 
-  protected Path workingDir;
+  private Path workingDir;
   private ImageDB imgDB;
   private Predicate<StoreImage> storageRule;
   private Logger log = LoggerFactory.getLogger(DriveStorage.class);
@@ -39,6 +43,12 @@ public class DriveStorage implements IDataStorage<StoreImage> {
   private final HashMap<Long, ReadWriteLock> lockedIDs = new HashMap<>();
   private final ReadWriteLock mapLock = new ReentrantReadWriteLock();
 
+  /**
+   * Standard constructor creating a storage in the working directory on the physical disc.
+   * @param workingDir Working directory on the physical disc where the data is stored.
+   * @param imgDB Image database containing the IDs for the data.
+   * @param storageRule Storage rule which data can be stored.
+   */
   public DriveStorage(Path workingDir, ImageDB imgDB, Predicate<StoreImage> storageRule) {
     if (workingDir == null) {
       log.error("The supplied working directory is null.");
@@ -80,6 +90,12 @@ public class DriveStorage implements IDataStorage<StoreImage> {
     return l;
   }
 
+  /**
+   * Returns the stored image on the physical disc for a given image id at the given path.
+   * @param imgFile Image file path to load binary data.
+   * @param id Image id to acquire the correct lock prohibiting write access to the file.
+   * @return The image stored on disc or NULL if an IOException occurred during reading.
+   */
   protected StoreImage loadFromDisk(Path imgFile, long id) {
     byte[] imgData = null;
 

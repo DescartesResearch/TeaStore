@@ -15,10 +15,25 @@ package tools.descartes.teastore.image.setup;
 
 import java.util.Arrays;
 
+/**
+ * This enum contains the different storage rule implementations and their string representation.
+ * @author Norbert Schmitt
+ */
 public enum StorageRule {
 
-  ALL("All"), FULL_SIZE_IMG("Full-size-images");
+  /**
+   * Store all data without restrictions.
+   */
+  ALL("All"), 
+  
+  /** 
+   * Store only images if their size is equal to {@link tools.descartes.teastore.entities.ImageSizePreset.FULL}.
+   */
+  FULL_SIZE_IMG("Full-size-images");
 
+  /**
+   * Standard storage rule implementation used by the image provider service.
+   */
   public static final StorageRule STD_STORAGE_RULE = ALL;
 
   private final String strRepresentation;
@@ -26,11 +41,21 @@ public enum StorageRule {
   private StorageRule(String strRepresentation) {
     this.strRepresentation = strRepresentation;
   }
-
+  
+  /**
+   * Returns the string representation of the used storage rule implementation.
+   * @return String representation.
+   */
   public String getStrRepresentation() {
     return new String(strRepresentation);
   }
 
+  /**
+   * Convert string representation to the correct object. Will return the standard storage rule implementation if the 
+   * string representation is unknown.
+   * @param strStorageRule String representation of the storage rule implementation.
+   * @return Enum value of the storage rule implementation.
+   */
   public static StorageRule getStorageRuleFromString(String strStorageRule) {
     return Arrays.asList(StorageRule.values()).stream()
         .filter(mode -> mode.strRepresentation.equals(strStorageRule)).findFirst()

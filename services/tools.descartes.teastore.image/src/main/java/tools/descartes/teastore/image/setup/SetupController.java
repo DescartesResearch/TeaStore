@@ -70,25 +70,55 @@ import tools.descartes.teastore.image.storage.IDataStorage;
 import tools.descartes.teastore.image.storage.rules.StoreAll;
 import tools.descartes.teastore.image.storage.rules.StoreLargeImages;
 
+/**
+ * Image provider setup class. Connects to the persistence service to collect all available products and generates 
+ * images from the received products and their category. Searches for existing images to be used in the web interface 
+ * and adds them to the storage / cache.
+ * @author Norbert Schmitt
+ */
 public enum SetupController {
 
+  /**
+   * Instance of the setup controller.
+   */
   SETUP;
 
+  /**
+   * Constants used during image provider setup.
+   * @author Norbert Schmitt
+   */
   private interface SetupControllerConstants {
-    public  static final Path STD_WORKING_DIR = Paths.get("images");
-    // Longest wait period before querying the persistence again if it is finished
-    // creating entries
+	  
+	/**
+	 * Standard working directory in which the images are stored.
+	 */
+    public static final Path STD_WORKING_DIR = Paths.get("images");
+    
+    /**
+     * Longest wait period before querying the persistence again if it is finished creating entries.
+     */
     public final int PERSISTENCE_CREATION_MAX_WAIT_TIME = 120000;
-    // Wait time in ms before checking again for an existing persistence service
+    
+    /**
+     * Wait time in ms before checking again for an existing persistence service.
+     */
     public static final List<Integer> PERSISTENCE_CREATION_WAIT_TIME = Arrays.asList(1000, 2000,
         5000, 10000, 30000, 60000);
-    // Number of available logical cpus for image creation
+    
+    /**
+     * Number of available logical cpus for image creation.
+     */
     public static final int CREATION_THREAD_POOL_SIZE = Runtime.getRuntime().availableProcessors();
-    // Wait time in ms for the image creation thread pool to terminate all threads.
+    
+    /**
+     * Wait time in ms for the image creation thread pool to terminate all threads.
+     */
     public static final long CREATION_THREAD_POOL_WAIT = 500;
-    // Wait time in ms (per image to generate) before an image provider service is
-    // registered if there is another
-    // image provider service registered.
+    
+    /**
+     * Wait time in ms (per image to generate) before an image provider service is registered if there is another 
+     * image provider service registered.
+     */
     public static final long CREATION_THREAD_POOL_WAIT_PER_IMG_NR = 70;
   }
 
@@ -136,16 +166,20 @@ public enum SetupController {
         log.info("Persistence call timed out.", timeout);
       }
 
-      if (result == null ? false : Boolean.parseBoolean(result.readEntity(String.class))) {
-        if (result != null) {
-          result.close();
-        }
-        break;
+      boolean test = false;
+      if (result != null) {
+    	  test = Boolean.parseBoolean(result.readEntity(String.class));
+    	  if (test) {
+    		  result.close();
+    	  }
+    	  break;
       }
 
       try {
-        int nextWaitTime = waitTimes.hasNext() ? waitTimes.next()
-            : SetupControllerConstants.PERSISTENCE_CREATION_MAX_WAIT_TIME;
+    	int nextWaitTime = SetupControllerConstants.PERSISTENCE_CREATION_MAX_WAIT_TIME;
+    	if (waitTimes.hasNext()) {
+    		nextWaitTime = waitTimes.next();
+    	}
         log.info("Persistence not reachable. Waiting for {}ms.", nextWaitTime);
         Thread.sleep(nextWaitTime);
       } catch (InterruptedException interrupted) {
@@ -213,7 +247,11 @@ public enum SetupController {
       result.close();
       log.info("{} categories found.", categories.size());
     }
-    return categories == null ? new ArrayList<Category>() : categories;
+    
+    if (categories == null) {
+      return new ArrayList<Category>();
+    }
+    return categories;
   }
 
   private List<Long> convertToIDs(List<Product> products) {
@@ -241,6 +279,9 @@ public enum SetupController {
     return result;
   }
 
+  /**
+   * Generates images for the product IDs and categories received from the persistence service.
+   */
   public void generateImages() {
     List<Category> categories = fetchCategories();
     HashMap<Category, List<Long>> products = new HashMap<>();
@@ -249,6 +290,11 @@ public enum SetupController {
     generateImages(products, matchCategoriesToImage(categories));
   }
 
+  /**
+   * Generates images for the given product IDs and categories.
+   * @param products Map of categories and the corresponding products.
+   * @param categoryImages Category image representing a specific category.
+   */
   public void generateImages(Map<Category, List<Long>> products,
       Map<Category, BufferedImage> categoryImages) {
     nrOfImagesToGenerate = products.entrySet().stream().flatMap(e -> e.getValue().stream()).count();
@@ -266,6 +312,9 @@ public enum SetupController {
         SetupControllerConstants.CREATION_THREAD_POOL_SIZE);
   }
 
+  /**
+   * Search for category images in the resource folder.
+   */
   public void detectCategoryImages() {
     log.info("Trying to find images that indicate categories in generated images.");
 
@@ -299,6 +348,9 @@ public enum SetupController {
     log.info("Found {} images for categories.", nrOfImagesForCategory);
   }
 
+  /**
+   * Create the working directory in which all generated images are stored if it is not existing.
+   */
   public void createWorkingDir() {
     if (!workingDir.toFile().exists()) {
       if (!workingDir.toFile().mkdir()) {
@@ -314,8 +366,13 @@ public enum SetupController {
     }
   }
 
+  /**
+   * Returns the path to a given resource, category image or web interface image.
+   * @param resource Resource to find path.
+   * @return Path to the given resource or NULL if the resource could not be found.
+   */
   public Path getPathToResource(String resource) {
-    // NOTODO: Rework the code piece fetching the existing images until the next
+    // Rework the code piece fetching the existing images until the next
     // comment
     URL url = this.getClass().getResource(resource);
     Path dir = null;
@@ -333,10 +390,17 @@ public enum SetupController {
     return dir;
   }
 
+  /**
+   * Search for web interface images and add them to the existing image database.
+   */
   public void detectExistingImages() {
     detectExistingImages(imgDB);
   }
 
+  /**
+   * Search for web interface images and add them to the given image database.
+   * @param db Image database found web interface images will be added to.
+   */
   public void detectExistingImages(ImageDB db) {
     if (db == null) {
       log.error("The supplied image database is null.");
@@ -400,6 +464,11 @@ public enum SetupController {
         dir.toAbsolutePath().toString(), nrOfImagesExisting);
   }
 
+  /**
+   * Sets the cache size of the specific implementation.
+   * @param cacheSize Positive cache size in bytes.
+   * @return True if the cache size was set successfully, otherwise false.
+   */
   public boolean setCacheSize(long cacheSize) {
     if (cacheSize < 0) {
       log.info("Tried to set cache size to a value below zero. Keeping old value");
@@ -412,10 +481,17 @@ public enum SetupController {
     return cache.setMaxCacheSize(cacheSize);
   }
 
+  /**
+   * Delete all images from the current working directory.
+   */
   public void deleteImages() {
     deleteUnusedImages(new ArrayList<>());
   }
 
+  /**
+   * Delete all images from the current working directory, except the images with the IDs given.
+   * @param imagesToKeep List of images to keep.
+   */
   public void deleteUnusedImages(List<Long> imagesToKeep) {
     File currentDir = workingDir.toFile();
     int nrOfImagesDeleted = 0;
@@ -433,6 +509,9 @@ public enum SetupController {
         workingDir.toAbsolutePath().toString(), nrOfImagesDeleted);
   }
 
+  /**
+   * Deletes the current working directory.
+   */
   public void deleteWorkingDir() {
     File currentDir = workingDir.toFile();
 
@@ -443,6 +522,9 @@ public enum SetupController {
     log.info("Deleted working directory {}.", workingDir.toAbsolutePath().toString());
   }
 
+  /**
+   * Sets up the storage, storage rule, cache implementation and caching rule according to the configuration.
+   */
   public void setupStorage() {
     Predicate<StoreImage> storagePredicate = null;
     switch (storageRule) {
@@ -506,17 +588,33 @@ public enum SetupController {
     log.info("Storage setup done.");
   }
 
+  /**
+   * Give the image provider the configured image database and cache / storage object containing all images referenced 
+   * in the image database.
+   */
   public void configureImageProvider() {
     ImageProvider.IP.setImageDB(imgDB);
-    ImageProvider.IP.setStorage(cache == null ? storage : cache);
+    if (cache == null) {
+    	ImageProvider.IP.setStorage(storage);
+    } else {
+    	ImageProvider.IP.setStorage(cache);
+    }
 
     log.info("Storage and image database handed over to image provider");
   }
 
+  /**
+   * Returns the current working directory.
+   * @return Current working directory.
+   */
   public Path getWorkingDir() {
     return workingDir;
   }
 
+  /**
+   * Checks whether the setup is finished and complete or not.
+   * @return True if the setup is finished and complete, otherwise false.
+   */
   public boolean isFinished() {
     if (storage == null) {
       return false;
@@ -527,6 +625,10 @@ public enum SetupController {
     return isFinished.get();
   }
 
+  /**
+   * Returns a string containing the current state of the image provider setup and configuration settings.
+   * @return A string containing the current state of the image provider setup and configuration settings.
+   */
   public String getState() {
     StringBuilder sb = new StringBuilder();
 
@@ -542,8 +644,11 @@ public enum SetupController {
         .append(System.lineSeparator());
     sb.append("Caching Rule: ").append(cachingRule.getStrRepresentation())
         .append(System.lineSeparator());
-    sb.append("Creator Thread: ")
-        .append(imgCreationPool.getQueue().size() != 0 ? "Running" : "Finished")
+    String poolState = "Running";
+    if (imgCreationPool.getQueue().size() == 0) {
+    	poolState = "Finished";
+    }
+    sb.append("Creator Thread: ").append(poolState)
         .append(System.lineSeparator());
     sb.append("Images Created: ").append(String.valueOf(nrOfImagesGenerated.get())).append(" / ")
         .append(String.valueOf(nrOfImagesToGenerate)).append(System.lineSeparator());
@@ -591,11 +696,20 @@ public enum SetupController {
    * Convenience methods
    */
 
+  /**
+   * Deletes all images and the current working directory.
+   */
   public void teardown() {
     deleteImages();
     deleteWorkingDir();
   }
 
+  /**
+   * Deletes all images and the current working directory and starts the setup by generating product images and 
+   * adding web interface images to the image database. The final cache / storage and image database is then handed 
+   * over to the image provider instance. If this image provider service is the not the first image provider and other 
+   * image provider services are registered, the registration is delayed until all images are generated.
+   */
   public void startup() {
     // Delete all images in case the image provider was not shutdown gracefully last
     // time, leaving images on disk
@@ -619,6 +733,12 @@ public enum SetupController {
     isFinished.set(true);
   }
 
+  /**
+   * Deletes all images and the current working directory and starts the setup by generating product images and 
+   * adding web interface images to the image database. The final cache / storage and image database is then handed 
+   * over to the image provider instance. The reconfiguration and image generation takes place in a background thread. 
+   * This service remains registered and might receive request from other services.
+   */
   public void reconfiguration() {
     Thread x = new Thread() {
 

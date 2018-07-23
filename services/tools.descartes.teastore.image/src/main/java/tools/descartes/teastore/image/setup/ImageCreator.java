@@ -24,15 +24,55 @@ import java.util.stream.Stream;
 
 import tools.descartes.teastore.entities.ImageSize;
 
-public class ImageCreator {
+/**
+ * Helper class drawing images from random shapes and texts.
+ * @author Norbert Schmitt
+ */
+public final class ImageCreator {
 
+  /**
+   * Random number generator seed.
+   */
   public static final long STD_SEED = 12345;
+  
+  /**
+   * Standard number of shapes added for each image.
+   */
   public static final int STD_NR_OF_SHAPES_PER_IMAGE = 10;
+  
+  /**
+   * Maximum RGB color code used in determining the color of the background, a shape or text.
+   */
   public static final int MAX_RGB = 255;
+  
+  /**
+   * Maximum font size of random text in an image.
+   */
   public static final int MAX_FONT_SIZE = 200;
+  
+  /**
+   * Maximum number of characters of random text in an image.
+   */
   public static final int MAX_TEXT_LENGTH = 30;
+  
+  /**
+   * Maximum number for ascii character.
+   */
   public static final int MAX_CHAR_SIZE = 255;
 
+  private ImageCreator() {
+	  
+  }
+  
+  /**
+   * Create an image with the given number of shapes, with the given size. The shapes will be added to the supplied 
+   * buffered image using the given random number generator.
+   * @param shapesPerImage Number of shapes added to the buffered image.
+   * @param categoryImg Image added at the end representing the product category.
+   * @param size Size of the image in pixel.
+   * @param rand Random number generator.
+   * @return Returns the given buffered image with the added shapes and category image.
+   */
   public static BufferedImage createImage(int shapesPerImage, BufferedImage categoryImg,
       ImageSize size, Random rand) {
     BufferedImage img = new BufferedImage(size.getWidth(), size.getHeight(), BufferedImage.OPAQUE);
@@ -56,6 +96,9 @@ public class ImageCreator {
         break;
       case 3:
         makeText(graphics, size, rand);
+        break;
+      default:
+        makeRectangle(graphics, size, rand);
         break;
       }
     }
@@ -135,6 +178,9 @@ public class ImageCreator {
     case 3:
       fontName = Font.DIALOG;
       break;
+    default:
+      fontName = Font.SANS_SERIF;
+      break;
     }
 
     int fontStyle = Font.PLAIN;
@@ -147,6 +193,9 @@ public class ImageCreator {
       break;
     case 2:
       fontStyle = Font.ITALIC;
+      break;
+    default:
+      fontStyle = Font.PLAIN;
       break;
     }
 
