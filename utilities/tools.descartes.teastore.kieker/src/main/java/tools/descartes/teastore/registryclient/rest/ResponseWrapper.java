@@ -28,56 +28,57 @@ public class ResponseWrapper {
 
 		final String operationExecutionHeader = response.getHeaderString(HEADER_FIELD);
 		if ((operationExecutionHeader == null) || (operationExecutionHeader.equals(""))) {
-			LOG.warn("Response without tracking id was found");
-		}
-		
-		final String[] headerArray = operationExecutionHeader.split(",");
-
-		// Extract session id
-		sessionId = headerArray[1];
-		if ("null".equals(sessionId)) {
-			sessionId = OperationExecutionRecord.NO_SESSION_ID;
-		}
-
-		// Extract EOI
-		final String eoiStr = headerArray[2];
-		eoi = -1;
-		try {
-			eoi = Integer.parseInt(eoiStr);
-		} catch (final NumberFormatException exc) {
-			LOG.warn("Invalid eoi", exc);
-		}
-
-		// Extract ESS
-		final String essStr = headerArray[3];
-		ess = -1;
-		try {
-			ess = Integer.parseInt(essStr);
-		} catch (final NumberFormatException exc) {
-			LOG.warn("Invalid ess", exc);
-		}
-
-		// Extract trace id
-		final String traceIdStr = headerArray[0];
-		if (traceIdStr != null) {
-			try {
-				traceId = Long.parseLong(traceIdStr);
-			} catch (final NumberFormatException exc) {
-				LOG.warn("Invalid trace id", exc);
-			}
+		  LOG.warn("Response without tracking id was found");
 		} else {
+		
+		  final String[] headerArray = operationExecutionHeader.split(",");
+	
+		  // Extract session id
+		  sessionId = headerArray[1];
+		  if ("null".equals(sessionId)) {
+			sessionId = OperationExecutionRecord.NO_SESSION_ID;
+		  }
+
+		  // Extract EOI
+		  final String eoiStr = headerArray[2];
+		  eoi = -1;
+		  try {
+			eoi = Integer.parseInt(eoiStr);
+		  } catch (final NumberFormatException exc) {
+			LOG.warn("Invalid eoi", exc);
+		  }
+	
+		  // Extract ESS
+		  final String essStr = headerArray[3];
+		  ess = -1;
+		  try {
+			ess = Integer.parseInt(essStr);
+		  } catch (final NumberFormatException exc) {
+			LOG.warn("Invalid ess", exc);
+		  }
+	
+		  // Extract trace id
+		  final String traceIdStr = headerArray[0];
+		  if (traceIdStr != null) {
+			try {
+			  traceId = Long.parseLong(traceIdStr);
+			} catch (final NumberFormatException exc) {
+			  LOG.warn("Invalid trace id", exc);
+			}
+		  } else {
 			traceId = CF_REGISTRY.getUniqueTraceId();
 			sessionId = SESSION_ID_ASYNC_TRACE;
 			eoi = 0; // EOI of this execution
 			ess = 0; // ESS of this execution
-		}
-
-		// Store thread-local values
-		CF_REGISTRY.storeThreadLocalTraceId(traceId);
-		CF_REGISTRY.storeThreadLocalEOI(eoi); // this execution has EOI=eoi; next execution will get eoi with incrementAndRecall
-		CF_REGISTRY.storeThreadLocalESS(ess); // this execution has ESS=ess
-		SESSION_REGISTRY.storeThreadLocalSessionId(sessionId);
-		return response;
+		  }
+	
+		  // Store thread-local values
+		  CF_REGISTRY.storeThreadLocalTraceId(traceId);
+		  CF_REGISTRY.storeThreadLocalEOI(eoi); // this execution has EOI=eoi; next execution will get eoi with incrementAndRecall
+		  CF_REGISTRY.storeThreadLocalESS(ess); // this execution has ESS=ess
+		  SESSION_REGISTRY.storeThreadLocalSessionId(sessionId);
+		  return response;
+	   }
 	}
 
 }

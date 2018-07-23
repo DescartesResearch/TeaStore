@@ -173,8 +173,8 @@ public class CategoryServlet extends AbstractUIServlet {
         return navigation;
 
       } else {
-        int lowerbound = (int) Math.ceil((numberpagination - 1) / 2);
-        int upperbound = (int) Math.floor((numberpagination - 1) / 2);
+        int lowerbound = (int) Math.ceil(((double)numberpagination - 1.0) / 2.0);
+        int upperbound = (int) Math.floor(((double)numberpagination - 1.0) / 2.0);
         int up = Math.min(page + upperbound, maxpages);
         int down = Math.max(page - lowerbound, 1);
         for (int i = down; i <= up; i++) {
