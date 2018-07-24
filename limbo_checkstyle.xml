@@ -72,7 +72,6 @@
     <module name="RightCurly"/>
     <module name="AvoidInlineConditionals"/>
     <module name="EmptyStatement"/>
-    <module name="EqualsHashCode"/>
     <module name="HiddenField">
       <property name="severity" value="ignore"/>
       <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>

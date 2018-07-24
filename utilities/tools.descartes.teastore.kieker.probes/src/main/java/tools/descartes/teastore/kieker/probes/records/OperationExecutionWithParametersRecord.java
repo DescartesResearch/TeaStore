@@ -21,7 +21,7 @@ public class OperationExecutionWithParametersRecord extends OperationExecutionRe
   private static final long serialVersionUID = 5027368663979062260L;
 
   /** Descriptive definition of the serialization size of the record. */
-  public static final int SIZE = TYPE_SIZE_STRING // OperationExecutionRecord.operationSignature
+  private static final int SIZE = TYPE_SIZE_STRING // OperationExecutionRecord.operationSignature
       + TYPE_SIZE_STRING // OperationExecutionRecord.sessionId
       + TYPE_SIZE_LONG // OperationExecutionRecord.traceId
       + TYPE_SIZE_LONG // OperationExecutionRecord.tin
@@ -34,7 +34,7 @@ public class OperationExecutionWithParametersRecord extends OperationExecutionRe
       + TYPE_SIZE_STRING // IPayloadCharacterization.returnType
       + TYPE_SIZE_STRING; // IPayloadCharacterization.returnVal
 
-  public static final Class<?>[] TYPES = { String.class, // OperationExecutionRecord.operationSignature
+  private static final Class<?>[] TYPES = { String.class, // OperationExecutionRecord.operationSignature
       String.class, // OperationExecutionRecord.sessionId
       long.class, // OperationExecutionRecord.traceId
       long.class, // OperationExecutionRecord.tin
@@ -47,16 +47,6 @@ public class OperationExecutionWithParametersRecord extends OperationExecutionRe
       String.class, // IPayloadCharacterization.returnType
       String.class, // IPayloadCharacterization.returnVal
   };
-
-  /** user-defined constants. */
-  public static final String[] NO_PARAMETERS = {};
-  public static final String NO_RETURN = "<no-return-type>";
-
-  /** default constants. */
-  public static final String[] PARAMETER_TYPES = NO_PARAMETERS;
-  public static final String[] PARAMETER_VALUES = NO_PARAMETERS;
-  public static final String RETURN_TYPE = NO_RETURN;
-  public static final String RETURN_VALUE = NO_RETURN;
 
   /** property name array. */
   private static final String[] PROPERTY_NAMES = { "operationSignature", "sessionId", "traceId",
@@ -72,18 +62,18 @@ public class OperationExecutionWithParametersRecord extends OperationExecutionRe
   /**
    * Creates a new instance of this class using the given parameters.
    * 
-   * @param operationSignature
-   * @param sessionId
-   * @param traceId
-   * @param tin
-   * @param tout
-   * @param hostname
-   * @param eoi
-   * @param ess
-   * @param parameterTypes
-   * @param parameterValues
-   * @param returnType
-   * @param returnValue
+   * @param operationSignature string representation of operation signature
+   * @param sessionId sessionid
+   * @param traceId traceid
+   * @param tin time in
+   * @param tout time out
+   * @param hostname hostname
+   * @param eoi eoi
+   * @param ess ess
+   * @param parameterTypes array of parameter types
+   * @param parameterValues array of parameter values
+   * @param returnType return type
+   * @param returnValue return value
    */
   public OperationExecutionWithParametersRecord(final String operationSignature,
       final String sessionId, final long traceId, final long tin, final long tout,
@@ -97,21 +87,22 @@ public class OperationExecutionWithParametersRecord extends OperationExecutionRe
   }
 
   /**
+   * Constructor.
    * @param deserializer
    *          The deserializer to use
    */
   public OperationExecutionWithParametersRecord(final IValueDeserializer deserializer) {
     super(deserializer);
     // load array sizes
-    int parameters_size0 = deserializer.getInt();
-    this.parameterTypes = new String[parameters_size0];
-    for (int i0 = 0; i0 < parameters_size0; i0++) {
+    int parametersSize0 = deserializer.getInt();
+    this.parameterTypes = new String[parametersSize0];
+    for (int i0 = 0; i0 < parametersSize0; i0++) {
       this.parameterTypes[i0] = deserializer.getString();
   }
     // load array sizes
-    int values_size0 = deserializer.getInt();
-    this.parameterValues = new String[values_size0];
-    for (int i0 = 0; i0 < values_size0; i0++) {
+    int valuesSize0 = deserializer.getInt();
+    this.parameterValues = new String[valuesSize0];
+    for (int i0 = 0; i0 < valuesSize0; i0++) {
       this.parameterValues[i0] = deserializer.getString();
     }
     
@@ -147,15 +138,15 @@ public class OperationExecutionWithParametersRecord extends OperationExecutionRe
   public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
     super.serialize(serializer);
     // store array sizes
-    int parameters_size0 = this.getParameterTypes().length;
-    serializer.putInt(parameters_size0);
-    for (int i0 = 0; i0 < parameters_size0; i0++) {
+    int parametersSize0 = this.getParameterTypes().length;
+    serializer.putInt(parametersSize0);
+    for (int i0 = 0; i0 < parametersSize0; i0++) {
       serializer.putString(this.getParameterTypes()[i0]);
   }
     // store array sizes
-    int values_size0 = this.getParameterValues().length;
-    serializer.putInt(values_size0);
-    for (int i0 = 0; i0 < values_size0; i0++) {
+    int valuesSize0 = this.getParameterValues().length;
+    serializer.putInt(valuesSize0);
+    for (int i0 = 0; i0 < valuesSize0; i0++) {
       serializer.putString(this.getParameterValues()[i0]);
     }
 
@@ -250,21 +241,21 @@ public class OperationExecutionWithParametersRecord extends OperationExecutionRe
       return false;
     }
     // get array length
-    int _parameters_size0 = this.getParameterTypes().length;
-    if (_parameters_size0 != castedRecord.getParameterTypes().length) {
+    int parametersSize0 = this.getParameterTypes().length;
+    if (parametersSize0 != castedRecord.getParameterTypes().length) {
       return false;
     }
-    for (int i0 = 0; i0 < _parameters_size0; i0++) {
+    for (int i0 = 0; i0 < parametersSize0; i0++) {
       if (!this.getParameterTypes()[i0].equals(castedRecord.getParameterTypes()[i0])) {
         return false;
       }
     }
     // get array length
-    int values_size0 = this.getParameterValues().length;
-    if (values_size0 != castedRecord.getParameterValues().length) {
+    int valuesSize0 = this.getParameterValues().length;
+    if (valuesSize0 != castedRecord.getParameterValues().length) {
       return false;
     }
-    for (int i0 = 0; i0 < values_size0; i0++) {
+    for (int i0 = 0; i0 < valuesSize0; i0++) {
       if (!this.getParameterValues()[i0].equals(castedRecord.getParameterValues()[i0])) {
         return false;
       }
@@ -272,18 +263,34 @@ public class OperationExecutionWithParametersRecord extends OperationExecutionRe
     return true;
   }
 
+  /**
+   * Getter for parameter types.
+   * @return parameter types
+   */
   public final String[] getParameterTypes() {
     return this.parameterTypes;
   }
 
+  /**
+   * Getter for parameter values.
+   * @return parameter values
+   */
   public final String[] getParameterValues() {
     return this.parameterValues;
   }
 
+  /**
+   * Getter for return type.
+   * @return return type
+   */
   public String getReturnType() {
     return this.returnType;
   }
 
+  /**
+   * Getter for return value.
+   * @return return value
+   */
   public String getReturnValue() {
     return this.returnValue;
   }
