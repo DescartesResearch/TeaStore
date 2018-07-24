@@ -55,7 +55,9 @@ public enum ImageProvider {
    * @param imgDB Image database, mapping between products and web interface static images.
    */
   public void setImageDB(ImageDB imgDB) {
-    db = imgDB;
+	if (imgDB != null) {
+	  db = imgDB;
+	}
   }
 
   /**
@@ -63,7 +65,9 @@ public enum ImageProvider {
    * @param imgStorage Image storage containing all available images.
    */
   public void setStorage(IDataStorage<StoreImage> imgStorage) {
-    storage = imgStorage;
+	if (imgStorage != null) {
+      storage = imgStorage;
+	}
   }
 
   /**

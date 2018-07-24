@@ -291,7 +291,7 @@ public abstract class AbstractRecommenderTest {
 
 		// compare type
 		List<Long> recommended = new ArrayList<Long>();
-		recommended.add(new Long(-1));
+		recommended.add(-1L);
 
 		Assert.assertEquals(recommended.getClass(),
 				getAlgo().recommendProducts(allUsers.get(2).getId(), recommendMulti).getClass());

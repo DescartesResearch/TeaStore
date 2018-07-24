@@ -15,8 +15,8 @@ import tools.descartes.teastore.image.cache.entry.AbstractEntry;
 
 public class TestAbstractEntry {
 
-  private final long mockedByteSize = 5000;
-  private final long mockedID = 1234567890;
+  private static final long MOCKED_BYTE_SIZE = 5000;
+  private static final long MOCKED_ID = 1234567890;
 
   @Mock
   private StoreImage mockedImg;
@@ -28,8 +28,8 @@ public class TestAbstractEntry {
   @Before
   public void initialize() {
     MockitoAnnotations.initMocks(this);
-    when(mockedImg.getByteSize()).thenReturn(mockedByteSize);
-    when(mockedImg.getId()).thenReturn(mockedID);
+    when(mockedImg.getByteSize()).thenReturn(MOCKED_BYTE_SIZE);
+    when(mockedImg.getId()).thenReturn(MOCKED_ID);
     when(mockedImgNotEqual.getByteSize()).thenReturn(300L);
     when(mockedImgNotEqual.getId()).thenReturn(9876543210L);
     when(nullEntry.getData()).thenReturn(null);
@@ -60,13 +60,13 @@ public class TestAbstractEntry {
   @Test
   public void testGetByteSize() {
     AbstractEntryWrapper uut = new AbstractEntryWrapper(mockedImg);
-    assertEquals(mockedByteSize, uut.getByteSize());
+    assertEquals(MOCKED_BYTE_SIZE, uut.getByteSize());
   }
 
   @Test
   public void testGetID() {
     AbstractEntryWrapper uut = new AbstractEntryWrapper(mockedImg);
-    assertEquals(mockedID, uut.getId());
+    assertEquals(MOCKED_ID, uut.getId());
   }
 
   @Test

@@ -112,7 +112,7 @@ public class TestStoreImage {
   }
 
   @Test
-  public void testGetId() {
+  public void testGetID() {
     StoreImage uut = new StoreImage(IMG_ID1, img, ImageSizePreset.ICON.getSize());
     assertEquals(IMG_ID1, uut.getId());
   }

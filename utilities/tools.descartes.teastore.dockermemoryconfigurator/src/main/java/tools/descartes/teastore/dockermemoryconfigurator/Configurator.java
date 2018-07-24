@@ -50,7 +50,7 @@ public final class Configurator {
 		long percentage = DEFAULT_PERCENTAGE;
 		if (args.length > 0) {
 			String arg0 = args[0].trim();
-			if (arg0 != null && !arg0.isEmpty()) {
+			if (!arg0.isEmpty()) {
 				try {
 					percentage = Long.parseLong(arg0);
 				} catch (NumberFormatException e) {

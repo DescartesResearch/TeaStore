@@ -63,12 +63,12 @@ public class CategoryServlet extends AbstractUIServlet {
       throws ServletException, IOException, LoadBalancerTimeoutException {
     if (request.getParameter("category") != null) {
       checkforCookie(request, response);
-      long categoryID = Long.valueOf(request.getParameter("category"));
+      long categoryID = Long.parseLong(request.getParameter("category"));
 
       Category category = LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "categories",
           Category.class, categoryID);
 
-      int products = Integer.valueOf(ServiceLoadBalancer.loadBalanceRESTOperation(
+      int products = Integer.parseInt(ServiceLoadBalancer.loadBalanceRESTOperation(
           Service.PERSISTENCE, "products", Product.class,
           client -> ResponseWrapper.wrap(HttpWrapper
               .wrap(client.getEndpointTarget().path("count").path(String.valueOf(categoryID)))
@@ -76,12 +76,12 @@ public class CategoryServlet extends AbstractUIServlet {
 
       int numberProducts = INITIAL_PRODUCT_DISPLAY_COUNT;
       if (request.getAttribute("numberProducts") != null) {
-        numberProducts = Integer.valueOf(request.getAttribute("numberProducts").toString());
+        numberProducts = Integer.parseInt(request.getAttribute("numberProducts").toString());
       }
 
       int page = 1;
       if (request.getParameter("page") != null) {
-        int pagenumber = Integer.valueOf(request.getParameter("page"));
+        int pagenumber = Integer.parseInt(request.getParameter("page"));
         int maxpages = (int) Math.ceil(((double) products) / numberProducts);
         if (pagenumber <= maxpages) {
           page = pagenumber;

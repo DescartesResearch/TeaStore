@@ -330,7 +330,7 @@ public enum SetupController {
     }
 
     nrOfImagesForCategory = 0;
-    if (dir != null && dir.exists() && dir.isDirectory()) {
+    if (dir.exists() && dir.isDirectory()) {
       File[] fileList = dir.listFiles();
       if (fileList == null) {
     	  return;
@@ -513,8 +513,10 @@ public enum SetupController {
       }
       for (File file : fileList) {
         if (file.isFile() && !imagesToKeep.contains(Long.parseLong(file.getName()))) {
-          file.delete();
-          nrOfImagesDeleted++;
+          boolean isDeleted = file.delete();
+          if (isDeleted) {
+            nrOfImagesDeleted++;
+          }
         }
       }
     }
@@ -528,32 +530,37 @@ public enum SetupController {
    */
   public void deleteWorkingDir() {
     File currentDir = workingDir.toFile();
+    boolean isDeleted = false;
 
     if (currentDir.exists() && currentDir.isDirectory()) {
-      currentDir.delete();
+      isDeleted = currentDir.delete();
     }
 
-    log.info("Deleted working directory {}.", workingDir.toAbsolutePath().toString());
+    if (isDeleted) {
+      log.info("Deleted working directory {}.", workingDir.toAbsolutePath().toString());
+    } else {
+      log.info("Working directory {} not deleted.", workingDir.toAbsolutePath().toString());
+    }
   }
 
   /**
    * Sets up the storage, storage rule, cache implementation and caching rule according to the configuration.
    */
   public void setupStorage() {
-    Predicate<StoreImage> storagePredicate = null;
+    Predicate<StoreImage> storagePredicate = new StoreAll<StoreImage>();
     switch (storageRule) {
     case ALL:
-      storagePredicate = new StoreAll<StoreImage>();
       break;
     case FULL_SIZE_IMG:
       storagePredicate = new StoreLargeImages();
       break;
     default:
-      storagePredicate = new StoreAll<StoreImage>();
       break;
     }
 
-    storage = null;
+    // We only support Drive Storage at this moment
+    storage = new DriveStorage(workingDir, imgDB, storagePredicate);
+    /*
     switch (storageMode) {
     case DRIVE:
       storage = new DriveStorage(workingDir, imgDB, storagePredicate);
@@ -562,6 +569,7 @@ public enum SetupController {
       storage = new DriveStorage(workingDir, imgDB, storagePredicate);
       break;
     }
+    */
 
     Predicate<StoreImage> cachePredicate = null;
     switch (cachingRule) {

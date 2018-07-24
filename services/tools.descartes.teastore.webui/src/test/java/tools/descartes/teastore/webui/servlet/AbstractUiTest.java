@@ -151,21 +151,23 @@ public abstract class AbstractUiTest {
 				requestparams = "?" + requestparams;
 			}
 			URL obj;
-			BufferedReader in = null;
 			String url = "http://localhost:3000/test/test" + requestparams;
 			obj = new URL(url);
 			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+			
 			if (!cookiename.equals("") && !value.equals("")) {
 				con.setRequestProperty("Cookie", cookiename + "=" + value);
 			}
-			in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			
 			String inputLine;
 			StringBuffer response = new StringBuffer();
-
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine + "\n");
-			}
-			in.close();
+			
+			try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+				while ((inputLine = in.readLine()) != null) {
+					response.append(inputLine + "\n");
+				}
+			} 
+			
 			return response.toString();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -221,10 +223,11 @@ public abstract class AbstractUiTest {
 		connection.setDoOutput(true);
 
 		// Send request
-		DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-		wr.writeBytes(query);
-		wr.flush();
-		wr.close();
+		try (DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
+			wr.writeBytes(query);
+			wr.flush();
+			wr.close();
+		}
 
 		boolean redirect = false;
 		int status = connection.getResponseCode();
@@ -249,14 +252,14 @@ public abstract class AbstractUiTest {
 
 		}
 
-		BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 		String inputLine;
 		StringBuffer response = new StringBuffer();
-
-		while ((inputLine = in.readLine()) != null) {
-			response.append(inputLine + "\n");
+		
+		try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine + "\n");
+			}
 		}
-		in.close();
 		return response.toString();
 	}
 

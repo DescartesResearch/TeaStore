@@ -288,7 +288,7 @@ public class RecommenderEndpointTest extends AbstractRecommenderRestTest {
 		// checking if a list was returned
 		Assert.assertNotEquals("The given entity must not be null.", null, recommended);
 		// checking if the list contains the right type
-		Long[] arr = { new Long(1) };
+		Long[] arr = { 1L };
 		try {
 			recommended.toArray(arr);
 		} catch (ArrayStoreException e) {
