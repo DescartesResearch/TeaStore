@@ -9,6 +9,11 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.writer.filesystem.AsciiFileWriter;
 
+/**
+ * Daemon that writes the logs to HDD.
+ * @author Simon
+ *
+ */
 public class FileWriterDaemon implements Runnable {
 
 	@Override

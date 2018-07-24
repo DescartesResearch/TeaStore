@@ -25,62 +25,71 @@ import org.apache.log4j.BasicConfigurator;
 
 /**
  * Application Lifecycle Listener implementation class Registry Client Startup.
+ * 
  * @author Simon Eismann
  *
  */
 @WebListener
 public class LogReaderStartup implements ServletContextListener {
-	private static ScheduledExecutorService logReaderStarter;
-	private static ScheduledExecutorService fileWriterStarter;
-	
-	/**
-	 * Also set this accordingly in RegistryClientStartup.
-	 */
-	
-	/**
-	 * Empty constructor.
-	 */
-    public LogReaderStartup() {
-    	
-    }
+  private static ScheduledExecutorService logReaderStarter;
+  private static ScheduledExecutorService fileWriterStarter;
 
-	/**
-     * @see ServletContextListener#contextDestroyed(ServletContextEvent)
-     * @param arg0 The servlet context event at destruction.
-     */
-    public void contextDestroyed(ServletContextEvent event)  { 
-    	stopFileWriter();
-    	logReaderStarter.shutdownNow();
-    	try {
-			logReaderStarter.awaitTermination(10, TimeUnit.SECONDS);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-    }
-    
-    public static void stopFileWriter() {
-    	fileWriterStarter.shutdownNow();
-    	try {
-			fileWriterStarter.awaitTermination(10, TimeUnit.SECONDS);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-    }
+  /**
+   * Also set this accordingly in RegistryClientStartup.
+   */
 
-	/**
-     * @see ServletContextListener#contextInitialized(ServletContextEvent)
-     * @param arg0 The servlet context event at initialization.
-     */
-    public void contextInitialized(ServletContextEvent event)  {
-    	startFileWriter();
-    	logReaderStarter = Executors.newSingleThreadScheduledExecutor();
-		BasicConfigurator.configure();
-    	logReaderStarter.schedule(new LogReaderDaemon(), 10, TimeUnit.SECONDS);
+  /**
+   * Empty constructor.
+   */
+  public LogReaderStartup() {
+
+  }
+
+  /**
+   * @see ServletContextListener#contextDestroyed(ServletContextEvent)
+   * @param event
+   *          The servlet context event at destruction.
+   */
+  public void contextDestroyed(ServletContextEvent event) {
+    stopFileWriter();
+    logReaderStarter.shutdownNow();
+    try {
+      logReaderStarter.awaitTermination(10, TimeUnit.SECONDS);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
     }
-    
-    public static void startFileWriter() {
-    	fileWriterStarter = Executors.newSingleThreadScheduledExecutor();
-    	fileWriterStarter.schedule(new FileWriterDaemon(), 10, TimeUnit.SECONDS);
+  }
+
+  /**
+   * stops the filewriter.
+   */
+  public static void stopFileWriter() {
+    fileWriterStarter.shutdownNow();
+    try {
+      fileWriterStarter.awaitTermination(10, TimeUnit.SECONDS);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
     }
-    
+  }
+
+  /**
+   * @see ServletContextListener#contextInitialized(ServletContextEvent)
+   * @param event
+   *          The servlet context event at initialization.
+   */
+  public void contextInitialized(ServletContextEvent event) {
+    startFileWriter();
+    logReaderStarter = Executors.newSingleThreadScheduledExecutor();
+    BasicConfigurator.configure();
+    logReaderStarter.schedule(new LogReaderDaemon(), 10, TimeUnit.SECONDS);
+  }
+
+  /**
+   * Starts the filewriter.
+   */
+  public static void startFileWriter() {
+    fileWriterStarter = Executors.newSingleThreadScheduledExecutor();
+    fileWriterStarter.schedule(new FileWriterDaemon(), 10, TimeUnit.SECONDS);
+  }
+
 }

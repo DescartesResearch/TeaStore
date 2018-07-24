@@ -7,6 +7,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Servlet to reset the logs.
+ * @author Simon
+ *
+ */
 @WebServlet("/reset")
 public class Reset extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -26,7 +31,7 @@ public class Reset extends HttpServlet {
 		LogReaderStartup.startFileWriter();
 	}
 
-	public void deleteFolder(File folder, String prefix) {
+	private void deleteFolder(File folder, String prefix) {
 		File[] files = folder.listFiles();
 		if (files != null) { // some JVMs return null for empty dirs
 			for (File f : files) {
@@ -41,7 +46,7 @@ public class Reset extends HttpServlet {
 		}
 	}
 
-	public void deleteFolder(File folder) {
+	private void deleteFolder(File folder) {
 		File[] files = folder.listFiles();
 		if (files != null) { // some JVMs return null for empty dirs
 			for (File f : files) {
