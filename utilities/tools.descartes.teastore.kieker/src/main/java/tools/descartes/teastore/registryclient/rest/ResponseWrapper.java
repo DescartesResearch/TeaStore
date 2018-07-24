@@ -77,8 +77,8 @@ public class ResponseWrapper {
 		  CF_REGISTRY.storeThreadLocalEOI(eoi); // this execution has EOI=eoi; next execution will get eoi with incrementAndRecall
 		  CF_REGISTRY.storeThreadLocalESS(ess); // this execution has ESS=ess
 		  SESSION_REGISTRY.storeThreadLocalSessionId(sessionId);
-		  return response;
 	   }
+    return response;
 	}
 
 }
