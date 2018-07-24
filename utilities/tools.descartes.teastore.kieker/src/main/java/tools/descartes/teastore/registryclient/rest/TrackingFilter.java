@@ -37,6 +37,7 @@ public class TrackingFilter implements Filter {
    * 
    * @param filterConfig
    *          configuration of filter
+   * @throws ServletException servletException
    */
   public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -51,6 +52,8 @@ public class TrackingFilter implements Filter {
    *          response
    * @param chain
    *          filter chain
+   * @throws IOException ioException
+   * @throws ServletException servletException
    */
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {
