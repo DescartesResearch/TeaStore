@@ -29,7 +29,7 @@ public final class HttpWrapper {
   }
 
   /**
-   * Wrap webtarget
+   * Wrap webtarget.
    * @param target webtarget to wrap
    * @return wrapped wentarget
    */
