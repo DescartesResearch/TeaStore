@@ -1,17 +1,3 @@
-<context-param>
-	<param-name>CPUMemUsageServletContextListener.samplingIntervalSeconds
-	</param-name>
-	<param-value>1</param-value>
-</context-param>
-<context-param>
-	<param-name>CPUMemUsageServletContextListener.initialSamplingDelaySeconds
-	</param-name>
-	<param-value>0</param-value>
-</context-param>
-<listener>
-	<listener-class>kieker.monitoring.probe.servlet.CPUMemUsageServletContextListener
-	</listener-class>
-</listener>
 <filter>
 	<filter-name>TrackingFilter</filter-name>
 	<filter-class>tools.descartes.teastore.registryclient.rest.TrackingFilter</filter-class>

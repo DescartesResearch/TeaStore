@@ -18,41 +18,9 @@
 		<exclude within="tools.descartes.teastore.persistence.repository..*" />
 		<exclude within="tools.descartes.teastore.persistence.servlet..*" />
 		<exclude within="tools.descartes.teastore.persistence.rest.DatabaseGenerationEndpoint" />
-		<exclude within="tools.descartes.teastore.recommender.servlet.IndexServlet" />
-		<exclude within="tools.descartes.teastore.recommender.servlet.RetrainDaemon" />
-		<exclude within="tools.descartes.teastore.recommender.servlet.RecommenderStartup" />
-		<exclude within="tools.descartes.teastore.recommender.rest.TrainEndPoint" />
-		<exclude within="tools.descartes.teastore.recommender.algorithm.impl.UseFallBackException" />
-		<exclude within="tools.descartes.teastore.recommender.algorithm.OrderItemSet" />
-		<exclude within="tools.descartes.teastore.recommender.algorithm.AbstractRecommender" />
 		<exclude within="tools.descartes.teastore.webui.startup..*" />
 		<exclude within="tools.descartes.teastore.webui.servlet.elhelper..*" />
 		<exclude within="tools.descartes.teastore.webui.servlet.AbstractUIServlet" />
-		<exclude within="tools.descartes.teastore.image.setup.CachingMode" />
-		<exclude within="tools.descartes.teastore.image.setup.CachingRule" />
-		<exclude within="tools.descartes.teastore.image.setup.CreatorFactory" />
-		<exclude within="tools.descartes.teastore.image.setup.CreatorRunner" />
-		<exclude within="tools.descartes.teastore.image.setup.ImageCreator" />
-		<exclude within="tools.descartes.teastore.image.setup.ImageIDFactory" />
-		<exclude within="tools.descartes.teastore.image.setup.ImageProviderStartup" />
-		<exclude within="tools.descartes.teastore.image.setup.StorageMode" />
-		<exclude within="tools.descartes.teastore.image.setup.StorageRule" />
-		<exclude within="tools.descartes.teastore.image.storage.rules..*" />
-		<exclude within="tools.descartes.teastore.image.cache.rules..*" />
-		<exclude within="tools.descartes.teastore.image.cache.entry..*" />
-		<exclude within="tools.descartes.teastore.image.ImageDB" />
-		<exclude within="tools.descartes.teastore.image.ImageDBKey" />
-		<exclude within="tools.descartes.teastore.image.ImageScaler" />
-		<exclude within="tools.descartes.teastore.image.StoreImage" />
-		<exclude within="tools.descartes.teastore.image.cache.AbstractQueueCache" />
-		<exclude within="tools.descartes.teastore.image.cache.AbstractTreeCache" />
-		<exclude within="tools.descartes.teastore.image.cache.FirstInFirstOut" />
-		<exclude within="tools.descartes.teastore.image.cache.IDataCache" />
-		<exclude within="tools.descartes.teastore.image.cache.LastInFirstOut" />
-		<exclude within="tools.descartes.teastore.image.cache.LeastFrequentlyUsed" />
-		<exclude within="tools.descartes.teastore.image.cache.LeastRecentlyUsed" />
-		<exclude within="tools.descartes.teastore.image.cache.MostRecentlyUsed" />
-		<exclude within="tools.descartes.teastore.image.cache.RandomReplacement" />
 		<exclude within="tools.descartes.teastore.registryclient.rest.HttpWrapper" />
 		<exclude within="tools.descartes.teastore.registryclient.rest.TrackingFilter" />
 		<exclude within="tools.descartes.teastore.registryclient.rest.ResponseWrapper" />
@@ -128,69 +96,11 @@
 			&amp;&amp; !execution(* tools.descartes.teastore.persistence.domain.PersistenceUser.setRealName(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.persistence.domain.PersistenceUser.getEmail(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.persistence.domain.PersistenceUser.setEmail(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.recommender.servlet.TrainingSynchronizer.filterLists(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.recommender.servlet.TrainingSynchronizer.toMillis(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.recommender.servlet.TrainingSynchronizer.setReady(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.recommender.servlet.TrainingSynchronizer.waitForPersistence(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.recommender.servlet.TrainingSynchronizer.getInstance(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.recommender.servlet.TrainingSynchronizer.filterForMaxtimeStamp(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.recommender.algorithm.RecommenderSelector.getInstance(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.recommender.algorithm.RecommenderSelector.train(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.recommender.algorithm.impl.cf.SlopeOneRecommender.executePreprocessing(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.recommender.algorithm.impl.cf.SlopeOneRecommender.getUserVector(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.recommender.algorithm.impl.cf.SlopeOneRecommender.calculateScoreForItem(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.recommender.algorithm.impl.cf.SlopeOneRecommender.buildDifferencesMatrices(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.recommender.algorithm.impl.pop.PopularityBasedRecommender.executePreprocessing(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.webui.servlet.CategoryServlet.createNavigation(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.webui.servlet.CartActionServlet.updateOrder(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.webui.servlet.CartActionServlet.confirmOrder(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.webui.servlet.CartActionServlet.extractOrderInformation(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.webui.servlet.OrderServlet.doGetInternal(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.cache.AbstractCache.setMaxCacheSize(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.cache.AbstractCache.getFreeSpace(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.cache.AbstractCache.getCurrentCacheSize(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.ImageProvider.setImageDB(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.ImageProvider.getWebUIImages(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.ImageProvider.getProductImages(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.ImageProvider.setStorage(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.cache.AbstractCache.findInEntries(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.storage.DriveStorage.loadFromDisk(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.storage.DriveStorage.getIDLock(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.storage.DriveStorage.saveData(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.storage.DriveStorage.dataIsStorable(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.cache.AbstractCache.dataIsInCache(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.cache.AbstractCache.getData(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.cache.AbstractCache.hasStorageFor(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.cache.AbstractCache.addEntry(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.cache.AbstractCache.dataAddedToCache(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.cache.AbstractCache.dataRemovedFromCache(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.cache.AbstractCache.dataIsCachable(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.cache.AbstractCache.saveData(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.cache.AbstractCache.cacheData(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.cache.AbstractCache.findInEntries(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.SetupController.waitForPersistence(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.SetupController.fetchProductsForCategory(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.SetupController.fetchCategories(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.SetupController.convertToIDs(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.SetupController.matchCategoriesToImage(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.SetupController.generateImages(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.SetupController.detectCategoryImages(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.SetupController.createWorkingDir(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.SetupController.getPathToResource(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.SetupController.detectExistingImages(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.SetupController.setCacheSize(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.SetupController.deleteImages(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.SetupController.deleteUnusedImages(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.SetupController.deleteWorkingDir(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.SetupController.setupStorage(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.SetupController.configureImageProvider(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.SetupController.getWorkingDir(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.SetupController.isFinished(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.SetupController.getState(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.SetupController.waitAndStopImageCreation(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.SetupController.isFirstImageProvider(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.SetupController.teardown(..))
-			&amp;&amp; !execution(* tools.descartes.teastore.image.setup.SetupController.configureImageProvider(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.registryclient.rest.LoadBalancedImageOperations.getProductImage(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.registryclient.rest.LoadBalancedImageOperations.getProductPreviewImages(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.registryclient.rest.LoadBalancedImageOperations.getWebImage(..))
