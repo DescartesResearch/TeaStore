@@ -25,18 +25,6 @@
 						<phase>package</phase>
 					</execution>
 					<execution>
-						<id>tag-push-latest</id>
-						<goals>
-							<goal>tag</goal>
-							<goal>push</goal>
-						</goals>
-						<configuration>
-							<repository>${dockerrepository}/teastore-kieker-rabbitmq</repository>
-							<tag>latest</tag>
-						</configuration>
-						<phase>package</phase>
-					</execution>
-					<execution>
 						<id>tag-push-version</id>
 						<goals>
 							<goal>tag</goal>
@@ -44,7 +32,7 @@
 						</goals>
 						<configuration>
 							<repository>${dockerrepository}/teastore-base</repository>
-							<tag>${project.version}</tag>
+							<tag>${project.version}-softee</tag>
 						</configuration>
 						<phase>package</phase>
 					</execution>

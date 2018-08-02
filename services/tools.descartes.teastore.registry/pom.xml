@@ -185,18 +185,6 @@
 								</configuration>
 							</execution>
 							<execution>
-								<id>tag-push-latest</id>
-								<goals>
-									<goal>tag</goal>
-									<goal>push</goal>
-								</goals>
-								<configuration>
-									<repository>${dockerrepository}/teastore-registry</repository>
-									<tag>latest</tag>
-								</configuration>
-								<phase>package</phase>
-							</execution>
-							<execution>
 								<id>tag-push-version</id>
 								<goals>
 									<goal>tag</goal>
@@ -204,7 +192,7 @@
 								</goals>
 								<configuration>
 									<repository>${dockerrepository}/teastore-registry</repository>
-									<tag>${project.version}</tag>
+									<tag>${project.version}-softee</tag>
 								</configuration>
 								<phase>package</phase>
 							</execution>
@@ -339,17 +327,6 @@
 								</goals>
 							</execution>
 
-							<execution>
-								<id>tag-push-latest</id>
-								<goals>
-									<goal>tag</goal>
-									<goal>push</goal>
-								</goals>
-								<configuration>
-									<repository>${dockerrepository}/teastore-registry-kieker</repository>
-									<tag>latest</tag>
-								</configuration>
-							</execution>
 
 							<execution>
 								<id>tag-push-version</id>
@@ -359,7 +336,7 @@
 								</goals>
 								<configuration>
 									<repository>${dockerrepository}/teastore-registry-kieker</repository>
-									<tag>${project.version}</tag>
+									<tag>${project.version}-softee</tag>
 								</configuration>
 							</execution>
 						</executions>
