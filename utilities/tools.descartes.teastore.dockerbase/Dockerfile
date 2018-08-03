@@ -2,8 +2,7 @@ FROM tomcat:8.5-jre8
 MAINTAINER Chair of Software Engineering <se2-it@informatik.uni-wuerzburg.de>
 
 # Delete all example webapps from base container
-RUN rm -r /usr/local/tomcat/webapps
-RUN mkdir /usr/local/tomcat/webapps
+RUN rm -r /usr/local/tomcat/webapps/examples
 
 # Copy config, database connector library and script for environment variables into container
 COPY baseContext.xml /usr/local/tomcat/conf/context.xml
