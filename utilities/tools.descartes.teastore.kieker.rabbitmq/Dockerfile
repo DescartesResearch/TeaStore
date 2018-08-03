@@ -9,7 +9,6 @@ RUN apt-get update
 RUN apt-get install unzip
 RUN unzip /apache.zip
 RUN chmod -R +x /apache-tomcat-8.5.24
-RUN echo '<% response.sendRedirect("/logs/"); %>' > /apache-tomcat-8.5.24/webapps/ROOT/index.jsp
 RUN mkdir /usr/share/man/man1
 RUN apt-get -y install default-jre-headless
 
@@ -18,4 +17,4 @@ COPY target/tools.descartes.teastore.kieker.rabbitmq.war /apache-tomcat-8.5.24/w
 EXPOSE 8080
 
 #Login for rabbitmq webui is admin:nimda
-CMD  /apache-tomcat-8.5.24/bin/startup.sh && rabbitmq-server
+CMD  echo '<% response.sendRedirect("/logs/"); %>' > /apache-tomcat-8.5.24/webapps/ROOT/index.jsp && /apache-tomcat-8.5.24/bin/startup.sh && rabbitmq-server
