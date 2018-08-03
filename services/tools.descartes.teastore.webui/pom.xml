@@ -138,7 +138,7 @@
 									<overwrite>true</overwrite>
 									<resources>
 										<resource>
-											<directory>../../utilities/tools.descartes.teastore.dockerbase/ServiceDockerfile/</directory>
+											<directory>../../utilities/tools.descartes.teastore.dockerbase/WebuiDockerfile/</directory>
 											<includes>
 												<include>Dockerfile</include>
 											</includes>
