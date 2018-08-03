@@ -208,7 +208,25 @@
 						<artifactId>maven-resources-plugin</artifactId>
 						<version>3.0.2</version>
 						<executions>
-							<!-- COPY MONITORING.PROPERTIES -->
+							<execution>
+								<id>copy-dockerfile</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.basedir}</outputDirectory>
+									<overwrite>true</overwrite>
+									<resources>
+										<resource>
+											<directory>../../utilities/tools.descartes.teastore.kieker/WebuiDockerfile</directory>
+											<includes>
+												<include>Dockerfile</include>
+											</includes>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
 							<execution>
 								<id>copy-monitoring</id>
 								<phase>generate-resources</phase>
