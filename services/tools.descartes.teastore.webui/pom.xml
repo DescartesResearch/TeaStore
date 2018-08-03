@@ -241,7 +241,6 @@
 											<directory>../../utilities/tools.descartes.teastore.kieker/</directory>
 											<includes>
 												<include>kieker.monitoring.properties</include>
-												<include>Dockerfile</include>
 												<include>start_kieker.sh</include>
 											</includes>
 										</resource>
