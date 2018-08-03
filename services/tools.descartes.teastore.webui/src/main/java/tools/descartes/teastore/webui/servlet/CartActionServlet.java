@@ -38,7 +38,7 @@ import tools.descartes.teastore.entities.message.SessionBlob;
 @WebServlet("/cartAction")
 public class CartActionServlet extends AbstractUIServlet {
 	private static final long serialVersionUID = 1L;
-	private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/yyyy");
+	private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("MM/yyyy");
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -56,13 +56,13 @@ public class CartActionServlet extends AbstractUIServlet {
 		for (Object paramo : request.getParameterMap().keySet()) {
 			String param = (String) paramo;
 			if (param.contains("addToCart")) {
-				long productID = Long.valueOf(request.getParameter("productid"));
+				long productID = Long.parseLong(request.getParameter("productid"));
 				SessionBlob blob = LoadBalancedStoreOperations.addProductToCart(getSessionBlob(request), productID);
 				saveSessionBlob(blob, response);
 				redirect("/cart", response, MESSAGECOOKIE, String.format(ADDPRODUCT, productID));
 				break;
 			} else if (param.contains("removeProduct")) {
-				long productID = Long.valueOf(param.substring("removeProduct_".length()));
+				long productID = Long.parseLong(param.substring("removeProduct_".length()));
 				SessionBlob blob = LoadBalancedStoreOperations.removeProductFromCart(getSessionBlob(request),
 						productID);
 				saveSessionBlob(blob, response);
@@ -112,7 +112,7 @@ public class CartActionServlet extends AbstractUIServlet {
 			}
 			blob = LoadBalancedStoreOperations.placeOrder(getSessionBlob(request), infos[0] + " " + infos[1], infos[2],
 					infos[3], infos[4],
-					YearMonth.parse(infos[6], dtf).atDay(1).format(DateTimeFormatter.ISO_LOCAL_DATE), price, infos[5]);
+					YearMonth.parse(infos[6], DTF).atDay(1).format(DateTimeFormatter.ISO_LOCAL_DATE), price, infos[5]);
 			saveSessionBlob(blob, response);
 			redirect("/", response, MESSAGECOOKIE, ORDERCONFIRMED);
 		}
@@ -153,7 +153,7 @@ public class CartActionServlet extends AbstractUIServlet {
 		for (OrderItem orderItem : orderItems) {
 			if (request.getParameter("orderitem_" + orderItem.getProductId()) != null) {
 				blob = LoadBalancedStoreOperations.updateQuantity(blob, orderItem.getProductId(),
-						Integer.valueOf(request.getParameter("orderitem_" + orderItem.getProductId())));
+						Integer.parseInt(request.getParameter("orderitem_" + orderItem.getProductId())));
 			}
 		}
 		saveSessionBlob(blob, response);

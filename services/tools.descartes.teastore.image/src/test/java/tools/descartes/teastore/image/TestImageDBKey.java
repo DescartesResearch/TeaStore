@@ -29,8 +29,8 @@ public class TestImageDBKey {
 
   @Test
   public void testConstructor() {
-    new ImageDBKey(TEST_PRODUCT_KEY);
-    new ImageDBKey(TEST_FILENAME);
+	new ImageDBKey(TEST_PRODUCT_KEY);
+	new ImageDBKey(TEST_FILENAME);
   }
 
   @Test

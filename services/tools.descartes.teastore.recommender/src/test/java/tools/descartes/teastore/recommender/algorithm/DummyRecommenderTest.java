@@ -52,7 +52,7 @@ public class DummyRecommenderTest extends AbstractRecommenderFunctionalityTest {
 	public void testSingleResults() {
 		// compare
 		List<Long> recommended = new ArrayList<Long>();
-		recommended.add(new Long(-1));
+		recommended.add(-1L);
 		Assert.assertEquals(recommended,
 				getAlgo().recommendProducts(getAllUsers().get(0).getId(), getRecommendSingle()));
 	}
@@ -68,7 +68,7 @@ public class DummyRecommenderTest extends AbstractRecommenderFunctionalityTest {
 	public void testMultiResults() {
 		// compare
 		List<Long> recommended = new ArrayList<Long>();
-		recommended.add(new Long(-1));
+		recommended.add(-1L);
 
 		Assert.assertEquals(recommended,
 				getAlgo().recommendProducts(getAllUsers().get(0).getId(), getRecommendMulti()));

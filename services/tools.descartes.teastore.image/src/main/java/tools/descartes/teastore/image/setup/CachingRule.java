@@ -42,7 +42,7 @@ public enum CachingRule {
    * @return String representation.
    */
   public String getStrRepresentation() {
-    return new String(strRepresentation);
+    return strRepresentation;
   }
 
   /**

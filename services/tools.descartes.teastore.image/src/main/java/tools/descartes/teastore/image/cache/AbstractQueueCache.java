@@ -33,7 +33,7 @@ public abstract class AbstractQueueCache<T extends ICachable<T>>
    * Base constructor used by specific implementations.
    * @param cachedStorage Storage object to query if an entry is not found in the cache.
    * @param maxCacheSize Maximum memory used by the cache in bytes.
-   * @param cachingRule Caching rule how the cache will evict entries if no memory is left.
+   * @param cachingRule Caching rule determining if data should be cached.
    */
   public AbstractQueueCache(IDataStorage<T> cachedStorage, long maxCacheSize,
       Predicate<T> cachingRule) {

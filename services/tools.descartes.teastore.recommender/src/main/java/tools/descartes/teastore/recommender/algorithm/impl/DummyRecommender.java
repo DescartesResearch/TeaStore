@@ -32,7 +32,7 @@ public class DummyRecommender extends AbstractRecommender {
 	@Override
 	protected List<Long> execute(Long userid, List<Long> currentItems) {
 		List<Long> recommended = new ArrayList<Long>();
-		recommended.add(new Long(-1));
+		recommended.add(-1L);
 		return recommended;
 	}
 

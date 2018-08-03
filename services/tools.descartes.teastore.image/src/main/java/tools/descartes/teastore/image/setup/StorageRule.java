@@ -47,7 +47,7 @@ public enum StorageRule {
    * @return String representation.
    */
   public String getStrRepresentation() {
-    return new String(strRepresentation);
+    return strRepresentation;
   }
 
   /**

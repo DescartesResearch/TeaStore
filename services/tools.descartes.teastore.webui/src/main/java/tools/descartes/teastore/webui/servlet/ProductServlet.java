@@ -60,7 +60,7 @@ public class ProductServlet extends AbstractUIServlet {
       throws ServletException, IOException, LoadBalancerTimeoutException {
     checkforCookie(request, response);
     if (request.getParameter("id") != null) {
-      long id = Long.valueOf(request.getParameter("id"));
+      Long id = Long.valueOf(request.getParameter("id"));
       request.setAttribute("CategoryList", LoadBalancedCRUDOperations
           .getEntities(Service.PERSISTENCE, "categories", Category.class, -1, -1));
       request.setAttribute("title", "TeaStore Product");

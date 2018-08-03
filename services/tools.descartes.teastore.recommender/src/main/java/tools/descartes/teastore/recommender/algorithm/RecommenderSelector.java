@@ -130,9 +130,9 @@ public final class RecommenderSelector implements IRecommender {
 	 * 
 	 * @return The instance of this class.
 	 */
-	public static RecommenderSelector getInstance() {
+	public static synchronized RecommenderSelector getInstance() {
 		if (instance == null) {
-			instance = new RecommenderSelector();
+			 instance = new RecommenderSelector();
 		}
 		return instance;
 	}
