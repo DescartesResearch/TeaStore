@@ -30,7 +30,7 @@ import tools.descartes.teastore.entities.Category;
 import tools.descartes.teastore.entities.ImageSizePreset;
 
 /**
- * Servlet implementation for the web view of "Error page"
+ * Servlet implementation for the web view of "Error page".
  * 
  * @author Andre Bauer
  */

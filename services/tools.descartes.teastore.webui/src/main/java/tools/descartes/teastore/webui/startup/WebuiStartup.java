@@ -37,7 +37,7 @@ public class WebuiStartup implements ServletContextListener {
 
 	/**
      * @see ServletContextListener#contextDestroyed(ServletContextEvent)
-     * @param arg0 The servlet context event at destruction.
+     * @param event The servlet context event at destruction.
      */
     public void contextDestroyed(ServletContextEvent event)  { 
     	RegistryClient.getClient().unregister(event.getServletContext().getContextPath());
@@ -45,7 +45,7 @@ public class WebuiStartup implements ServletContextListener {
 
 	/**
      * @see ServletContextListener#contextInitialized(ServletContextEvent)
-     * @param arg0 The servlet context event at initialization.
+     * @param event The servlet context event at initialization.
      */
     public void contextInitialized(ServletContextEvent event)  {
     	ServiceLoadBalancer.preInitializeServiceLoadBalancers(Service.AUTH, Service.IMAGE);

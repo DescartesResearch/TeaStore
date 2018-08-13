@@ -37,66 +37,69 @@ import tools.descartes.teastore.entities.Product;
 import tools.descartes.teastore.entities.message.SessionBlob;
 
 /**
- * Servlet implementation for the web view of "Product"
+ * Servlet implementation for the web view of "Product".
  * 
  * @author Andre Bauer
  */
 @WebServlet("/product")
 public class ProductServlet extends AbstractUIServlet {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public ProductServlet() {
-		super();
-	}
+  /**
+   * @see HttpServlet#HttpServlet()
+   */
+  public ProductServlet() {
+    super();
+  }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected void handleGETRequest(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, LoadBalancerTimeoutException {
-		checkforCookie(request, response);
-		if (request.getParameter("id") != null) {
-			long id = Long.valueOf(request.getParameter("id"));
-			request.setAttribute("CategoryList",
-					LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "categories", Category.class, -1, -1));
-			request.setAttribute("title", "TeaStore Product");
-			SessionBlob blob = getSessionBlob(request);
-			request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(blob));
-			Product p = LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "products", Product.class, id);
-			request.setAttribute("product", p);
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void handleGETRequest(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException, LoadBalancerTimeoutException {
+    checkforCookie(request, response);
+    if (request.getParameter("id") != null) {
+      Long id = Long.valueOf(request.getParameter("id"));
+      request.setAttribute("CategoryList", LoadBalancedCRUDOperations
+          .getEntities(Service.PERSISTENCE, "categories", Category.class, -1, -1));
+      request.setAttribute("title", "TeaStore Product");
+      SessionBlob blob = getSessionBlob(request);
+      request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(blob));
+      Product p = LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "products",
+          Product.class, id);
+      request.setAttribute("product", p);
 
-			List<OrderItem> items = new LinkedList<>();
-			OrderItem oi = new OrderItem();
-			oi.setProductId(id);
-			oi.setQuantity(1);
-			items.add(oi);
-			items.addAll(getSessionBlob(request).getOrderItems());
-			List<Long> productIds = LoadBalancedRecommenderOperations.getRecommendations(items, getSessionBlob(request).getUID());
-			List<Product> ads = new LinkedList<Product>();
-			for (Long productId : productIds) {
-				ads.add(LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "products", Product.class, productId));
-			}
-			
-			if (ads.size() > 3) {
-				ads.subList(3, ads.size()).clear();
-			}
-			request.setAttribute("Advertisment", ads);
+      List<OrderItem> items = new LinkedList<>();
+      OrderItem oi = new OrderItem();
+      oi.setProductId(id);
+      oi.setQuantity(1);
+      items.add(oi);
+      items.addAll(getSessionBlob(request).getOrderItems());
+      List<Long> productIds = LoadBalancedRecommenderOperations.getRecommendations(items,
+          getSessionBlob(request).getUID());
+      List<Product> ads = new LinkedList<Product>();
+      for (Long productId : productIds) {
+        ads.add(LoadBalancedCRUDOperations.getEntity(Service.PERSISTENCE, "products", Product.class,
+            productId));
+      }
 
-			request.setAttribute("productImages",
-					LoadBalancedImageOperations.getProductImages(ads, ImageSizePreset.RECOMMENDATION.getSize()));
-			request.setAttribute("productImage", LoadBalancedImageOperations.getProductImage(p));
-			request.setAttribute("storeIcon",
-					LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
-			request.setAttribute("helper", ELHelperUtils.UTILS);
+      if (ads.size() > 3) {
+        ads.subList(3, ads.size()).clear();
+      }
+      request.setAttribute("Advertisment", ads);
 
-			request.getRequestDispatcher("WEB-INF/pages/product.jsp").forward(request, response);
-		} else {
-			redirect("/", response);
-		}
-	}
+      request.setAttribute("productImages", LoadBalancedImageOperations.getProductImages(ads,
+          ImageSizePreset.RECOMMENDATION.getSize()));
+      request.setAttribute("productImage", LoadBalancedImageOperations.getProductImage(p));
+      request.setAttribute("storeIcon",
+          LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
+      request.setAttribute("helper", ELHelperUtils.UTILS);
+
+      request.getRequestDispatcher("WEB-INF/pages/product.jsp").forward(request, response);
+    } else {
+      redirect("/", response);
+    }
+  }
 
 }

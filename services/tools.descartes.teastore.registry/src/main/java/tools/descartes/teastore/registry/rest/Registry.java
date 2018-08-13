@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class Registry {
 
-	private static Registry registry = null;
+	private static Registry registry = new Registry();
 	private Map<String, List<String>> map = new ConcurrentHashMap<String, List<String>>();
 	private Map<String, HeartbeatInfo> heartbeatMap = new ConcurrentHashMap<String, HeartbeatInfo>();
 	private static final Logger LOG = LoggerFactory.getLogger(Registry.class);
@@ -58,9 +58,6 @@ public final class Registry {
 	 * @return registry singleton
 	 */
 	public static Registry getRegistryInstance() {
-		if (registry == null) {
-			registry = new Registry();
-		}
 		return registry;
 	}
 	

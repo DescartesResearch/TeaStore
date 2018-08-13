@@ -36,13 +36,23 @@ public final class ELHelperUtils {
 		
 	}
 	
+	/**
+	 * Formats date.
+	 * @param isoFormattedDate string containing date
+	 * @return pretty formatted date
+	 */
 	public String formatToPrettyDate(String isoFormattedDate) {
 		return LocalDateTime.parse(isoFormattedDate, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
 				.format(DateTimeFormatter.ofPattern("yyyy MM dd - HH:mm:ss"));
 	}
 	
+	/**
+	 * Format price.
+	 * @param price price to be formatted
+	 * @return formatted price
+	 */
 	public String formatPriceInCents(long price) {
-		return "&#36; " + PRICE_FORMAT.format((double)price /100.0);
+		return "&#36; " + PRICE_FORMAT.format((double) price / 100.0);
 	}
 	
 }

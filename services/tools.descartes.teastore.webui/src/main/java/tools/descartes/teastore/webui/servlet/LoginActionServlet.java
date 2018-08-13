@@ -25,7 +25,7 @@ import tools.descartes.teastore.registryclient.rest.LoadBalancedStoreOperations;
 import tools.descartes.teastore.entities.message.SessionBlob;
 
 /**
- * Servlet for handling the login actions
+ * Servlet for handling the login actions.
  * 
  * @author Andre Bauer
  */

@@ -33,7 +33,15 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/tools.descartes.teastore.entities"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/tools.descartes.teastore.registryclient"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tools.descartes.teastore.entities">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/tools.descartes.teastore.registryclient">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

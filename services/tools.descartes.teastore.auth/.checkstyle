@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<fileset-config file-format-version="1.2.0" simple-config="true" sync-formatter="false">
-  <fileset name="all" enabled="true" check-config-name="LIMBO Checkstyle" local="false">
+<fileset-config file-format-version="1.2.0" simple-config="false" sync-formatter="false">
+  <local-check-config name="Limbo" location="C:\Users\Simon\git\TeaStore\limbo_checkstyle.xml" type="external" description="">
+    <additional-data name="protect-config-file" value="true"/>
+  </local-check-config>
+  <fileset name="all" enabled="true" check-config-name="Google Checks" local="false">
     <file-match-pattern match-pattern="." include-pattern="true"/>
   </fileset>
 </fileset-config>

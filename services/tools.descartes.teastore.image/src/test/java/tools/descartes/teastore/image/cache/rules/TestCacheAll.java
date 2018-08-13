@@ -25,19 +25,19 @@ import tools.descartes.teastore.image.cache.rules.CacheAll;
 
 public class TestCacheAll {
 
-	@Mock
-	private StoreImage mockedImg; 
+  @Mock
+  private StoreImage mockedImg;
 
-	@Before
-	public void initialize() {
-		MockitoAnnotations.initMocks(this);
-	}
-	
-	@Test
-	public void testRule() {
-		CacheAll<StoreImage> uut = new CacheAll<>();
-		assertTrue(uut.test(mockedImg));
-		assertTrue(uut.test(null));
-	}
+  @Before
+  public void initialize() {
+    MockitoAnnotations.initMocks(this);
+  }
+
+  @Test
+  public void testRule() {
+    CacheAll<StoreImage> uut = new CacheAll<>();
+    assertTrue(uut.test(mockedImg));
+    assertTrue(uut.test(null));
+  }
 
 }

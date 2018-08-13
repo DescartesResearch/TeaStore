@@ -15,21 +15,36 @@ package tools.descartes.teastore.image.setup;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * Singleton helper class generating unique image identifiers.
+ * @author Norbert Schmitt
+ */
 public enum ImageIDFactory {
 
-	ID;
-	
-	private AtomicLong nextID = new AtomicLong(1);
-	
-	private ImageIDFactory() {
+  /**
+   * Instance of the image id factory.
+   */
+  ID;
 
-	}
-	
-	public long getNextImageID() {
-		return nextID.getAndIncrement();
-	}
-	
-	public void startAtID(long nextID) {
-		this.nextID.set(nextID);
-	}
+  private AtomicLong nextID = new AtomicLong(1);
+
+  private ImageIDFactory() {
+
+  }
+
+  /**
+   * Returns the next unique image identifier.
+   * @return The next unique image identifier.
+   */
+  public long getNextImageID() {
+    return nextID.getAndIncrement();
+  }
+
+  /**
+   * Sets the first image identifier to start with.
+   * @param nextID The image identifier to start with.
+   */
+  public void startAtID(long nextID) {
+    this.nextID.set(nextID);
+  }
 }

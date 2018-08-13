@@ -88,12 +88,11 @@ public final class TrainingSynchronizer {
 	 * 
 	 * @return An instance of {@link TrainingSynchronizer}
 	 */
-	public static TrainingSynchronizer getInstance() {
+	public static synchronized TrainingSynchronizer getInstance() {
 		if (instance == null) {
 			instance = new TrainingSynchronizer();
 		}
 		return instance;
-
 	}
 
 	private static final Logger LOG = LoggerFactory.getLogger(TrainingSynchronizer.class);
@@ -185,7 +184,7 @@ public final class TrainingSynchronizer {
 			items = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "orderitems", OrderItem.class, -1, -1);
 			long noItems = items.size();
 			LOG.trace("Retrieved " + noItems + " orderItems, starting retrieving of orders now.");
-		} catch (Exception e) {
+		} catch (NotFoundException | LoadBalancerTimeoutException e) {
 			// set ready anyway to avoid deadlocks
 			setReady(true);
 			LOG.error("Database retrieving failed.");
@@ -195,7 +194,7 @@ public final class TrainingSynchronizer {
 			orders = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "orders", Order.class, -1, -1);
 			long noOrders = orders.size();
 			LOG.trace("Retrieved " + noOrders + " orders, starting training now.");
-		} catch (Exception e) {
+		} catch (NotFoundException | LoadBalancerTimeoutException e) {
 			// set ready anyway to avoid deadlocks
 			setReady(true);
 			LOG.error("Database retrieving failed.");

@@ -1,32 +1,32 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <properties>
-        <teastoreversion>1.1.0</teastoreversion>
-    </properties>
-  
+	<properties>
+		<teastoreversion>1.2.0</teastoreversion>
+	</properties>
+
 	<prerequisites>
 		<maven>3.0</maven>
 	</prerequisites>
-  
+
 	<groupId>tools.descartes.teastore</groupId>
 	<artifactId>parent</artifactId>
 	<packaging>pom</packaging>
 	<version>${teastoreversion}</version>
 
 	<profiles>
-	    <profile>
-	        <id>docker</id>
-	        <activation>
-            	<activeByDefault>false</activeByDefault>
-        	</activation>
-	        <modules>
-				<module>./utilities/tools.descartes.teastore.dockerbase</module>  
+		<profile>
+			<id>docker</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<modules>
+				<module>./utilities/tools.descartes.teastore.dockerbase</module>
 				<module>./utilities/tools.descartes.teastore.database</module>
 				<module>./utilities/tools.descartes.teastore.docker.all</module>
 			</modules>
-	    </profile>
+		</profile>
 		<profile>
 			<id>kieker</id>
 			<activation>
@@ -60,8 +60,36 @@
 		<module>
 			utilities/tools.descartes.teastore.registryclient
 		</module>
-		
+
 		<module>services/tools.descartes.teastore.auth</module>
 		<module>services/tools.descartes.teastore.webui</module>
 	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<id>validate</id>
+						<phase>validate</phase>
+						<configuration>
+							<configLocation>limbo_checkstyle.xml</configLocation>
+							<encoding>UTF-8</encoding>
+							<consoleOutput>true</consoleOutput>
+							<failsOnError>true</failsOnError>
+							<linkXRef>false</linkXRef>
+							<violationSeverity>warning</violationSeverity>
+						</configuration>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>

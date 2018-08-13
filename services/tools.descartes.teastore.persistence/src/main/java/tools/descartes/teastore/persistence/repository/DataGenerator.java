@@ -232,7 +232,7 @@ public final class DataGenerator {
 			categoryIndices.put(category, categoryIndex);
 			categoryIndex++;
 		}
-		CategoryRepository.REPOSITORY.getAllEntities().parallelStream().forEach( category -> {
+		CategoryRepository.REPOSITORY.getAllEntities().parallelStream().forEach(category -> {
 				for (int i = 0; i < productsPerCategory; i++) {
 					int productTypeIndex = categoryIndices.get(category) % PRODUCTNAMES.length;
 					int productIndex = i % PRODUCTNAMES[productTypeIndex].length;

@@ -270,10 +270,10 @@ public abstract class AbstractRecommender implements IRecommender {
 				for (Entry<Long, Integer> product : orderset.getOrderset().entrySet()) {
 					// if key was not known before -> first occurence
 					if (!line.containsKey(product.getKey())) {
-						line.put(product.getKey(), new Double(product.getValue()));
+						line.put(product.getKey(), Double.valueOf(product.getValue()));
 					} else {
 						// if key was known before -> increase counter
-						line.put(product.getKey(), new Double(line.get(product.getKey()) + product.getValue()));
+						line.put(product.getKey(), Double.valueOf(line.get(product.getKey()) + product.getValue()));
 					}
 				}
 			}

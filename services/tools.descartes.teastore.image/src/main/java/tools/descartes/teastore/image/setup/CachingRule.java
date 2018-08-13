@@ -15,26 +15,45 @@ package tools.descartes.teastore.image.setup;
 
 import java.util.Arrays;
 
+/**
+ * This enum contains the different caching rule implementations and their string representation.
+ * @author Norbert Schmitt
+ */
 public enum CachingRule {
 
-	ALL("All");
-	
-	public static final CachingRule STD_CACHING_RULE = ALL;
-	
-	private final String strRepresentation;
-	
-	private CachingRule(String strRepresentation) {
-		this.strRepresentation = strRepresentation;
-	}
-	
-	public String getStrRepresentation() {
-		return new String(strRepresentation);
-	}
-	
-	public static CachingRule getCachingRuleFromString(String strCachingRule) {
-		return Arrays.asList(CachingRule.values()).stream()
-				.filter(mode -> mode.strRepresentation.equals(strCachingRule))
-				.findFirst()
-				.orElse(STD_CACHING_RULE);
-	}
+  /**
+   * Cache all data without restrictions.
+   */
+  ALL("All");
+
+  /**
+   * Standard caching rule implementation used by the image provider service.
+   */
+  public static final CachingRule STD_CACHING_RULE = ALL;
+
+  private final String strRepresentation;
+
+  private CachingRule(String strRepresentation) {
+    this.strRepresentation = strRepresentation;
+  }
+
+  /**
+   * Returns the string representation of the used caching rule implementation.
+   * @return String representation.
+   */
+  public String getStrRepresentation() {
+    return strRepresentation;
+  }
+
+  /**
+   * Convert string representation to the correct object. Will return the standard caching rule implementation if the 
+   * string representation is unknown.
+   * @param strCachingRule String representation of the caching rule implementation.
+   * @return Enum value of the caching rule implementation.
+   */
+  public static CachingRule getCachingRuleFromString(String strCachingRule) {
+    return Arrays.asList(CachingRule.values()).stream()
+        .filter(mode -> mode.strRepresentation.equals(strCachingRule)).findFirst()
+        .orElse(STD_CACHING_RULE);
+  }
 }

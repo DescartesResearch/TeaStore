@@ -32,152 +32,151 @@ import tools.descartes.teastore.image.ImageDBKey;
 
 public class TestImageDB {
 
-	private final long productID = 1234567890;
-	private final String name = "testname";
-	private final long productImageID = 99;
-	private final long productImageIDLarge = 999;
-	private final long nameImageID = 200;
-	private ImageSize size = ImageSizePreset.ICON.getSize();
-	private ImageSize sizeLarge = ImageSizePreset.FULL.getSize();
-	private ImageDB uut;
-	
-	@Mock
-	private ImageDBKey mockedProductKey;
-	@Mock
-	private ImageDBKey mockedNameKey;
+  private static final long PRODUCT_ID = 1234567890;
+  private static final String NAME = "testname";
+  private static final long PRODUCT_IMAGE_ID = 99;
+  private static final long PRODUCT_IMAGE_ID_LARGE = 999;
+  private static final long NAME_IMAGE_ID = 200;
+  private ImageSize size = ImageSizePreset.ICON.getSize();
+  private ImageSize sizeLarge = ImageSizePreset.FULL.getSize();
+  private ImageDB uut;
 
-	
-	@Before
-	public void initialize() {
-		MockitoAnnotations.initMocks(this);
-		when(mockedProductKey.isProductKey()).thenReturn(true);
-		when(mockedProductKey.getProductID()).thenReturn(productID);
-		when(mockedProductKey.getWebUIName()).thenReturn(null);
-		when(mockedNameKey.isProductKey()).thenReturn(false);
-		when(mockedNameKey.getProductID()).thenReturn(0L);
-		when(mockedNameKey.getWebUIName()).thenReturn(name);
-		uut = new ImageDB();
-	}
-	
-	@Test
-	public void testConstructor() {
-		ImageDB uut = new ImageDB();
-		new ImageDB(uut);
-	}
-	
-	@Test(expected = NullPointerException.class)
-	public void testConstructorNull() {
-		new ImageDB(null);
-	}
-	
-	@Test
-	public void testHasImageID() {
-		uut.setImageMapping(mockedProductKey, productImageID, size);
-		assertTrue(uut.hasImageID(mockedProductKey, size));
-		assertFalse(uut.hasImageID(mockedNameKey, size));
-		
-		uut = new ImageDB();
-		uut.setImageMapping(mockedNameKey, nameImageID, size);
-		assertTrue(uut.hasImageID(mockedNameKey, size));
-		assertFalse(uut.hasImageID(mockedProductKey, size));
-	}
-	
-	@Test(expected = NullPointerException.class)
-	public void testHasImageIDNull() {
-		uut.hasImageID((ImageDBKey)null, size);
-	}
-	
-	@Test
-	public void testSetImageMappingAndGetImageID() {
-		assertEquals(0, uut.getImageID(mockedProductKey, size));
-		assertEquals(0, uut.getImageID(mockedProductKey, size));
-		assertEquals(0, uut.getImageID(mockedProductKey, null));
-		
-		uut = new ImageDB();
-		uut.setImageMapping(mockedProductKey, productImageID, size);
-		assertEquals(0, uut.getImageID(mockedProductKey, null));	
-		assertEquals(productImageID, uut.getImageID(mockedProductKey, size));
-		assertNotEquals(nameImageID, uut.getImageID(mockedProductKey, size));
-		assertNotEquals(0, uut.getImageID(mockedProductKey, size));
-		
-		assertEquals(0, uut.getImageID(mockedNameKey, null));
-		assertEquals(0, uut.getImageID(mockedNameKey, size));
-		assertNotEquals(productImageID, uut.getImageID(mockedNameKey, size));
+  @Mock
+  private ImageDBKey mockedProductKey;
+  @Mock
+  private ImageDBKey mockedNameKey;
 
-		uut = new ImageDB();
-		uut.setImageMapping(mockedProductKey, productImageID, size);
-		uut.setImageMapping(mockedNameKey, nameImageID, size);
-		assertEquals(productImageID, uut.getImageID(mockedProductKey, size));
-		assertNotEquals(nameImageID, uut.getImageID(mockedProductKey, size));
-		assertNotEquals(0, uut.getImageID(mockedProductKey, size));
-		
-		assertEquals(nameImageID, uut.getImageID(mockedNameKey, size));
-		assertNotEquals(productImageID, uut.getImageID(mockedNameKey, size));
-		assertNotEquals(0, uut.getImageID(mockedNameKey, size));
+  @Before
+  public void initialize() {
+    MockitoAnnotations.initMocks(this);
+    when(mockedProductKey.isProductKey()).thenReturn(true);
+    when(mockedProductKey.getProductID()).thenReturn(PRODUCT_ID);
+    when(mockedProductKey.getWebUIName()).thenReturn(null);
+    when(mockedNameKey.isProductKey()).thenReturn(false);
+    when(mockedNameKey.getProductID()).thenReturn(0L);
+    when(mockedNameKey.getWebUIName()).thenReturn(NAME);
+    uut = new ImageDB();
+  }
 
-		uut.setImageMapping(mockedProductKey, productImageIDLarge, sizeLarge);
-		assertEquals(0, uut.getImageID(mockedProductKey, null));
-		assertEquals(productImageID, uut.getImageID(mockedProductKey, size));
-		assertNotEquals(productImageIDLarge, uut.getImageID(mockedProductKey, size));
-		assertNotEquals(0, uut.getImageID(mockedProductKey, size));
-		assertNotEquals(nameImageID, uut.getImageID(mockedProductKey, size));
-		
-		assertEquals(0, uut.getImageID(mockedNameKey, null));
-		assertEquals(0, uut.getImageID(mockedNameKey, sizeLarge));	
-		assertNotEquals(productImageIDLarge, uut.getImageID(mockedNameKey, sizeLarge));
-		assertNotEquals(productImageID, uut.getImageID(mockedNameKey, sizeLarge));
-		assertNotEquals(nameImageID, uut.getImageID(mockedNameKey, sizeLarge));
-	
-		assertEquals(nameImageID, uut.getImageID(mockedNameKey, size));
-		assertNotEquals(0, uut.getImageID(mockedNameKey, size));
-		assertNotEquals(productImageID, uut.getImageID(mockedNameKey, size));
-		assertNotEquals(productImageIDLarge, uut.getImageID(mockedNameKey, size));
-	}
-	
-	@Test(expected = NullPointerException.class)
-	public void testGetImageIDNull() {
-		uut.setImageMapping(mockedProductKey, productImageID, size);
-		uut.setImageMapping(mockedNameKey, nameImageID, size);
-		
-		uut.getImageID((ImageDBKey)null, size);
-	}
-	
-	@Test
-	public void testGetImageSize() {
-		assertNull(uut.getImageSize(productImageID));
-		
-		uut.setImageMapping(mockedProductKey, productImageID, size);
-		assertNull(uut.getImageSize(nameImageID));
-		assertEquals(size, uut.getImageSize(productImageID));
-		
-		uut.setImageMapping(mockedProductKey, productImageIDLarge, sizeLarge);
-		assertNull(uut.getImageSize(nameImageID));
-		assertNotEquals(sizeLarge, uut.getImageSize(productImageID));
-		assertEquals(size, uut.getImageSize(productImageID));
-	}
-	
-	@Test(expected = NullPointerException.class)
-	public void testSetImageMappingKeyNull() {
-		uut.setImageMapping((ImageDBKey)null, nameImageID, size);
-	}
-	
-	@Test(expected = NullPointerException.class)
-	public void testSetImageMappingNameNull() {
-		uut.setImageMapping((String)null, nameImageID, size);
-	}
-	
-	@Test(expected = NullPointerException.class)
-	public void testSetImageMappingProductSizeNull() {
-		uut.setImageMapping(productID, productImageID, null);
-	}
-	
-	@Test(expected = NullPointerException.class)
-	public void testSetImageMappingNameSizeNull() {
-		uut.setImageMapping(name, nameImageID, null);	
-	}
-	
-	@Test(expected = NullPointerException.class)
-	public void testSetImageMappingKeySizeNull() {
-		uut.setImageMapping(mockedNameKey, nameImageID, null);
-	}
+  @Test
+  public void testConstructor() {
+    ImageDB uut = new ImageDB();
+    new ImageDB(uut);
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void testConstructorNull() {
+    new ImageDB(null);
+  }
+
+  @Test
+  public void testHasImageID() {
+    uut.setImageMapping(mockedProductKey, PRODUCT_IMAGE_ID, size);
+    assertTrue(uut.hasImageID(mockedProductKey, size));
+    assertFalse(uut.hasImageID(mockedNameKey, size));
+
+    uut = new ImageDB();
+    uut.setImageMapping(mockedNameKey, NAME_IMAGE_ID, size);
+    assertTrue(uut.hasImageID(mockedNameKey, size));
+    assertFalse(uut.hasImageID(mockedProductKey, size));
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void testHasImageIDNull() {
+    uut.hasImageID((ImageDBKey) null, size);
+  }
+
+  @Test
+  public void testSetImageMappingAndGetImageID() {
+    assertEquals(0, uut.getImageID(mockedProductKey, size));
+    assertEquals(0, uut.getImageID(mockedProductKey, size));
+    assertEquals(0, uut.getImageID(mockedProductKey, null));
+
+    uut = new ImageDB();
+    uut.setImageMapping(mockedProductKey, PRODUCT_IMAGE_ID, size);
+    assertEquals(0, uut.getImageID(mockedProductKey, null));
+    assertEquals(PRODUCT_IMAGE_ID, uut.getImageID(mockedProductKey, size));
+    assertNotEquals(NAME_IMAGE_ID, uut.getImageID(mockedProductKey, size));
+    assertNotEquals(0, uut.getImageID(mockedProductKey, size));
+
+    assertEquals(0, uut.getImageID(mockedNameKey, null));
+    assertEquals(0, uut.getImageID(mockedNameKey, size));
+    assertNotEquals(PRODUCT_IMAGE_ID, uut.getImageID(mockedNameKey, size));
+
+    uut = new ImageDB();
+    uut.setImageMapping(mockedProductKey, PRODUCT_IMAGE_ID, size);
+    uut.setImageMapping(mockedNameKey, NAME_IMAGE_ID, size);
+    assertEquals(PRODUCT_IMAGE_ID, uut.getImageID(mockedProductKey, size));
+    assertNotEquals(NAME_IMAGE_ID, uut.getImageID(mockedProductKey, size));
+    assertNotEquals(0, uut.getImageID(mockedProductKey, size));
+
+    assertEquals(NAME_IMAGE_ID, uut.getImageID(mockedNameKey, size));
+    assertNotEquals(PRODUCT_IMAGE_ID, uut.getImageID(mockedNameKey, size));
+    assertNotEquals(0, uut.getImageID(mockedNameKey, size));
+
+    uut.setImageMapping(mockedProductKey, PRODUCT_IMAGE_ID_LARGE, sizeLarge);
+    assertEquals(0, uut.getImageID(mockedProductKey, null));
+    assertEquals(PRODUCT_IMAGE_ID, uut.getImageID(mockedProductKey, size));
+    assertNotEquals(PRODUCT_IMAGE_ID_LARGE, uut.getImageID(mockedProductKey, size));
+    assertNotEquals(0, uut.getImageID(mockedProductKey, size));
+    assertNotEquals(NAME_IMAGE_ID, uut.getImageID(mockedProductKey, size));
+
+    assertEquals(0, uut.getImageID(mockedNameKey, null));
+    assertEquals(0, uut.getImageID(mockedNameKey, sizeLarge));
+    assertNotEquals(PRODUCT_IMAGE_ID_LARGE, uut.getImageID(mockedNameKey, sizeLarge));
+    assertNotEquals(PRODUCT_IMAGE_ID, uut.getImageID(mockedNameKey, sizeLarge));
+    assertNotEquals(NAME_IMAGE_ID, uut.getImageID(mockedNameKey, sizeLarge));
+
+    assertEquals(NAME_IMAGE_ID, uut.getImageID(mockedNameKey, size));
+    assertNotEquals(0, uut.getImageID(mockedNameKey, size));
+    assertNotEquals(PRODUCT_IMAGE_ID, uut.getImageID(mockedNameKey, size));
+    assertNotEquals(PRODUCT_IMAGE_ID_LARGE, uut.getImageID(mockedNameKey, size));
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void testGetImageIDNull() {
+    uut.setImageMapping(mockedProductKey, PRODUCT_IMAGE_ID, size);
+    uut.setImageMapping(mockedNameKey, NAME_IMAGE_ID, size);
+
+    uut.getImageID((ImageDBKey) null, size);
+  }
+
+  @Test
+  public void testGetImageSize() {
+    assertNull(uut.getImageSize(PRODUCT_IMAGE_ID));
+
+    uut.setImageMapping(mockedProductKey, PRODUCT_IMAGE_ID, size);
+    assertNull(uut.getImageSize(NAME_IMAGE_ID));
+    assertEquals(size, uut.getImageSize(PRODUCT_IMAGE_ID));
+
+    uut.setImageMapping(mockedProductKey, PRODUCT_IMAGE_ID_LARGE, sizeLarge);
+    assertNull(uut.getImageSize(NAME_IMAGE_ID));
+    assertNotEquals(sizeLarge, uut.getImageSize(PRODUCT_IMAGE_ID));
+    assertEquals(size, uut.getImageSize(PRODUCT_IMAGE_ID));
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void testSetImageMappingKeyNull() {
+    uut.setImageMapping((ImageDBKey) null, NAME_IMAGE_ID, size);
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void testSetImageMappingNameNull() {
+    uut.setImageMapping((String) null, NAME_IMAGE_ID, size);
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void testSetImageMappingProductSizeNull() {
+    uut.setImageMapping(PRODUCT_ID, PRODUCT_IMAGE_ID, null);
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void testSetImageMappingNameSizeNull() {
+    uut.setImageMapping(NAME, NAME_IMAGE_ID, null);
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void testSetImageMappingKeySizeNull() {
+    uut.setImageMapping(mockedNameKey, NAME_IMAGE_ID, null);
+  }
 }

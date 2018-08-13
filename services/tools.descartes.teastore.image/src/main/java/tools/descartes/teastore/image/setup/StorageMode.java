@@ -15,26 +15,45 @@ package tools.descartes.teastore.image.setup;
 
 import java.util.Arrays;
 
+/**
+ * This enum contains the different storage implementations and their string representation.
+ * @author Norbert Schmitt
+ */
 public enum StorageMode {
-	
-	DRIVE("Drive");
-	
-	public static final StorageMode STD_STORAGE_MODE = DRIVE;
-	
-	private final String strRepresentation;
-	
-	private StorageMode(String strRepresentation) {
-		this.strRepresentation = strRepresentation;
-	}
-	
-	public String getStrRepresentation() {
-		return new String(strRepresentation);
-	}
-	
-	public static StorageMode getStorageModeFromString(String strStorageMode) {
-		return Arrays.asList(StorageMode.values()).stream()
-				.filter(mode -> mode.strRepresentation.equals(strStorageMode))
-				.findFirst()
-				.orElse(STD_STORAGE_MODE);
-	}
+
+  /**
+   * Store all images on the pyhsical drive.
+   */
+  DRIVE("Drive");
+
+  /**
+   * Standard storage implementation used by the image provider service.
+   */
+  public static final StorageMode STD_STORAGE_MODE = DRIVE;
+
+  private final String strRepresentation;
+
+  private StorageMode(String strRepresentation) {
+    this.strRepresentation = strRepresentation;
+  }
+
+  /**
+   * Returns the string representation of the used storage implementation.
+   * @return String representation.
+   */
+  public String getStrRepresentation() {
+    return strRepresentation;
+  }
+
+  /**
+   * Convert string representation to the correct object. Will return the standard storage implementation if the 
+   * string representation is unknown.
+   * @param strStorageMode String representation of the storage implementation.
+   * @return Enum value of the storage implementation.
+   */
+  public static StorageMode getStorageModeFromString(String strStorageMode) {
+    return Arrays.asList(StorageMode.values()).stream()
+        .filter(mode -> mode.strRepresentation.equals(strStorageMode)).findFirst()
+        .orElse(STD_STORAGE_MODE);
+  }
 }

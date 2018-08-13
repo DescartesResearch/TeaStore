@@ -14,23 +14,27 @@
 package tools.descartes.teastore.image.cache.entry;
 
 /**
- * Basic wrapper type stored by all cache implementations. It wraps the data stored in a cache.
+ * Basic wrapper type stored by all cache implementations. It wraps the data
+ * stored in a cache.
+ * 
  * @author Norbert Schmitt
  *
- * @param <T> The data type that should be cached. Must implement 
- * {@link tools.descartes.teastore.image.cache.entry.ICachable}.
+ * @param <T>
+ *          The data type that should be cached. Must implement
+ *          {@link tools.descartes.teastore.image.cache.entry.ICachable}.
  */
 public interface ICacheEntry<T extends ICachable<T>> extends ICachable<T> {
-	
-	/**
-	 * Method signaling to the wrapper that this entry was read from the cache.
-	 */
-	public void wasUsed();
-	
-	/**
-	 * Returns the cachable data stored in this wrapper class.
-	 * @return The cachable data
-	 */
-	public T getData();
-	
+
+  /**
+   * Method signaling to the wrapper that this entry was read from the cache.
+   */
+  public void wasUsed();
+
+  /**
+   * Returns the cachable data stored in this wrapper class.
+   * 
+   * @return The cachable data
+   */
+  public T getData();
+
 }

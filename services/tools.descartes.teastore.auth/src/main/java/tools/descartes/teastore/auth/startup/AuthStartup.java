@@ -11,6 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package tools.descartes.teastore.auth.startup;
 
 import javax.servlet.ServletContextEvent;
@@ -24,41 +25,44 @@ import tools.descartes.teastore.registryclient.util.RESTClient;
 
 /**
  * Application Lifecycle Listener implementation class Registry Client Startup.
+ * 
  * @author Simon Eismann
  *
  */
 @WebListener
 public class AuthStartup implements ServletContextListener {
-	
-	private static final int REST_READ_TIMOUT = 1750;
-	
-	/**
-	 * Also set this accordingly in RegistryClientStartup.
-	 */
-	
-	/**
-	 * Empty constructor.
-	 */
-    public AuthStartup() {
-    	
-    }
 
-	/**
-     * @see ServletContextListener#contextDestroyed(ServletContextEvent)
-     * @param arg0 The servlet context event at destruction.
-     */
-    public void contextDestroyed(ServletContextEvent event)  { 
-    	RegistryClient.getClient().unregister(event.getServletContext().getContextPath());
-    }
+  private static final int REST_READ_TIMOUT = 1750;
 
-	/**
-     * @see ServletContextListener#contextInitialized(ServletContextEvent)
-     * @param arg0 The servlet context event at initialization.
-     */
-    public void contextInitialized(ServletContextEvent event)  {
-    	RESTClient.setGlobalReadTimeout(REST_READ_TIMOUT);
-    	ServiceLoadBalancer.preInitializeServiceLoadBalancers(Service.PERSISTENCE, Service.RECOMMENDER);
-    	RegistryClient.getClient().register(event.getServletContext().getContextPath());
-    }
-    
+  /**
+   * Also set this accordingly in RegistryClientStartup.
+   */
+
+  /**
+   * Empty constructor.
+   */
+  public AuthStartup() {
+
+  }
+
+  /**
+   * shutdown routine.
+   * @see ServletContextListener#contextDestroyed(ServletContextEvent)
+   * @param event The servlet context event at destruction.
+   */
+  public void contextDestroyed(ServletContextEvent event) {
+    RegistryClient.getClient().unregister(event.getServletContext().getContextPath());
+  }
+
+  /**
+   * startup routine.
+   * @see ServletContextListener#contextInitialized(ServletContextEvent)
+   * @param event The servlet context event at initialization.
+   */
+  public void contextInitialized(ServletContextEvent event) {
+    RESTClient.setGlobalReadTimeout(REST_READ_TIMOUT);
+    ServiceLoadBalancer.preInitializeServiceLoadBalancers(Service.PERSISTENCE, Service.RECOMMENDER);
+    RegistryClient.getClient().register(event.getServletContext().getContextPath());
+  }
+
 }

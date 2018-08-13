@@ -15,32 +15,69 @@ package tools.descartes.teastore.image.setup;
 
 import java.util.Arrays;
 
+/**
+ * This enum contains the different cache implementations and their string representation.
+ * @author Norbert Schmitt
+ */
 public enum CachingMode {
 
-	FIFO("FIFO"),
-	LIFO("LIFO"),
-	RR("RR"),
-	LFU("LFU"),
-	LRU("LRU"),
-	MRU("MRU"),
-	NONE("Disabled");
-	
-	public static final CachingMode STD_CACHING_MODE = LFU;
-	
-	private final String strRepresentation;
-	
-	private CachingMode(String strRepresentation) {
-		this.strRepresentation = strRepresentation;
-	}
-	
-	public String getStrRepresentation() {
-		return new String(strRepresentation);
-	}
-	
-	public static CachingMode getCachingModeFromString(String strCachingMode) {
-		return Arrays.asList(CachingMode.values()).stream()
-				.filter(mode -> mode.strRepresentation.equals(strCachingMode))
-				.findFirst()
-				.orElse(STD_CACHING_MODE);
-	}
+  /**
+   * First in first out cache.
+   */
+  FIFO("FIFO"), 
+  /**
+   * Last in first out cache.
+   */
+  LIFO("LIFO"), 
+  /**
+   * Random replacement cache.
+   */
+  RR("RR"), 
+  /**
+   * Least frequently used cache.
+   */
+  LFU("LFU"), 
+  /**
+   * Least recently used cache.
+   */
+  LRU("LRU"), 
+  /**
+   * Most recently used cache.
+   */
+  MRU("MRU"), 
+  /**
+   * Use no cache (Cache disabled).
+   */
+  NONE("Disabled");
+
+  /**
+   * Standard cache implementation used by the image provider service.
+   */
+  public static final CachingMode STD_CACHING_MODE = LFU;
+
+  private final String strRepresentation;
+
+  private CachingMode(String strRepresentation) {
+    this.strRepresentation = strRepresentation;
+  }
+
+  /**
+   * Returns the string representation of the used cache implementation.
+   * @return String representation.
+   */
+  public String getStrRepresentation() {
+    return strRepresentation;
+  }
+
+  /**
+   * Convert string representation to the correct object. Will return the standard cache implementation if the string 
+   * representation is unknown.
+   * @param strCachingMode String representation of the cache implementation.
+   * @return Enum value of the cache implementation.
+   */
+  public static CachingMode getCachingModeFromString(String strCachingMode) {
+    return Arrays.asList(CachingMode.values()).stream()
+        .filter(mode -> mode.strRepresentation.equals(strCachingMode)).findFirst()
+        .orElse(STD_CACHING_MODE);
+  }
 }

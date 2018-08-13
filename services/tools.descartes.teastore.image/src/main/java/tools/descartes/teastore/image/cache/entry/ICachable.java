@@ -14,25 +14,30 @@
 package tools.descartes.teastore.image.cache.entry;
 
 /**
- * Interface that must be imlemented if it should use the cache implementations provided in the package
- * {@link tools.descartes.teastore.image.cache}. Each cachable data type must have a unique ID and a byte size to be 
- * identifiable and the cache can determine if there is enough space left. 
+ * Interface that must be imlemented if it should use the cache implementations
+ * provided in the package {@link tools.descartes.teastore.image.cache}. Each
+ * cachable data type must have a unique ID and a byte size to be identifiable
+ * and the cache can determine if there is enough space left.
+ * 
  * @author Norbert Schmitt
  *
- * @param <D>  Data type that must implement this interface.
+ * @param <D>
+ *          Data type that must implement this interface.
  */
 public interface ICachable<D extends ICachable<D>> {
-	
-	/**
-	 * Returns the byte size of the cachable data. 
-	 * @return The byte size of the cachable data
-	 */
-	public long getByteSize();
-	
-	/**
-	 * Returns the unique identifier of the cachable data.
-	 * @return The unique identifier of the cachable data
-	 */
-	public long getId();
-	
+
+  /**
+   * Returns the byte size of the cachable data.
+   * 
+   * @return The byte size of the cachable data
+   */
+  public long getByteSize();
+
+  /**
+   * Returns the unique identifier of the cachable data.
+   * 
+   * @return The unique identifier of the cachable data
+   */
+  public long getId();
+
 }

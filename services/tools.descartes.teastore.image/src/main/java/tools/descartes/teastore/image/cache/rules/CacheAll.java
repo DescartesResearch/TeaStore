@@ -17,11 +17,17 @@ import java.util.function.Predicate;
 
 import tools.descartes.teastore.image.cache.entry.ICachable;
 
+/**
+ * Standard caching rule allowing to cache all data inserted into a cache.
+ * @author Norbert Schmitt
+ *
+ * @param <T> Entry Type implementing ICachable.
+ */
 public class CacheAll<T extends ICachable<T>> implements Predicate<T> {
 
-	@Override
-	public boolean test(T t) {
-		return true;
-	}
+  @Override
+  public boolean test(T t) {
+    return true;
+  }
 
 }

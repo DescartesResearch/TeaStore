@@ -27,33 +27,33 @@ import tools.descartes.teastore.image.StoreImage;
 import tools.descartes.teastore.image.storage.rules.StoreLargeImages;
 
 public class TestStoreLargeImages {
-	
-	@Mock
-	private StoreImage mockedLargeImg;
-	@Mock
-	private StoreImage mockedIconImg;
-	@Mock
-	private StoreImage mockedMainImg;
-	@Mock
-	private StoreImage mockedPreviewImg;
 
-	@Before
-	public void initialize() {
-		MockitoAnnotations.initMocks(this);
-		when(mockedLargeImg.getSize()).thenReturn(ImageSizePreset.FULL.getSize());
-		when(mockedIconImg.getSize()).thenReturn(ImageSizePreset.ICON.getSize());
-		when(mockedMainImg.getSize()).thenReturn(ImageSizePreset.MAIN_IMAGE.getSize());
-		when(mockedPreviewImg.getSize()).thenReturn(ImageSizePreset.PREVIEW.getSize());
-	}
-	
-	@Test
-	public void testRule() {
-		StoreLargeImages uut = new StoreLargeImages();
-		assertTrue(uut.test(mockedLargeImg));
-		assertFalse(uut.test(mockedIconImg));
-		assertFalse(uut.test(mockedMainImg));
-		assertFalse(uut.test(mockedPreviewImg));
-		assertFalse(uut.test(null));
-	}
-	
+  @Mock
+  private StoreImage mockedLargeImg;
+  @Mock
+  private StoreImage mockedIconImg;
+  @Mock
+  private StoreImage mockedMainImg;
+  @Mock
+  private StoreImage mockedPreviewImg;
+
+  @Before
+  public void initialize() {
+    MockitoAnnotations.initMocks(this);
+    when(mockedLargeImg.getSize()).thenReturn(ImageSizePreset.FULL.getSize());
+    when(mockedIconImg.getSize()).thenReturn(ImageSizePreset.ICON.getSize());
+    when(mockedMainImg.getSize()).thenReturn(ImageSizePreset.MAIN_IMAGE.getSize());
+    when(mockedPreviewImg.getSize()).thenReturn(ImageSizePreset.PREVIEW.getSize());
+  }
+
+  @Test
+  public void testRule() {
+    StoreLargeImages uut = new StoreLargeImages();
+    assertTrue(uut.test(mockedLargeImg));
+    assertFalse(uut.test(mockedIconImg));
+    assertFalse(uut.test(mockedMainImg));
+    assertFalse(uut.test(mockedPreviewImg));
+    assertFalse(uut.test(null));
+  }
+
 }

@@ -26,34 +26,34 @@ import tools.descartes.teastore.image.cache.entry.TimedEntry;
 
 public class TestTimedEntry {
 
-	@Mock
-	private StoreImage mockedImg; 
+  @Mock
+  private StoreImage mockedImg;
 
-	@Before
-	public void initialize() {
-		MockitoAnnotations.initMocks(this);
-	}
-	
-	@Test
-	public void testConstructor() {
-		new TimedEntry<>(mockedImg);
-	}
-	
-	@Test(expected = NullPointerException.class)
-	public void testConstructorNull() {
-		new TimedEntry<StoreImage>(null);
-	}
+  @Before
+  public void initialize() {
+    MockitoAnnotations.initMocks(this);
+  }
 
-	@Test
-	public void testTime() {
-		TimedEntry<StoreImage> uut = new TimedEntry<>(mockedImg);
-		assertNotEquals(0L, uut.getTime());
-		long uutTime = uut.getTime();
-		uut.wasUsed();
-		assertNotEquals(uutTime, uut.getTime());
-		long currentTime = System.nanoTime();
-		uut.wasUsed();
-		assertEquals(currentTime, uut.getTime(), 5e5);
-	}
-	
+  @Test
+  public void testConstructor() {
+    new TimedEntry<>(mockedImg);
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void testConstructorNull() {
+    new TimedEntry<StoreImage>(null);
+  }
+
+  @Test
+  public void testTime() {
+    TimedEntry<StoreImage> uut = new TimedEntry<>(mockedImg);
+    assertNotEquals(0L, uut.getTime());
+    long uutTime = uut.getTime();
+    uut.wasUsed();
+    assertNotEquals(uutTime, uut.getTime());
+    long currentTime = System.nanoTime();
+    uut.wasUsed();
+    assertEquals(currentTime, uut.getTime(), 5e5);
+  }
+
 }

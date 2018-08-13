@@ -5,13 +5,13 @@ import tools.descartes.teastore.image.cache.entry.AbstractEntry;
 
 public class AbstractEntryWrapper extends AbstractEntry<StoreImage> {
 
-	public AbstractEntryWrapper(StoreImage data) {
-		super(data);
-	}
+  public AbstractEntryWrapper(StoreImage data) {
+    super(data);
+  }
 
-	@Override
-	public void wasUsed() {
-		
-	}
+  @Override
+  public void wasUsed() {
+
+  }
 
 }

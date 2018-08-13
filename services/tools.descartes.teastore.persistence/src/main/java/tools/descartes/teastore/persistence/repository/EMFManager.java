@@ -59,7 +59,7 @@ final class EMFManager {
 	 * Get the entity manager factory.
 	 * @return The entity manager factory.
 	 */
-	static EntityManagerFactory getEMF() {
+	static synchronized EntityManagerFactory getEMF() {
 		if (emf == null) {
 			HashMap<String, String> persistenceProperties = EMFManager.persistenceProperties;
 			if (persistenceProperties == null) {

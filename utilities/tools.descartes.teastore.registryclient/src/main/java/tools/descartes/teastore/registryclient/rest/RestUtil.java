@@ -13,8 +13,26 @@ import tools.descartes.teastore.registryclient.util.NotFoundException;
 import tools.descartes.teastore.entities.Order;
 import tools.descartes.teastore.entities.Product;
 
-public class RestUtil {
+/**
+ * Utilities.
+ * @author Simon
+ *
+ */
+public final class RestUtil {
 	
+  /**
+   * hides constructor.
+   */
+  private RestUtil() {
+    
+  }
+  
+  /**
+   * Throw common exceptions.
+   * @param responseWithStatus response
+   * @throws NotFoundException error 404
+   * @throws LoadBalancerTimeoutException timeout error
+   */
 	public static void throwCommonExceptions(Response responseWithStatus)
 			throws NotFoundException, LoadBalancerTimeoutException {
 		if (responseWithStatus.getStatus() == Status.NOT_FOUND.getStatusCode()) {
@@ -24,6 +42,13 @@ public class RestUtil {
 		}
 	}
 	
+	/**
+	 * Read entity or return null-.
+	 * @param r external call response
+	 * @param entityClass class of object to load
+   * @param <T> class of object to be loaded
+	 * @return entity or null
+	 */
 	public static <T> T readEntityOrNull(Response r, Class<T> entityClass) {
 		if (r != null) {
 			if (r.getStatus() == 200) {
@@ -35,13 +60,25 @@ public class RestUtil {
 		return null;
 	}
 	
+	/**
+	 * reads entity, throws potential errors and closes the response.
+	 * @param responseWithStatus response 
+	 * @param entityClass class of object to be loaded
+	 * @param <T> class of object to be loaded
+	 * @return entity
+	 */
 	public static <T> T readThrowAndOrClose(Response responseWithStatus, Class<T> entityClass) {
 		T entity = null;
 		entity = readEntityOrNull(responseWithStatus, entityClass);
 		throwCommonExceptions(responseWithStatus);
 		return entity;
 	}
-	
+
+  /**
+   * Special case for orders.
+   * @param r response 
+   * @return List of orders
+   */
 	public static List<Order> readListThrowAndOrCloseOrder(Response r) {
 		List<Order> entity = null;
 		if (r != null) {
@@ -58,6 +95,11 @@ public class RestUtil {
 		return entity;
 	}
 	
+	/**
+	 * Special case for products.
+	 * @param r response
+	 * @return List of products
+	 */
 	public static List<Product> readListThrowAndOrCloseProduct(Response r) {
 		List<Product> entity = null;
 		if (r != null) {

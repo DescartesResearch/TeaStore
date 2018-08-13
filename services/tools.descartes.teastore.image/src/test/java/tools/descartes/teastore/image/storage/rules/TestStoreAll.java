@@ -24,20 +24,20 @@ import tools.descartes.teastore.image.StoreImage;
 import tools.descartes.teastore.image.storage.rules.StoreAll;
 
 public class TestStoreAll {
-	
-	@Mock
-	private StoreImage mockedImg; 
 
-	@Before
-	public void initialize() {
-		MockitoAnnotations.initMocks(this);
-	}
-	
-	@Test
-	public void testRule() {
-		StoreAll<StoreImage> uut = new StoreAll<>();
-		assertTrue(uut.test(mockedImg));
-		assertTrue(uut.test(null));
-	}
-	
+  @Mock
+  private StoreImage mockedImg;
+
+  @Before
+  public void initialize() {
+    MockitoAnnotations.initMocks(this);
+  }
+
+  @Test
+  public void testRule() {
+    StoreAll<StoreImage> uut = new StoreAll<>();
+    assertTrue(uut.test(mockedImg));
+    assertTrue(uut.test(null));
+  }
+
 }

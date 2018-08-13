@@ -13,34 +13,58 @@
  */
 package tools.descartes.teastore.image;
 
+/**
+ * Entry for an image database ({@link tools.descartes.teastore.image.ImageDB}). 
+ * @author Norbert Schmitt
+ */
 public class ImageDBKey {
 
-	private final long productID;
-	private final String webuiName;
-	private final boolean isProductKey;
-	
-	public ImageDBKey(long productID) {
-		this.productID = productID;
-		webuiName = null;
-		isProductKey = true;
-	}
-	
-	public ImageDBKey(String webuiName) {
-		this.webuiName = webuiName;
-		productID = 0;
-		isProductKey = false;
-	}
-	
-	public boolean isProductKey() {
-		return isProductKey;
-	}
-	
-	public long getProductID() {
-		return productID;
-	}
-	
-	public String getWebUIName() {
-		return webuiName;
-	}
+  private final long productID;
+  private final String webuiName;
+  private final boolean isProductKey;
+
+  /**
+   * This entry will represent a product id in the image database.
+   * @param productID Product id.
+   */
+  public ImageDBKey(long productID) {
+    this.productID = productID;
+    webuiName = null;
+    isProductKey = true;
+  }
+
+  /**
+   * This entry will represents a product id in the image database.
+   * @param webuiName Web UI image name.
+   */
+  public ImageDBKey(String webuiName) {
+    this.webuiName = webuiName;
+    productID = 0;
+    isProductKey = false;
+  }
+
+  /**
+   * Checks whether this image database entry represents a product or a static image for the web interface. 
+   * @return True if this image database entry represents a product id, otherwise false.
+   */
+  public boolean isProductKey() {
+    return isProductKey;
+  }
+
+  /**
+   * Returns the stored product id this entry represents or zero if it represents a web interface entry.
+   * @return Product id or zero if it is a web interface entry.
+   */
+  public long getProductID() {
+    return productID;
+  }
+
+  /**
+   * Returns the stored web interface name or NULL if it represents a product id.
+   * @return Web interface image name or NULL if it represents a product id.
+   */
+  public String getWebUIName() {
+    return webuiName;
+  }
 
 }

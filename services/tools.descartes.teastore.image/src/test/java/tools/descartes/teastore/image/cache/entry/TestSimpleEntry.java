@@ -22,29 +22,29 @@ import tools.descartes.teastore.image.StoreImage;
 import tools.descartes.teastore.image.cache.entry.SimpleEntry;
 
 public class TestSimpleEntry {
-	
-	@Mock
-	private StoreImage mockedImg; 
 
-	@Before
-	public void initialize() {
-		MockitoAnnotations.initMocks(this);
-	}
-	
-	@Test
-	public void testConstructor() {
-		new SimpleEntry<>(mockedImg);
-	}
-	
-	@Test(expected = NullPointerException.class)
-	public void testConstructorNull() {
-		new SimpleEntry<StoreImage>(null);
-	}
+  @Mock
+  private StoreImage mockedImg;
 
-	@Test
-	public void testUseCount() {
-		SimpleEntry<StoreImage> uut = new SimpleEntry<>(mockedImg);
-		uut.wasUsed();
-	}
+  @Before
+  public void initialize() {
+    MockitoAnnotations.initMocks(this);
+  }
+
+  @Test
+  public void testConstructor() {
+    new SimpleEntry<>(mockedImg);
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void testConstructorNull() {
+    new SimpleEntry<StoreImage>(null);
+  }
+
+  @Test
+  public void testUseCount() {
+    SimpleEntry<StoreImage> uut = new SimpleEntry<>(mockedImg);
+    uut.wasUsed();
+  }
 
 }
