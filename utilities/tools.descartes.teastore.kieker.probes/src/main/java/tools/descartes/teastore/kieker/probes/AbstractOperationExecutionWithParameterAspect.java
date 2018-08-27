@@ -15,6 +15,7 @@ import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.probe.aspectj.AbstractAspectJProbe;
 import kieker.monitoring.timer.ITimeSource;
+import tools.descartes.teastore.entities.message.SessionBlob;
 import tools.descartes.teastore.kieker.probes.records.OperationExecutionWithParametersRecord;
 
 /**
@@ -156,6 +157,10 @@ public abstract class AbstractOperationExecutionWithParameterAspect extends Abst
     if (argument instanceof java.util.Collection) {
       // log collection size
       return String.valueOf(((java.util.Collection<?>) argument).size());
+    }
+    if (argument instanceof SessionBlob) {
+      SessionBlob sb = (SessionBlob) argument;
+      return String.valueOf(sb.getOrderItems().size());
     }
     // all others are just to string
     return argument.toString();
