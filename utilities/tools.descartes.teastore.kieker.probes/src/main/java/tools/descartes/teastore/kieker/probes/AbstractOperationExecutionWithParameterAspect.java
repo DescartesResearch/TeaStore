@@ -163,7 +163,11 @@ public abstract class AbstractOperationExecutionWithParameterAspect extends Abst
       return String.valueOf(sb.getOrderItems().size());
     }
     // all others are just to string
-    return argument.toString();
+    String stringRepresentation = argument.toString();
+    int stringLength = stringRepresentation.length();
+    if (stringLength < 500)
+      return argument.toString();
+    return String.valueOf(stringLength);
   }
 
   private void logWithoutParameters(final ProceedingJoinPoint thisJoinPoint, String signature,
