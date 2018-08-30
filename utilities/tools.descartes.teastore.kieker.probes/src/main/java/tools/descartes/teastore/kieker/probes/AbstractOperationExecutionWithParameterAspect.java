@@ -165,8 +165,9 @@ public abstract class AbstractOperationExecutionWithParameterAspect extends Abst
     // all others are just to string
     String stringRepresentation = argument.toString();
     int stringLength = stringRepresentation.length();
-    if (stringLength < 500)
+    if (stringLength < 500) {
       return argument.toString();
+    }
     return String.valueOf(stringLength);
   }
 
