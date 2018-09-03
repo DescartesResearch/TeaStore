@@ -165,7 +165,7 @@ public abstract class AbstractOperationExecutionWithParameterAspect extends Abst
     }
     
     if (argument instanceof ImageSize) {
-      return String.valueOf(((ImageSize)argument).getPixelCount());
+      return String.valueOf(((ImageSize) argument).getPixelCount());
     }
     
     // all others are just to string
