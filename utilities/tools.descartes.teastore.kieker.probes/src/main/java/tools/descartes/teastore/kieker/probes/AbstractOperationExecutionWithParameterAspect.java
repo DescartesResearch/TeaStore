@@ -15,6 +15,7 @@ import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.probe.aspectj.AbstractAspectJProbe;
 import kieker.monitoring.timer.ITimeSource;
+import tools.descartes.teastore.entities.ImageSize;
 import tools.descartes.teastore.entities.message.SessionBlob;
 import tools.descartes.teastore.kieker.probes.records.OperationExecutionWithParametersRecord;
 
@@ -162,6 +163,11 @@ public abstract class AbstractOperationExecutionWithParameterAspect extends Abst
       SessionBlob sb = (SessionBlob) argument;
       return String.valueOf(sb.getOrderItems().size());
     }
+    
+    if (argument instanceof ImageSize) {
+      return String.valueOf(((ImageSize)argument).getPixelCount());
+    }
+    
     // all others are just to string
     String stringRepresentation = argument.toString();
     int stringLength = stringRepresentation.length();
