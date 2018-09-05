@@ -168,19 +168,7 @@
 								</goals>
 								<configuration>
 									<repository>${dockerrepository}/teastore-webui</repository>
-									<tag>latest</tag>
-								</configuration>
-								<phase>package</phase>
-							</execution>
-							<execution>
-								<id>tag-push-version</id>
-								<goals>
-									<goal>tag</goal>
-									<goal>push</goal>
-								</goals>
-								<configuration>
-									<repository>${dockerrepository}/teastore-webui</repository>
-									<tag>${project.version}</tag>
+									<tag>sven</tag>
 								</configuration>
 								<phase>package</phase>
 							</execution>
@@ -343,19 +331,7 @@
 								</goals>
 								<configuration>
 									<repository>${dockerrepository}/teastore-webui-kieker</repository>
-									<tag>latest</tag>
-								</configuration>
-								<phase>package</phase>
-							</execution>
-							<execution>
-								<id>tag-push-version</id>
-								<goals>
-									<goal>tag</goal>
-									<goal>push</goal>
-								</goals>
-								<configuration>
-									<repository>${dockerrepository}/teastore-webui-kieker</repository>
-									<tag>${project.version}</tag>
+									<tag>sven</tag>
 								</configuration>
 								<phase>package</phase>
 							</execution>
