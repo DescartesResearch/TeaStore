@@ -151,7 +151,7 @@
 								</goals>
 								<configuration>
 									<repository>${dockerrepository}/teastore-recommender</repository>
-									<tag>sven</tag>
+									<tag>low_granularity</tag>
 								</configuration>
 								<phase>package</phase>
 							</execution>
@@ -297,7 +297,7 @@
 								</goals>
 								<configuration>
 									<repository>${dockerrepository}/teastore-recommender-kieker</repository>
-									<tag>sven</tag>
+									<tag>low_granularity</tag>
 								</configuration>
 								<phase>package</phase>
 							</execution>

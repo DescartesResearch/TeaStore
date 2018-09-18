@@ -168,7 +168,7 @@
 								</goals>
 								<configuration>
 									<repository>${dockerrepository}/teastore-webui</repository>
-									<tag>sven</tag>
+									<tag>low_granularity</tag>
 								</configuration>
 								<phase>package</phase>
 							</execution>
@@ -331,7 +331,7 @@
 								</goals>
 								<configuration>
 									<repository>${dockerrepository}/teastore-webui-kieker</repository>
-									<tag>sven</tag>
+									<tag>low_granularity</tag>
 								</configuration>
 								<phase>package</phase>
 							</execution>

@@ -192,7 +192,7 @@
 								</goals>
 								<configuration>
 									<repository>${dockerrepository}/teastore-registry</repository>
-									<tag>sven</tag>
+									<tag>low_granularity</tag>
 								</configuration>
 								<phase>package</phase>
 							</execution>
@@ -335,7 +335,7 @@
 								</goals>
 								<configuration>
 									<repository>${dockerrepository}/teastore-registry-kieker</repository>
-									<tag>sven</tag>
+									<tag>low_granularity</tag>
 								</configuration>
 							</execution>
 						</executions>

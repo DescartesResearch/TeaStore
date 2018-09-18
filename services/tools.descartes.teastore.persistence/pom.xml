@@ -159,7 +159,7 @@
 								</goals>
 								<configuration>
 									<repository>${dockerrepository}/teastore-persistence</repository>
-									<tag>sven</tag>
+									<tag>low_granularity</tag>
 								</configuration>
 								<phase>package</phase>
 							</execution>
@@ -305,7 +305,7 @@
 								</goals>
 								<configuration>
 									<repository>${dockerrepository}/teastore-persistence-kieker</repository>
-									<tag>sven</tag>
+									<tag>low_granularity</tag>
 								</configuration>
 								<phase>package</phase>
 							</execution>

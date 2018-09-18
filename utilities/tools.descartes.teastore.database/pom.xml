@@ -34,7 +34,7 @@
 						</goals>
 						<configuration>
 							<repository>${dockerrepository}/teastore-db</repository>
-							<tag>sven</tag>
+							<tag>low_granularity</tag>
 						</configuration>
 						<phase>package</phase>
 					</execution>
