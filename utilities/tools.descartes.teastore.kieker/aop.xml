@@ -115,6 +115,8 @@
 			&amp;&amp; !execution(* tools.descartes.teastore.persistence.domain.PersistenceProduct.setCategoryId(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.persistence.domain.PersistenceProduct.getName(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.persistence.domain.ProductRepository.getEntityClass(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.persistence.domain.ProductRepository.getAllEntries(..))
+			&amp;&amp; !execution(* tools.descartes.teastore.persistence.domain.ProductRepository.getProductCount(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.persistence.domain.CategoryRepository.getEntityClass(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.persistence.domain.OrderItemRepository.getEntityClass(..))
 			&amp;&amp; !execution(* tools.descartes.teastore.persistence.domain.UserRepository.getEntityClass(..))
