@@ -61,10 +61,6 @@
 		<exclude within="tools.descartes.teastore.registryclient.util.RESTClient" />
 		<exclude within="tools.descartes.teastore.registryclient.util.RESTClient$1" />
 		<exclude within="tools.descartes.teastore.registryclient.util.AbstractCRUDEndpoint" />
-		<exclude within="tools.descartes.teastore.registryclient.rest.LoadBalancedCRUDOperations" />
-		<exclude within="tools.descartes.teastore.registryclient.rest.LoadBalancedStoreOperations" />
-		<exclude within="tools.descartes.teastore.registryclient.rest.LoadBalancedRecommenderOperations" />
-		<exclude within="tools.descartes.teastore.registryclient.rest.LoadBalancedImageOperations" />
 		</weaver>
 	<aspects>
 		<concrete-aspect name="kieker.monitoring.probe.aspectj.operationExecution.TargetedAspect" extends="tools.descartes.teastore.kieker.probes.AbstractOperationExecutionWithParameterAspect">
