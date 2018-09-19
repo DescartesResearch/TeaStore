@@ -216,7 +216,6 @@
             &amp;&amp; !execution(* tools.descartes.teastore.persistence.domain.PersistenceOrderItem.setOrder(..))
             &amp;&amp; !execution(* tools.descartes.teastore.persistence.domain.OrderItemRepository.createEntity(..))
             &amp;&amp; !execution(* tools.descartes.teastore.persistence.domain.PersistenceOrderItem.getId())
-            &amp;&amp; !execution(* tools.descartes.teastore.persistence.rest.ProductEndpoint.findEntityById(..))
             &amp;&amp; !execution(* tools.descartes.teastore.persistence.domain.PersistenceUser.getId())
             &amp;&amp; !execution(* tools.descartes.teastore.persistence.domain.OrderRepository.getAllEntitiesWithUser(..))
             &amp;&amp; !execution(* tools.descartes.teastore.persistence.domain.UserRepository.getUserByName(..))
