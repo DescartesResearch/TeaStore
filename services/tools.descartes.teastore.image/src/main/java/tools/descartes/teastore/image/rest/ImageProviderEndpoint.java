@@ -42,8 +42,107 @@ public class ImageProviderEndpoint {
    * @return Map of product IDs and the image data as base64 encoded string.
    */
   @POST
-  @Path("getProductImages")
-  public Response getProductImages(HashMap<Long, String> images) {
+  @Path("getProductImages1")
+  public Response getProductImages1(HashMap<Long, String> images) {
+    return Response.ok()
+        .entity(ImageProvider.IP.getProductImages(images.entrySet().parallelStream().collect(
+            Collectors.toMap(e -> e.getKey(), e -> ImageSize.parseImageSize(e.getValue())))))
+        .build();
+  }
+  
+  @POST
+  @Path("getProductImages2")
+  public Response getProductImages2(HashMap<Long, String> images) {
+    return Response.ok()
+        .entity(ImageProvider.IP.getProductImages(images.entrySet().parallelStream().collect(
+            Collectors.toMap(e -> e.getKey(), e -> ImageSize.parseImageSize(e.getValue())))))
+        .build();
+  }
+  
+  @POST
+  @Path("getProductImages3")
+  public Response getProductImages3(HashMap<Long, String> images) {
+    return Response.ok()
+        .entity(ImageProvider.IP.getProductImages(images.entrySet().parallelStream().collect(
+            Collectors.toMap(e -> e.getKey(), e -> ImageSize.parseImageSize(e.getValue())))))
+        .build();
+  }
+  
+  @POST
+  @Path("getProductImages4")
+  public Response getProductImages4(HashMap<Long, String> images) {
+    return Response.ok()
+        .entity(ImageProvider.IP.getProductImages(images.entrySet().parallelStream().collect(
+            Collectors.toMap(e -> e.getKey(), e -> ImageSize.parseImageSize(e.getValue())))))
+        .build();
+  }
+  
+  @POST
+  @Path("getProductImages5")
+  public Response getProductImages5(HashMap<Long, String> images) {
+    return Response.ok()
+        .entity(ImageProvider.IP.getProductImages(images.entrySet().parallelStream().collect(
+            Collectors.toMap(e -> e.getKey(), e -> ImageSize.parseImageSize(e.getValue())))))
+        .build();
+  }
+  
+  @POST
+  @Path("getProductImages6")
+  public Response getProductImages6(HashMap<Long, String> images) {
+    return Response.ok()
+        .entity(ImageProvider.IP.getProductImages(images.entrySet().parallelStream().collect(
+            Collectors.toMap(e -> e.getKey(), e -> ImageSize.parseImageSize(e.getValue())))))
+        .build();
+  }
+  
+  @POST
+  @Path("getProductImages7")
+  public Response getProductImages7(HashMap<Long, String> images) {
+    return Response.ok()
+        .entity(ImageProvider.IP.getProductImages(images.entrySet().parallelStream().collect(
+            Collectors.toMap(e -> e.getKey(), e -> ImageSize.parseImageSize(e.getValue())))))
+        .build();
+  }
+  
+  @POST
+  @Path("getProductImages8")
+  public Response getProductImages8(HashMap<Long, String> images) {
+    return Response.ok()
+        .entity(ImageProvider.IP.getProductImages(images.entrySet().parallelStream().collect(
+            Collectors.toMap(e -> e.getKey(), e -> ImageSize.parseImageSize(e.getValue())))))
+        .build();
+  }
+  
+  @POST
+  @Path("getProductImages9")
+  public Response getProductImages9(HashMap<Long, String> images) {
+    return Response.ok()
+        .entity(ImageProvider.IP.getProductImages(images.entrySet().parallelStream().collect(
+            Collectors.toMap(e -> e.getKey(), e -> ImageSize.parseImageSize(e.getValue())))))
+        .build();
+  }
+  
+  @POST
+  @Path("getProductImages10")
+  public Response getProductImages10(HashMap<Long, String> images) {
+    return Response.ok()
+        .entity(ImageProvider.IP.getProductImages(images.entrySet().parallelStream().collect(
+            Collectors.toMap(e -> e.getKey(), e -> ImageSize.parseImageSize(e.getValue())))))
+        .build();
+  }
+  
+  @POST
+  @Path("getProductImages11")
+  public Response getProductImages11(HashMap<Long, String> images) {
+    return Response.ok()
+        .entity(ImageProvider.IP.getProductImages(images.entrySet().parallelStream().collect(
+            Collectors.toMap(e -> e.getKey(), e -> ImageSize.parseImageSize(e.getValue())))))
+        .build();
+  }
+  
+  @POST
+  @Path("getProductImages12")
+  public Response getProductImages12(HashMap<Long, String> images) {
     return Response.ok()
         .entity(ImageProvider.IP.getProductImages(images.entrySet().parallelStream().collect(
             Collectors.toMap(e -> e.getKey(), e -> ImageSize.parseImageSize(e.getValue())))))
