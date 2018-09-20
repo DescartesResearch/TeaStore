@@ -50,6 +50,11 @@ public class ImageProviderEndpoint {
         .build();
   }
   
+  /**
+   * Queries the image provider for the given product IDs in the given size, provided as strings.
+   * @param images Map of product IDs and the corresponding image size as string.
+   * @return Map of product IDs and the image data as base64 encoded string.
+   */
   @POST
   @Path("getProductImages2")
   public Response getProductImages2(HashMap<Long, String> images) {
@@ -59,6 +64,11 @@ public class ImageProviderEndpoint {
         .build();
   }
   
+  /**
+   * Queries the image provider for the given product IDs in the given size, provided as strings.
+   * @param images Map of product IDs and the corresponding image size as string.
+   * @return Map of product IDs and the image data as base64 encoded string.
+   */
   @POST
   @Path("getProductImages3")
   public Response getProductImages3(HashMap<Long, String> images) {
@@ -68,6 +78,11 @@ public class ImageProviderEndpoint {
         .build();
   }
   
+  /**
+   * Queries the image provider for the given product IDs in the given size, provided as strings.
+   * @param images Map of product IDs and the corresponding image size as string.
+   * @return Map of product IDs and the image data as base64 encoded string.
+   */
   @POST
   @Path("getProductImages4")
   public Response getProductImages4(HashMap<Long, String> images) {
@@ -77,6 +92,11 @@ public class ImageProviderEndpoint {
         .build();
   }
   
+  /**
+   * Queries the image provider for the given product IDs in the given size, provided as strings.
+   * @param images Map of product IDs and the corresponding image size as string.
+   * @return Map of product IDs and the image data as base64 encoded string.
+   */
   @POST
   @Path("getProductImages5")
   public Response getProductImages5(HashMap<Long, String> images) {
@@ -86,6 +106,11 @@ public class ImageProviderEndpoint {
         .build();
   }
   
+  /**
+   * Queries the image provider for the given product IDs in the given size, provided as strings.
+   * @param images Map of product IDs and the corresponding image size as string.
+   * @return Map of product IDs and the image data as base64 encoded string.
+   */
   @POST
   @Path("getProductImages6")
   public Response getProductImages6(HashMap<Long, String> images) {
@@ -95,6 +120,11 @@ public class ImageProviderEndpoint {
         .build();
   }
   
+  /**
+   * Queries the image provider for the given product IDs in the given size, provided as strings.
+   * @param images Map of product IDs and the corresponding image size as string.
+   * @return Map of product IDs and the image data as base64 encoded string.
+   */
   @POST
   @Path("getProductImages7")
   public Response getProductImages7(HashMap<Long, String> images) {
@@ -104,6 +134,11 @@ public class ImageProviderEndpoint {
         .build();
   }
   
+  /**
+   * Queries the image provider for the given product IDs in the given size, provided as strings.
+   * @param images Map of product IDs and the corresponding image size as string.
+   * @return Map of product IDs and the image data as base64 encoded string.
+   */
   @POST
   @Path("getProductImages8")
   public Response getProductImages8(HashMap<Long, String> images) {
@@ -113,6 +148,11 @@ public class ImageProviderEndpoint {
         .build();
   }
   
+  /**
+   * Queries the image provider for the given product IDs in the given size, provided as strings.
+   * @param images Map of product IDs and the corresponding image size as string.
+   * @return Map of product IDs and the image data as base64 encoded string.
+   */
   @POST
   @Path("getProductImages9")
   public Response getProductImages9(HashMap<Long, String> images) {
@@ -122,6 +162,11 @@ public class ImageProviderEndpoint {
         .build();
   }
   
+  /**
+   * Queries the image provider for the given product IDs in the given size, provided as strings.
+   * @param images Map of product IDs and the corresponding image size as string.
+   * @return Map of product IDs and the image data as base64 encoded string.
+   */
   @POST
   @Path("getProductImages10")
   public Response getProductImages10(HashMap<Long, String> images) {
@@ -131,6 +176,11 @@ public class ImageProviderEndpoint {
         .build();
   }
   
+  /**
+   * Queries the image provider for the given product IDs in the given size, provided as strings.
+   * @param images Map of product IDs and the corresponding image size as string.
+   * @return Map of product IDs and the image data as base64 encoded string.
+   */
   @POST
   @Path("getProductImages11")
   public Response getProductImages11(HashMap<Long, String> images) {
@@ -140,6 +190,11 @@ public class ImageProviderEndpoint {
         .build();
   }
   
+  /**
+   * Queries the image provider for the given product IDs in the given size, provided as strings.
+   * @param images Map of product IDs and the corresponding image size as string.
+   * @return Map of product IDs and the image data as base64 encoded string.
+   */
   @POST
   @Path("getProductImages12")
   public Response getProductImages12(HashMap<Long, String> images) {
