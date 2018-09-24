@@ -1,6 +1,47 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
+  name: teastore-kieker-rabbitmq
+spec:
+  template:
+    metadata:
+      labels:
+        app: teastore
+        run: teastore-kieker-rabbitmq
+    spec:
+      nodeSelector:
+        type: util
+      containers:
+      - name: teastore-kieker-rabbitmq
+        image: descartesresearch/teastore-kieker-rabbitmq
+        ports:
+        - containerPort: 5672
+        - containerPort: 8080
+        - containerPort: 15672
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: teastore-kieker-rabbitmq
+  labels:
+    app: teastore
+    run: teastore-kieker-rabbitmq
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8080
+    nodePort: 30081
+    protocol: TCP
+    name: webui-port
+  - port: 5672
+    protocol: TCP
+    name: rabbitmq-port
+  selector:
+    run: teastore-kieker-rabbitmq
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
   name: teastore-db
 spec:
   template:
@@ -9,11 +50,17 @@ spec:
         app: teastore
         run: teastore-db
     spec:
+      nodeSelector:
+        type: util
       containers:
       - name: teastore-db
         image: descartesresearch/teastore-db
         ports:
         - containerPort: 3306
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "300m"
 ---
 apiVersion: v1
 kind: Service
@@ -40,6 +87,8 @@ spec:
         app: teastore
         run: teastore-registry
     spec:
+      nodeSelector:
+        type: util
       containers:
       - name: teastore-registry
         image: descartesresearch/teastore-registry
@@ -48,6 +97,10 @@ spec:
         env:
         - name: USE_POD_IP
           value: "true"
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "300m"
 ---
 apiVersion: v1
 kind: Service
@@ -68,12 +121,15 @@ kind: Deployment
 metadata:
   name: teastore-persistence
 spec:
+  replicas: 4
   template:
     metadata:
       labels:
         app: teastore
         run: teastore-persistence
     spec:
+      nodeSelector:
+        type: work
       containers:
       - name: teastore-persistence
         image: descartesresearch/teastore-persistence-kieker
@@ -90,18 +146,25 @@ spec:
           value: "3306"
         - name: RABBITMQ_HOST
           value: "teastore-kieker-rabbitmq"
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "300m"
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: teastore-auth
 spec:
+  replicas: 4
   template:
     metadata:
       labels:
         app: teastore
         run: teastore-auth
     spec:
+      nodeSelector:
+        type: work
       containers:
       - name: teastore-auth
         image: descartesresearch/teastore-auth-kieker
@@ -114,18 +177,25 @@ spec:
           value: "teastore-registry"
         - name: RABBITMQ_HOST
           value: "teastore-kieker-rabbitmq"
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "300m"
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: teastore-image
 spec:
+  replicas: 4
   template:
     metadata:
       labels:
         app: teastore
         run: teastore-image
     spec:
+      nodeSelector:
+        type: work
       containers:
       - name: teastore-image
         image: descartesresearch/teastore-image-kieker
@@ -138,18 +208,25 @@ spec:
           value: "teastore-registry"
         - name: RABBITMQ_HOST
           value: "teastore-kieker-rabbitmq"
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "300m"
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: teastore-recommender
 spec:
+  replicas: 4
   template:
     metadata:
       labels:
         app: teastore
         run: teastore-recommender
     spec:
+      nodeSelector:
+        type: work
       containers:
       - name: teastore-recommender
         image: descartesresearch/teastore-recommender-kieker
@@ -162,18 +239,25 @@ spec:
           value: "teastore-registry"
         - name: RABBITMQ_HOST
           value: "teastore-kieker-rabbitmq"
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "300m"
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: teastore-webui
 spec:
+  replicas: 4
   template:
     metadata:
       labels:
         app: teastore
         run: teastore-webui
     spec:
+      nodeSelector:
+        type: work
       containers:
       - name: teastore-webui
         image: descartesresearch/teastore-webui-kieker
@@ -186,6 +270,21 @@ spec:
           value: "teastore-registry"
         - name: RABBITMQ_HOST
           value: "teastore-kieker-rabbitmq"
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "300m"
+        readinessProbe:
+          initialDelaySeconds: 60
+          timeoutSeconds: 1
+          periodSeconds: 30
+          successThreshold: 1
+          failureThreshold: 3
+          httpGet:
+            path: "/tools.descartes.teastore.webui/category?category=2&page=1"
+            port: 8080
+            scheme: HTTP
+
 ---
 apiVersion: v1
 kind: Service
@@ -195,10 +294,11 @@ metadata:
     app: teastore
     run: teastore-webui
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
-  - port: 8080
-    nodePort: 30080
+  - name: web
+    port: 80
+    targetPort: 8080
     protocol: TCP
   selector:
     run: teastore-webui
