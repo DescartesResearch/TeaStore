@@ -7,8 +7,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kieker.common.record.IMonitoringRecord;
-
 /**
  * Servlet that shows logs currently stored in memory.
  * 
