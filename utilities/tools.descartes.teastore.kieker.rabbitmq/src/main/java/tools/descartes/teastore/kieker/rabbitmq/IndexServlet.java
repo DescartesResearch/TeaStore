@@ -30,7 +30,7 @@ public class IndexServlet extends HttpServlet {
     writer.println("<h1>Kieker logs</h1>");
     writer.println("<ul>");
     writer.println("<li><a href=\"/logs/\">Get log files</a></li>");
-    writer.println("<li><a href=\"/logs//displaylogs\">Display logs currently stored in memory</a></li>");
+    writer.println("<li><a href=\"/logs/displaylogs\">Display logs currently stored in memory</a></li>");
     writer.println("<li><a href=\"/logs/reset\">Reset logs</a></li>");
     writer.println("</ul>");
   }
