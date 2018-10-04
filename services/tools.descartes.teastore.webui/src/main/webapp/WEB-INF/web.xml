@@ -4,6 +4,19 @@
   <welcome-file-list>
     <welcome-file>index</welcome-file>
   </welcome-file-list>
+  <servlet>
+    <servlet-name>webuirest</servlet-name>
+    <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+    <init-param>
+      <param-name>jersey.config.server.provider.packages</param-name>
+      <param-value>tools.descartes.teastore.webui.rest</param-value>
+    </init-param>
+    <load-on-startup>2</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>webuirest</servlet-name>
+    <url-pattern>/rest/*</url-pattern>
+  </servlet-mapping>
   <env-entry>
     <env-entry-name>servicePort</env-entry-name>
     <env-entry-type>java.lang.String</env-entry-type>

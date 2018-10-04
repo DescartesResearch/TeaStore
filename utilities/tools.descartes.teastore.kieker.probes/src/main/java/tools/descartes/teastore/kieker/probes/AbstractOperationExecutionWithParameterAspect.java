@@ -15,6 +15,8 @@ import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.probe.aspectj.AbstractAspectJProbe;
 import kieker.monitoring.timer.ITimeSource;
+import tools.descartes.teastore.entities.ImageSize;
+import tools.descartes.teastore.entities.message.SessionBlob;
 import tools.descartes.teastore.kieker.probes.records.OperationExecutionWithParametersRecord;
 
 /**
@@ -157,8 +159,22 @@ public abstract class AbstractOperationExecutionWithParameterAspect extends Abst
       // log collection size
       return String.valueOf(((java.util.Collection<?>) argument).size());
     }
+    if (argument instanceof SessionBlob) {
+      SessionBlob sb = (SessionBlob) argument;
+      return String.valueOf(sb.getOrderItems().size());
+    }
+    
+    if (argument instanceof ImageSize) {
+      return String.valueOf(((ImageSize) argument).getPixelCount());
+    }
+    
     // all others are just to string
-    return argument.toString();
+    String stringRepresentation = argument.toString();
+    int stringLength = stringRepresentation.length();
+    if (stringLength < 500) {
+      return argument.toString();
+    }
+    return String.valueOf(stringLength);
   }
 
   private void logWithoutParameters(final ProceedingJoinPoint thisJoinPoint, String signature,

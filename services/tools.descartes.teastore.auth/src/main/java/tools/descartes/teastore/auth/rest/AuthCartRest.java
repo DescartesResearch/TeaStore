@@ -68,6 +68,7 @@ public class AuthCartRest {
     for (OrderItem orderItem : blob.getOrderItems()) {
       if (orderItem.getProductId() == pid) {
         orderItem.setQuantity(orderItem.getQuantity() + 1);
+        blob = new ShaSecurityProvider().secure(blob);
         return Response.status(Response.Status.OK).entity(blob).build();
       }
     }
