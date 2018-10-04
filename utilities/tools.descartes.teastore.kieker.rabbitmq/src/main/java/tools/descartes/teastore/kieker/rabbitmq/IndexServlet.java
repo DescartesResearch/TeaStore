@@ -28,8 +28,10 @@ public class IndexServlet extends HttpServlet {
     PrintWriter writer = response.getWriter();
     response.setCharacterEncoding("utf8");
     writer.println("<h1>Kieker logs</h1>");
-    writer.println("<a href=\"/logs/\">Get log files</a>");
-    writer.println("<a href=\"/logs//displaylogs\">Display logs currently stored in memory</a>");
-    writer.println("<a href=\"/logs/reset\">Reset logs</a>");
+    writer.println("<ul>");
+    writer.println("<li><a href=\"/logs/\">Get log files</a></li>");
+    writer.println("<li><a href=\"/logs//displaylogs\">Display logs currently stored in memory</a></li>");
+    writer.println("<li><a href=\"/logs/reset\">Reset logs</a></li>");
+    writer.println("</ul>");
   }
 }
