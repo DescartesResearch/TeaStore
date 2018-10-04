@@ -53,7 +53,7 @@ public enum CachingMode {
   /**
    * Standard cache implementation used by the image provider service.
    */
-  public static final CachingMode STD_CACHING_MODE = LFU;
+  public static final CachingMode STD_CACHING_MODE = RR;
 
   private final String strRepresentation;
 
