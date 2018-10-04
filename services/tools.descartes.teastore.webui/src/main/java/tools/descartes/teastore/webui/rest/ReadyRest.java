@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package tools.descartes.teastore.auth.rest;
+package tools.descartes.teastore.webui.rest;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
