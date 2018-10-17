@@ -61,7 +61,7 @@ public class AuthStartup implements ServletContextListener {
    */
   public void contextInitialized(ServletContextEvent event) {
     RESTClient.setGlobalReadTimeout(REST_READ_TIMOUT);
-    ServiceLoadBalancer.preInitializeServiceLoadBalancers(Service.PERSISTENCE, Service.RECOMMENDER);
+    ServiceLoadBalancer.preInitializeServiceLoadBalancers(Service.PERSISTENCE);
     RegistryClient.getClient().register(event.getServletContext().getContextPath());
   }
 
