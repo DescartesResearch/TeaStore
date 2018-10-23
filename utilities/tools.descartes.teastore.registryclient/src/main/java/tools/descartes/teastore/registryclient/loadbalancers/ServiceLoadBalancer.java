@@ -79,7 +79,8 @@ public final class ServiceLoadBalancer {
     		//initialize before logging in case the compiler optimizes it away when log-level info is not set
     		getServiceLoadBalancer(service);
     		//log the state to prevent the compiler from optimizing the initialization away
-    		LOG.info("Pre-initializing client-side load balancer for target: " + getServiceLoadBalancer(service).targetService.getServiceName());
+    		LOG.info("Pre-initializing client-side load balancer for target: " 
+			 + getServiceLoadBalancer(service).targetService.getServiceName());
     	}
     }
     
