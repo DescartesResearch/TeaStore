@@ -48,7 +48,6 @@ public class WebuiStartup implements ServletContextListener {
      * @param event The servlet context event at initialization.
      */
     public void contextInitialized(ServletContextEvent event)  {
-      System.out.println("Heap size: " + Runtime.getRuntime().maxMemory());
     	ServiceLoadBalancer.preInitializeServiceLoadBalancers(Service.AUTH, Service.IMAGE,
     			Service.PERSISTENCE, Service.RECOMMENDER);
     	RegistryClient.getClient().register(event.getServletContext().getContextPath());

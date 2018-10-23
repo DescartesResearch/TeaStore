@@ -76,7 +76,10 @@ public final class ServiceLoadBalancer {
      */
     public static void preInitializeServiceLoadBalancers(Service... targetServices) {
     	for (Service service : targetServices) {
-    		updateLoadBalancersForServiceUsingRegistry(service);
+    		//initialize before logging in case the compiler optimizes it away when log-level info is not set
+    		getServiceLoadBalancer(service);
+    		//log the state to prevent the compiler from optimizing the initialization away
+    		LOG.info("Pre-initializing client-side load balancer for target: " + getServiceLoadBalancer(service).targetService.getServiceName());
     	}
     }
     
