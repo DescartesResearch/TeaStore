@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<Context>
+    <!--
+    	Use the in-memory database when running
+    	the persistence in a development environment.
+    -->
+    <Environment name="inMemoryDB" value="true"
+    	type="java.lang.String" override="false"/>
+</Context>

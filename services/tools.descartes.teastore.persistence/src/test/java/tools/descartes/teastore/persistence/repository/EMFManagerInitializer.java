@@ -12,14 +12,6 @@ import tools.descartes.teastore.persistence.repository.EMFManager;
  */
 public final class EMFManagerInitializer {
 	
-	private static final String DRIVER_PROPERTY = "javax.persistence.jdbc.driver";
-	private static final String DRIVER_VALUE = "org.hsqldb.jdbcDriver";
-	private static final String JDBC_URL_PROPERTY = "javax.persistence.jdbc.url";
-	private static final String JDBC_URL_VALUE = "jdbc:hsqldb:mem:test";
-	private static final String USER_PROPERTY = "javax.persistence.jdbc.user";
-	private static final String USER_VALUE = "sa";
-	private static final String PASSWORD_PROPERTY = "javax.persistence.jdbc.password";
-	private static final String PASSWORD_VALUE = "";
 	private static final String DDL_PROPERTY = "eclipselink.ddl-generation";
 	private static final String DDL_VALUE = "drop-and-create-tables";
 	private static final String DDL_OUTPUT_PROPERTY = "eclipselink.ddl-generation.output-mode";
@@ -39,11 +31,7 @@ public final class EMFManagerInitializer {
 	
 	
 	private static HashMap<String, String> createPersistencePropertiesForTesting() {
-		HashMap<String, String> persistenceProperties = new HashMap<String, String>();
-		persistenceProperties.put(DRIVER_PROPERTY, DRIVER_VALUE);
-		persistenceProperties.put(JDBC_URL_PROPERTY, JDBC_URL_VALUE);
-		persistenceProperties.put(USER_PROPERTY, USER_VALUE);
-		persistenceProperties.put(PASSWORD_PROPERTY, PASSWORD_VALUE);
+		HashMap<String, String> persistenceProperties = EMFManager.createPersistencePropertieForInMemoryDB();
 		persistenceProperties.put(DDL_PROPERTY, DDL_VALUE);
 		persistenceProperties.put(DDL_OUTPUT_PROPERTY, DDL_OUTPUT_VALUE);
 		return persistenceProperties;
