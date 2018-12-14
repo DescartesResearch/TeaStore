@@ -100,62 +100,6 @@
 
 	<profiles>
 		<profile>
-			<id>docker</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<dependencies>
-				<dependency>
-					<groupId>tools.descartes.teastore</groupId>
-					<artifactId>dockerbase</artifactId>
-					<version>${teastoreversion}</version>
-					<type>pom</type>
-				</dependency>
-			</dependencies>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>com.spotify</groupId>
-						<artifactId>dockerfile-maven-plugin</artifactId>
-						<version>1.3.6</version>
-						<executions>
-							<execution>
-								<id>build-image</id>
-								<goals>
-									<goal>build</goal>
-								</goals>
-								<phase>package</phase>
-							</execution>
-							<execution>
-								<id>tag-push-latest</id>
-								<goals>
-									<goal>tag</goal>
-									<goal>push</goal>
-								</goals>
-								<configuration>
-									<repository>${dockerrepository}/teastore-persistence</repository>
-									<tag>latest</tag>
-								</configuration>
-								<phase>package</phase>
-							</execution>
-							<execution>
-								<id>tag-push-version</id>
-								<goals>
-									<goal>tag</goal>
-									<goal>push</goal>
-								</goals>
-								<configuration>
-									<repository>${dockerrepository}/teastore-persistence</repository>
-									<tag>${project.version}</tag>
-								</configuration>
-								<phase>package</phase>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
 			<id>kieker</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>

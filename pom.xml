@@ -22,9 +22,7 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<modules>
-				<module>./utilities/tools.descartes.teastore.dockerbase</module>
-				<module>./utilities/tools.descartes.teastore.database</module>
-				<module>./utilities/tools.descartes.teastore.docker.all</module>
+				
 			</modules>
 		</profile>
 		<profile>
@@ -41,28 +39,17 @@
 	</profiles>
 
 	<modules>
-		<module>
-			utilities/tools.descartes.teastore.dockermemoryconfigurator
-		</module>
-		<module>
-			interfaces/tools.descartes.teastore.entities
-		</module>
+		<module>interfaces/tools.descartes.teastore.entities</module>
+		<module>utilities/tools.descartes.teastore.registryclient</module>
+		<module>utilities/tools.descartes.teastore.dockermemoryconfigurator</module>
+		<module>./utilities/tools.descartes.teastore.dockerbase</module>
 		<module>services/tools.descartes.teastore.image</module>
-		<module>
-			services/tools.descartes.teastore.persistence
-		</module>
-		<module>
-			services/tools.descartes.teastore.recommender
-		</module>
-		<module>
-			services/tools.descartes.teastore.registry
-		</module>
-		<module>
-			utilities/tools.descartes.teastore.registryclient
-		</module>
-
+		<module>services/tools.descartes.teastore.persistence</module>
+		<module>services/tools.descartes.teastore.recommender</module>
+		<module>services/tools.descartes.teastore.registry</module>
 		<module>services/tools.descartes.teastore.auth</module>
 		<module>services/tools.descartes.teastore.webui</module>
+		<module>./utilities/tools.descartes.teastore.docker.all</module>
 	</modules>
 
 	<build>
