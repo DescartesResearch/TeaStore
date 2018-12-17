@@ -77,12 +77,18 @@
 			<version>1.6.4</version>
 		</dependency>
 		<dependency>
-    		<groupId>com.rabbitmq</groupId>
-    		<artifactId>amqp-client</artifactId>
-    		<version>5.5.1</version>
+			<groupId>com.rabbitmq</groupId>
+			<artifactId>amqp-client</artifactId>
+			<version>5.5.1</version>
+		</dependency>
+		<dependency>
+			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>kieker</artifactId>
+			<version>1.14-SNAPSHOT</version>
+			<classifier>aspectj</classifier>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<finalName>tools.descartes.teastore.persistence</finalName>
 		<plugins>
@@ -97,7 +103,7 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 	<parent>
 		<groupId>tools.descartes.teastore</groupId>
 		<artifactId>parent</artifactId>

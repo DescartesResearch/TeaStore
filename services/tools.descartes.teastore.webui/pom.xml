@@ -86,7 +86,14 @@
 			<artifactId>amqp-client</artifactId>
 			<version>5.0.0</version>
 		</dependency>
+		<dependency>
+			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>kieker</artifactId>
+			<version>1.14-SNAPSHOT</version>
+			<classifier>aspectj</classifier>
+		</dependency>
 	</dependencies>
+
 	<build>
 		<finalName>tools.descartes.teastore.webui</finalName>
 		<plugins>
