@@ -15,13 +15,6 @@
 	<packaging>pom</packaging>
 	<version>${teastoreversion}</version>
 	
-	<repositories>
-		<repository>
-			<id>sonatype.oss.snapshots</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-		</repository>
-	</repositories>
-	
 	<modules>
 		<module>interfaces/tools.descartes.teastore.entities</module>
 		<module>./utilities/tools.descartes.teastore.kieker</module>
