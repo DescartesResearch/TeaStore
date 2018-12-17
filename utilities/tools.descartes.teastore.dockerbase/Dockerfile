@@ -34,11 +34,14 @@ ENV TOMCAT_HEAP_MEM_PERCENTAGE 50
 # Environment variable no longer needed. Replaced by sed in start.sh
 # ENV JAVA_OPTS $JAVA_OPTS -Dsecurerandom.source=file:/dev/urandom
 
-#ENV JAVA_OPTS="${JAVA_OPTS} -javaagent:/kieker/agent/agent.jar"
-#ENV JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.configuration=/kieker/config/kieker.monitoring.properties"
-#ENV JAVA_OPTS="${JAVA_OPTS} -Daj.weaving.verbose=true"
-#ENV JAVA_OPTS="${JAVA_OPTS} -Dorg.aspectj.weaver.loadtime.configuration=/aop.xml"
-#ENV JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.skipDefaultAOPConfiguration=true"
+COPY kieker.monitoring.properties 									/kieker/config/kieker.monitoring.properties
+COPY src/main/webapp/WEB-INF/lib/kieker-1.14-SNAPSHOT-aspectj.jar 	/kieker/agent/agent.jar
+
+ENV JAVA_OPTS="${JAVA_OPTS} -javaagent:/kieker/agent/agent.jar"
+ENV JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.configuration=/kieker/config/kieker.monitoring.properties"
+ENV JAVA_OPTS="${JAVA_OPTS} -Daj.weaving.verbose=true"
+ENV JAVA_OPTS="${JAVA_OPTS} -Dorg.aspectj.weaver.loadtime.configuration=/aop.xml"
+ENV JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.skipDefaultAOPConfiguration=true"
 
 EXPOSE 8080
 
