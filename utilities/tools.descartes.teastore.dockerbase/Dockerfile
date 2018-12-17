@@ -34,6 +34,12 @@ ENV TOMCAT_HEAP_MEM_PERCENTAGE 50
 # Environment variable no longer needed. Replaced by sed in start.sh
 # ENV JAVA_OPTS $JAVA_OPTS -Dsecurerandom.source=file:/dev/urandom
 
+ENV JAVA_OPTS="${JAVA_OPTS} -javaagent:/kieker/agent/agent.jar"
+ENV JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.configuration=/kieker/config/kieker.monitoring.properties"
+ENV JAVA_OPTS="${JAVA_OPTS} -Daj.weaving.verbose=true"
+ENV JAVA_OPTS="${JAVA_OPTS} -Dorg.aspectj.weaver.loadtime.configuration=/aop.xml"
+ENV JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.skipDefaultAOPConfiguration=true"
+
 EXPOSE 8080
 
 CMD java -jar /usr/local/tomcat/bin/dockermemoryconfigurator.jar ${TOMCAT_HEAP_MEM_PERCENTAGE}; /usr/local/tomcat/bin/start.sh && /usr/local/tomcat/bin/catalina.sh run
