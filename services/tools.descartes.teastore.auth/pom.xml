@@ -18,7 +18,13 @@
 			<artifactId>registryclient</artifactId>
 			<version>${teastoreversion}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>tools.descartes.teastore</groupId>
+			<artifactId>dockerbase</artifactId>
+			<version>${teastoreversion}</version>
+			<type>pom</type>
+		</dependency>
+		
 		<!-- WebApp Dependencies -->
 		<dependency>
 			<groupId>org.mindrot</groupId>

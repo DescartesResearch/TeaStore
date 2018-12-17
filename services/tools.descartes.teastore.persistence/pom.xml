@@ -19,6 +19,12 @@
 			<artifactId>registryclient</artifactId>
 			<version>${teastoreversion}</version>
 		</dependency>
+		<dependency>
+			<groupId>tools.descartes.teastore</groupId>
+			<artifactId>dockerbase</artifactId>
+			<version>${teastoreversion}</version>
+			<type>pom</type>
+		</dependency>
 
 
 		<!-- Dependencies only needed for compilation -->
