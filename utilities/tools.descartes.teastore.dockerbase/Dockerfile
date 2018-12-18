@@ -35,7 +35,7 @@ ENV TOMCAT_HEAP_MEM_PERCENTAGE 50
 # ENV JAVA_OPTS $JAVA_OPTS -Dsecurerandom.source=file:/dev/urandom
 
 COPY kieker.monitoring.properties 							/kieker/config/kieker.monitoring.properties
-COPY aop.xml 												/usr/local/tomcat/webapps/tools.descartes.teastore.webui/aop.xml
+COPY aop.xml 												/usr/local/tomcat/lib/aop.xml
 COPY kieker-1.14-SNAPSHOT-aspectj.jar 						/kieker/agent/agent.jar
 
 ENV JAVA_OPTS="${JAVA_OPTS} -javaagent:/kieker/agent/agent.jar"
