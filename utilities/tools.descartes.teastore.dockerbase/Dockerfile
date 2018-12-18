@@ -36,6 +36,8 @@ ENV RABBITMQ_HOST unset
 # Environment variable no longer needed. Replaced by sed in start.sh
 # ENV JAVA_OPTS $JAVA_OPTS -Dsecurerandom.source=file 837:/dev/urandom
 
+RUN mkdir /kieker/logs
+
 COPY kieker.monitoring.properties 							/kieker/config/kieker.monitoring.properties
 COPY aop.xml 												/usr/local/tomcat/lib/aop.xml
 COPY kieker-1.14-SNAPSHOT-aspectj.jar 						/kieker/agent/agent.jar
