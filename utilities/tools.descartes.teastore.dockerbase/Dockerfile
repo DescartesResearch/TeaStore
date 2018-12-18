@@ -40,9 +40,9 @@ COPY kieker-1.14-SNAPSHOT-aspectj.jar 						/kieker/agent/agent.jar
 
 ENV JAVA_OPTS="${JAVA_OPTS} -javaagent:/kieker/agent/agent.jar"
 ENV JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.configuration=/kieker/config/kieker.monitoring.properties"
-ENV JAVA_OPTS="${JAVA_OPTS} -Daj.weaving.verbose=true"
+ENV JAVA_OPTS="${JAVA_OPTS} -Daj.weaving.verbose=false"
 ENV JAVA_OPTS="${JAVA_OPTS} -Dorg.aspectj.weaver.loadtime.configuration=aop.xml"
-ENV JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.skipDefaultAOPConfiguration=false"
+ENV JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.skipDefaultAOPConfiguration=true"
 ENV JAVA_OPTS="${JAVA_OPTS} -Daj.weaving.loadersToSkip=java.net.URLClassLoader"
 
 EXPOSE 8080
