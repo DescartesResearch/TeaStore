@@ -17,7 +17,6 @@
 	
 	<modules>
 		<module>interfaces/tools.descartes.teastore.entities</module>
-		<module>./utilities/tools.descartes.teastore.kieker</module>
 		<module>./utilities/tools.descartes.teastore.kieker.probes</module>
 		<module>./utilities/tools.descartes.teastore.kieker.rabbitmq</module>
 		<module>utilities/tools.descartes.teastore.registryclient</module>

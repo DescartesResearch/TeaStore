@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="tools.descartes.teastore.kieker.rabbitmq">
+    <wb-module deploy-name="kieker.rabbitmq-1.3.1-SNAPSHOT">
         <wb-resource deploy-path="/" source-path="/src/main/java"/>
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
@@ -11,6 +11,6 @@
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="java-output-path" value="/tools.descartes.teastore.kieker.rabbitmq/target/classes"/>
-        <property name="context-root" value="tools.descartes.teastore.kieker.rabbitmq"/>
+        <property name="context-root" value="kieker.rabbitmq"/>
     </wb-module>
 </project-modules>

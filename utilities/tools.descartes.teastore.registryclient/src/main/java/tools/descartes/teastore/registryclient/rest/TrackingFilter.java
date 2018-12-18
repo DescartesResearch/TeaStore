@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 
@@ -27,6 +29,7 @@ public class TrackingFilter implements Filter {
 
   private static final Log LOG = LogFactory.getLog(TrackingFilter.class);
 
+  private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
   private static final String SESSION_ID_ASYNC_TRACE = "NOSESSION-ASYNCIN";
   private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
   private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
@@ -57,6 +60,9 @@ public class TrackingFilter implements Filter {
    */
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {
+    if (!CTRLINST.isMonitoringEnabled()) {
+      chain.doFilter(request, response);
+    }
     String url = ((HttpServletRequest) request).getRequestURL().toString();
     if (url.contains("webui")) {
       chain.doFilter(request, response);
