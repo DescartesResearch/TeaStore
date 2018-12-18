@@ -43,7 +43,7 @@ ENV JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.configuration=/kieker/config/kie
 ENV JAVA_OPTS="${JAVA_OPTS} -Daj.weaving.verbose=true"
 ENV JAVA_OPTS="${JAVA_OPTS} -Dorg.aspectj.weaver.loadtime.configuration=aop.xml"
 ENV JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.skipDefaultAOPConfiguration=true"
-ENV JAVA_OPTS="${JAVA_OPTS} -Daj.weaving.loadersToSkip=java.net.URLClassLoader,sun.misc.Launcher.AppClassLoader,sun.misc.Launcher.ExtClassLoader"
+ENV JAVA_OPTS="${JAVA_OPTS} -Daj.weaving.loadersToSkip=java.net.URLClassLoader,sun.misc.Launcher$AppClassLoader,sun.misc.Launcher$ExtClassLoader"
 
 EXPOSE 8080
 
