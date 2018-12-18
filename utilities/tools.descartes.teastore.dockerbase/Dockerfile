@@ -32,7 +32,7 @@ ENV TOMCAT_HEAP_MEM_PERCENTAGE 50
 
 # Setting secure random number generation to urandom. This increases the startup speed.
 # Environment variable no longer needed. Replaced by sed in start.sh
-# ENV JAVA_OPTS $JAVA_OPTS -Dsecurerandom.source=file:/dev/urandom
+# ENV JAVA_OPTS $JAVA_OPTS -Dsecurerandom.source=file 837:/dev/urandom
 
 COPY kieker.monitoring.properties 							/kieker/config/kieker.monitoring.properties
 COPY aop.xml 												/usr/local/tomcat/lib/aop.xml
