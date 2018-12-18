@@ -64,13 +64,14 @@ public final class HttpWrapper {
           // CTRLINST.terminateMonitoring();
         }
       }
+
+      // Get request header
+      Builder builder = target.request(MediaType.APPLICATION_JSON)
+          .accept(MediaType.APPLICATION_JSON);
+
+      return builder.header(HEADER_FIELD, Long.toString(traceId) + "," + sessionId + ","
+          + Integer.toString(eoi) + "," + Integer.toString(nextESS));
     }
-
-    // Get request header
-    Builder builder = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
-
-    return builder.header(HEADER_FIELD, Long.toString(traceId) + "," + sessionId + ","
-        + Integer.toString(eoi) + "," + Integer.toString(nextESS));
-
+    return target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
   }
 }
