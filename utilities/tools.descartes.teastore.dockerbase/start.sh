@@ -23,3 +23,13 @@ if [ "$LOG_TO_FILE" == "true" ]
 then
 sed -i "s/kieker.monitoring.writer=kieker.monitoring.writer.collector.ChunkingCollector/kieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsciiFileWriter/g" /kieker/config/kieker.monitoring.properties
 fi
+
+if [ "$LOG_TO_FILE" == "true" || "$RABBITMQ_HOST" != "unset" ]
+then
+export JAVA_OPTS="${JAVA_OPTS} -javaagent:/kieker/agent/agent.jar"
+export JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.configuration=/kieker/config/kieker.monitoring.properties"
+export JAVA_OPTS="${JAVA_OPTS} -Daj.weaving.verbose=false"
+export JAVA_OPTS="${JAVA_OPTS} -Dorg.aspectj.weaver.loadtime.configuration=aop.xml"
+export JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.skipDefaultAOPConfiguration=true"
+export JAVA_OPTS="${JAVA_OPTS} -Daj.weaving.loadersToSkip=java.net.URLClassLoader"
+fi

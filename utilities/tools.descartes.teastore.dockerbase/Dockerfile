@@ -29,6 +29,8 @@ ENV RECOMMENDER_ALGORITHM SlopeOne
 ENV PROXY_NAME unset
 ENV PROXY_PORT unset
 ENV TOMCAT_HEAP_MEM_PERCENTAGE 50
+ENV LOG_TO_FILE false
+ENV RABBITMQ_HOST unset
 
 # Setting secure random number generation to urandom. This increases the startup speed.
 # Environment variable no longer needed. Replaced by sed in start.sh
@@ -37,13 +39,6 @@ ENV TOMCAT_HEAP_MEM_PERCENTAGE 50
 COPY kieker.monitoring.properties 							/kieker/config/kieker.monitoring.properties
 COPY aop.xml 												/usr/local/tomcat/lib/aop.xml
 COPY kieker-1.14-SNAPSHOT-aspectj.jar 						/kieker/agent/agent.jar
-
-ENV JAVA_OPTS="${JAVA_OPTS} -javaagent:/kieker/agent/agent.jar"
-ENV JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.configuration=/kieker/config/kieker.monitoring.properties"
-ENV JAVA_OPTS="${JAVA_OPTS} -Daj.weaving.verbose=false"
-ENV JAVA_OPTS="${JAVA_OPTS} -Dorg.aspectj.weaver.loadtime.configuration=aop.xml"
-ENV JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.skipDefaultAOPConfiguration=true"
-ENV JAVA_OPTS="${JAVA_OPTS} -Daj.weaving.loadersToSkip=java.net.URLClassLoader"
 
 EXPOSE 8080
 
