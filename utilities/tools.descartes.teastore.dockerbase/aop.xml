@@ -1,6 +1,6 @@
 <!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.eclipse.org/aspectj/dtd/aspectj.dtd">
 <aspectj>
-	<weaver options="-Xlint:ignore -Xset:weaveJavaxPackages=false">
+	<weaver options="-Xlint:ignore -Xset:weaveJavaxPackages=true">
 		<include within="tools.descartes.teastore..*"/>
 		<exclude within="tools.descartes.teastore.kieker..*"/>
  		<exclude within="tools.descartes.teastore.entities..*" />

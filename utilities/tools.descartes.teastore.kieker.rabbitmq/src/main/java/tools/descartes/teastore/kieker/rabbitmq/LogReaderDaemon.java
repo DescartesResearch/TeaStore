@@ -14,7 +14,7 @@ import kieker.common.configuration.Configuration;
  */
 public class LogReaderDaemon implements Runnable {
 
-  private static final String URI = "amqp://admin:nimda@0.0.0.0";
+  private static final String URI = "amqp://admin:nimda@127.0.0.1";
   private static final String QUEUENAME = "kieker";
 
   @Override
