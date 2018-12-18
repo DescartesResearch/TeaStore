@@ -24,7 +24,7 @@ then
 sed -i "s/kieker.monitoring.writer=kieker.monitoring.writer.collector.ChunkingCollector/kieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsciiFileWriter/g" /kieker/config/kieker.monitoring.properties
 fi
 
-if [ "$LOG_TO_FILE" == "true" || "$RABBITMQ_HOST" != "unset" ]
+if [ "$LOG_TO_FILE" == "true" ] || [ "$RABBITMQ_HOST" != "unset" ]
 then
 export JAVA_OPTS="${JAVA_OPTS} -javaagent:/kieker/agent/agent.jar"
 export JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.configuration=/kieker/config/kieker.monitoring.properties"
