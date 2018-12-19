@@ -24,9 +24,11 @@ then
 sed -i "s/kieker.monitoring.writer=kieker.monitoring.writer.collector.ChunkingCollector/kieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsciiFileWriter/g" /kieker/config/kieker.monitoring.properties
 fi
 
-if [ "$LOG_TO_FILE" == "true" ] || [ "$RABBITMQ_HOST" != "unset" ]
+if [ "$LOG_TO_FILE" != "true" ] && [ "$RABBITMQ_HOST" == "unset" ]
 then
+sed -i "s/kieker.monitoring.enabled=true/kieker.monitoring.enabled=false/g" /kieker/config/kieker.monitoring.properties
+fi
+
 touch /usr/local/tomcat/bin/setenv.sh
 chmod +x /usr/local/tomcat/bin/setenv.sh
 echo 'export JAVA_OPTS="-javaagent:/kieker/agent/agent.jar -Dkieker.monitoring.configuration=/kieker/config/kieker.monitoring.properties -Daj.weaving.verbose=false -Dorg.aspectj.weaver.loadtime.configuration=aop.xml -Dkieker.monitoring.skipDefaultAOPConfiguration=true -Daj.weaving.loadersToSkip=java.net.URLClassLoader"' > /usr/local/tomcat/bin/setenv.sh
-fi
