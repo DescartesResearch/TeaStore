@@ -18,7 +18,11 @@ then
 	sed -i "s/<Connector port=\"8080\" protocol=\"HTTP\/1.1\".*/<Connector port=\"8080\" protocol=\"HTTP\/1.1\" proxyName=\"${PROXY_NAME}\" proxyPort=\"${PROXY_PORT}\"/g" /usr/local/tomcat/conf/server.xml
 fi
 sed -i 's/securerandom.source=file:\/dev.*/securerandom.source=file:\/dev\/urandom/g' /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security
+
+if [ "$RABBITMQ_HOST" != "unset" ]
 sed -i "s/kieker.monitoring.writer.amqp.ChunkingAmqpWriter.uri=amqp:\/\/admin:nimda@RABBITMQ_PORT_PLACEHOLDER/kieker.monitoring.writer.amqp.ChunkingAmqpWriter.uri=amqp:\/\/admin:nimda@${RABBITMQ_HOST}/g" /kieker/config/kieker.monitoring.properties
+fi
+
 if [ "$LOG_TO_FILE" == "true" ]
 then
 sed -i "s/kieker.monitoring.writer=kieker.monitoring.writer.collector.ChunkingCollector/kieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsciiFileWriter/g" /kieker/config/kieker.monitoring.properties
