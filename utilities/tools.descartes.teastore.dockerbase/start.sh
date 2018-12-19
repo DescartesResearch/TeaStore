@@ -30,5 +30,5 @@ touch /usr/local/tomcat/bin/setenv.sh
 chmod +x /usr/local/tomcat/bin/setenv.sh
 echo 'export JAVA_OPTS="-javaagent:/kieker/agent/agent.jar -Dkieker.monitoring.configuration=/kieker/config/kieker.monitoring.properties -Daj.weaving.verbose=false -Dorg.aspectj.weaver.loadtime.configuration=aop.xml -Dkieker.monitoring.skipDefaultAOPConfiguration=true -Daj.weaving.loadersToSkip=java.net.URLClassLoader"' > /usr/local/tomcat/bin/setenv.sh
 else
-find /usr/local/tomcat/webapps -regextype sed -regex ".*/kieker-.*.jar" -exec rm -rf {} \;
+zip -d /usr/local/tomcat/webapps/tools.descartes.teastore.image.war WEB-INF/lib/kieker-1.13.jar
 fi
