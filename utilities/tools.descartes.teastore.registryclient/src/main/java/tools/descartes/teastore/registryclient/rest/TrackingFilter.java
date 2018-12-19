@@ -62,6 +62,7 @@ public class TrackingFilter implements Filter {
       throws IOException, ServletException {
     if (!CTRLINST.isMonitoringEnabled()) {
       chain.doFilter(request, response);
+      return;
     }
     String url = ((HttpServletRequest) request).getRequestURL().toString();
     if (url.contains("webui")) {
