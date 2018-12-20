@@ -7,6 +7,9 @@ RUN rm -r /usr/local/tomcat/webapps/docs
 RUN rm -r /usr/local/tomcat/webapps/host-manager
 RUN rm -r /usr/local/tomcat/webapps/manager
 
+RUN /usr/local/rm tomcat/lib/websocket-api.jar
+RUN /usr/local/rm tomcat/lib/tomcat-websocket.jar
+
 # Copy config, database connector library and script for environment variables into container
 COPY baseContext.xml /usr/local/tomcat/conf/context.xml
 COPY mysql-connector-java-5.1.44-bin.jar /usr/local/tomcat/lib/mysql-connector-java-5.1.44-bin.jar
