@@ -17,9 +17,9 @@ if [ "$PROXY_NAME" != "unset" ] && [ "$PROXY_PORT" != "unset" ]
 then
 	sed -i "s/<Connector port=\"8080\" protocol=\"HTTP\/1.1\".*/<Connector port=\"8080\" protocol=\"HTTP\/1.1\" proxyName=\"${PROXY_NAME}\" proxyPort=\"${PROXY_PORT}\"/g" /usr/local/tomcat/conf/server.xml
 fi
-sed -i 's/securerandom.source=file:\/dev.*/securerandom.source=file:\/dev\/urandom/g'  /usr/local/tomcat/conf/catalina.properties
+sed -i 's/securerandom.source=file:\/dev.*/securerandom.source=file:\/dev\/urandom/g'  /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security
 
-sed -i 's/tomcat.util.scan.StandardJarScanFilter.jarsToSkip=/tomcat.util.scan.StandardJarScanFilter.jarsToSkip=*,/g' /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security
+sed -i 's/tomcat.util.scan.StandardJarScanFilter.jarsToSkip=/tomcat.util.scan.StandardJarScanFilter.jarsToSkip=*,/g' /usr/local/tomcat/conf/catalina.properties
 
 
 
