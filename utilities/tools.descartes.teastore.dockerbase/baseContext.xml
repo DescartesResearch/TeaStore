@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE xml>
 <Context>
+	<JarScanner>
+		<JarScanFilter className="org.apache.tomcat.util.scan.StandardJarScanFilter"/>
+	</JarScanner>
 	<!-- Default configuration and other configuration values here. -->
 	<JarScanner scanClassPath="false" />
 	<!-- Service registration settings, almost always required. -->
