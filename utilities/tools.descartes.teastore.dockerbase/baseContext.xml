@@ -3,7 +3,7 @@
 <Context containerSciFilter="WsSci">
 
     <!-- Default configuration and other configuration values here.    -->
-
+	<JarScanner scanClassPath="false" />
     <!-- Service registration settings, almost always required. -->
     <Environment name="servicePort" value="%%PLACEHOLDER%%"
     	type="java.lang.String" override="false"/>
