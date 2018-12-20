@@ -20,6 +20,7 @@ fi
 sed -i 's/securerandom.source=file:\/dev.*/securerandom.source=file:\/dev\/urandom/g'  /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security
 
 sed -i 's/tomcat.util.scan.StandardJarScanFilter.jarsToSkip=/tomcat.util.scan.StandardJarScanFilter.jarsToSkip=*,/g' /usr/local/tomcat/conf/catalina.properties
+sed -i 's/tomcat.util.scan.StandardJarScanFilter.jarsToScan=/tomcat.util.scan.StandardJarScanFilter.jarsToScan=jstl-api*.jar,/g' /usr/local/tomcat/conf/catalina.properties
 
 
 
