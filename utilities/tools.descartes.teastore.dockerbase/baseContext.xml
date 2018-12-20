@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE xml>
 <Context containerSciFilter="WsSci">
-    <JarScanner>
-        <JarScanFilter tldSkip="*.*"/>
-    </JarScanner>
+	<JarScanner>
+		<JarScanFilter defaultTldScan="false" />
+	</JarScanner>
 	<!-- Default configuration and other configuration values here. -->
 
 	<!-- Service registration settings, almost always required. -->
