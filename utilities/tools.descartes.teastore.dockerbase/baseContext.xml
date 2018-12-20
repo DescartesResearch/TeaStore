@@ -2,9 +2,7 @@
 <!DOCTYPE xml>
 <Context>
 	<JarScanner>
-		<JarScanFilter
-			pluggabilityScan="${tomcat.util.scan.StandardJarScanFilter.jarsToScan},
-                       my_pluggable_feature.jar" />
+		<JarScanFilter />
 	</JarScanner>
 	<!-- Default configuration and other configuration values here. -->
 	<JarScanner scanClassPath="false" />
