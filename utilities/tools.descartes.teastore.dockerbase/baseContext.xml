@@ -1,31 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE xml>
 <Context containerSciFilter="WsSci">
-
-    <!-- Default configuration and other configuration values here.    -->
+	<JarScanner>
+		<JarScanFilter
+			pluggabilityScan="${tomcat.util.scan.StandardJarScanFilter.jarsToScan},
+                       my_pluggable_feature.jar" />
+	</JarScanner>
+	<!-- Default configuration and other configuration values here. -->
 	<JarScanner scanClassPath="false" />
-    <!-- Service registration settings, almost always required. -->
-    <Environment name="servicePort" value="%%PLACEHOLDER%%"
-    	type="java.lang.String" override="false"/>
-    <Environment name="hostName" value="%%PLACEHOLDER%%" type="java.lang.String" override="false"/>
-    <Environment name="registryURL" value="%%PLACEHOLDER%%"
-    		type="java.lang.String" override="false"/>
-  	<!-- Override hostName by using the IP, as reported by the OS. Use for KUBERNETES. -->
-  	<Environment name="useHostIP" value="false"
-  		type="java.lang.String" override="false"/>
+	<!-- Service registration settings, almost always required. -->
+	<Environment name="servicePort" value="%%PLACEHOLDER%%"
+		type="java.lang.String" override="false" />
+	<Environment name="hostName" value="%%PLACEHOLDER%%" type="java.lang.String"
+		override="false" />
+	<Environment name="registryURL" value="%%PLACEHOLDER%%"
+		type="java.lang.String" override="false" />
+	<!-- Override hostName by using the IP, as reported by the OS. Use for KUBERNETES. -->
+	<Environment name="useHostIP" value="false" type="java.lang.String"
+		override="false" />
 
-    <!-- Database settings, specify if not localhost:3306 -->
-    <Environment name="databaseHost" value="%%PLACEHOLDER%%"
-    	type="java.lang.String" override="false"/>
-    <Environment name="databasePort" value="%%PLACEHOLDER%%"
-    	type="java.lang.String" override="false"/>
-    
-    <!-- Recommender settings, specify loop time in ms if periodic retraining is required -->
-    <Environment name="recommenderLoopTime" value="0"
-    	type="java.lang.Long" override="false"/>
+	<!-- Database settings, specify if not localhost:3306 -->
+	<Environment name="databaseHost" value="%%PLACEHOLDER%%"
+		type="java.lang.String" override="false" />
+	<Environment name="databasePort" value="%%PLACEHOLDER%%"
+		type="java.lang.String" override="false" />
+
+	<!-- Recommender settings, specify loop time in ms if periodic retraining 
+		is required -->
+	<Environment name="recommenderLoopTime" value="0"
+		type="java.lang.Long" override="false" />
 	<Environment name="recommenderAlgorithm" value="SlopeOne"
-    	type="java.lang.String" override="false"/>
-    	
-    <!-- General Tomcat setting: disable session persistence; improves startup times. -->
-    <Manager pathname="" />
+		type="java.lang.String" override="false" />
+
+	<!-- General Tomcat setting: disable session persistence; improves startup 
+		times. -->
+	<Manager pathname="" />
 </Context>
