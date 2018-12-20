@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE xml>
-<Context>
+<Context containerSciFilter="WsSci">
 
     <!-- Default configuration and other configuration values here.    -->
 
