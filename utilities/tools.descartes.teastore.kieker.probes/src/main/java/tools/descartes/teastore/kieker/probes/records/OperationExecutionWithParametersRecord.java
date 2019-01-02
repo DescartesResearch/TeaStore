@@ -5,7 +5,6 @@ import java.nio.BufferOverflowException;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 /**
  * Class for storing the Monitored execution recrods with parameters.
@@ -119,15 +118,6 @@ public class OperationExecutionWithParametersRecord extends OperationExecutionRe
   @Override
   @Deprecated
   public Object[] toArray() {
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  @Deprecated
-  public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
     throw new UnsupportedOperationException();
   }
 

@@ -6,8 +6,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -27,8 +25,6 @@ import tools.descartes.teastore.kieker.probes.records.OperationExecutionWithPara
  */
 @Aspect
 public abstract class AbstractOperationExecutionWithParameterAspect extends AbstractAspectJProbe {
-  private static final Log LOG = LogFactory
-      .getLog(AbstractOperationExecutionWithParameterAspect.class);
 
   private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
   private static final ITimeSource TIME = CTRLINST.getTimeSource();
@@ -79,7 +75,6 @@ public abstract class AbstractOperationExecutionWithParameterAspect extends Abst
       eoi = CFREGISTRY.incrementAndRecallThreadLocalEOI(); // ess > 1
       ess = CFREGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0
       if ((eoi == -1) || (ess == -1)) {
-        LOG.error("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
         CTRLINST.terminateMonitoring();
       }
     }
