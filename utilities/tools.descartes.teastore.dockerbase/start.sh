@@ -30,7 +30,7 @@ then
 sed -i "s/kieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsciiFileWriter/kieker.monitoring.writer=kieker.monitoring.writer.elasticapm.ElasticAPMServerWriter/g" /kieker/config/kieker.monitoring.properties
 fi
 
-if [ "$LOG_TO_FILE" != "true" ] && [ "$RABBITMQ_HOST" == "unset" ]
+if [ "$LOG_TO_FILE" != "true" ] && [ "$RABBITMQ_HOST" == "unset" ] && [ "$ELASTIC_HOST" == "unset" ]
 then
 sed -i 's/kieker.monitoring.enabled=true/kieker.monitoring.enabled=false/g' /kieker/config/kieker.monitoring.properties
 fi
