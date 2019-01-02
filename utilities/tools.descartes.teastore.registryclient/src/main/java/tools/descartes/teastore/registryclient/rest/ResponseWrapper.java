@@ -2,8 +2,6 @@ package tools.descartes.teastore.registryclient.rest;
 
 import javax.ws.rs.core.Response;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -22,7 +20,6 @@ public final class ResponseWrapper {
   private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
   private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
   private static final String HEADER_FIELD = "KiekerTracingInfo";
-  private static final Log LOG = LogFactory.getLog(ResponseWrapper.class);
   private static final String SESSION_ID_ASYNC_TRACE = "NOSESSION-ASYNCIN";
 
   /**
@@ -48,7 +45,6 @@ public final class ResponseWrapper {
 
       final String operationExecutionHeader = response.getHeaderString(HEADER_FIELD);
       if ((operationExecutionHeader == null) || (operationExecutionHeader.equals(""))) {
-        LOG.warn("Response without tracking id was found");
       } else {
 
         final String[] headerArray = operationExecutionHeader.split(",");
@@ -65,7 +61,6 @@ public final class ResponseWrapper {
         try {
           eoi = Integer.parseInt(eoiStr);
         } catch (final NumberFormatException exc) {
-          LOG.warn("Invalid eoi", exc);
         }
 
         // Extract ESS
@@ -74,7 +69,6 @@ public final class ResponseWrapper {
         try {
           ess = Integer.parseInt(essStr);
         } catch (final NumberFormatException exc) {
-          LOG.warn("Invalid ess", exc);
         }
 
         // Extract trace id
@@ -83,7 +77,6 @@ public final class ResponseWrapper {
           try {
             traceId = Long.parseLong(traceIdStr);
           } catch (final NumberFormatException exc) {
-            LOG.warn("Invalid trace id", exc);
           }
         } else {
           traceId = CF_REGISTRY.getUniqueTraceId();

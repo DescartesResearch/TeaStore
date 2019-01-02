@@ -3,8 +3,6 @@ package tools.descartes.teastore.registryclient.rest;
 import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.core.MediaType;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
@@ -20,7 +18,6 @@ import javax.ws.rs.client.WebTarget;
  */
 public final class HttpWrapper {
   private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
-  private static final Log LOG = LogFactory.getLog(HttpWrapper.class);
   private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
   private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
   private static final String HEADER_FIELD = "KiekerTracingInfo";
@@ -60,7 +57,6 @@ public final class HttpWrapper {
         ess = CF_REGISTRY.recallThreadLocalESS();
         nextESS = ess;
         if ((eoi == -1) || (ess == -1)) {
-          LOG.error("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
           // CTRLINST.terminateMonitoring();
         }
       }

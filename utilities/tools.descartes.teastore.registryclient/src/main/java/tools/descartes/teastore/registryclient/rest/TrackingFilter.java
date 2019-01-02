@@ -11,8 +11,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -27,7 +25,6 @@ import kieker.monitoring.core.registry.SessionRegistry;
  */
 public class TrackingFilter implements Filter {
 
-  private static final Log LOG = LogFactory.getLog(TrackingFilter.class);
 
   private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
   private static final String SESSION_ID_ASYNC_TRACE = "NOSESSION-ASYNCIN";
@@ -79,7 +76,6 @@ public class TrackingFilter implements Filter {
       final String operationExecutionHeader = req.getHeader(HEADER_FIELD);
 
       if ((operationExecutionHeader == null) || (operationExecutionHeader.equals(""))) {
-        LOG.debug("No monitoring data found in the incoming request header");
         // LOG.info("Will continue without sending back reponse header");
         traceId = CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
         CF_REGISTRY.storeThreadLocalEOI(0);
@@ -87,10 +83,6 @@ public class TrackingFilter implements Filter {
         eoi = 0;
         ess = 0;
       } else {
-        if (LOG.isDebugEnabled()) {
-          LOG.debug(
-              "Received request: " + req.getMethod() + "with header = " + operationExecutionHeader);
-        }
         final String[] headerArray = operationExecutionHeader.split(",");
 
         // Extract session id
@@ -105,7 +97,6 @@ public class TrackingFilter implements Filter {
         try {
           eoi = Integer.parseInt(eoiStr);
         } catch (final NumberFormatException exc) {
-          LOG.warn("Invalid eoi", exc);
         }
 
         // Extract ESS
@@ -114,7 +105,6 @@ public class TrackingFilter implements Filter {
         try {
           ess = Integer.parseInt(essStr);
         } catch (final NumberFormatException exc) {
-          LOG.warn("Invalid ess", exc);
         }
 
         // Extract trace id
@@ -123,7 +113,6 @@ public class TrackingFilter implements Filter {
           try {
             traceId = Long.parseLong(traceIdStr);
           } catch (final NumberFormatException exc) {
-            LOG.warn("Invalid trace id", exc);
           }
         } else {
           traceId = CF_REGISTRY.getUniqueTraceId();
@@ -139,8 +128,6 @@ public class TrackingFilter implements Filter {
         SESSION_REGISTRY.storeThreadLocalSessionId(sessionId);
       }
 
-    } else {
-      LOG.error("Something went wrong");
     }
     CharResponseWrapper wrappedResponse = new CharResponseWrapper((HttpServletResponse) response);
     PrintWriter out = response.getWriter();
