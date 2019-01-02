@@ -22,8 +22,12 @@ sed -i 's/securerandom.source=file:\/dev.*/securerandom.source=file:\/dev\/urand
 if [ "$RABBITMQ_HOST" != "unset" ]
 then
 sed -i "s/kieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsciiFileWriter/kieker.monitoring.writer=kieker.monitoring.writer.collector.ChunkingCollector/g" /kieker/config/kieker.monitoring.properties
-
 sed -i "s/kieker.monitoring.writer.amqp.ChunkingAmqpWriter.uri=amqp:\/\/admin:nimda@RABBITMQ_PORT_PLACEHOLDER/kieker.monitoring.writer.amqp.ChunkingAmqpWriter.uri=amqp:\/\/admin:nimda@${RABBITMQ_HOST}/g" /kieker/config/kieker.monitoring.properties
+fi
+
+if [ "$ELASTIC_HOST" != "unset" ]
+then
+sed -i "s/kieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsciiFileWriter/kieker.monitoring.writer=kieker.monitoring.writer.elasticapm.ElasticAPMServerWriter/g" /kieker/config/kieker.monitoring.properties
 fi
 
 if [ "$LOG_TO_FILE" != "true" ] && [ "$RABBITMQ_HOST" == "unset" ]

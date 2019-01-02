@@ -37,6 +37,7 @@ ENV PROXY_PORT unset
 ENV TOMCAT_HEAP_MEM_PERCENTAGE 50
 ENV LOG_TO_FILE false
 ENV RABBITMQ_HOST unset
+ENV ELASTIC_HOST unset
 
 # Setting secure random number generation to urandom. This increases the startup speed.
 # Environment variable no longer needed. Replaced by sed in start.sh
