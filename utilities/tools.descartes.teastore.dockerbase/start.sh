@@ -28,7 +28,7 @@ fi
 if [ "$ELASTIC_HOST" != "unset" ]
 then
 sed -i "s/kieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsciiFileWriter/kieker.monitoring.writer=kieker.monitoring.writer.elasticapm.ElasticAPMServerWriter/g" /kieker/config/kieker.monitoring.properties
-sed -i "s/kieker.monitoring.writer.elasticapm.ElasticAPMServerWriter.ServerUrl=ELASTIC_PLACEHOLDER/kieker.monitoring.writer.elasticapm.ElasticAPMServerWriter.ServerUrl=${ELASTIC_HOST}/g" /kieker/config/kieker.monitoring.properties
+sed -i "s/kieker.monitoring.writer.elasticapm.ElasticAPMServerWriter.ServerUrl=http:\/\/ELASTIC_PLACEHOLDER:9200/kieker.monitoring.writer.elasticapm.ElasticAPMServerWriter.ServerUrl=http:\/\/${ELASTIC_HOST}:9200/g" /kieker/config/kieker.monitoring.properties
 
 
 fi
