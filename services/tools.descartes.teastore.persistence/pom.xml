@@ -24,13 +24,6 @@
 			<artifactId>kieker.probes</artifactId>
 			<version>${teastoreversion}</version>
 		</dependency>
-		<dependency>
-			<groupId>net.kieker-monitoring</groupId>
-			<artifactId>kieker</artifactId>
-			<version>1.14-SNAPSHOT</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/kieker-1.14-SNAPSHOT.jar</systemPath>
-		</dependency>
 
 
 		<!-- Dependencies only needed for compilation -->
