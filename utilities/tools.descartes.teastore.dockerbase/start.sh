@@ -28,6 +28,9 @@ fi
 if [ "$ELASTIC_HOST" != "unset" ]
 then
 sed -i "s/kieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsciiFileWriter/kieker.monitoring.writer=kieker.monitoring.writer.elasticapm.ElasticAPMServerWriter/g" /kieker/config/kieker.monitoring.properties
+sed -i "s/kieker.monitoring.writer.elasticapm.ElasticAPMServerWriter.ServerUrl=ELASTIC_PLACEHOLDER/kieker.monitoring.writer.elasticapm.ElasticAPMServerWriter.ServerUrl=${ELASTIC_HOST}/g" /kieker/config/kieker.monitoring.properties
+
+
 fi
 
 if [ "$LOG_TO_FILE" != "true" ] && [ "$RABBITMQ_HOST" == "unset" ] && [ "$ELASTIC_HOST" == "unset" ]
