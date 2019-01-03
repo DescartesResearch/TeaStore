@@ -57,7 +57,7 @@ public final class HttpWrapper {
         ess = CF_REGISTRY.recallThreadLocalESS();
         nextESS = ess;
         if ((eoi == -1) || (ess == -1)) {
-          // CTRLINST.terminateMonitoring();
+          System.out.println("Faulty ESS detected!");
         }
       }
 

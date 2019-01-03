@@ -45,6 +45,7 @@ public final class ResponseWrapper {
 
       final String operationExecutionHeader = response.getHeaderString(HEADER_FIELD);
       if ((operationExecutionHeader == null) || (operationExecutionHeader.equals(""))) {
+        System.out.println("Missing Header detected!");
       } else {
 
         final String[] headerArray = operationExecutionHeader.split(",");
