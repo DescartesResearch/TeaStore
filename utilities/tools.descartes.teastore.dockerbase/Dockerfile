@@ -3,6 +3,12 @@ MAINTAINER Chair of Software Engineering <se2-it@informatik.uni-wuerzburg.de>
 
 # Delete all example webapps from base container
 RUN rm -r /usr/local/tomcat/webapps/examples
+RUN rm -r /usr/local/tomcat/webapps/docs
+RUN rm -r /usr/local/tomcat/webapps/host-manager
+RUN rm -r /usr/local/tomcat/webapps/manager
+
+RUN rm /usr/local/tomcat/lib/websocket-api.jar
+RUN rm /usr/local/tomcat/lib/tomcat-websocket.jar
 
 # Copy config, database connector library and script for environment variables into container
 COPY baseContext.xml /usr/local/tomcat/conf/context.xml
@@ -29,10 +35,18 @@ ENV RECOMMENDER_ALGORITHM SlopeOne
 ENV PROXY_NAME unset
 ENV PROXY_PORT unset
 ENV TOMCAT_HEAP_MEM_PERCENTAGE 50
+ENV LOG_TO_FILE false
+ENV RABBITMQ_HOST unset
 
 # Setting secure random number generation to urandom. This increases the startup speed.
 # Environment variable no longer needed. Replaced by sed in start.sh
-# ENV JAVA_OPTS $JAVA_OPTS -Dsecurerandom.source=file:/dev/urandom
+# ENV JAVA_OPTS $JAVA_OPTS -Dsecurerandom.source=file 837:/dev/urandom
+
+RUN mkdir -p /kieker/logs
+
+COPY kieker.monitoring.properties 							/kieker/config/kieker.monitoring.properties
+COPY aop.xml 												/usr/local/tomcat/lib/aop.xml
+COPY kieker-1.14-SNAPSHOT-aspectj.jar 						/kieker/agent/agent.jar
 
 EXPOSE 8080
 

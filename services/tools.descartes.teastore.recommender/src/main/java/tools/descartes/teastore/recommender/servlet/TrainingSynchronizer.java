@@ -142,7 +142,7 @@ public final class TrainingSynchronizer {
 				if (result != null && Boolean.parseBoolean(result.readEntity(String.class))) {
 					break;
 				}
-			} catch (NotFoundException | LoadBalancerTimeoutException e) {
+			} catch (NullPointerException | NotFoundException | LoadBalancerTimeoutException e) {
 				// continue waiting as usual
 			} finally {
 				if (result != null) {

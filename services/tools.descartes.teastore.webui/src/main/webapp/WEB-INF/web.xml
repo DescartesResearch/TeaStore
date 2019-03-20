@@ -1,33 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
-  <display-name>Descartes TeaStore Web UI</display-name>
-  <welcome-file-list>
-    <welcome-file>index</welcome-file>
-  </welcome-file-list>
-  <servlet>
-    <servlet-name>webuirest</servlet-name>
-    <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
-    <init-param>
-      <param-name>jersey.config.server.provider.packages</param-name>
-      <param-value>tools.descartes.teastore.webui.rest</param-value>
-    </init-param>
-    <load-on-startup>2</load-on-startup>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>webuirest</servlet-name>
-    <url-pattern>/rest/*</url-pattern>
-  </servlet-mapping>
-  <env-entry>
-    <env-entry-name>servicePort</env-entry-name>
-    <env-entry-type>java.lang.String</env-entry-type>
-    <env-entry-value>8080</env-entry-value>
-  </env-entry>
-  <env-entry>
-    <env-entry-name>registryURL</env-entry-name>
-    <env-entry-type>java.lang.String</env-entry-type>
-    <env-entry-value>http://localhost:8080/tools.descartes.teastore.registry/rest/services/</env-entry-value>
-  </env-entry>
-  <error-page>
-    <location>/error</location>
-  </error-page>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	version="3.1">
+	<display-name>Descartes TeaStore Web UI</display-name>
+	<welcome-file-list>
+		<welcome-file>index</welcome-file>
+	</welcome-file-list>
+	<servlet>
+		<servlet-name>webuirest</servlet-name>
+		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>jersey.config.server.provider.packages</param-name>
+			<param-value>tools.descartes.teastore.webui.rest</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>webuirest</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+	<env-entry>
+		<env-entry-name>servicePort</env-entry-name>
+		<env-entry-type>java.lang.String</env-entry-type>
+		<env-entry-value>8080</env-entry-value>
+	</env-entry>
+	<env-entry>
+		<env-entry-name>registryURL</env-entry-name>
+		<env-entry-type>java.lang.String</env-entry-type>
+		<env-entry-value>http://localhost:8080/tools.descartes.teastore.registry/rest/services/</env-entry-value>
+	</env-entry>
+	<error-page>
+		<location>/error</location>
+	</error-page>
+	<filter>
+		<filter-name>TrackingFilter</filter-name>
+		<filter-class>tools.descartes.teastore.registryclient.rest.TrackingFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>TrackingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<absolute-ordering/>
 </web-app>

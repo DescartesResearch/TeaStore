@@ -4,4 +4,5 @@
   <welcome-file-list>
     <welcome-file>/</welcome-file>
   </welcome-file-list>
+  <absolute-ordering/>
 </web-app>
