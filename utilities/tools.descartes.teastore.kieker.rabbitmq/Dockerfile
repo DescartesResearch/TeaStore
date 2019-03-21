@@ -9,7 +9,6 @@ RUN apt-get update
 RUN apt-get install unzip
 RUN unzip /apache.zip
 RUN chmod -R +x /apache-tomcat-8.5.24
-RUN mkdir /usr/share/man/man1
 RUN apt-get -y install default-jre-headless
 
 COPY target/*.war /apache-tomcat-8.5.24/webapps/logs.war

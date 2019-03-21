@@ -76,7 +76,7 @@ spec:
     spec:
       containers:
       - name: teastore-persistence
-        image: descartesresearch/teastore-persistence-kieker
+        image: descartesresearch/teastore-persistence
         ports:
         - containerPort: 8080
         env:
@@ -104,7 +104,7 @@ spec:
     spec:
       containers:
       - name: teastore-auth
-        image: descartesresearch/teastore-auth-kieker
+        image: descartesresearch/teastore-auth
         ports:
         - containerPort: 8080
         env:
@@ -128,7 +128,7 @@ spec:
     spec:
       containers:
       - name: teastore-image
-        image: descartesresearch/teastore-image-kieker
+        image: descartesresearch/teastore-image
         ports:
         - containerPort: 8080
         env:
@@ -152,7 +152,7 @@ spec:
     spec:
       containers:
       - name: teastore-recommender
-        image: descartesresearch/teastore-recommender-kieker
+        image: descartesresearch/teastore-recommender
         ports:
         - containerPort: 8080
         env:
@@ -176,7 +176,7 @@ spec:
     spec:
       containers:
       - name: teastore-webui
-        image: descartesresearch/teastore-webui-kieker
+        image: descartesresearch/teastore-webui
         ports:
         - containerPort: 8080
         env:
