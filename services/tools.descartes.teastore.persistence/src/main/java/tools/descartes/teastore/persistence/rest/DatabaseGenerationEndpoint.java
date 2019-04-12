@@ -107,8 +107,7 @@ public class DatabaseGenerationEndpoint {
 		boolean isFinished = DataGenerator.GENERATOR.getGenerationFinishedFlag();
 		if (isFinished) {
 			return Response.ok().build();
-		}
-		else {
+		} else {
 			return Response.serverError().build();
 		}
 	}
