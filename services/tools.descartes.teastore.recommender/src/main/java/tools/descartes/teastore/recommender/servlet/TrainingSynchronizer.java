@@ -42,7 +42,7 @@ import tools.descartes.teastore.entities.OrderItem;
 /**
  * This class organizes the communication with the other services and
  * synchronizes on startup and training.
- * 
+ *
  * @author Johannes Grohmann
  *
  */
@@ -85,7 +85,7 @@ public final class TrainingSynchronizer {
 
 	/**
 	 * Returns the instance for this singleton.
-	 * 
+	 *
 	 * @return An instance of {@link TrainingSynchronizer}
 	 */
 	public static synchronized TrainingSynchronizer getInstance() {
@@ -139,7 +139,7 @@ public final class TrainingSynchronizer {
 						client -> client.getService().path(client.getApplicationURI()).path(client.getEndpointURI())
 								.path("finished").request().get());
 
-				if (result != null && Boolean.parseBoolean(result.readEntity(String.class))) {
+				if (result != null && result.getStatus() >= 200 && result.getStatus() < 400) {
 					break;
 				}
 			} catch (NullPointerException | NotFoundException | LoadBalancerTimeoutException e) {
@@ -167,7 +167,7 @@ public final class TrainingSynchronizer {
 	/**
 	 * Connects via REST to the database and retrieves all {@link OrderItem}s and
 	 * all {@link Order}s. Then, it triggers the training of the recommender.
-	 * 
+	 *
 	 * @return The number of elements retrieved from the database or -1 if the
 	 *         process failed.
 	 */

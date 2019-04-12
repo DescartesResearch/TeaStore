@@ -108,7 +108,7 @@ public final class Tracing {
     } catch (IllegalArgumentException e) {
       e.printStackTrace();
     }
-    return spanBuilder.withTag(Tags.SPAN_KIND.getKey(), Tags.SPAN_KIND_SERVER).startActive(true);
+    return spanBuilder.withTag(Tags.SPAN_KIND.getKey(), Tags.SPAN_KIND_CLIENT).startActive(true);
   }
 
   /**
