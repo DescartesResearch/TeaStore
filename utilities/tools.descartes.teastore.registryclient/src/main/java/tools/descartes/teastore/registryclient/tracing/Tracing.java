@@ -47,8 +47,11 @@ public final class Tracing {
    * @param requestBuilder The requestBuilder object that gets injected
    */
   public static void inject(Invocation.Builder requestBuilder) {
-    GlobalTracer.get().inject(GlobalTracer.get().activeSpan().context(), Format.Builtin.HTTP_HEADERS,
-        Tracing.requestBuilderCarrier(requestBuilder));
+    SpanContext currentContext = GlobalTracer.get().activeSpan().context();
+    if (currentContext != null) {
+      GlobalTracer.get().inject(currentContext, Format.Builtin.HTTP_HEADERS,
+          Tracing.requestBuilderCarrier(requestBuilder));
+    }
   }
 
   /**
