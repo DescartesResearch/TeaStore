@@ -60,7 +60,6 @@ public class ImageProviderStartup implements ServletContextListener {
     ServiceLoadBalancer.preInitializeServiceLoadBalancers(Service.PERSISTENCE);
     RegistryClient.getClient().runAfterServiceIsAvailable(Service.PERSISTENCE,
         new StartupCallback() {
-
           @Override
           public void callback() {
             SetupController.SETUP.startup();
@@ -68,5 +67,4 @@ public class ImageProviderStartup implements ServletContextListener {
           }
         }, Service.IMAGE);
   }
-
 }
