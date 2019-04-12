@@ -10,6 +10,7 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.HttpHeaders;
 
 import io.jaegertracing.internal.JaegerTracer;
+import io.jaegertracing.internal.propagation.B3TextMapCodec;
 import io.jaegertracing.internal.samplers.ConstSampler;
 import io.opentracing.Scope;
 import io.opentracing.Span;
@@ -38,7 +39,9 @@ public final class Tracing {
    * @return Tracer intended to be used as GlobalTracer
    */
   public static Tracer init(String service) {
-    return new JaegerTracer.Builder(service).withSampler(new ConstSampler(true)).withZipkinSharedRpcSpan().build();
+    return new JaegerTracer.Builder(service).withSampler(new ConstSampler(true)).withZipkinSharedRpcSpan()
+        .registerInjector(Format.Builtin.HTTP_HEADERS, new B3TextMapCodec.Builder().build())
+        .registerExtractor(Format.Builtin.HTTP_HEADERS, new B3TextMapCodec.Builder().build()).build();
   }
 
   /**
