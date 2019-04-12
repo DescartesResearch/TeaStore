@@ -168,12 +168,8 @@ public enum SetupController {
         log.info("ServiceLoadBalancerResult was null!");
       }
 
-      boolean test = false;
-      if (result != null) {
-    	  test = Boolean.parseBoolean(result.readEntity(String.class));
-    	  if (test) {
-    		  result.close();
-    	  }
+      if (result != null && result.getStatus() >= 200 && result.getStatus() < 400) {
+    		result.close();
     	  break;
       }
 
