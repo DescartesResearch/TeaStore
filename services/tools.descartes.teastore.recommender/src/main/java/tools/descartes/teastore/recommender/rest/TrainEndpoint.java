@@ -25,7 +25,7 @@ import tools.descartes.teastore.entities.OrderItem;
 
 /**
  * REST endpoint to trigger the (re)training of the Recommender.
- * 
+ *
  * @author Johannes Grohmann
  *
  */
@@ -41,7 +41,7 @@ public class TrainEndpoint {
 	 * the {@link IRecommender} will throw an
 	 * {@link UnsupportedOperationException}.<br>
 	 * Calling this method twice will trigger a retraining.
-	 * 
+	 *
 	 * @return Returns a {@link Response} with
 	 *         {@link javax.servlet.http.HttpServletResponse#SC_OK} or with
 	 *         {@link javax.servlet.http.HttpServletResponse#SC_INTERNAL_SERVER_ERROR},
@@ -68,7 +68,7 @@ public class TrainEndpoint {
 	/**
 	 * Returns the last time stamp, which was considered at the training of this
 	 * instance.
-	 * 
+	 *
 	 * @return Returns a {@link Response} with
 	 *         {@link javax.servlet.http.HttpServletResponse#SC_OK} containing the
 	 *         maximum considered time as String or with
@@ -84,7 +84,7 @@ public class TrainEndpoint {
 		}
 		return Response.ok(TrainingSynchronizer.getInstance().getMaxTime()).build();
 	}
-	
+
 	/**
 	 * This methods checks, if the service is ready to serve recommendation
 	 * requests, i.e., if the algorithm is finish training and no retraining process
@@ -93,13 +93,17 @@ public class TrainEndpoint {
 	 * the old trained instance might still answer issued requests until the new
 	 * instance is fully trained. However, performance behavior is probably
 	 * influenced.
-	 * 
+	 *
 	 * @return True, if recommender is ready; false, if not.
 	 */
 	@GET
 	@Path("isready")
 	public Response isReady() {
 		boolean isReady = TrainingSynchronizer.getInstance().isReady();
-		return Response.ok(String.valueOf(isReady)).build();
+		if (isReady) {
+			return Response.ok().build();
+		} else {
+			return Response.serverError().build();
+		}
 	}
 }
