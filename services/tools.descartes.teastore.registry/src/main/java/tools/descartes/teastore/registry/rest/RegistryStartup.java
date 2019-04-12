@@ -37,21 +37,21 @@ public class RegistryStartup implements ServletContextListener {
 	 * Also set this accordingly in RegistryClientStartup.
 	 */
 	private static final int HEARTBEAT_INTERVAL_MS = 2500;
-	
+
 	private static ScheduledExecutorService heartbeatScheduler;
-	
+
 	/**
 	 * Empty constructor.
 	 */
     public RegistryStartup() {
-    	
+
     }
 
 	/**
      * @see ServletContextListener#contextDestroyed(ServletContextEvent)
      * @param arg0 The servlet context event at destruction.
      */
-    public void contextDestroyed(ServletContextEvent arg0)  { 
+    public void contextDestroyed(ServletContextEvent arg0)  {
     	heartbeatScheduler.shutdownNow();
     	LOG.info("Shutdown registry");
     }
@@ -60,11 +60,11 @@ public class RegistryStartup implements ServletContextListener {
      * @see ServletContextListener#contextInitialized(ServletContextEvent)
      * @param arg0 The servlet context event at initialization.
      */
-    public void contextInitialized(ServletContextEvent arg0)  {
+	public void contextInitialized(ServletContextEvent arg0) {
 		heartbeatScheduler = Executors.newSingleThreadScheduledExecutor();
 		heartbeatScheduler.scheduleAtFixedRate(new RegistryHeartbeatDaemon(),
 				HEARTBEAT_INTERVAL_MS,  HEARTBEAT_INTERVAL_MS, TimeUnit.MILLISECONDS);
     	LOG.info("Registry online");
     }
-    
+
 }
