@@ -103,9 +103,10 @@ public final class Tracing {
       SpanContext parentSpanCtx = GlobalTracer.get().extract(Format.Builtin.HTTP_HEADERS,
           new TextMapExtractAdapter(headers));
       if (parentSpanCtx != null) {
-        spanBuilder = GlobalTracer.get().buildSpan("op").asChildOf(parentSpanCtx);
+        spanBuilder = spanBuilder.asChildOf(parentSpanCtx);
       }
     } catch (IllegalArgumentException e) {
+      e.printStackTrace();
     }
     return spanBuilder.withTag(Tags.SPAN_KIND.getKey(), Tags.SPAN_KIND_SERVER).startActive(true);
   }
@@ -126,7 +127,7 @@ public final class Tracing {
 
       @Override
       public void put(String key, String value) {
-        System.out.println("Inserted header" + key + ": " + value);
+        System.out.println("Inserted header " + key + ": " + value);
         builder.header(key, value);
       }
     };
