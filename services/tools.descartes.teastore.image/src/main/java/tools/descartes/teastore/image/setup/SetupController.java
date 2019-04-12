@@ -71,8 +71,8 @@ import tools.descartes.teastore.image.storage.rules.StoreAll;
 import tools.descartes.teastore.image.storage.rules.StoreLargeImages;
 
 /**
- * Image provider setup class. Connects to the persistence service to collect all available products and generates 
- * images from the received products and their category. Searches for existing images to be used in the web interface 
+ * Image provider setup class. Connects to the persistence service to collect all available products and generates
+ * images from the received products and their category. Searches for existing images to be used in the web interface
  * and adds them to the storage / cache.
  * @author Norbert Schmitt
  */
@@ -88,35 +88,35 @@ public enum SetupController {
    * @author Norbert Schmitt
    */
   private interface SetupControllerConstants {
-	  
+
 	/**
 	 * Standard working directory in which the images are stored.
 	 */
     public static final Path STD_WORKING_DIR = Paths.get("images");
-    
+
     /**
      * Longest wait period before querying the persistence again if it is finished creating entries.
      */
     public final int PERSISTENCE_CREATION_MAX_WAIT_TIME = 120000;
-    
+
     /**
      * Wait time in ms before checking again for an existing persistence service.
      */
     public static final List<Integer> PERSISTENCE_CREATION_WAIT_TIME = Arrays.asList(1000, 2000,
         5000, 10000, 30000, 60000);
-    
+
     /**
      * Number of available logical cpus for image creation.
      */
     public static final int CREATION_THREAD_POOL_SIZE = Runtime.getRuntime().availableProcessors();
-    
+
     /**
      * Wait time in ms for the image creation thread pool to terminate all threads.
      */
     public static final long CREATION_THREAD_POOL_WAIT = 500;
-    
+
     /**
-     * Wait time in ms (per image to generate) before an image provider service is registered if there is another 
+     * Wait time in ms (per image to generate) before an image provider service is registered if there is another
      * image provider service registered.
      */
     public static final long CREATION_THREAD_POOL_WAIT_PER_IMG_NR = 70;
@@ -164,6 +164,8 @@ public enum SetupController {
         log.info("No persistence found.", notFound);
       } catch (LoadBalancerTimeoutException timeout) {
         log.info("Persistence call timed out.", timeout);
+      } catch (NullPointerException npe) {
+        log.info("ServiceLoadBalancerResult was null!");
       }
 
       boolean test = false;
@@ -247,7 +249,7 @@ public enum SetupController {
       result.close();
       log.info("{} categories found.", categories.size());
     }
-    
+
     if (categories == null) {
       return new ArrayList<Category>();
     }
@@ -437,7 +439,7 @@ public enum SetupController {
           // Copy files to correct file with the image id number
           try {
             buffImg = ImageIO.read(file);
-            
+
           } catch (IOException ioException) {
             log.warn("An IOException occured while reading the file " + file.getAbsolutePath()
                 + " from disk.", ioException.getMessage());
@@ -611,7 +613,7 @@ public enum SetupController {
   }
 
   /**
-   * Give the image provider the configured image database and cache / storage object containing all images referenced 
+   * Give the image provider the configured image database and cache / storage object containing all images referenced
    * in the image database.
    */
   public void configureImageProvider() {
@@ -727,9 +729,9 @@ public enum SetupController {
   }
 
   /**
-   * Deletes all images and the current working directory and starts the setup by generating product images and 
-   * adding web interface images to the image database. The final cache / storage and image database is then handed 
-   * over to the image provider instance. If this image provider service is the not the first image provider and other 
+   * Deletes all images and the current working directory and starts the setup by generating product images and
+   * adding web interface images to the image database. The final cache / storage and image database is then handed
+   * over to the image provider instance. If this image provider service is the not the first image provider and other
    * image provider services are registered, the registration is delayed until all images are generated.
    */
   public void startup() {
@@ -756,9 +758,9 @@ public enum SetupController {
   }
 
   /**
-   * Deletes all images and the current working directory and starts the setup by generating product images and 
-   * adding web interface images to the image database. The final cache / storage and image database is then handed 
-   * over to the image provider instance. The reconfiguration and image generation takes place in a background thread. 
+   * Deletes all images and the current working directory and starts the setup by generating product images and
+   * adding web interface images to the image database. The final cache / storage and image database is then handed
+   * over to the image provider instance. The reconfiguration and image generation takes place in a background thread.
    * This service remains registered and might receive request from other services.
    */
   public void reconfiguration() {
