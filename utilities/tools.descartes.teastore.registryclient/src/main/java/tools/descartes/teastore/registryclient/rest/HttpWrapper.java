@@ -9,12 +9,13 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
+import tools.descartes.teastore.registryclient.tracing.Tracing;
 
 import javax.ws.rs.client.WebTarget;
 
 /**
  * Wrapper for http calls.
- * 
+ *
  * @author Simon
  *
  */
@@ -34,12 +35,12 @@ public final class HttpWrapper {
 
   /**
    * Wrap webtarget.
-   * 
-   * @param target
-   *          webtarget to wrap
+   *
+   * @param target webtarget to wrap
    * @return wrapped wentarget
    */
   public static Builder wrap(WebTarget target) {
+    Builder builder = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
     if (CTRLINST.isMonitoringEnabled()) {
       final String sessionId = SESSION_REGISTRY.recallThreadLocalSessionId();
       final int eoi; // this is executionOrderIndex-th execution in this trace
@@ -64,14 +65,13 @@ public final class HttpWrapper {
           // CTRLINST.terminateMonitoring();
         }
       }
+      Tracing.inject(builder);
 
       // Get request header
-      Builder builder = target.request(MediaType.APPLICATION_JSON)
-          .accept(MediaType.APPLICATION_JSON);
-
-      return builder.header(HEADER_FIELD, Long.toString(traceId) + "," + sessionId + ","
-          + Integer.toString(eoi) + "," + Integer.toString(nextESS));
+      return builder.header(HEADER_FIELD,
+          Long.toString(traceId) + "," + sessionId + "," + Integer.toString(eoi) + "," + Integer.toString(nextESS));
     }
-    return target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
+    Tracing.inject(builder);
+    return builder;
   }
 }
