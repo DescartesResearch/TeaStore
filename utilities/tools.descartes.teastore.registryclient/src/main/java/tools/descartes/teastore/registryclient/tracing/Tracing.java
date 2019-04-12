@@ -12,6 +12,7 @@ import javax.ws.rs.core.HttpHeaders;
 import io.jaegertracing.internal.JaegerTracer;
 import io.jaegertracing.internal.samplers.ConstSampler;
 import io.opentracing.Scope;
+import io.opentracing.Span;
 import io.opentracing.SpanContext;
 import io.opentracing.Tracer;
 import io.opentracing.propagation.Format;
@@ -47,9 +48,9 @@ public final class Tracing {
    * @param requestBuilder The requestBuilder object that gets injected
    */
   public static void inject(Invocation.Builder requestBuilder) {
-    SpanContext currentContext = GlobalTracer.get().activeSpan().context();
-    if (currentContext != null) {
-      GlobalTracer.get().inject(currentContext, Format.Builtin.HTTP_HEADERS,
+    Span activeSpan = GlobalTracer.get().activeSpan();
+    if (activeSpan != null) {
+      GlobalTracer.get().inject(activeSpan.context(), Format.Builtin.HTTP_HEADERS,
           Tracing.requestBuilderCarrier(requestBuilder));
     }
   }
