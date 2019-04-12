@@ -42,7 +42,7 @@ public final class Tracing {
 
   /**
    * This function is used to inject the current span context into the request to
-   * be made
+   * be made.
    *
    * @param requestBuilder The requestBuilder object that gets injected
    */
