@@ -22,6 +22,7 @@ import io.opentracing.util.GlobalTracer;
 
 /**
  * Utility functions for OpenTracing integration.
+ *
  * @author Long Bui
  */
 public final class Tracing {
@@ -37,6 +38,17 @@ public final class Tracing {
    */
   public static Tracer init(String service) {
     return new JaegerTracer.Builder(service).withSampler(new ConstSampler(true)).withZipkinSharedRpcSpan().build();
+  }
+
+  /**
+   * This function is used to inject the current span context into the request to
+   * be made
+   *
+   * @param requestBuilder The requestBuilder object that gets injected
+   */
+  public static void inject(Invocation.Builder requestBuilder) {
+    GlobalTracer.get().inject(GlobalTracer.get().activeSpan().context(), Format.Builtin.HTTP_HEADERS,
+        Tracing.requestBuilderCarrier(requestBuilder));
   }
 
   /**
@@ -110,6 +122,7 @@ public final class Tracing {
 
       @Override
       public void put(String key, String value) {
+        System.out.println("Inserted header" + key + ": " + value);
         builder.header(key, value);
       }
     };
