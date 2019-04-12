@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Application Lifecycle Listener implementation class Registry Client Startup.
- * 
+ *
  * @author Simon Eismann
  *
  */
@@ -73,5 +73,6 @@ public class RegistryStartup implements ServletContextListener {
     }, HEARTBEAT_INTERVAL_MS, HEARTBEAT_INTERVAL_MS, TimeUnit.MILLISECONDS);
     LOG.info("Registry online");
   }
+
 
 }

@@ -18,14 +18,16 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+import io.opentracing.util.GlobalTracer;
 import tools.descartes.teastore.registryclient.RegistryClient;
 import tools.descartes.teastore.registryclient.Service;
 import tools.descartes.teastore.registryclient.loadbalancers.ServiceLoadBalancer;
+import tools.descartes.teastore.registryclient.tracing.Tracing;
 import tools.descartes.teastore.registryclient.util.RESTClient;
 
 /**
  * Application Lifecycle Listener implementation class Registry Client Startup.
- * 
+ *
  * @author Simon Eismann
  *
  */
@@ -60,6 +62,7 @@ public class AuthStartup implements ServletContextListener {
    * @param event The servlet context event at initialization.
    */
   public void contextInitialized(ServletContextEvent event) {
+    GlobalTracer.register(Tracing.init(Service.AUTH.getServiceName()));
     RESTClient.setGlobalReadTimeout(REST_READ_TIMOUT);
     ServiceLoadBalancer.preInitializeServiceLoadBalancers(Service.PERSISTENCE);
     RegistryClient.getClient().register(event.getServletContext().getContextPath());
