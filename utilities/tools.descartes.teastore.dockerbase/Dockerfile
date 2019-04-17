@@ -49,6 +49,8 @@ COPY kieker.monitoring.properties 							/kieker/config/kieker.monitoring.proper
 COPY aop.xml 												/usr/local/tomcat/lib/aop.xml
 COPY kieker-1.14-SNAPSHOT-aspectj.jar 						/kieker/agent/agent.jar
 
+COPY pinpoint-bootstrap-1.8.3.jar                           /pinpoint/agent/pinpoint-bootstrap-1.8.3.jar
+
 EXPOSE 8080
 
 CMD java -jar /usr/local/tomcat/bin/dockermemoryconfigurator.jar ${TOMCAT_HEAP_MEM_PERCENTAGE}; /usr/local/tomcat/bin/start.sh && /usr/local/tomcat/bin/catalina.sh run
