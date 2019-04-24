@@ -26,45 +26,52 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Application Lifecycle Listener implementation class Registry Client Startup.
+ * 
  * @author Simon Eismann
  *
  */
 @WebListener
 public class RegistryStartup implements ServletContextListener {
 
-	private static final Logger LOG = LoggerFactory.getLogger(RegistryStartup.class);
-	/**
-	 * Also set this accordingly in RegistryClientStartup.
-	 */
-	private static final int HEARTBEAT_INTERVAL_MS = 2500;
-	
-	private static ScheduledExecutorService heartbeatScheduler;
-	
-	/**
-	 * Empty constructor.
-	 */
-    public RegistryStartup() {
-    	
-    }
+  private static final Logger LOG = LoggerFactory.getLogger(RegistryStartup.class);
+  /**
+   * Also set this accordingly in RegistryClientStartup.
+   */
+  private static final int HEARTBEAT_INTERVAL_MS = 2500;
 
-	/**
-     * @see ServletContextListener#contextDestroyed(ServletContextEvent)
-     * @param arg0 The servlet context event at destruction.
-     */
-    public void contextDestroyed(ServletContextEvent arg0)  { 
-    	heartbeatScheduler.shutdownNow();
-    	LOG.info("Shutdown registry");
-    }
+  private static ScheduledExecutorService heartbeatScheduler;
 
-	/**
-     * @see ServletContextListener#contextInitialized(ServletContextEvent)
-     * @param arg0 The servlet context event at initialization.
-     */
-    public void contextInitialized(ServletContextEvent arg0)  {
-		heartbeatScheduler = Executors.newSingleThreadScheduledExecutor();
-		heartbeatScheduler.scheduleAtFixedRate(new RegistryHeartbeatDaemon(),
-				HEARTBEAT_INTERVAL_MS,  HEARTBEAT_INTERVAL_MS, TimeUnit.MILLISECONDS);
-    	LOG.info("Registry online");
-    }
-    
+  /**
+   * Empty constructor.
+   */
+  public RegistryStartup() {
+
+  }
+
+  /**
+   * @see ServletContextListener#contextDestroyed(ServletContextEvent)
+   * @param arg0
+   *          The servlet context event at destruction.
+   */
+  public void contextDestroyed(ServletContextEvent arg0) {
+    heartbeatScheduler.shutdownNow();
+    LOG.info("Shutdown registry");
+  }
+
+  /**
+   * @see ServletContextListener#contextInitialized(ServletContextEvent)
+   * @param arg0
+   *          The servlet context event at initialization.
+   */
+  public void contextInitialized(ServletContextEvent arg0) {
+    heartbeatScheduler = Executors.newSingleThreadScheduledExecutor();
+    heartbeatScheduler.scheduleAtFixedRate(new Runnable() {
+      @Override
+      public void run() {
+        Registry.getRegistryInstance().heartBeatCleanup();
+      }
+    }, HEARTBEAT_INTERVAL_MS, HEARTBEAT_INTERVAL_MS, TimeUnit.MILLISECONDS);
+    LOG.info("Registry online");
+  }
+
 }

@@ -13,130 +13,157 @@
  */
 package tools.descartes.teastore.registry.rest;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * Registry for the services.
+ * 
  * @author Simon Eismann
  *
  */
 public final class Registry {
 
-	private static Registry registry = new Registry();
-	private Map<String, List<String>> map = new ConcurrentHashMap<String, List<String>>();
-	private Map<String, HeartbeatInfo> heartbeatMap = new ConcurrentHashMap<String, HeartbeatInfo>();
-	private static final Logger LOG = LoggerFactory.getLogger(Registry.class);
-	
-	private Registry() { } 
-	
-	/**
-	 * Returns the map used by the registry, should only be used by test cases.
-	 * @return map used by registry
-	 */
-	public Map<String, HeartbeatInfo> getHeartbeatMap() {
-		return heartbeatMap;
-	}
-	
-	
-	/**
-	 * Returns the map used by the registry, should only be used by test cases.
-	 * @return map used by registry
-	 */
-	public Map<String, List<String>> getMap() {
-		return map;
-	}
-	
-	/**
-	 * Getter for singleton registry.
-	 * @return registry singleton
-	 */
-	public static Registry getRegistryInstance() {
-		return registry;
-	}
-	
-	/**
-	 * Returns all locations for a service.
-	 * @param name Name of the service
-	 * @return List over all locations
-	 */
-	public synchronized List<String> getLocations(String name) {
-		return getFromMap(name);
-	}
-	
-	private List<String> getFromMap(String name) {
-		if (map.get(name) == null) {
-			map.put(name, new LinkedList<String>());
-		}
-		return map.get(name);
-	}
-	
-	private void updateHeartbeatMap(String name, String location) {
-		HeartbeatInfo info = getFromHeartbeatMap(name, location);
-		if (info == null) {
-			heartbeatMap.put(name + location, new HeartbeatInfo());
-		} else {
-			info.newHeartbeat();
-		}
-	}
-	
-	private HeartbeatInfo getFromHeartbeatMap(String name, String location) {
-		return heartbeatMap.get(name + location);
-	}
-	
-	/**
-	 * Checks if service is alive.
-	 * @param name service name
-	 * @param location service location
-	 * @return true if alive
-	 */
-	public boolean isAlive(String name, String location) {
-		return getFromHeartbeatMap(name, location).isAlive();
-	}
-	
-	/**
-	 * Unregisters a service instance from the registry.
-	 * @param name name of the service
-	 * @param location instance location
-	 * @return boolean success indicator
-	 */
-	public synchronized boolean unregister(String name, String location) {
-		if (map.get(name) == null) {
-			return false;
-		}
-		List<String> locations = map.get(name);
-		
-		boolean removed = locations.remove(location);
-		if (locations.size() == 0) {
-			map.remove(name);
-		}
-		
-		if (removed) {
-			LOG.info("Unregistered " + name + "@" + location);
-		}
-		return removed;
-	}
+  private static Registry registry = new Registry();
+  private Map<String, List<String>> serviceLocationMap = new HashMap<String, List<String>>();
+  private Map<String, HeartbeatInfo> heartbeatMap = Collections
+      .synchronizedMap(new HashMap<String, HeartbeatInfo>());
+  private ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+  private Lock readLock = readWriteLock.readLock();
+  private Lock writeLock = readWriteLock.writeLock();
+  private static final Logger LOG = LoggerFactory.getLogger(Registry.class);
 
-	/**
-	 * Registers a service instance from the registry.
-	 * @param name name of the service
-	 * @param location instance location
-	 * @return boolean success indicator
-	 */
-	public synchronized boolean register(String name, String location) {
-		List<String> locations = getFromMap(name);
-		updateHeartbeatMap(name, location);
-		if (locations.contains(location)) {
-			return false;
-		}
-		LOG.info("Registered " + name + "@" + location);
-		locations.add(location);
-		return true;
-	}
- }
+  private Registry() {
+  }
+
+  /**
+   * Getter for singleton registry.
+   * 
+   * @return registry singleton
+   */
+  public static Registry getRegistryInstance() {
+    return registry;
+  }
+
+  /**
+   * Returns all locations for a service.
+   * 
+   * @param name
+   *          Name of the service
+   * @return List over all locations
+   */
+  public List<String> getLocations(String name) {
+    List<String> locations;
+    readLock.lock();
+    try {
+      locations = serviceLocationMap.get(name);
+    } finally {
+      readLock.unlock();
+    }
+
+    writeLock.lock();
+    try {
+      if (locations == null) {
+        locations = new LinkedList<String>();
+        serviceLocationMap.put(name, locations);
+      }
+    } finally {
+      writeLock.unlock();
+    }
+    return locations;
+  }
+
+  private void updateHeartbeatMap(String name, String location) {
+    HeartbeatInfo info = heartbeatMap.get(name + location);
+    if (info == null) {
+      heartbeatMap.put(name + location, new HeartbeatInfo());
+    } else {
+      info.newHeartbeat();
+    }
+  }
+
+  /**
+   * Unregisters a service instance from the registry.
+   * 
+   * @param name
+   *          name of the service
+   * @param location
+   *          instance location
+   * @return boolean success indicator
+   */
+  public boolean unregister(String name, String location) {
+    writeLock.lock();
+    try {
+      List<String> locations = serviceLocationMap.get(name);
+      if (locations == null) {
+        return false;
+      }
+
+      boolean removed = locations.remove(location);
+      if (locations.size() == 0) {
+        serviceLocationMap.remove(name);
+      }
+
+      if (removed) {
+        LOG.info("Unregistered " + name + "@" + location);
+      }
+      return removed;
+    } finally {
+      writeLock.unlock();
+    }
+  }
+
+  /**
+   * Registers a service instance from the registry.
+   * 
+   * @param name
+   *          name of the service
+   * @param location
+   *          instance location
+   * @return boolean success indicator
+   */
+  public boolean register(String name, String location) {
+    updateHeartbeatMap(name, location);
+
+    List<String> locations = getLocations(name);
+    if (locations.contains(location)) {
+      return false;
+    }
+
+    writeLock.lock();
+    try {
+      serviceLocationMap.get(name).add(location);
+      LOG.info("Registered " + name + "@" + location);
+      return true;
+    } finally {
+      writeLock.unlock();
+    }
+  }
+
+  public void heartBeatCleanup() {
+    writeLock.lock();
+    try {
+      serviceLocationMap.entrySet().stream().forEach(entry -> {
+        for (Iterator<String> iter = entry.getValue().iterator(); iter.hasNext();) {
+          String location = iter.next();
+          if (!heartbeatMap.get(entry.getKey() + location).isAlive()) {
+            iter.remove();
+            LOG.warn(
+                "Removed " + entry.getKey() + "@" + location + " since it failed the heartbeat!");
+          }
+        }
+      });
+    } finally {
+      writeLock.unlock();
+    }
+  }
+}

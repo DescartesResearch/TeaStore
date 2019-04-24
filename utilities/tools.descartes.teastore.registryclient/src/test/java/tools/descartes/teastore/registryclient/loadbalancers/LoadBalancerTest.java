@@ -27,6 +27,8 @@ import org.junit.Test;
 
 import com.netflix.loadbalancer.Server;
 
+import kieker.monitoring.core.controller.MonitoringController;
+
 import org.junit.Assert;
 
 import tools.descartes.teastore.registryclient.Service;
@@ -93,6 +95,7 @@ public class LoadBalancerTest {
 	public void setup() throws Throwable {
 		testTomcats = new ArrayList<>(NUM_SERVERS + 1);
 		IntStream.range(0, NUM_SERVERS).forEach(i -> setupAndAddTestTomcat(i));
+		MonitoringController.getInstance().disableMonitoring();		
 	}
 	
 	/**
