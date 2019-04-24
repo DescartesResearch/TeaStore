@@ -99,11 +99,10 @@ public class TrainEndpoint {
 	@GET
 	@Path("isready")
 	public Response isReady() {
-		boolean isReady = TrainingSynchronizer.getInstance().isReady();
-		if (isReady) {
-			return Response.ok().build();
+		if (TrainingSynchronizer.getInstance().isReady()) {
+			return Response.ok(true).build();
 		} else {
-			return Response.serverError().build();
+			return Response.serverError().entity(false).build();
 		}
 	}
 }

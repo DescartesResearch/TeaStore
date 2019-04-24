@@ -104,11 +104,10 @@ public class DatabaseGenerationEndpoint {
 	@GET
 	@Path("finished")
 	public Response isFinshed() {
-		boolean isFinished = DataGenerator.GENERATOR.getGenerationFinishedFlag();
-		if (isFinished) {
-			return Response.ok().build();
+		if (DataGenerator.GENERATOR.getGenerationFinishedFlag()) {
+			return Response.ok(true).build();
 		} else {
-			return Response.serverError().build();
+			return Response.serverError().entity(false).build();
 		}
 	}
 
