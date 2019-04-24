@@ -151,8 +151,6 @@ public final class Registry {
   
   /**
    * removes service instances from the registry based on heartbeat.
-   * 
-   * @return boolean success indicator
    */
   public void heartBeatCleanup() {
     writeLock.lock();
