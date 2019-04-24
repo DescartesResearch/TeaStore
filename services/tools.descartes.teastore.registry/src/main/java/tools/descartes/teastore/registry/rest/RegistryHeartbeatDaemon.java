@@ -17,6 +17,8 @@ import java.util.Iterator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Daemon which sends out heartbeats to the resistered service.
@@ -30,7 +32,8 @@ public class RegistryHeartbeatDaemon implements Runnable {
 	public void run() {
 		try {
 			Registry.getRegistryInstance().getMap().entrySet().stream().forEach(entry -> {
-				for (Iterator<String> iter = entry.getValue().iterator(); iter.hasNext();) {
+			  List<String> copy = new LinkedList<String>(entry.getValue())
+			  for (Iterator<String> iter = copy.iterator(); iter.hasNext();) {
 					String location = iter.next();
 					if (!Registry.getRegistryInstance().isAlive(entry.getKey(), location)) {
 						iter.remove();
