@@ -32,7 +32,7 @@ public class RegistryHeartbeatDaemon implements Runnable {
 	public void run() {
 		try {
 			Registry.getRegistryInstance().getMap().entrySet().stream().forEach(entry -> {
-			  List<String> copy = new LinkedList<String>(entry.getValue())
+			  List<String> copy = new LinkedList<String>(entry.getValue());
 			  for (Iterator<String> iter = copy.iterator(); iter.hasNext();) {
 					String location = iter.next();
 					if (!Registry.getRegistryInstance().isAlive(entry.getKey(), location)) {
