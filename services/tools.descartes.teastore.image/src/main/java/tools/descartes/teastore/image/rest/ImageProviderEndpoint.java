@@ -22,6 +22,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import tools.descartes.teastore.entities.ImageSize;
 import tools.descartes.teastore.image.ImageProvider;
@@ -84,9 +85,9 @@ public class ImageProviderEndpoint {
   @Path("finished")
   public Response isFinished() {
     if (SetupController.SETUP.isFinished()) {
-      return Response.ok().build();
+      return Response.ok(true).build();
     } else {
-      return Response.serverError().build();
+      return Response.serverError().entity(false).build();
     }
   }
 

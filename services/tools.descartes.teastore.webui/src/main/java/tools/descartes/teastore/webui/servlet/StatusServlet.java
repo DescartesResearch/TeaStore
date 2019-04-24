@@ -22,7 +22,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.MediaType;
 
 import tools.descartes.teastore.registryclient.RegistryClient;
 import tools.descartes.teastore.registryclient.Service;
@@ -92,10 +92,11 @@ public class StatusServlet extends AbstractUIServlet {
    * @return status
    */
   private boolean isDatabaseFinished() {
-    Response finished = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE,
-        "generatedb", String.class, client -> client.getEndpointTarget().path("finished").request().get());
-    if (finished != null && finished.getStatus() >= 200 && finished.getStatus() < 400) {
-      return true;
+    String finished = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE,
+        "generatedb", String.class, client -> client.getEndpointTarget().path("finished")
+            .request(MediaType.TEXT_PLAIN).get().readEntity(String.class));
+    if (finished != null) {
+      return Boolean.parseBoolean(finished);
     }
     return false;
   }
@@ -106,12 +107,13 @@ public class StatusServlet extends AbstractUIServlet {
    * @return status
    */
   private boolean isImageFinished() {
-    List<Response> finishedMessages = ServiceLoadBalancer.multicastRESTOperation(Service.IMAGE,
-        "image", String.class, client -> client.getEndpointTarget().path("finished").request().get());
+    List<String> finishedMessages = ServiceLoadBalancer.multicastRESTOperation(Service.IMAGE,
+        "image", String.class, client -> client.getEndpointTarget().path("finished")
+            .request(MediaType.APPLICATION_JSON).get().readEntity(String.class));
     if (finishedMessages != null && !finishedMessages.isEmpty()) {
       boolean finished = true;
-      for (Response finishedMessage : finishedMessages) {
-        finished = finished && (finishedMessage.getStatus() >= 200 && finishedMessage.getStatus() < 400);
+      for (String finishedMessage : finishedMessages) {
+        finished = finished && Boolean.parseBoolean(finishedMessage);
       }
       return finished;
     }
@@ -124,11 +126,11 @@ public class StatusServlet extends AbstractUIServlet {
    * @return status
    */
   private boolean isRecommenderFinished() {
-    List<Response> finishedMessages = ServiceLoadBalancer.multicastRESTOperation(Service.RECOMMENDER,
+    List<String> finishedMessages = ServiceLoadBalancer.multicastRESTOperation(Service.RECOMMENDER,
         "train", String.class, client -> client.getEndpointTarget().path("isready")
-            .request().get());
+            .request(MediaType.TEXT_PLAIN).get().readEntity(String.class));
     if (finishedMessages != null && !finishedMessages.isEmpty()) {
-      return finishedMessages.stream().map(b -> b.getStatus() >= 200 && b.getStatus() < 400).reduce(Boolean.TRUE,
+      return finishedMessages.stream().map(b -> Boolean.parseBoolean(b)).reduce(Boolean.TRUE,
           (a, b) -> a && b);
     }
     return false;

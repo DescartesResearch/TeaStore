@@ -139,8 +139,8 @@ public final class TrainingSynchronizer {
 						client -> client.getService().path(client.getApplicationURI()).path(client.getEndpointURI())
 								.path("finished").request().get());
 
-				if (result != null && result.getStatus() >= 200 && result.getStatus() < 400) {
-					break;
+								if (result != null && Boolean.parseBoolean(result.readEntity(String.class))) {
+									break;
 				}
 			} catch (NullPointerException | NotFoundException | LoadBalancerTimeoutException e) {
 				// continue waiting as usual
