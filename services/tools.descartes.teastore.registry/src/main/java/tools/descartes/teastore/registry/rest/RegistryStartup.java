@@ -73,6 +73,4 @@ public class RegistryStartup implements ServletContextListener {
     }, HEARTBEAT_INTERVAL_MS, HEARTBEAT_INTERVAL_MS, TimeUnit.MILLISECONDS);
     LOG.info("Registry online");
   }
-
-
 }
