@@ -149,8 +149,6 @@ public class HeartbeatTest {
 	        }
 	        registryTomcat.destroy();
 	    }
-		Registry.getRegistryInstance().getHeartbeatMap().clear();
-		Registry.getRegistryInstance().getMap().clear();
 	}
 	
 	private int getRegistryPort() {
