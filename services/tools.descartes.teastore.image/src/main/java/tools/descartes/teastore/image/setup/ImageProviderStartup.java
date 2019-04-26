@@ -17,14 +17,16 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+import io.opentracing.util.GlobalTracer;
 import tools.descartes.teastore.registryclient.RegistryClient;
 import tools.descartes.teastore.registryclient.Service;
 import tools.descartes.teastore.registryclient.StartupCallback;
 import tools.descartes.teastore.registryclient.loadbalancers.ServiceLoadBalancer;
+import tools.descartes.teastore.registryclient.tracing.Tracing;
 
 /**
  * Application Lifecycle Listener implementation class Registry Client Startup.
- * 
+ *
  * @author Simon Eismann
  *
  */
@@ -54,10 +56,10 @@ public class ImageProviderStartup implements ServletContextListener {
    *          The servlet context event at initialization.
    */
   public void contextInitialized(ServletContextEvent event) {
+    GlobalTracer.register(Tracing.init(Service.IMAGE.getServiceName()));
     ServiceLoadBalancer.preInitializeServiceLoadBalancers(Service.PERSISTENCE);
     RegistryClient.getClient().runAfterServiceIsAvailable(Service.PERSISTENCE,
         new StartupCallback() {
-
           @Override
           public void callback() {
             SetupController.SETUP.startup();
@@ -65,5 +67,4 @@ public class ImageProviderStartup implements ServletContextListener {
           }
         }, Service.IMAGE);
   }
-
 }

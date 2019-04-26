@@ -36,9 +36,9 @@ import tools.descartes.teastore.registryclient.RegistryClient;
  */
 @Path("generatedb")
 public class DatabaseGenerationEndpoint {
-	
+
 	private static final Logger LOG = LoggerFactory.getLogger(DatabaseGenerationEndpoint.class);
-	
+
 	/**
 	 * Drop database and create a new one.
 	 * @param categories Number of new categories.
@@ -88,14 +88,14 @@ public class DatabaseGenerationEndpoint {
 				+ maxOrderCount + " max orders per user.";
 		return Response.ok(message).build();
 	}
-	
+
 	private int parseQuery(Integer param, int defaultValue) {
 		if (param == null) {
 			return defaultValue;
 		}
 		return param;
 	}
-	
+
 	/**
 	 * Returns the is finished flag for database generation.
 	 * Also returns false if the persistence provider is in maintenance mode.
@@ -104,10 +104,13 @@ public class DatabaseGenerationEndpoint {
 	@GET
 	@Path("finished")
 	public Response isFinshed() {
-		boolean isFinished = DataGenerator.GENERATOR.getGenerationFinishedFlag();
-		return Response.ok(String.valueOf(isFinished)).build();
+		if (DataGenerator.GENERATOR.getGenerationFinishedFlag()) {
+			return Response.ok(true).build();
+		} else {
+			return Response.serverError().entity(false).build();
+		}
 	}
-	
+
 	/**
 	 * Disables or enables the maintenance mode.
 	 * Persistence providers in maintenance mode return 503 on almost anything.
@@ -123,7 +126,7 @@ public class DatabaseGenerationEndpoint {
 		DataGenerator.GENERATOR.setMaintenanceModeInternal(maintenanceMode);
 		return Response.ok().build();
 	}
-	
+
 	/**
 	 * Returns the is maintenance flag. Only to be used by other persistence providers.
 	 * @return True, if in maintenance; false, otherwise.

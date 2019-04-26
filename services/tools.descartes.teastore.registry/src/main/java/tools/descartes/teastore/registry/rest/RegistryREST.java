@@ -22,6 +22,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 /**
  * Rest endpoint for the registry.
@@ -30,7 +31,7 @@ import javax.ws.rs.core.Response;
 @Path("services")
 @Produces({ "application/json" })
 public class RegistryREST {
-	
+
 	/**
 	 * Register a service at a location.
 	 * @param name Service name
@@ -42,9 +43,9 @@ public class RegistryREST {
 	public Response register(@PathParam("name") final String name, @PathParam("location") final String location) {
 		boolean success = Registry.getRegistryInstance().register(name, location);
 		if (success) {
-			return Response.status(Response.Status.OK).build();
+			return Response.status(Status.CREATED).build();
 		}
-		return Response.status(Response.Status.CONFLICT).build();
+		return Response.ok().build();
 	}
 
 	/**
@@ -62,7 +63,7 @@ public class RegistryREST {
 		}
 		return Response.status(Response.Status.NOT_FOUND).build();
 	}
-	
+
 	/**
 	 * Get list of all instances of a service.
 	 * @param name service name
@@ -74,7 +75,5 @@ public class RegistryREST {
 		List<String> locations = Registry.getRegistryInstance().getLocations(name);
 		return Response.status(Response.Status.OK).entity(locations).build();
 	}
-	
-	
-	
+
 }

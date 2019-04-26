@@ -33,7 +33,7 @@ import tools.descartes.teastore.entities.ImageSizePreset;
 
 /**
  * Servlet to show database and other service status.
- * 
+ *
  * @author Joakim von Kistowski
  */
 @WebServlet("/status")
@@ -88,7 +88,7 @@ public class StatusServlet extends AbstractUIServlet {
 
   /**
    * Checks if Database is created.
-   * 
+   *
    * @return status
    */
   private boolean isDatabaseFinished() {
@@ -103,7 +103,7 @@ public class StatusServlet extends AbstractUIServlet {
 
   /**
    * Checks if ImageProvider is ready.
-   * 
+   *
    * @return status
    */
   private boolean isImageFinished() {
@@ -122,7 +122,7 @@ public class StatusServlet extends AbstractUIServlet {
 
   /**
    * Checks if Recommender has finished training.
-   * 
+   *
    * @return status
    */
   private boolean isRecommenderFinished() {
