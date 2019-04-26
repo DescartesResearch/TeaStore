@@ -130,7 +130,6 @@ public final class Tracing {
 
       @Override
       public void put(String key, String value) {
-        System.out.println("Inserted header " + key + ": " + value);
         builder.header(key, value);
       }
     };

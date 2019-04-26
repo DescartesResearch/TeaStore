@@ -41,6 +41,7 @@ public final class HttpWrapper {
    */
   public static Builder wrap(WebTarget target) {
     Builder builder = target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
+    Tracing.inject(builder);
     if (CTRLINST.isMonitoringEnabled()) {
       final String sessionId = SESSION_REGISTRY.recallThreadLocalSessionId();
       final int eoi; // this is executionOrderIndex-th execution in this trace
@@ -65,13 +66,10 @@ public final class HttpWrapper {
           // CTRLINST.terminateMonitoring();
         }
       }
-      Tracing.inject(builder);
-
       // Get request header
       return builder.header(HEADER_FIELD,
           Long.toString(traceId) + "," + sessionId + "," + Integer.toString(eoi) + "," + Integer.toString(nextESS));
     }
-    Tracing.inject(builder);
     return builder;
   }
 }
