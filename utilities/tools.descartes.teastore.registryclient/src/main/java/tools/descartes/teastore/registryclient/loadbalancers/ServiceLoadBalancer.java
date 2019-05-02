@@ -49,26 +49,26 @@ import tools.descartes.teastore.registryclient.util.RESTClient;
 public final class ServiceLoadBalancer {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ServiceLoadBalancer.class);
-	
+
 	//Loadbalancers for each service name
 	private static ConcurrentHashMap<String, ServiceLoadBalancer> serviceMap = new ConcurrentHashMap<>();
-	
+
 	//clients for each endpoint (for a fixed service)
 	private ConcurrentHashMap<String, EndpointClientCollection<?>> endpointMap = new ConcurrentHashMap<>();
 	private final Service targetService;
 	private Set<Server> serviceServers = new HashSet<Server>();
-	
+
 	private BaseLoadBalancer loadBalancer;
     // retry handler that does not retry on same server, but on a different server
     private final RetryHandler retryHandler = new DefaultLoadBalancerRetryHandler(0, 2, true);
-	
+
     private ReadWriteLock loadBalancerModificationLock = new ReentrantReadWriteLock();
-    
+
     //private constructor
     private ServiceLoadBalancer(final Service targetService) {
     	this.targetService = targetService;
-    }    
-    
+    }
+
     /**
      * Initializes load balancers for the target services.
      * Queries target service instances from the registry.
@@ -79,11 +79,11 @@ public final class ServiceLoadBalancer {
     		//initialize before logging in case the compiler optimizes it away when log-level info is not set
     		getServiceLoadBalancer(service);
     		//log the state to prevent the compiler from optimizing the initialization away
-    		LOG.info("Pre-initializing client-side load balancer for target: " 
+    		LOG.info("Pre-initializing client-side load balancer for target: "
 			 + getServiceLoadBalancer(service).targetService.getServiceName());
     	}
     }
-    
+
 	private static ServiceLoadBalancer getServiceLoadBalancer(Service targetService) {
 		ServiceLoadBalancer serviceBalancer = serviceMap.get(targetService.getServiceName());
     	if (serviceBalancer == null
@@ -94,7 +94,7 @@ public final class ServiceLoadBalancer {
     	}
     	return serviceMap.get(targetService.getServiceName());
     }
-	
+
 	/**
 	 * Gets the load balancer for a service. Initializes it with a list of know servers,
 	 * if the service is not known exists.
@@ -112,7 +112,7 @@ public final class ServiceLoadBalancer {
     	}
     	return serviceMap.get(targetService.getServiceName());
     }
-	
+
 	@SuppressWarnings("unchecked")
 	private <T> EndpointClientCollection<T> getEndpointClientCollection(String endpointURI, Class<T> entityClass) {
 		EndpointClientCollection<?> endpointCollection = endpointMap.get(endpointURI);
@@ -124,14 +124,14 @@ public final class ServiceLoadBalancer {
     	endpointCollection = endpointMap.get(endpointURI);
     	return (EndpointClientCollection<T>) endpointCollection;
 	}
-    
+
 	/**
 	 * Update all load balancers for a service. Triggers Registry client to ask registry for updates.
 	 */
 	static void updateLoadBalancersForKnownServicesUsingRegistry() {
 		serviceMap.values().forEach(balancer -> updateLoadBalancersForServiceUsingRegistry(balancer.targetService));
     }
-	
+
 	/**
 	 * Update all load balancers for a service with servers. Triggers Registry client to ask registry for updates.
 	 * @param targetService The service for which to update.
@@ -140,7 +140,7 @@ public final class ServiceLoadBalancer {
     	List<Server> servers = RegistryClient.getClient().getServersForService(targetService);
     	updateLoadBalancersForService(targetService, servers);
     }
-	
+
 	/**
 	 * Update all load balancers for a service. Call if server list has changed.
 	 * @param newServers New servers with which to update the load balancers.
@@ -153,7 +153,7 @@ public final class ServiceLoadBalancer {
     	}
     	serviceBalancer.updateLoadBalancer(newServers);
     }
-    
+
     private void updateLoadBalancer(List<Server> newServers) {
     	if (serviceServers == null) {
     		serviceServers = new HashSet<Server>();
@@ -180,7 +180,7 @@ public final class ServiceLoadBalancer {
     		loadBalancerModificationLock.writeLock().unlock();
     	}
     }
-    
+
     /**
      * Load balances a REST operation. Automatically creates the needed load balancers, clients, etc. if needed.
      * @param targetService The service to load balance.
@@ -200,7 +200,7 @@ public final class ServiceLoadBalancer {
     		Function<RESTClient<T>, R> operation) throws NotFoundException, LoadBalancerTimeoutException {
     	return getServiceLoadBalancer(targetService).loadBalanceRESTOperation(endpointURI, entityClass, operation);
 	}
-    
+
     private <T, R> R loadBalanceRESTOperation(String endpointURI,
     		Class<T> entityClass, Function<RESTClient<T>, R> operation)
     				throws NotFoundException, LoadBalancerTimeoutException {
@@ -224,7 +224,10 @@ public final class ServiceLoadBalancer {
                         				(RESTClient<T>) getEndpointClientCollection(endpointURI, entityClass)
                 				.getRESTClient(server), operation)
                         		))
-                        .onErrorReturn((Throwable e) -> null).toBlocking().first();
+						.onErrorReturn((Throwable e) -> {
+							e.printStackTrace();
+							return null;
+						}).toBlocking().first();
         		if (slbr == null) {
         			throw new NullPointerException("ServiceLoadBalancerResult was null!");
         		}
@@ -242,7 +245,7 @@ public final class ServiceLoadBalancer {
     	}
 		return r;
 	}
-    
+
     /**
      * Sends a multicast to all known instances of the service.
      * Does not repeat failed sends.
@@ -260,7 +263,7 @@ public final class ServiceLoadBalancer {
     		Function<RESTClient<T>, R> operation) {
     	return getServiceLoadBalancer(targetService).multicastRESTOperation(endpointURI, entityClass, operation, null);
     }
-    
+
     /**
      * Sends a multicast to all known instances of this service, except for the
      * one actually sending (this instance).
@@ -279,7 +282,7 @@ public final class ServiceLoadBalancer {
     			.multicastRESTOperation(endpointURI, entityClass, operation,
     					RegistryClient.getClient().getMyServiceInstanceServer());
     }
-    
+
     //exception can be null
     private <T, R> List<R> multicastRESTOperation(String endpointURI, Class<T> entityClass,
     		Function<RESTClient<T>, R> operation, Server exception) {

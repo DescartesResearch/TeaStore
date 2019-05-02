@@ -21,7 +21,7 @@ import javax.ws.rs.core.Response;
 
 /**
  * Rest endpoint for the store cart.
- * 
+ *
  * @author Simon
  */
 @Path("ready")
@@ -31,13 +31,13 @@ public class ReadyRest {
 
   /**
    * This methods checks, if the service is ready.
-   * 
+   *
    * @return True, if recommender is ready; false, if not.
    */
   @GET
   @Path("isready")
   public Response isReady() {
-    return Response.ok(String.valueOf(true)).build();
+    return Response.ok(true).build();
   }
 
 }

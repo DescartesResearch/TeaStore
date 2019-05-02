@@ -65,7 +65,7 @@ public class ImageProviderEndpoint {
   }
 
   /**
-   * Signals the image provider to regenerate all product images. This is usually necessary if the product database 
+   * Signals the image provider to regenerate all product images. This is usually necessary if the product database
    * changed.
    * @return Returns status code 200.
    */
@@ -83,7 +83,11 @@ public class ImageProviderEndpoint {
   @GET
   @Path("finished")
   public Response isFinished() {
-    return Response.ok().entity(SetupController.SETUP.isFinished()).build();
+    if (SetupController.SETUP.isFinished()) {
+      return Response.ok(true).build();
+    } else {
+      return Response.serverError().entity(false).build();
+    }
   }
 
   /**

@@ -17,9 +17,11 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+import io.opentracing.util.GlobalTracer;
 import tools.descartes.teastore.registryclient.RegistryClient;
 import tools.descartes.teastore.registryclient.Service;
 import tools.descartes.teastore.registryclient.loadbalancers.ServiceLoadBalancer;
+import tools.descartes.teastore.registryclient.tracing.Tracing;
 
 /**
  * Application Lifecycle Listener implementation class Registry Client Startup.
@@ -32,14 +34,14 @@ public class WebuiStartup implements ServletContextListener {
 	 * Empty constructor.
 	 */
     public WebuiStartup() {
-    	
+
     }
 
 	/**
      * @see ServletContextListener#contextDestroyed(ServletContextEvent)
      * @param event The servlet context event at destruction.
      */
-    public void contextDestroyed(ServletContextEvent event)  { 
+    public void contextDestroyed(ServletContextEvent event)  {
     	RegistryClient.getClient().unregister(event.getServletContext().getContextPath());
     }
 
@@ -47,10 +49,11 @@ public class WebuiStartup implements ServletContextListener {
      * @see ServletContextListener#contextInitialized(ServletContextEvent)
      * @param event The servlet context event at initialization.
      */
-    public void contextInitialized(ServletContextEvent event)  {
+    public void contextInitialized(ServletContextEvent event) {
+        GlobalTracer.register(Tracing.init(Service.WEBUI.getServiceName()));
     	ServiceLoadBalancer.preInitializeServiceLoadBalancers(Service.AUTH, Service.IMAGE,
     			Service.PERSISTENCE, Service.RECOMMENDER);
     	RegistryClient.getClient().register(event.getServletContext().getContextPath());
     }
-    
+
 }
