@@ -50,7 +50,7 @@ COPY kieker.monitoring.properties 							/kieker/config/kieker.monitoring.proper
 COPY aop.xml 												/usr/local/tomcat/lib/aop.xml
 COPY kieker-1.14-SNAPSHOT-aspectj.jar 						/kieker/agent/agent.jar
 
-COPY pinpoint-agent-1.8.3                                   /pinpoint/pinpoint-agent-1.8.3
+COPY /pinpoint-agent-1.8.3/*                                   /pinpoint/pinpoint-agent-1.8.3/
 
 EXPOSE 8080
 
