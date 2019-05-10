@@ -1,5 +1,9 @@
 #!/bin/bash
 # DANGER! MAKE SURE THIS FILE HAS UNIX-STYLE LINE-ENDINGS OR THE DOCKER CONTAINER WILL NOT START!
+
+RED_COLOR="\e[31m"
+NO_COLOR="\e[0m"
+
 sed -i "s/<Environment name=\"servicePort\" value=.*/<Environment name=\"servicePort\" value=\"${SERVICE_PORT}\"/g" /usr/local/tomcat/conf/context.xml
 if [ "$HOST_NAME" != "unset" ]
 then
@@ -31,8 +35,10 @@ then
 sed -i 's/kieker.monitoring.enabled=true/kieker.monitoring.enabled=false/g' /kieker/config/kieker.monitoring.properties
 fi
 
+printf "${RED_COLOR}BEFORE SED COMMAND EXECUTEION. VALUE IS $PINPOINT_PROFILER_COLLECTOR_IP.${NO_COLOR}\n"
 if [ "$PINPOINT_PROFILER_COLLECTOR_IP" != "unset" ]
 then
+printf "${RED_COLOR}JUMPED IN.${NO_COLOR}\n"
 sed -i "s/profiler.collector.ip=127.0.0.1/profiler.collector.ip=${PINPOINT_PROFILER_COLLECTOR_IP}/g" /pinpoint-agent-1.8.3/pinpoint.config
 fi
 
