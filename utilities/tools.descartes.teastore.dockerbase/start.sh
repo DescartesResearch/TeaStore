@@ -31,6 +31,11 @@ then
 sed -i 's/kieker.monitoring.enabled=true/kieker.monitoring.enabled=false/g' /kieker/config/kieker.monitoring.properties
 fi
 
+if [ "$PINPOINT_PROFILER_COLLECTOR_IP" != "unset" ]
+then
+sed -i "s/profiler.collector.ip=127.0.0.1/profiler.collector.ip=${PINPOINT_PROFILER_COLLECTOR_IP}/g" /pinpoint-agent-1.8.3/pinpoint.config
+fi
+
 touch /usr/local/tomcat/bin/setenv.sh
 chmod +x /usr/local/tomcat/bin/setenv.sh
 echo 'export JAVA_OPTS="$JAVA_OPTS"' > /usr/local/tomcat/bin/setenv.sh

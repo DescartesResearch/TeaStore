@@ -38,6 +38,7 @@ ENV TOMCAT_HEAP_MEM_PERCENTAGE 50
 ENV LOG_TO_FILE false
 ENV RABBITMQ_HOST unset
 ENV JAVA_OPTS -javaagent:/kieker/agent/agent.jar -Dkieker.monitoring.configuration=/kieker/config/kieker.monitoring.properties -Daj.weaving.verbose=false -Dorg.aspectj.weaver.loadtime.configuration=aop.xml -Dkieker.monitoring.skipDefaultAOPConfiguration=true -Daj.weaving.loadersToSkip=java.net.URLClassLoader
+ENV PINPOINT_PROFILER_COLLECTOR_IP unset
 
 # Setting secure random number generation to urandom. This increases the startup speed.
 # Environment variable no longer needed. Replaced by sed in start.sh
