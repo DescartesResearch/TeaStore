@@ -39,7 +39,7 @@ printf "${RED_COLOR}BEFORE SED COMMAND EXECUTEION. VALUE IS $PINPOINT_PROFILER_C
 if [ "$PINPOINT_PROFILER_COLLECTOR_IP" != "unset" ]
 then
 printf "${RED_COLOR}JUMPED IN.${NO_COLOR}\n"
-sed -i "s/profiler.collector.ip=127.0.0.1/profiler.collector.ip=${PINPOINT_PROFILER_COLLECTOR_IP}/g" /pinpoint-agent-1.8.3/pinpoint.config
+sed -i "s/profiler.collector.ip=127.0.0.1/profiler.collector.ip=${PINPOINT_PROFILER_COLLECTOR_IP}/g" /pinpoint/pinpoint-agent-1.8.3/pinpoint.config
 fi
 
 touch /usr/local/tomcat/bin/setenv.sh
