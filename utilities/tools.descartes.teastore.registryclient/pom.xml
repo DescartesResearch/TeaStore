@@ -19,7 +19,7 @@
 		<dependency>
 			<groupId>net.kieker-monitoring</groupId>
 			<artifactId>kieker</artifactId>
-			<version>1.13</version>
+			<version>1.14</version>
 		</dependency>
 		<dependency>
 			<groupId>io.jaegertracing</groupId>
@@ -128,54 +128,6 @@
 			</plugin>
 		</plugins>
 	</build>
-	<profiles>
-		<profile>
-			<id>kieker</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<dependencies>
-				<dependency>
-					<groupId>net.kieker-monitoring</groupId>
-					<artifactId>kieker</artifactId>
-					<version>1.13</version>
-				</dependency>
-			</dependencies>
-			<build>
-				<!-- Copy Kieker files -->
-				<plugins>
-					<plugin>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>3.0.2</version>
-						<executions>
-							<execution>
-								<id>copy-kieker-files</id>
-								<phase>generate-resources</phase>
-								<goals>
-									<goal>copy-resources</goal>
-								</goals>
-								<configuration>
-									<outputDirectory>${project.basedir}/src/main/java/tools/descartes/teastore/registryclient/rest</outputDirectory>
-									<overwrite>true</overwrite>
-									<resources>
-										<resource>
-											<directory>../../utilities/tools.descartes.teastore.kieker/src/main/java/tools/descartes/teastore/registryclient/rest</directory>
-											<includes>
-												<include>HttpWrapper.java</include>
-												<include>ResponseWrapper.java</include>
-												<include>CharResponseWrapper.java</include>
-												<include>TrackingFilter.java</include>
-											</includes>
-										</resource>
-									</resources>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 	<parent>
 		<groupId>tools.descartes.teastore</groupId>
 		<artifactId>parent</artifactId>
