@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import io.opentracing.Scope;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -30,7 +30,7 @@ import tools.descartes.teastore.registryclient.tracing.Tracing;
  */
 public class TrackingFilter implements Filter {
 
-  private static final Log LOG = LogFactory.getLog(TrackingFilter.class);
+  private static final Logger LOG = LoggerFactory.getLogger(TrackingFilter.class);
 
   private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
   private static final String SESSION_ID_ASYNC_TRACE = "NOSESSION-ASYNCIN";

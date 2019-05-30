@@ -3,8 +3,8 @@ package tools.descartes.teastore.registryclient.rest;
 import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.core.MediaType;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
@@ -21,7 +21,7 @@ import javax.ws.rs.client.WebTarget;
  */
 public final class HttpWrapper {
   private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
-  private static final Log LOG = LogFactory.getLog(HttpWrapper.class);
+  private static final Logger LOG = LoggerFactory.getLogger(HttpWrapper.class);
   private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
   private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
   private static final String HEADER_FIELD = "KiekerTracingInfo";

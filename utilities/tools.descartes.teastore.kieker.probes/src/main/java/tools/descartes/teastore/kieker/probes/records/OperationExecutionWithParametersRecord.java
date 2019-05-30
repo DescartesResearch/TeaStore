@@ -5,15 +5,14 @@ import java.nio.BufferOverflowException;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 /**
  * Class for storing the Monitored execution recrods with parameters.
- * 
+ *
  * @author Johannes Grohmann
- * 
+ *
  *         API compatibility: Kieker 1.13.0
- * 
+ *
  */
 public class OperationExecutionWithParametersRecord extends OperationExecutionRecord
     implements IPayloadCharacterization {
@@ -61,7 +60,7 @@ public class OperationExecutionWithParametersRecord extends OperationExecutionRe
 
   /**
    * Creates a new instance of this class using the given parameters.
-   * 
+   *
    * @param operationSignature string representation of operation signature
    * @param sessionId sessionid
    * @param traceId traceid
@@ -105,7 +104,7 @@ public class OperationExecutionWithParametersRecord extends OperationExecutionRe
     for (int i0 = 0; i0 < valuesSize0; i0++) {
       this.parameterValues[i0] = deserializer.getString();
     }
-    
+
     this.returnType = deserializer.getString();
     this.returnValue = deserializer.getString();
   }
@@ -119,15 +118,6 @@ public class OperationExecutionWithParametersRecord extends OperationExecutionRe
   @Override
   @Deprecated
   public Object[] toArray() {
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  @Deprecated
-  public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
     throw new UnsupportedOperationException();
   }
 
@@ -180,7 +170,7 @@ public class OperationExecutionWithParametersRecord extends OperationExecutionRe
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @deprecated This record uses the
    *             {@link kieker.common.record.IMonitoringRecord.Factory} mechanism.
    *             Hence, this method is not implemented.
