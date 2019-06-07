@@ -3,7 +3,7 @@ push_flag='false'
 registry='descartesresearch'
 
 print_usage() {
-  printf "Usage: docker_build [-p] [-r REGISTRY_NAME]"
+  printf "Usage: docker_build.sh [-p] [-r REGISTRY_NAME]\n"
 }
 
 while getopts 'pr:' flag; do
@@ -15,8 +15,8 @@ while getopts 'pr:' flag; do
   esac
 done
 
-docker build --no-cache=true -t $1/teastore-base ../utilities/tools.descartes.teastore.dockerbase/
-perl -i -pe's|.*FROM descartesresearch/|FROM '"$1"'/|g' ../services/tools.descartes.teastore.*/Dockerfile
+docker build --no-cache=true -t "$registry/teastore-base" ../utilities/tools.descartes.teastore.dockerbase/
+perl -i -pe's|.*FROM descartesresearch/|FROM '"$registry"'/|g' ../services/tools.descartes.teastore.*/Dockerfile
 docker build -t "$registry/teastore-registry" ../services/tools.descartes.teastore.registry/
 docker build -t "$registry/teastore-persistence" ../services/tools.descartes.teastore.persistence/
 docker build -t "$registry/teastore-image" ../services/tools.descartes.teastore.image/
