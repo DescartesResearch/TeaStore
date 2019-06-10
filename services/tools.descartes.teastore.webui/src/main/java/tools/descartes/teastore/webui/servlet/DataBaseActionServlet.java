@@ -2,9 +2,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,6 +28,7 @@ import javax.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import tools.descartes.research.faasteastorelibrary.requests.database.GenerateDatabaseTablesRequest;
 import tools.descartes.teastore.registryclient.Service;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.teastore.registryclient.loadbalancers.ServiceLoadBalancer;
@@ -37,82 +38,105 @@ import tools.descartes.teastore.registryclient.rest.LoadBalancedImageOperations;
  * Servlet implementation for handling the data base action.
  * @author Andre
  */
-@WebServlet("/dataBaseAction")
-public class DataBaseActionServlet extends AbstractUIServlet {
-	private static final long serialVersionUID = 1L;
-	private static final String[] PARAMETERS = new String[] { "categories", "products", "users", "orders" };
-	private static final Logger LOG = LoggerFactory.getLogger(DataBaseActionServlet.class);
+@WebServlet( "/dataBaseAction" )
+public class DataBaseActionServlet extends AbstractUIServlet
+{
+    private static final long serialVersionUID = 1L;
+    private static final String[] PARAMETERS = new String[] { "categories", "products", "users", "orders" };
+    private static final Logger LOG = LoggerFactory.getLogger( DataBaseActionServlet.class );
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public DataBaseActionServlet() {
-		super();
-	}
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public DataBaseActionServlet( )
+    {
+        super( );
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected void handleGETRequest(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, LoadBalancerTimeoutException {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void handleGETRequest( HttpServletRequest request, HttpServletResponse response )
+            throws ServletException, IOException, LoadBalancerTimeoutException
+    {
 
-		if (request.getParameter("confirm") != null) {
+        if ( request.getParameter( "confirm" ) != null )
+        {
 
-			String[] infos = extractOrderInformation(request);
-			if (infos.length == 0) {
-				redirect("/database", response);
-			} else {
-				destroySessionBlob(getSessionBlob(request), response);
-				Response resp = ServiceLoadBalancer.loadBalanceRESTOperation(Service.PERSISTENCE, "generatedb",
-						String.class,
-						client -> client.getService().path(client.getApplicationURI()).path(client.getEndpointURI())
-								.queryParam(PARAMETERS[0], infos[0]).queryParam(PARAMETERS[1], infos[1])
-								.queryParam(PARAMETERS[2], infos[2]).queryParam(PARAMETERS[3], infos[3])
-								.request(MediaType.TEXT_PLAIN).get());
-				//buffer entity to release connections
-				resp.bufferEntity();
-				if (resp.getStatus() == 200) {
-					LOG.info("DB is re-generating.");
-				}
+            String[] infos = extractOrderInformation( request );
+            if ( infos.length == 0 )
+            {
+                redirect( "/database", response );
+            }
+            else
+            {
+                destroySessionBlob( getSessionBlob( request ), response );
+                Response resp = ServiceLoadBalancer.loadBalanceRESTOperation( Service.PERSISTENCE, "generatedb",
+                        String.class,
+                        client -> client.getService( ).path( client.getApplicationURI( ) ).path( client
+                                .getEndpointURI( ) )
+                                .queryParam( PARAMETERS[ 0 ], infos[ 0 ] ).queryParam( PARAMETERS[ 1 ], infos[ 1 ] )
+                                .queryParam( PARAMETERS[ 2 ], infos[ 2 ] ).queryParam( PARAMETERS[ 3 ], infos[ 3 ] )
+                                .request( MediaType.TEXT_PLAIN ).get( ) );
+                //buffer entity to release connections
+                resp.bufferEntity( );
+                if ( resp.getStatus( ) == 200 )
+                {
+                    LOG.info( "DB is re-generating." );
+                }
 
-				// Regenerate images
-				List<Integer> status = LoadBalancedImageOperations.regenerateImages();
-				status.stream().filter(r -> r != 200).forEach(
-						r -> LOG.warn("An image provider service responded with " + r + " when regenerating images."));
-				// Retrain recommender
-				List<Response> recResp = ServiceLoadBalancer.multicastRESTOperation(Service.RECOMMENDER, "train",
-						String.class,
-						client -> client.getEndpointTarget().path("async").request(MediaType.TEXT_PLAIN).get());
-				recResp.stream().filter(r -> r.getStatus() != 200).forEach(
-						r -> LOG.warn("A recommender service responded with " + r.getStatus() + " when retraining."));
-				//buffer entity to release connections
-				recResp.stream().forEach(r -> r.bufferEntity());
-				redirect("/status", response);
-			}
+                // Regenerate images
+                List< Integer > status = LoadBalancedImageOperations.regenerateImages( );
+                status.stream( ).filter( r -> r != 200 ).forEach(
+                        r -> LOG.warn( "An image provider service responded with " + r + " when regenerating images."
+						) );
+                // Retrain recommender
+                List< Response > recResp = ServiceLoadBalancer.multicastRESTOperation( Service.RECOMMENDER, "train",
+                        String.class,
+                        client -> client.getEndpointTarget( ).path( "async" ).request( MediaType.TEXT_PLAIN ).get( ) );
+                recResp.stream( ).filter( r -> r.getStatus( ) != 200 ).forEach(
+                        r -> LOG.warn( "A recommender service responded with " + r.getStatus( ) + " when retraining."
+						) );
+                //buffer entity to release connections
+                recResp.stream( ).forEach( r -> r.bufferEntity( ) );
+                redirect( "/status", response );
+            }
 
-		} else {
-			redirect("/", response);
-		}
-	}
+        }
+        else
+        {
+            redirect( "/", response );
+        }
+    }
 
-	/**
-	 * Extracts the information from the input fields.
-	 * 
-	 * @param request
-	 * @return String[] with the info for the database generation
-	 */
-	private String[] extractOrderInformation(HttpServletRequest request) {
+    private void generateDatabaseTables( )
+    {
+        new GenerateDatabaseTablesRequest( 2, 50, 3, 5, 5 ).performRequest( );
+    }
 
-		String[] infos = new String[PARAMETERS.length];
-		for (int i = 0; i < PARAMETERS.length; i++) {
-			if (request.getParameter(PARAMETERS[i]) == null) {
-				return new String[0];
-			} else {
-				infos[i] = request.getParameter(PARAMETERS[i]);
-			}
-		}
-		return infos;
-	}
+    /**
+     * Extracts the information from the input fields.
+     *
+     * @param request
+     * @return String[] with the info for the database generation
+     */
+    private String[] extractOrderInformation( HttpServletRequest request )
+    {
+
+        String[] infos = new String[ PARAMETERS.length ];
+        for ( int i = 0; i < PARAMETERS.length; i++ )
+        {
+            if ( request.getParameter( PARAMETERS[ i ] ) == null )
+            {
+                return new String[ 0 ];
+            }
+            else
+            {
+                infos[ i ] = request.getParameter( PARAMETERS[ i ] );
+            }
+        }
+        return infos;
+    }
 
 }

@@ -28,6 +28,7 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import tools.descartes.research.faasteastorelibrary.api.ITeaStoreFunction;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.CategoryEntity;
+import tools.descartes.research.faasteastorelibrary.requests.category.GetAllCategoriesRequest;
 import tools.descartes.teastore.registryclient.Service;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.teastore.registryclient.rest.LoadBalancedCRUDOperations;
@@ -35,6 +36,7 @@ import tools.descartes.teastore.registryclient.rest.LoadBalancedImageOperations;
 import tools.descartes.teastore.registryclient.rest.LoadBalancedStoreOperations;
 import tools.descartes.teastore.entities.Category;
 import tools.descartes.teastore.entities.ImageSizePreset;
+import tools.descartes.teastore.webui.authentication.AuthenticatorSingleton;
 
 /**
  * Servlet implementation for the web view of "Index".
@@ -64,7 +66,7 @@ public class IndexServlet extends AbstractUIServlet
         checkforCookie( request, response );
 //        request.setAttribute( "CategoryList",
 //                LoadBalancedCRUDOperations.getEntities( Service.PERSISTENCE, "categories", Category.class, -1, -1 ) );
-        request.setAttribute( "CategoryList", getAllCategories() );
+        request.setAttribute( "CategoryList", getAllCategories( ) );
         request.setAttribute( "title", "TeaStore Home" );
         request.setAttribute( "login", LoadBalancedStoreOperations.isLoggedIn( getSessionBlob( request ) ) );
         request.setAttribute( "storeIcon",
@@ -73,36 +75,13 @@ public class IndexServlet extends AbstractUIServlet
         request.getRequestDispatcher( "WEB-INF/pages/index.jsp" ).forward( request, response );
     }
 
-    private List<CategoryEntity > getAllCategories(){
-        Gson gson = new GsonBuilder( ).setPrettyPrinting( ).create( );
+    private List< CategoryEntity > getAllCategories( )
+    {
+        return new GetAllCategoriesRequest( 0, 10 ).performRequest( );
+    }
 
-        OkHttpClient client = new OkHttpClient( );
-
-        //TODO wenn kein limit/start angegeben, dann sollen alle categories geladen werden
-        Request okHttpRequest =
-                new Request.Builder( )
-                        .url( "http://10.1.227.142:8080/function/" + ITeaStoreFunction.FN_GET_ALL_CATEGORIES )
-                        .get( )
-                        .build( );
-
-        com.squareup.okhttp.Response response = null;
-
-        String responseBodyAsString = "";
-
-        try
-        {
-            response = client.newCall( okHttpRequest ).execute( );
-
-            responseBodyAsString = response.body( ).string( );
-        }
-        catch ( IOException e )
-        {
-            e.printStackTrace( );
-        }
-
-        List< CategoryEntity > categories = gson.fromJson( responseBodyAsString,
-                new TypeToken< List< CategoryEntity > >( ) { }.getType( ) );
-
-        return categories;
+    private boolean isUserLoggedIn( )
+    {
+        return AuthenticatorSingleton.getInstance( ).isUserLoggedIn( );
     }
 }
