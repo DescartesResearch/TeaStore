@@ -16,7 +16,6 @@ package tools.descartes.teastore.persistence.repository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
@@ -47,7 +46,7 @@ import tools.descartes.teastore.entities.User;
 
 /**
  * Class for generating data in the database.
- * 
+ *
  * @author Joakim von Kistowski
  *
  */
@@ -57,7 +56,7 @@ public final class DataGenerator {
 	 * Status code for maintenance mode.
 	 */
 	public static final int MAINTENANCE_STATUS_CODE = 503;
-	
+
 	/**
 	 * Default category count for small database.
 	 */
@@ -74,7 +73,7 @@ public final class DataGenerator {
 	 * Default max order per user for small database.
 	 */
 	public static final int SMALL_DB_MAX_ORDERS_PER_USER = 5;
-	
+
 	/**
 	 * Default category count for tiny database.
 	 */
@@ -91,7 +90,7 @@ public final class DataGenerator {
 	 * Default max order per user for tiny database.
 	 */
 	public static final int TINY_DB_MAX_ORDERS_PER_USER = 2;
-	
+
 	private Random random = new Random(5);
 
 	private static final String PASSWORD = "password";
@@ -105,7 +104,7 @@ public final class DataGenerator {
 	private static final String[][] PRODUCTNAMES = {
 			{ "Earl Grey (loose)", "Assam (loose)", "Darjeeling (loose)", "Frisian Black Tee (loose)",
 				"Anatolian Assam (loose)", "Earl Grey (20 bags)", "Assam (20 bags)", "Darjeeling (20 bags)",
-				"Ceylon (loose)", "Ceylon (20 bags)", "House blend (20 bags)", "Assam with Ginger (20 bags)"}, 
+				"Ceylon (loose)", "Ceylon (20 bags)", "House blend (20 bags)", "Assam with Ginger (20 bags)"},
 			{ "Sencha (loose)", "Sencha (15 bags)", "Sencha (25 bags)", "Earl Grey Green (loose)",
 					"Earl Grey Green (15 bags)", "Earl Grey Green (25 bags)", "Matcha 30 g", "Matcha 50 g",
 					"Matcha 100 g", "Gunpowder Tea (loose)", "Gunpowder Tea (15 bags)", "Gunpowder Tea (25 bags)" },
@@ -154,10 +153,10 @@ public final class DataGenerator {
 			"Miller", "Wilson", "Moorse", "Taylor", "Anderson", "Thomas", "Jackson", "White", "Harris",
 			"Martin", "Thompson", "Garcia", "Martinez", "Robinson", "Clark", "Rodriguez", "Lewis", "Lee",
 			"Walker", "Hall", "Allen", "Young", "Hernandez", "King", "Wright", "Lopez", "Hill", "Scoot"};
-	
+
 	private static final int MAX_ITEMS_PER_ORDER = 10;
 	private static final double PREFFERED_CATEGORY_CHANCE = 0.825;
-	
+
 
 	/**
 	 * The data generator singleton.
@@ -165,14 +164,14 @@ public final class DataGenerator {
 	public static final DataGenerator GENERATOR = new DataGenerator();
 
 	private boolean maintenanceMode = false;
-	
+
 	private DataGenerator() {
 
 	}
 
 	/**
 	 * Checks if the database is empty.
-	 * 
+	 *
 	 * @return True if the database is empty.
 	 */
 	public boolean isDatabaseEmpty() {
@@ -183,7 +182,7 @@ public final class DataGenerator {
 
 	/**
 	 * Generates data for the database. Uses a fixed random seed.
-	 * 
+	 *
 	 * @param categories
 	 *            Number of categories.
 	 * @param productsPerCategory
@@ -227,29 +226,25 @@ public final class DataGenerator {
 
 	private void generateProducts(int productsPerCategory) {
 		int categoryIndex = 0;
-		HashMap<Category, Integer> categoryIndices = new HashMap<>();
 		for (PersistenceCategory category : CategoryRepository.REPOSITORY.getAllEntities()) {
-			categoryIndices.put(category, categoryIndex);
+			int productTypeIndex = categoryIndex % PRODUCTNAMES.length;
+			for (int i = 0; i < productsPerCategory; i++) {
+				int productIndex = i % PRODUCTNAMES[productTypeIndex].length;
+				int version = i / PRODUCTNAMES[productTypeIndex].length;
+				Product product = new Product();
+				if (version == 0) {
+					product.setName(PRODUCTNAMES[productTypeIndex][productIndex]);
+				} else {
+					product.setName(PRODUCTNAMES[productTypeIndex][productIndex] + ", v" + version);
+				}
+				product.setDescription(
+						"Great " + category.getName() + ": " + PRODUCTNAMES[productTypeIndex][productIndex]);
+				product.setListPriceInCents(95 + random.nextInt(12000));
+				product.setCategoryId(category.getId());
+				ProductRepository.REPOSITORY.createEntity(product);
+			}
 			categoryIndex++;
 		}
-		CategoryRepository.REPOSITORY.getAllEntities().parallelStream().forEach(category -> {
-				for (int i = 0; i < productsPerCategory; i++) {
-					int productTypeIndex = categoryIndices.get(category) % PRODUCTNAMES.length;
-					int productIndex = i % PRODUCTNAMES[productTypeIndex].length;
-					int version = i / PRODUCTNAMES[productTypeIndex].length;
-					Product product = new Product();
-					if (version == 0) {
-						product.setName(PRODUCTNAMES[productTypeIndex][productIndex]);
-					} else {
-						product.setName(PRODUCTNAMES[productTypeIndex][productIndex] + ", v" + version);
-					}
-					product.setDescription(
-							"Great " + category.getName() + ": " + PRODUCTNAMES[productTypeIndex][productIndex]);
-					product.setListPriceInCents(95 + random.nextInt(12000));
-					product.setCategoryId(category.getId());
-					ProductRepository.REPOSITORY.createEntity(product);
-				}
-			});
 	}
 
 	private void generateUsers(int users) {
@@ -263,7 +258,7 @@ public final class DataGenerator {
 			UserRepository.REPOSITORY.createEntity(user);
 		});
 	}
-	
+
 	private void generateOrders(int maxOrdersPerUser, int productsPerCategory) {
 		UserRepository.REPOSITORY.getAllEntities().parallelStream().forEach(user -> {
 			for (int i = 0; i < random.nextInt(maxOrdersPerUser + 1); i++) {
@@ -305,7 +300,7 @@ public final class DataGenerator {
 			}
 		});
 	}
-	
+
 	//Order and preferred category must have a valid id!
 	private OrderItem generateOrderItem(Order order, Category preferred, int productsPerCategory) {
 		OrderItem item = new OrderItem();
@@ -322,19 +317,19 @@ public final class DataGenerator {
 		item.setUnitPriceInCents(product.getListPriceInCents());
 		return item;
 	}
-	
+
 	private String fourDigits() {
 		return String.valueOf(1000 + random.nextInt(8999));
 	}
-	
+
 	/**
 	 * Drops database and recreates all tables.<br/>
 	 * Attention: Does not reset foreign persistence contexts.
-	 * Best practice is to call CacheManager.MANAGER.resetAllEMFs() after dropping and then recreating the DB.  
+	 * Best practice is to call CacheManager.MANAGER.resetAllEMFs() after dropping and then recreating the DB.
 	 */
 	public void dropAndCreateTables() {
 		CacheManager.MANAGER.clearLocalCacheOnly();
-		ServerSession session = CategoryRepository.REPOSITORY.getEM().unwrap(ServerSession.class);  
+		ServerSession session = CategoryRepository.REPOSITORY.getEM().unwrap(ServerSession.class);
 		SchemaManager schemaManager = new SchemaManager(session);
 		schemaManager.replaceDefaultTables(true, true);
 		CacheManager.MANAGER.clearLocalCacheOnly();
@@ -342,7 +337,7 @@ public final class DataGenerator {
 		setGenerationFinishedFlag(false);
 		CacheManager.MANAGER.clearAllCaches();
 	}
-	
+
 	private void setGenerationFinishedFlag(boolean flag) {
 		EntityManager em = CategoryRepository.REPOSITORY.getEM();
 		try {
@@ -365,7 +360,7 @@ public final class DataGenerator {
 			em.close();
 		}
 	}
-	
+
 	/**
 	 * Returns true if the database has finished generating.
 	 * False if it is currently generating.
@@ -409,7 +404,7 @@ public final class DataGenerator {
 	public synchronized void setMaintenanceModeInternal(boolean maintenanceMode) {
 		this.maintenanceMode = maintenanceMode;
 	}
-	
+
 	/**
 	 * Puts all persistences into maintenance mode.
 	 * Will return 503 on pretty much every external call once in this mode.
@@ -424,9 +419,9 @@ public final class DataGenerator {
 					r.bufferEntity();
 					r.close();
 				}
-			}); 
+			});
 	}
-	
+
 	private Response setMaintenanceModeExternal(RESTClient<String> client, final Boolean maintenanceMode) {
 		Response r = client.getEndpointTarget().path("maintenance")
 		.request(MediaType.TEXT_PLAIN).post(Entity.entity(String.valueOf(maintenanceMode), MediaType.TEXT_PLAIN));
