@@ -130,12 +130,12 @@ public class CartActionServlet extends AbstractUIServlet
 
     private ProductEntity getProductById( final long productId )
     {
-        return new GetProductByIdRequest( productId ).performRequest( );
+        return new GetProductByIdRequest( productId ).performRequest( ).getEntity();
     }
 
     private void deleteCartItem( final long cartItemId )
     {
-        CartItemEntity cartItem = new GetCartItemByIdRequest( cartItemId ).performRequest( );
+        CartItemEntity cartItem = new GetCartItemByIdRequest( cartItemId ).performRequest( ).getEntity();
 
         new DeleteCartItemRequest( cartItem ).performRequest( );
     }
@@ -155,7 +155,8 @@ public class CartActionServlet extends AbstractUIServlet
     {
         UserEntity user = AuthenticatorSingleton.getInstance( ).getUser( );
 
-        return new GetAllCartItemsOfUserByIdRequest( 0, 100, user.getId( ) ).performRequest( );
+        return new GetAllCartItemsOfUserByIdRequest( 0, 100, user.getId( ) ).performRequest( )
+                .getEntity();
     }
 
     /**

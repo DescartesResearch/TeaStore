@@ -3,9 +3,9 @@
 	<form action="cartAction" method="POST">
 	<table><tr><td class ="productthumb">
 		<input type='hidden' name="productid" value="${product.id}">
-		<a href="<c:url value="/product?id=${product.id}" />" ><img
-			src="${productImages[product.id]}"
-			alt="${product.name}"></a>
+		<%--<a href="<c:url value="/product?id=${product.id}" />" ><img--%>
+			<%--src="${productImages[product.id]}"--%>
+			<%--alt="${product.name}"></a>--%>
 		</td> <%-- <div class="divider col-sm-1"></div> --%>
 		<td class="divider"></td>
 		<td class="description">

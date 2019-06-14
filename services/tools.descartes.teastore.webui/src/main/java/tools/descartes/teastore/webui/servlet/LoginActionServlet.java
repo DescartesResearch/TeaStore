@@ -104,7 +104,7 @@ public class LoginActionServlet extends AbstractUIServlet
 
     private void loginUser( final String userName, final String password )
     {
-        UserEntity user = new BasicAuthRequest( userName, password ).performRequest( );
+        UserEntity user = new BasicAuthRequest( userName, password ).performRequest( ).getEntity();
 
         AuthenticatorSingleton.getInstance( ).setUser( user );
     }

@@ -94,6 +94,7 @@ public class ProfileServlet extends AbstractUIServlet
 
     private List< OrderEntity > getAllOrdersOfUserById( )
     {
-        return new GetAllOrdersOfUserByIdRequest( 0, 100, getUser( ).getId( ) ).performRequest( );
+        return new GetAllOrdersOfUserByIdRequest( 0, 100, getUser( ).getId( ) ).performRequest( )
+                .getEntity();
     }
 }

@@ -117,7 +117,7 @@ public class ProductServlet extends AbstractUIServlet
 
     private List< CategoryEntity > getAllCategories( )
     {
-        return new GetAllCategoriesRequest( 0, 100 ).performRequest( );
+        return new GetAllCategoriesRequest( 0, 100 ).performRequest( ).getEntity();
     }
 
     private boolean isLoggedIn( )
@@ -127,6 +127,6 @@ public class ProductServlet extends AbstractUIServlet
 
     private ProductEntity getProductById( final long productId )
     {
-        return new GetProductByIdRequest( productId ).performRequest( );
+        return new GetProductByIdRequest( productId ).performRequest( ).getEntity();
     }
 }

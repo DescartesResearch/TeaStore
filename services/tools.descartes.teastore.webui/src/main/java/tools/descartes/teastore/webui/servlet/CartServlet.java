@@ -120,12 +120,13 @@ public class CartServlet extends AbstractUIServlet
     {
         UserEntity user = AuthenticatorSingleton.getInstance( ).getUser( );
 
-        return new GetAllCartItemsOfUserByIdRequest( 0, 100, user.getId( ) ).performRequest( );
+        return new GetAllCartItemsOfUserByIdRequest( 0, 100, user.getId( ) ).performRequest( )
+                .getEntity();
     }
 
     private List< CategoryEntity > getAllCategories( )
     {
-        return new GetAllCategoriesRequest( 0, 100 ).performRequest( );
+        return new GetAllCategoriesRequest( 0, 100 ).performRequest( ).getEntity();
     }
 
     private boolean isLoggedIn( )

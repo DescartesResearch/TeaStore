@@ -21,20 +21,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import tools.descartes.research.faasteastorelibrary.api.ITeaStoreFunction;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.CategoryEntity;
+import tools.descartes.research.faasteastorelibrary.requests.ResponseObject;
 import tools.descartes.research.faasteastorelibrary.requests.category.GetAllCategoriesRequest;
-import tools.descartes.teastore.registryclient.Service;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
-import tools.descartes.teastore.registryclient.rest.LoadBalancedCRUDOperations;
 import tools.descartes.teastore.registryclient.rest.LoadBalancedImageOperations;
 import tools.descartes.teastore.registryclient.rest.LoadBalancedStoreOperations;
-import tools.descartes.teastore.entities.Category;
 import tools.descartes.teastore.entities.ImageSizePreset;
 import tools.descartes.teastore.webui.authentication.AuthenticatorSingleton;
 
@@ -69,15 +61,15 @@ public class IndexServlet extends AbstractUIServlet
         request.setAttribute( "CategoryList", getAllCategories( ) );
         request.setAttribute( "title", "TeaStore Home" );
         request.setAttribute( "login", LoadBalancedStoreOperations.isLoggedIn( getSessionBlob( request ) ) );
-        request.setAttribute( "storeIcon",
-                LoadBalancedImageOperations.getWebImage( "icon", ImageSizePreset.ICON.getSize( ) ) );
+//        request.setAttribute( "storeIcon",
+//                LoadBalancedImageOperations.getWebImage( "icon", ImageSizePreset.ICON.getSize( ) ) );
 
         request.getRequestDispatcher( "WEB-INF/pages/index.jsp" ).forward( request, response );
     }
 
     private List< CategoryEntity > getAllCategories( )
     {
-        return new GetAllCategoriesRequest( 0, 10 ).performRequest( );
+        return new GetAllCategoriesRequest( 0, 10 ).performRequest( ).getEntity();
     }
 
     private boolean isUserLoggedIn( )
