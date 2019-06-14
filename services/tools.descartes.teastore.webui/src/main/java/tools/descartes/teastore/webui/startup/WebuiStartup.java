@@ -42,7 +42,7 @@ public class WebuiStartup implements ServletContextListener {
      * @param event The servlet context event at destruction.
      */
     public void contextDestroyed(ServletContextEvent event)  {
-    	RegistryClient.getClient().unregister(event.getServletContext().getContextPath());
+//    	RegistryClient.getClient().unregister(event.getServletContext().getContextPath());
     }
 
 	/**
@@ -50,10 +50,10 @@ public class WebuiStartup implements ServletContextListener {
      * @param event The servlet context event at initialization.
      */
     public void contextInitialized(ServletContextEvent event) {
-        GlobalTracer.register(Tracing.init(Service.WEBUI.getServiceName()));
-    	ServiceLoadBalancer.preInitializeServiceLoadBalancers(Service.AUTH, Service.IMAGE,
-    			Service.PERSISTENCE, Service.RECOMMENDER);
-    	RegistryClient.getClient().register(event.getServletContext().getContextPath());
+//        GlobalTracer.register(Tracing.init(Service.WEBUI.getServiceName()));
+//    	ServiceLoadBalancer.preInitializeServiceLoadBalancers(Service.AUTH, Service.IMAGE,
+//    			Service.PERSISTENCE, Service.RECOMMENDER);
+//    	RegistryClient.getClient().register(event.getServletContext().getContextPath());
     }
 
 }

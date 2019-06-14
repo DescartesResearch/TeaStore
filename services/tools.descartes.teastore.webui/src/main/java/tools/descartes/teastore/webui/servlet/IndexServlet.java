@@ -60,7 +60,7 @@ public class IndexServlet extends AbstractUIServlet
 //                LoadBalancedCRUDOperations.getEntities( Service.PERSISTENCE, "categories", Category.class, -1, -1 ) );
         request.setAttribute( "CategoryList", getAllCategories( ) );
         request.setAttribute( "title", "TeaStore Home" );
-        request.setAttribute( "login", LoadBalancedStoreOperations.isLoggedIn( getSessionBlob( request ) ) );
+//        request.setAttribute( "login", LoadBalancedStoreOperations.isLoggedIn( getSessionBlob( request ) ) );
 //        request.setAttribute( "storeIcon",
 //                LoadBalancedImageOperations.getWebImage( "icon", ImageSizePreset.ICON.getSize( ) ) );
 

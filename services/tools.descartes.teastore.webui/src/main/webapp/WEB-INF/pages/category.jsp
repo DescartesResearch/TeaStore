@@ -4,7 +4,7 @@
 		<div class="col-md-9 col-lg-10 col-sm-12">
 			<h2 class="minipage-title">${category}</h2>
 			<div class="row">
-				<c:forEach items="${Productslist}" var="product" varStatus="loop">
+				<c:forEach items="${productList}" var="product" varStatus="loop">
 					<div class="col-sm-6 col-md-4 col-lg-3 placeholder">
 						<%@include file="product_item.jsp"%>
 					</div>

@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,18 +30,9 @@ import tools.descartes.research.faasteastorelibrary.interfaces.persistence.Produ
 import tools.descartes.research.faasteastorelibrary.requests.ResponseObject;
 import tools.descartes.research.faasteastorelibrary.requests.category.GetAllCategoriesRequest;
 import tools.descartes.research.faasteastorelibrary.requests.category.GetCategoryByIdRequest;
+import tools.descartes.research.faasteastorelibrary.requests.product.CountProductsOfCategoryByIdRequest;
 import tools.descartes.research.faasteastorelibrary.requests.product.GetAllProductsOfCategoryByIdRequest;
-import tools.descartes.teastore.registryclient.Service;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
-import tools.descartes.teastore.registryclient.loadbalancers.ServiceLoadBalancer;
-import tools.descartes.teastore.registryclient.rest.HttpWrapper;
-import tools.descartes.teastore.registryclient.rest.LoadBalancedCRUDOperations;
-import tools.descartes.teastore.registryclient.rest.LoadBalancedImageOperations;
-import tools.descartes.teastore.registryclient.rest.LoadBalancedStoreOperations;
-import tools.descartes.teastore.registryclient.rest.ResponseWrapper;
-import tools.descartes.teastore.entities.Category;
-import tools.descartes.teastore.entities.ImageSizePreset;
-import tools.descartes.teastore.entities.Product;
 import tools.descartes.teastore.webui.authentication.AuthenticatorSingleton;
 
 /**
@@ -76,46 +66,48 @@ public class CategoryServlet extends AbstractUIServlet
     protected void handleGETRequest( HttpServletRequest request, HttpServletResponse response )
             throws ServletException, IOException, LoadBalancerTimeoutException
     {
-        LOG.info( "method" );
-
         if ( request.getParameter( "category" ) != null )
         {
-            LOG.info( "jumped into method" );
-
-            //TODO
             checkforCookie( request, response );
 
             long categoryID = Long.parseLong( request.getParameter( "category" ) );
 
-            ResponseObject< CategoryEntity > responseObject = getCategoryById( categoryID );
-            CategoryEntity category = responseObject.getEntity( );
-            int totalProducts = Integer.parseInt( responseObject.getHeader( "X-Total-Number-Of-Results" ) );
+            CategoryEntity category = getCategoryById( categoryID );
 
-            LOG.info( "totalProducts: " + totalProducts );
+            int productsPerPage = INITIAL_PRODUCT_DISPLAY_COUNT;
 
-            int numberOfProductsPerPage = INITIAL_PRODUCT_DISPLAY_COUNT;
             if ( request.getAttribute( "numberProducts" ) != null )
             {
-                numberOfProductsPerPage = Integer.parseInt( request.getAttribute( "numberProducts" ).toString( ) );
+                productsPerPage = Integer.parseInt( request.getAttribute( "numberProducts" ).toString( ) );
             }
 
             int page = 1;
+
             if ( request.getParameter( "page" ) != null )
             {
-                int pagenumber = Integer.parseInt( request.getParameter( "page" ) );
-                int maxpages = ( int ) Math.ceil( ( ( double ) totalProducts ) / numberOfProductsPerPage );
-                if ( pagenumber <= maxpages )
+                int pageNumber = Integer.parseInt( request.getParameter( "page" ) );
+
+                int totalProducts = countProductsOfCategory( categoryID );
+
+                int maxPages = ( int ) Math.ceil( ( ( double ) totalProducts ) / productsPerPage );
+
+                if ( pageNumber <= maxPages )
                 {
-                    page = pagenumber;
+                    page = pageNumber;
                 }
             }
 
-            ArrayList< String > navigation = createNavigation( totalProducts, page, numberOfProductsPerPage );
+            int startIndex = ( page - 1 ) * productsPerPage;
+            int limit = productsPerPage;
 
-            int startIndex = ( page - 1 ) * numberOfProductsPerPage;
-            int limit = numberOfProductsPerPage;
+            ResponseObject< List< ProductEntity > > responseObject =
+                    getAllProductsOfCategoryById( startIndex, limit, categoryID );
 
-            List< ProductEntity > productList = getAllProductsOfCategoryById( startIndex, limit, categoryID );
+            List< ProductEntity > productList = responseObject.getEntity( );
+
+            int totalProducts = Integer.parseInt( responseObject.getHeader( "X-Total-Number-Of-Results" ) );
+
+            ArrayList< String > navigation = createNavigation( totalProducts, page, productsPerPage );
 
             //TODO (in product_item.jsp)
 //            request.setAttribute( "productImages", LoadBalancedImageOperations.getProductPreviewImages( productList
@@ -124,11 +116,11 @@ public class CategoryServlet extends AbstractUIServlet
 //                    LoadBalancedImageOperations.getWebImage( "icon", ImageSizePreset.ICON.getSize( ) ) );
             request.setAttribute( "CategoryList", getAllCategories( ) );
             request.setAttribute( "title", "TeaStore Category " + category.getName( ) );
-            request.setAttribute( "Productslist", productList );
+            request.setAttribute( "productList", productList );
             request.setAttribute( "category", category.getName( ) );
             request.setAttribute( "login", isLoggedIn( ) );
             request.setAttribute( "categoryID", categoryID );
-            request.setAttribute( "currentnumber", numberOfProductsPerPage );
+            request.setAttribute( "currentnumber", productsPerPage );
             request.setAttribute( "pagination", navigation );
             request.setAttribute( "pagenumber", page );
             request.setAttribute( "productdisplaycountoptions", PRODUCT_DISPLAY_COUNT_OPTIONS );
@@ -141,15 +133,20 @@ public class CategoryServlet extends AbstractUIServlet
         }
     }
 
-    private ResponseObject< CategoryEntity > getCategoryById( final long categoryId )
+    private CategoryEntity getCategoryById( final long categoryId )
     {
-        return new GetCategoryByIdRequest( categoryId ).performRequest( );
+        return new GetCategoryByIdRequest( categoryId ).performRequest( ).getEntity( );
     }
 
-    private List< ProductEntity > getAllProductsOfCategoryById( final int startIndex, final int limit,
+    private int countProductsOfCategory( final long categoryId )
+    {
+        return new CountProductsOfCategoryByIdRequest( categoryId ).performRequest( );
+    }
+
+    private ResponseObject< List< ProductEntity > > getAllProductsOfCategoryById( final int startIndex, final int limit,
             final long categoryId )
     {
-        return new GetAllProductsOfCategoryByIdRequest( startIndex, limit, categoryId ).performRequest( ).getEntity( );
+        return new GetAllProductsOfCategoryByIdRequest( startIndex, limit, categoryId ).performRequest( );
     }
 
     private boolean isLoggedIn( )
