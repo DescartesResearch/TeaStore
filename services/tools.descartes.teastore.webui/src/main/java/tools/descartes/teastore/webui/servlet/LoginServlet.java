@@ -2,9 +2,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,12 +14,17 @@
 package tools.descartes.teastore.webui.servlet;
 
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import tools.descartes.research.faasteastorelibrary.interfaces.persistence.CategoryEntity;
+import tools.descartes.research.faasteastorelibrary.requests.category.GetAllCategoriesRequest;
 import tools.descartes.teastore.registryclient.Service;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.teastore.registryclient.rest.LoadBalancedCRUDOperations;
@@ -27,40 +32,55 @@ import tools.descartes.teastore.registryclient.rest.LoadBalancedImageOperations;
 import tools.descartes.teastore.registryclient.rest.LoadBalancedStoreOperations;
 import tools.descartes.teastore.entities.Category;
 import tools.descartes.teastore.entities.ImageSizePreset;
+import tools.descartes.teastore.webui.authentication.AuthenticatorSingleton;
 
 /**
  * Servlet implementation for the web view of "Login".
- * 
+ *
  * @author Andre Bauer
  */
-@WebServlet("/login")
-public class LoginServlet extends AbstractUIServlet {
-	private static final long serialVersionUID = 1L;
+@WebServlet( "/login" )
+public class LoginServlet extends AbstractUIServlet
+{
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public LoginServlet() {
-		super();
-	}
+    private static Logger LOG = LoggerFactory.getLogger( LoginServlet.class );
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected void handleGETRequest(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, LoadBalancerTimeoutException {
-		checkforCookie(request, response);
-		request.setAttribute("CategoryList",
-				LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "categories", Category.class, -1, -1));
-		request.setAttribute("storeIcon",
-				LoadBalancedImageOperations.getWebImage("icon", ImageSizePreset.ICON.getSize()));
-		request.setAttribute("title", "TeaStore Login");
-		request.setAttribute("login", LoadBalancedStoreOperations.isLoggedIn(getSessionBlob(request)));
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public LoginServlet( )
+    {
+        super( );
+    }
 
-		request.setAttribute("referer", request.getHeader("Referer"));
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void handleGETRequest( HttpServletRequest request, HttpServletResponse response )
+            throws ServletException, IOException, LoadBalancerTimeoutException
+    {
+        checkforCookie( request, response );
+        request.setAttribute( "CategoryList", getAllCategories( ) );
+//        request.setAttribute( "storeIcon",
+//                LoadBalancedImageOperations.getWebImage( "icon", ImageSizePreset.ICON.getSize( ) ) );
+        request.setAttribute( "title", "TeaStore Login" );
+        request.setAttribute( "login", isLoggedIn( ) );
+        request.setAttribute( "referer", request.getHeader( "Referer" ) );
 
-		request.getRequestDispatcher("WEB-INF/pages/login.jsp").forward(request, response);
-	}
+        request.getRequestDispatcher( "WEB-INF/pages/login.jsp" ).forward( request, response );
+    }
 
+    private List< CategoryEntity > getAllCategories( )
+    {
+        return new GetAllCategoriesRequest( 0, 10 ).performRequest( ).getEntity( );
+    }
+
+    private boolean isLoggedIn( )
+    {
+        LOG.info( "isLoggendIn() -> " + AuthenticatorSingleton.getInstance( ).isUserLoggedIn( ) );
+
+        return AuthenticatorSingleton.getInstance( ).isUserLoggedIn( );
+    }
 }

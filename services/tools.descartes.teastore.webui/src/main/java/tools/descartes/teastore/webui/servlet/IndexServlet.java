@@ -60,7 +60,7 @@ public class IndexServlet extends AbstractUIServlet
 //                LoadBalancedCRUDOperations.getEntities( Service.PERSISTENCE, "categories", Category.class, -1, -1 ) );
         request.setAttribute( "CategoryList", getAllCategories( ) );
         request.setAttribute( "title", "TeaStore Home" );
-//        request.setAttribute( "login", LoadBalancedStoreOperations.isLoggedIn( getSessionBlob( request ) ) );
+        request.setAttribute( "login", isLoggedIn( ) );
 //        request.setAttribute( "storeIcon",
 //                LoadBalancedImageOperations.getWebImage( "icon", ImageSizePreset.ICON.getSize( ) ) );
 
@@ -69,10 +69,10 @@ public class IndexServlet extends AbstractUIServlet
 
     private List< CategoryEntity > getAllCategories( )
     {
-        return new GetAllCategoriesRequest( 0, 10 ).performRequest( ).getEntity();
+        return new GetAllCategoriesRequest( 0, 10 ).performRequest( ).getEntity( );
     }
 
-    private boolean isUserLoggedIn( )
+    private boolean isLoggedIn( )
     {
         return AuthenticatorSingleton.getInstance( ).isUserLoggedIn( );
     }

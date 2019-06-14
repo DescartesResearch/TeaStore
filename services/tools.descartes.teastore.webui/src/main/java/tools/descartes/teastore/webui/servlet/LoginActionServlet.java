@@ -20,11 +20,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.UserEntity;
 import tools.descartes.research.faasteastorelibrary.requests.authentication.BasicAuthRequest;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
-import tools.descartes.teastore.registryclient.rest.LoadBalancedStoreOperations;
-import tools.descartes.teastore.entities.message.SessionBlob;
 import tools.descartes.teastore.webui.authentication.AuthenticatorSingleton;
 
 /**
@@ -36,6 +36,8 @@ import tools.descartes.teastore.webui.authentication.AuthenticatorSingleton;
 public class LoginActionServlet extends AbstractUIServlet
 {
     private static final long serialVersionUID = 1L;
+
+    private static Logger LOG = LoggerFactory.getLogger( LoginActionServlet.class );
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -66,14 +68,15 @@ public class LoginActionServlet extends AbstractUIServlet
 
         if ( request.getParameter( "username" ) != null && request.getParameter( "password" ) != null )
         {
-            SessionBlob blob = LoadBalancedStoreOperations.login( getSessionBlob( request ),
-                    request.getParameter( "username" ), request.getParameter( "password" ) );
+//            SessionBlob blob = LoadBalancedStoreOperations.login( getSessionBlob( request ),
+//                    request.getParameter( "username" ), request.getParameter( "password" ) );
 
-            login = ( blob != null && blob.getSID( ) != null );
+            loginUser( request.getParameter( "username" ), request.getParameter( "password" ) );
 
-            if ( login )
+            if ( isLoggedIn( ) )
             {
-                saveSessionBlob( blob, response );
+//                saveSessionBlob( blob, response );
+
                 if ( request.getParameter( "referer" ) != null
                         && request.getParameter( "referer" ).contains( "tools.descartes.teastore.webui/cart" ) )
                 {
@@ -91,9 +94,10 @@ public class LoginActionServlet extends AbstractUIServlet
         }
         else if ( request.getParameter( "logout" ) != null )
         {
-            SessionBlob blob = LoadBalancedStoreOperations.logout( getSessionBlob( request ) );
-            saveSessionBlob( blob, response );
-            destroySessionBlob( blob, response );
+            logoutUser( );
+//            SessionBlob blob = LoadBalancedStoreOperations.logout( getSessionBlob( request ) );
+//            saveSessionBlob( blob, response );
+//            destroySessionBlob( blob, response );
             redirect( "/", response, MESSAGECOOKIE, SUCESSLOGOUT );
         }
         else
@@ -104,9 +108,18 @@ public class LoginActionServlet extends AbstractUIServlet
 
     private void loginUser( final String userName, final String password )
     {
-        UserEntity user = new BasicAuthRequest( userName, password ).performRequest( ).getEntity();
+        UserEntity user = new BasicAuthRequest( userName, password ).performRequest( ).getEntity( );
+
+        LOG.info( "loginUser() -> User.username = " + user.getUserName( ) );
 
         AuthenticatorSingleton.getInstance( ).setUser( user );
+    }
+
+    private boolean isLoggedIn( )
+    {
+        LOG.info( "isLoggedIn() -> " + AuthenticatorSingleton.getInstance( ).isUserLoggedIn( ) );
+
+        return AuthenticatorSingleton.getInstance( ).isUserLoggedIn( );
     }
 
     private void logoutUser( )
