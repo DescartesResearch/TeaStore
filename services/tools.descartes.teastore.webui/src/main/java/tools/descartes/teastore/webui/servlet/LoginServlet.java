@@ -14,7 +14,6 @@
 package tools.descartes.teastore.webui.servlet;
 
 import java.io.IOException;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -23,16 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tools.descartes.research.faasteastorelibrary.interfaces.persistence.CategoryEntity;
-import tools.descartes.research.faasteastorelibrary.requests.category.GetAllCategoriesRequest;
-import tools.descartes.teastore.registryclient.Service;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
-import tools.descartes.teastore.registryclient.rest.LoadBalancedCRUDOperations;
-import tools.descartes.teastore.registryclient.rest.LoadBalancedImageOperations;
-import tools.descartes.teastore.registryclient.rest.LoadBalancedStoreOperations;
-import tools.descartes.teastore.entities.Category;
-import tools.descartes.teastore.entities.ImageSizePreset;
-import tools.descartes.teastore.webui.authentication.AuthenticatorSingleton;
 
 /**
  * Servlet implementation for the web view of "Login".
@@ -63,24 +53,11 @@ public class LoginServlet extends AbstractUIServlet
     {
         checkforCookie( request, response );
         request.setAttribute( "CategoryList", getAllCategories( ) );
-//        request.setAttribute( "storeIcon",
-//                LoadBalancedImageOperations.getWebImage( "icon", ImageSizePreset.ICON.getSize( ) ) );
+        request.setAttribute( "storeIcon", getStoreIcon( ) );
         request.setAttribute( "title", "TeaStore Login" );
         request.setAttribute( "login", isLoggedIn( ) );
         request.setAttribute( "referer", request.getHeader( "Referer" ) );
 
         request.getRequestDispatcher( "WEB-INF/pages/login.jsp" ).forward( request, response );
-    }
-
-    private List< CategoryEntity > getAllCategories( )
-    {
-        return new GetAllCategoriesRequest( 0, 10 ).performRequest( ).getEntity( );
-    }
-
-    private boolean isLoggedIn( )
-    {
-        LOG.info( "isLoggendIn() -> " + AuthenticatorSingleton.getInstance( ).isUserLoggedIn( ) );
-
-        return AuthenticatorSingleton.getInstance( ).isUserLoggedIn( );
     }
 }

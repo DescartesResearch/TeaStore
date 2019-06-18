@@ -15,24 +15,18 @@
 package tools.descartes.teastore.webui.servlet;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import tools.descartes.research.faasteastorelibrary.requests.database.GenerateDatabaseTablesRequest;
-import tools.descartes.teastore.registryclient.Service;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
-import tools.descartes.teastore.registryclient.loadbalancers.ServiceLoadBalancer;
-import tools.descartes.teastore.registryclient.rest.LoadBalancedImageOperations;
 
 /**
  * Servlet implementation for handling the data base action.
@@ -72,34 +66,34 @@ public class DataBaseActionServlet extends AbstractUIServlet
             else
             {
                 destroySessionBlob( getSessionBlob( request ), response );
-                Response resp = ServiceLoadBalancer.loadBalanceRESTOperation( Service.PERSISTENCE, "generatedb",
-                        String.class,
-                        client -> client.getService( ).path( client.getApplicationURI( ) ).path( client
-                                .getEndpointURI( ) )
-                                .queryParam( PARAMETERS[ 0 ], infos[ 0 ] ).queryParam( PARAMETERS[ 1 ], infos[ 1 ] )
-                                .queryParam( PARAMETERS[ 2 ], infos[ 2 ] ).queryParam( PARAMETERS[ 3 ], infos[ 3 ] )
-                                .request( MediaType.TEXT_PLAIN ).get( ) );
+//                Response resp = ServiceLoadBalancer.loadBalanceRESTOperation( Service.PERSISTENCE, "generatedb",
+//                        String.class,
+//                        client -> client.getService( ).path( client.getApplicationURI( ) ).path( client
+//                                .getEndpointURI( ) )
+//                                .queryParam( PARAMETERS[ 0 ], infos[ 0 ] ).queryParam( PARAMETERS[ 1 ], infos[ 1 ] )
+//                                .queryParam( PARAMETERS[ 2 ], infos[ 2 ] ).queryParam( PARAMETERS[ 3 ], infos[ 3 ] )
+//                                .request( MediaType.TEXT_PLAIN ).get( ) );
                 //buffer entity to release connections
-                resp.bufferEntity( );
-                if ( resp.getStatus( ) == 200 )
-                {
-                    LOG.info( "DB is re-generating." );
-                }
+//                resp.bufferEntity( );
+//                if ( resp.getStatus( ) == 200 )
+//                {
+//                    LOG.info( "DB is re-generating." );
+//                }
 
                 // Regenerate images
-                List< Integer > status = LoadBalancedImageOperations.regenerateImages( );
-                status.stream( ).filter( r -> r != 200 ).forEach(
-                        r -> LOG.warn( "An image provider service responded with " + r + " when regenerating images."
-						) );
-                // Retrain recommender
-                List< Response > recResp = ServiceLoadBalancer.multicastRESTOperation( Service.RECOMMENDER, "train",
-                        String.class,
-                        client -> client.getEndpointTarget( ).path( "async" ).request( MediaType.TEXT_PLAIN ).get( ) );
-                recResp.stream( ).filter( r -> r.getStatus( ) != 200 ).forEach(
-                        r -> LOG.warn( "A recommender service responded with " + r.getStatus( ) + " when retraining."
-						) );
-                //buffer entity to release connections
-                recResp.stream( ).forEach( r -> r.bufferEntity( ) );
+//                List< Integer > status = LoadBalancedImageOperations.regenerateImages( );
+//                status.stream( ).filter( r -> r != 200 ).forEach(
+//                        r -> LOG.warn( "An image provider service responded with " + r + " when regenerating images."
+//						) );
+//                // Retrain recommender
+//                List< Response > recResp = ServiceLoadBalancer.multicastRESTOperation( Service.RECOMMENDER, "train",
+//                        String.class,
+//                        client -> client.getEndpointTarget( ).path( "async" ).request( MediaType.TEXT_PLAIN ).get( ) );
+//                recResp.stream( ).filter( r -> r.getStatus( ) != 200 ).forEach(
+//                        r -> LOG.warn( "A recommender service responded with " + r.getStatus( ) + " when retraining."
+//						) );
+//                //buffer entity to release connections
+//                recResp.stream( ).forEach( r -> r.bufferEntity( ) );
                 redirect( "/status", response );
             }
 

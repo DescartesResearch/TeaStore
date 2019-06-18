@@ -15,7 +15,6 @@
 package tools.descartes.teastore.webui.servlet;
 
 import java.io.IOException;
-import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -71,17 +70,17 @@ public class CartActionServlet extends AbstractUIServlet
             if ( param.contains( "addToCart" ) )
             {
                 long productID = Long.parseLong( request.getParameter( "productid" ) );
-                SessionBlob blob = LoadBalancedStoreOperations.addProductToCart( getSessionBlob( request ), productID );
-                saveSessionBlob( blob, response );
+//                SessionBlob blob = LoadBalancedStoreOperations.addProductToCart( getSessionBlob( request ), productID );
+//                saveSessionBlob( blob, response );
                 redirect( "/cart", response, MESSAGECOOKIE, String.format( ADDPRODUCT, productID ) );
                 break;
             }
             else if ( param.contains( "removeProduct" ) )
             {
                 long productID = Long.parseLong( param.substring( "removeProduct_".length( ) ) );
-                SessionBlob blob = LoadBalancedStoreOperations.removeProductFromCart( getSessionBlob( request ),
-                        productID );
-                saveSessionBlob( blob, response );
+//                SessionBlob blob = LoadBalancedStoreOperations.removeProductFromCart( getSessionBlob( request ),
+//                        productID );
+//                saveSessionBlob( blob, response );
                 redirect( "/cart", response, MESSAGECOOKIE, String.format( REMOVEPRODUCT, productID ) );
                 break;
             }
@@ -130,12 +129,12 @@ public class CartActionServlet extends AbstractUIServlet
 
     private ProductEntity getProductById( final long productId )
     {
-        return new GetProductByIdRequest( productId ).performRequest( ).getEntity();
+        return new GetProductByIdRequest( productId ).performRequest( ).getParsedResponseBody();
     }
 
     private void deleteCartItem( final long cartItemId )
     {
-        CartItemEntity cartItem = new GetCartItemByIdRequest( cartItemId ).performRequest( ).getEntity();
+        CartItemEntity cartItem = new GetCartItemByIdRequest( cartItemId ).performRequest( ).getParsedResponseBody();
 
         new DeleteCartItemRequest( cartItem ).performRequest( );
     }
@@ -156,7 +155,7 @@ public class CartActionServlet extends AbstractUIServlet
         UserEntity user = AuthenticatorSingleton.getInstance( ).getUser( );
 
         return new GetAllCartItemsOfUserByIdRequest( 0, 100, user.getId( ) ).performRequest( )
-                .getEntity();
+                .getParsedResponseBody();
     }
 
     /**
@@ -183,12 +182,12 @@ public class CartActionServlet extends AbstractUIServlet
             {
                 price += item.getQuantity( ) * item.getUnitPriceInCents( );
             }
-            blob = LoadBalancedStoreOperations.placeOrder( getSessionBlob( request ), infos[ 0 ] + " " + infos[ 1 ],
-                    infos[ 2 ],
-                    infos[ 3 ], infos[ 4 ],
-                    YearMonth.parse( infos[ 6 ], DTF ).atDay( 1 ).format( DateTimeFormatter.ISO_LOCAL_DATE ), price,
-                    infos[ 5 ] );
-            saveSessionBlob( blob, response );
+//            blob = LoadBalancedStoreOperations.placeOrder( getSessionBlob( request ), infos[ 0 ] + " " + infos[ 1 ],
+//                    infos[ 2 ],
+//                    infos[ 3 ], infos[ 4 ],
+//                    YearMonth.parse( infos[ 6 ], DTF ).atDay( 1 ).format( DateTimeFormatter.ISO_LOCAL_DATE ), price,
+//                    infos[ 5 ] );
+//            saveSessionBlob( blob, response );
             redirect( "/", response, MESSAGECOOKIE, ORDERCONFIRMED );
         }
 
@@ -234,11 +233,10 @@ public class CartActionServlet extends AbstractUIServlet
         {
             if ( request.getParameter( "orderitem_" + orderItem.getProductId( ) ) != null )
             {
-                blob = LoadBalancedStoreOperations.updateQuantity( blob, orderItem.getProductId( ),
-                        Integer.parseInt( request.getParameter( "orderitem_" + orderItem.getProductId( ) ) ) );
+//                blob = LoadBalancedStoreOperations.updateQuantity( blob, orderItem.getProductId( ),
+//                        Integer.parseInt( request.getParameter( "orderitem_" + orderItem.getProductId( ) ) ) );
             }
         }
         saveSessionBlob( blob, response );
     }
-
 }

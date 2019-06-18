@@ -10,7 +10,7 @@
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="<c:url value="/database"/>">Database</a></li>
-				<li><a href="<c:url value="/status"/>">Status</a></li>
+				<%--<li><a href="<c:url value="/status"/>">Status</a></li>--%>
 				<li><a href="<c:url value="/about"/>">About us</a></li>
 				<li><a
 					href="https://github.com/DescartesResearch/TeaStore/wiki"><span

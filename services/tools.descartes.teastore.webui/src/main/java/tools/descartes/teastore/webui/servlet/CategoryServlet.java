@@ -28,12 +28,10 @@ import org.slf4j.LoggerFactory;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.CategoryEntity;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.ProductEntity;
 import tools.descartes.research.faasteastorelibrary.requests.ResponseObject;
-import tools.descartes.research.faasteastorelibrary.requests.category.GetAllCategoriesRequest;
 import tools.descartes.research.faasteastorelibrary.requests.category.GetCategoryByIdRequest;
 import tools.descartes.research.faasteastorelibrary.requests.product.CountProductsOfCategoryByIdRequest;
 import tools.descartes.research.faasteastorelibrary.requests.product.GetAllProductsOfCategoryByIdRequest;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
-import tools.descartes.teastore.webui.authentication.AuthenticatorSingleton;
 
 /**
  * Servlet implementation for the web view of "Category".
@@ -103,17 +101,16 @@ public class CategoryServlet extends AbstractUIServlet
             ResponseObject< List< ProductEntity > > responseObject =
                     getAllProductsOfCategoryById( startIndex, limit, categoryID );
 
-            List< ProductEntity > productList = responseObject.getEntity( );
+            List< ProductEntity > productList = responseObject.getParsedResponseBody( );
 
-            int totalProducts = Integer.parseInt( responseObject.getHeader( "X-Total-Number-Of-Results" ) );
+            int totalProducts = Integer.parseInt( responseObject.getResponseHeader( "X-Total-Number-Of-Results" ) );
 
             ArrayList< String > navigation = createNavigation( totalProducts, page, productsPerPage );
 
             //TODO (in product_item.jsp)
 //            request.setAttribute( "productImages", LoadBalancedImageOperations.getProductPreviewImages( productList
 // ) );
-//            request.setAttribute( "storeIcon",
-//                    LoadBalancedImageOperations.getWebImage( "icon", ImageSizePreset.ICON.getSize( ) ) );
+            request.setAttribute( "storeIcon", getStoreIcon() );
             request.setAttribute( "CategoryList", getAllCategories( ) );
             request.setAttribute( "title", "TeaStore Category " + category.getName( ) );
             request.setAttribute( "productList", productList );
@@ -135,7 +132,7 @@ public class CategoryServlet extends AbstractUIServlet
 
     private CategoryEntity getCategoryById( final long categoryId )
     {
-        return new GetCategoryByIdRequest( categoryId ).performRequest( ).getEntity( );
+        return new GetCategoryByIdRequest( categoryId ).performRequest( ).getParsedResponseBody( );
     }
 
     private int countProductsOfCategory( final long categoryId )
@@ -147,16 +144,6 @@ public class CategoryServlet extends AbstractUIServlet
             final long categoryId )
     {
         return new GetAllProductsOfCategoryByIdRequest( startIndex, limit, categoryId ).performRequest( );
-    }
-
-    private boolean isLoggedIn( )
-    {
-        return AuthenticatorSingleton.getInstance( ).isUserLoggedIn( );
-    }
-
-    private List< CategoryEntity > getAllCategories( )
-    {
-        return new GetAllCategoriesRequest( 0, 10 ).performRequest( ).getEntity( );
     }
 
     /**
@@ -240,9 +227,9 @@ public class CategoryServlet extends AbstractUIServlet
                 }
             }
         }
+
         navigation.add( "next" );
 
         return navigation;
     }
-
 }

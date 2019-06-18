@@ -15,6 +15,7 @@ package tools.descartes.teastore.webui.servlet;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,17 +26,10 @@ import javax.servlet.http.HttpServletResponse;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.OrderEntity;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.UserEntity;
 import tools.descartes.research.faasteastorelibrary.requests.order.GetAllOrdersOfUserByIdRequest;
-import tools.descartes.teastore.registryclient.Service;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
-import tools.descartes.teastore.registryclient.rest.LoadBalancedCRUDOperations;
-import tools.descartes.teastore.registryclient.rest.LoadBalancedImageOperations;
-import tools.descartes.teastore.registryclient.rest.LoadBalancedStoreOperations;
 import tools.descartes.teastore.webui.authentication.AuthenticatorSingleton;
-import tools.descartes.teastore.webui.servlet.elhelper.ELHelperUtils;
-import tools.descartes.teastore.entities.Category;
-import tools.descartes.teastore.entities.ImageSizePreset;
-import tools.descartes.teastore.entities.Order;
-import tools.descartes.teastore.entities.User;
+import tools.descartes.teastore.webui.servlet.formatter.DateTimeFormatter;
+import tools.descartes.teastore.webui.servlet.formatter.PriceFormatter;
 
 /**
  * Servlet implementation for the web view of "Profile".
@@ -45,8 +39,9 @@ import tools.descartes.teastore.entities.User;
 @WebServlet( "/profile" )
 public class ProfileServlet extends AbstractUIServlet
 {
-
     private static final long serialVersionUID = 1L;
+
+    private static final Logger LOG = Logger.getLogger( "ProfileServlet" );
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -64,24 +59,24 @@ public class ProfileServlet extends AbstractUIServlet
             throws ServletException, IOException, LoadBalancerTimeoutException
     {
         checkforCookie( request, response );
-        if ( !LoadBalancedStoreOperations.isLoggedIn( getSessionBlob( request ) ) )
+
+        if ( !isLoggedIn( ) )
         {
             redirect( "/", response );
         }
         else
         {
-            request.setAttribute( "storeIcon",
-                    LoadBalancedImageOperations.getWebImage( "icon", ImageSizePreset.ICON.getSize( ) ) );
-            request.setAttribute( "CategoryList", LoadBalancedCRUDOperations
-                    .getEntities( Service.PERSISTENCE, "categories", Category.class, -1, -1 ) );
+            UserEntity user = getUser( );
+
+            request.setAttribute( "storeIcon", getStoreIcon( ) );
+            request.setAttribute( "CategoryList", getAllCategories( ) );
             request.setAttribute( "title", "TeaStore Home" );
-            request.setAttribute( "User", LoadBalancedCRUDOperations.getEntity( Service.PERSISTENCE,
-                    "users", User.class, getSessionBlob( request ).getUID( ) ) );
-            request.setAttribute( "Orders", LoadBalancedCRUDOperations.getEntities( Service.PERSISTENCE,
-                    "orders", Order.class, "user", getSessionBlob( request ).getUID( ), -1, -1 ) );
-            request.setAttribute( "login",
-                    LoadBalancedStoreOperations.isLoggedIn( getSessionBlob( request ) ) );
-            request.setAttribute( "helper", ELHelperUtils.UTILS );
+            request.setAttribute( "User", getUser( ) );
+            request.setAttribute( "Orders", getAllOrdersOfUserById( user.getId( ) ) );
+            request.setAttribute( "login", isLoggedIn( ) );
+
+            request.setAttribute( "dateTimeFormatter", new DateTimeFormatter( ) );
+            request.setAttribute( "priceFormatter", new PriceFormatter( ) );
 
             request.getRequestDispatcher( "WEB-INF/pages/profile.jsp" ).forward( request, response );
         }
@@ -89,12 +84,23 @@ public class ProfileServlet extends AbstractUIServlet
 
     private UserEntity getUser( )
     {
+        LOG.info( "getUser() -> " + AuthenticatorSingleton.getInstance( ).getUser( ).getId( ) );
+
         return AuthenticatorSingleton.getInstance( ).getUser( );
     }
 
-    private List< OrderEntity > getAllOrdersOfUserById( )
+    private List< OrderEntity > getAllOrdersOfUserById( final long userId )
     {
-        return new GetAllOrdersOfUserByIdRequest( 0, 100, getUser( ).getId( ) ).performRequest( )
-                .getEntity();
+        List< OrderEntity > orders = new GetAllOrdersOfUserByIdRequest( 0, 100, userId ).performRequest( )
+                .getParsedResponseBody( );
+
+        LOG.info( "size() -> " + orders.size( ) );
+
+        for ( OrderEntity order : orders )
+        {
+            LOG.info( order.toString( ) );
+        }
+
+        return orders;
     }
 }

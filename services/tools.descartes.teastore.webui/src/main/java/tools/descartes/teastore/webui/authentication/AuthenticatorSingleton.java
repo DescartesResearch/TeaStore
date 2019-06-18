@@ -16,6 +16,7 @@ public class AuthenticatorSingleton
         {
             AuthenticatorSingleton.instance = new AuthenticatorSingleton( );
         }
+
         return AuthenticatorSingleton.instance;
     }
 

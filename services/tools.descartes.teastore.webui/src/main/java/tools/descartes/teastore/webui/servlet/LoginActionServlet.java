@@ -108,18 +108,12 @@ public class LoginActionServlet extends AbstractUIServlet
 
     private void loginUser( final String userName, final String password )
     {
-        UserEntity user = new BasicAuthRequest( userName, password ).performRequest( ).getEntity( );
+        UserEntity user = new BasicAuthRequest( userName, password ).performRequest( ).getParsedResponseBody( );
 
+        //TODO was, wenn null, weil nichts gefunden?
         LOG.info( "loginUser() -> User.username = " + user.getUserName( ) );
 
         AuthenticatorSingleton.getInstance( ).setUser( user );
-    }
-
-    private boolean isLoggedIn( )
-    {
-        LOG.info( "isLoggedIn() -> " + AuthenticatorSingleton.getInstance( ).isUserLoggedIn( ) );
-
-        return AuthenticatorSingleton.getInstance( ).isUserLoggedIn( );
     }
 
     private void logoutUser( )
