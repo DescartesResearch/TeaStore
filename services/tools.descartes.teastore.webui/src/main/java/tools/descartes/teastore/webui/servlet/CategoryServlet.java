@@ -32,6 +32,7 @@ import tools.descartes.research.faasteastorelibrary.requests.category.GetCategor
 import tools.descartes.research.faasteastorelibrary.requests.product.CountProductsOfCategoryByIdRequest;
 import tools.descartes.research.faasteastorelibrary.requests.product.GetAllProductsOfCategoryByIdRequest;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
+import tools.descartes.teastore.webui.servlet.network.ProductImageHelper;
 
 /**
  * Servlet implementation for the web view of "Category".
@@ -107,13 +108,14 @@ public class CategoryServlet extends AbstractUIServlet
 
             ArrayList< String > navigation = createNavigation( totalProducts, page, productsPerPage );
 
-            //TODO (in product_item.jsp)
-//            request.setAttribute( "productImages", LoadBalancedImageOperations.getProductPreviewImages( productList
-// ) );
-            request.setAttribute( "storeIcon", getStoreIcon() );
+            request.setAttribute( "storeIcon", getStoreIcon( ) );
             request.setAttribute( "CategoryList", getAllCategories( ) );
             request.setAttribute( "title", "TeaStore Category " + category.getName( ) );
             request.setAttribute( "productList", productList );
+            //TODO (in product_item.jsp)
+//            request.setAttribute( "productImages", LoadBalancedImageOperations.getProductPreviewImages( productList
+// ) );
+            request.setAttribute( "productImageHelper", new ProductImageHelper( ) );
             request.setAttribute( "category", category.getName( ) );
             request.setAttribute( "login", isLoggedIn( ) );
             request.setAttribute( "categoryID", categoryID );

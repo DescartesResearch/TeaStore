@@ -23,7 +23,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import tools.descartes.research.faasteastorelibrary.interfaces.image.size.ImageSize;
+import tools.descartes.research.faasteastorelibrary.interfaces.image.size.ImageSizePreset;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.ProductEntity;
+import tools.descartes.research.faasteastorelibrary.requests.image.GetProductImageByProductIdRequest;
 import tools.descartes.research.faasteastorelibrary.requests.product.GetProductByIdRequest;
 import tools.descartes.teastore.registryclient.Service;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
@@ -92,8 +95,8 @@ public class ProductServlet extends AbstractUIServlet
             List< Product > ads = new LinkedList< Product >( );
             for ( Long pId : productIds )
             {
-                ads.add( LoadBalancedCRUDOperations.getEntity( Service.PERSISTENCE, "products", Product.class,
-                        pId ) );
+//                ads.add( LoadBalancedCRUDOperations.getEntity( Service.PERSISTENCE, "products", Product.class,
+//                        pId ) );
             }
 
             if ( ads.size( ) > 3 )
@@ -105,7 +108,8 @@ public class ProductServlet extends AbstractUIServlet
 
 //            request.setAttribute( "productImages", LoadBalancedImageOperations.getProductImages( ads,
 //                    ImageSizePreset.RECOMMENDATION.getSize( ) ) );
-//            request.setAttribute( "productImage", LoadBalancedImageOperations.getProductImage( product ) );
+
+            request.setAttribute( "productImage", getProductImageByProductId( productId ) );
 
             request.setAttribute( "storeIcon", getStoreIcon( ) );
             request.setAttribute( "helper", ELHelperUtils.UTILS );
@@ -122,5 +126,13 @@ public class ProductServlet extends AbstractUIServlet
     private ProductEntity getProductById( final long productId )
     {
         return new GetProductByIdRequest( productId ).performRequest( ).getParsedResponseBody( );
+    }
+
+    private String getProductImageByProductId( final long productId )
+    {
+        ImageSize imageSize = ImageSizePreset.FULL.getImageSize( );
+
+        return new GetProductImageByProductIdRequest( productId, imageSize.getWidth( ), imageSize.getHeight( ) )
+                .performRequest( ).getParsedResponseBody( );
     }
 }
