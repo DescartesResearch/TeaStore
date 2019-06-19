@@ -85,10 +85,6 @@ public class CartActionServlet extends AbstractUIServlet
             {
                 long productID = Long.parseLong( param.substring( "removeProduct_".length( ) ) );
 
-//                SessionBlob blob = LoadBalancedStoreOperations.removeProductFromCart( getSessionBlob( request ),
-//                        productID );
-//                saveSessionBlob( blob, response );
-
                 deleteFromCart( productID );
 
                 redirect( "/cart", response, MESSAGECOOKIE, String.format( REMOVEPRODUCT, productID ) );
@@ -97,17 +93,24 @@ public class CartActionServlet extends AbstractUIServlet
             }
             else if ( param.contains( "updateCartQuantities" ) )
             {
-                List< OrderItem > orderItems = getSessionBlob( request ).getOrderItems( );
-                updateCartItems( request, orderItems, response );
+                List< CartItem > cartItems = CartManagerSingleton.getInstance( ).getCartItems( );
+
+                updateCartItems( request, cartItems, response );
+
                 redirect( "/cart", response, MESSAGECOOKIE, CARTUPDATED );
+
                 break;
             }
             else if ( param.contains( "proceedtoCheckout" ) )
             {
-                if ( LoadBalancedStoreOperations.isLoggedIn( getSessionBlob( request ) ) )
+                if ( isLoggedIn() )
                 {
-                    List< OrderItem > orderItems = getSessionBlob( request ).getOrderItems( );
-                    updateCartItems( request, orderItems, response );
+//                    List< OrderItem > orderItems = getSessionBlob( request ).getOrderItems( );
+
+                    List< CartItem > cartItems = CartManagerSingleton.getInstance( ).getCartItems( );
+
+                    updateCartItems( request, cartItems, response );
+
                     redirect( "/order", response );
                 }
                 else
@@ -152,16 +155,19 @@ public class CartActionServlet extends AbstractUIServlet
         CartManagerSingleton.getInstance( ).deleteCartItem( productId );
     }
 
-    private void updateCartItems( HttpServletRequest request, List< OrderItem > orderItems, HttpServletResponse
+    private void updateCartItems( HttpServletRequest request, List< CartItem > cartItems, HttpServletResponse
             response )
     {
         SessionBlob blob = getSessionBlob( request );
 
-        for ( OrderItem orderItem : orderItems )
+        for ( CartItem cartItem : cartItems )
         {
-            if ( request.getParameter( "orderitem_" + orderItem.getProductId( ) ) != null )
+            if ( request.getParameter( "orderitem_" + cartItem.getProduct( ).getId( ) ) != null )
             {
-                int quantity = Integer.parseInt( request.getParameter( "orderitem_" + orderItem.getProductId( ) ) );
+                int quantity =
+                        Integer.parseInt( request.getParameter( "orderitem_" + cartItem.getProduct( ).getId( ) ) );
+
+                cartItem.setQuantity( quantity );
 
 //                blob = LoadBalancedStoreOperations.updateQuantity( blob, orderItem.getProductId( ),
 //                        Integer.parseInt( request.getParameter( "orderitem_" + orderItem.getProductId( ) ) ) );
