@@ -36,6 +36,17 @@ public class CartManagerSingleton
         return this.cartItems;
     }
 
+    public void deleteCartItem( final long productId )
+    {
+        for ( CartItem cartItem : this.cartItems )
+        {
+            if ( cartItem.getProduct( ).getId( ) == productId )
+            {
+                this.cartItems.remove( cartItem );
+            }
+        }
+    }
+
     public void deleteCartItems( )
     {
         this.cartItems = new LinkedList<>( );

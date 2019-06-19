@@ -15,8 +15,6 @@
 package tools.descartes.teastore.webui.servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -26,15 +24,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.CartItem;
-import tools.descartes.research.faasteastorelibrary.interfaces.persistence.CartItemEntity;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.ProductEntity;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.UserEntity;
-import tools.descartes.research.faasteastorelibrary.requests.cartitem.GetAllCartItemsOfUserByIdRequest;
 import tools.descartes.research.faasteastorelibrary.requests.recommender.GetRecommendedProductsRequest;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
-import tools.descartes.teastore.entities.OrderItem;
-import tools.descartes.teastore.entities.Product;
-import tools.descartes.teastore.entities.message.SessionBlob;
 import tools.descartes.teastore.webui.authentication.AuthenticatorSingleton;
 import tools.descartes.teastore.webui.cart.CartManagerSingleton;
 import tools.descartes.teastore.webui.servlet.network.ProductImageHelper;
@@ -65,47 +58,15 @@ public class CartServlet extends AbstractUIServlet
             throws ServletException, IOException, LoadBalancerTimeoutException
     {
         checkforCookie( request, response );
-        SessionBlob blob = getSessionBlob( request );
-
-        List< OrderItem > orderItems = blob.getOrderItems( );
-        ArrayList< Long > ids = new ArrayList<>( );
-        for ( OrderItem orderItem : orderItems )
-        {
-            ids.add( orderItem.getProductId( ) );
-        }
-
-        HashMap< Long, Product > products = new HashMap<>( );
-        for ( Long id : ids )
-        {
-//            Product product = LoadBalancedCRUDOperations.getEntity( Service.PERSISTENCE, "products",
-//                    Product.class, id );
-//            products.put( product.getId( ), product );
-        }
 
         request.setAttribute( "storeIcon", getStoreIcon( ) );
         request.setAttribute( "title", "TeaStore Cart" );
         request.setAttribute( "CategoryList", getAllCategories( ) );
         request.setAttribute( "CartItems", getCartItems( ) );
-        request.setAttribute( "Products", products );
         request.setAttribute( "login", isLoggedIn( ) );
 
-//        List< Long > productIds = LoadBalancedRecommenderOperations
-//                .getRecommendations( blob.getOrderItems( ), blob.getUID( ) );
-//        List< Product > ads = new LinkedList< Product >( );
-//        for ( Long productId : productIds )
-//        {
-//            ads.add( LoadBalancedCRUDOperations.getEntity( Service.PERSISTENCE, "products", Product.class,
-//                    productId ) );
-//        }
-
-//        if ( ads.size( ) > 3 )
-//        {
-//            ads.subList( 3, ads.size( ) ).clear( );
-//        }
         request.setAttribute( "RecommendedProducts", getRecommendedProducts( ) );
         request.setAttribute( "productImageHelper", new ProductImageHelper( ) );
-//
-//        request.setAttribute( "productImages", LoadBalancedImageOperations.getProductPreviewImages( ads ) );
 
         request.getRequestDispatcher( "WEB-INF/pages/cart.jsp" ).forward( request, response );
     }

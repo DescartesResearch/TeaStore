@@ -74,27 +74,31 @@ public class CartActionServlet extends AbstractUIServlet
             if ( param.contains( "addToCart" ) )
             {
                 long productID = Long.parseLong( request.getParameter( "productid" ) );
-//                SessionBlob blob = LoadBalancedStoreOperations.addProductToCart( getSessionBlob( request ),
-// productID );
-//                saveSessionBlob( blob, response );
+
                 addToCart( productID );
 
                 redirect( "/cart", response, MESSAGECOOKIE, String.format( ADDPRODUCT, productID ) );
+
                 break;
             }
             else if ( param.contains( "removeProduct" ) )
             {
                 long productID = Long.parseLong( param.substring( "removeProduct_".length( ) ) );
+
 //                SessionBlob blob = LoadBalancedStoreOperations.removeProductFromCart( getSessionBlob( request ),
 //                        productID );
 //                saveSessionBlob( blob, response );
+
+                deleteFromCart( productID );
+
                 redirect( "/cart", response, MESSAGECOOKIE, String.format( REMOVEPRODUCT, productID ) );
+
                 break;
             }
             else if ( param.contains( "updateCartQuantities" ) )
             {
                 List< OrderItem > orderItems = getSessionBlob( request ).getOrderItems( );
-                updateOrder( request, orderItems, response );
+                updateCartItems( request, orderItems, response );
                 redirect( "/cart", response, MESSAGECOOKIE, CARTUPDATED );
                 break;
             }
@@ -103,7 +107,7 @@ public class CartActionServlet extends AbstractUIServlet
                 if ( LoadBalancedStoreOperations.isLoggedIn( getSessionBlob( request ) ) )
                 {
                     List< OrderItem > orderItems = getSessionBlob( request ).getOrderItems( );
-                    updateOrder( request, orderItems, response );
+                    updateCartItems( request, orderItems, response );
                     redirect( "/order", response );
                 }
                 else
@@ -143,23 +147,39 @@ public class CartActionServlet extends AbstractUIServlet
         return new GetProductByIdRequest( productId ).performRequest( ).getParsedResponseBody( );
     }
 
-    private void deleteCartItem( final long cartItemId )
+    private void deleteFromCart( final long productId )
     {
-        CartItemEntity cartItem = new GetCartItemByIdRequest( cartItemId ).performRequest( ).getParsedResponseBody( );
-
-        new DeleteCartItemRequest( cartItem ).performRequest( );
+        CartManagerSingleton.getInstance( ).deleteCartItem( productId );
     }
 
-    private void updateCartItems( )
+    private void updateCartItems( HttpServletRequest request, List< OrderItem > orderItems, HttpServletResponse
+            response )
     {
-        //wahrscheinlich updateOrder aufrufen
-        List< CartItemEntity > cartItems = getAllCartItemsOfUserById( );
+        SessionBlob blob = getSessionBlob( request );
 
-        for ( CartItemEntity cartItem : cartItems )
+        for ( OrderItem orderItem : orderItems )
         {
+            if ( request.getParameter( "orderitem_" + orderItem.getProductId( ) ) != null )
+            {
+                int quantity = Integer.parseInt( request.getParameter( "orderitem_" + orderItem.getProductId( ) ) );
 
+//                blob = LoadBalancedStoreOperations.updateQuantity( blob, orderItem.getProductId( ),
+//                        Integer.parseInt( request.getParameter( "orderitem_" + orderItem.getProductId( ) ) ) );
+            }
         }
+        saveSessionBlob( blob, response );
     }
+
+//    private void updateCartItems( )
+//    {
+//        //wahrscheinlich updateOrder aufrufen
+//        List< CartItemEntity > cartItems = getAllCartItemsOfUserById( );
+//
+//        for ( CartItemEntity cartItem : cartItems )
+//        {
+//
+//        }
+//    }
 
     private List< CartItemEntity > getAllCartItemsOfUserById( )
     {
@@ -228,26 +248,5 @@ public class CartActionServlet extends AbstractUIServlet
             }
         }
         return infos;
-    }
-
-    /**
-     * Updates the items in the cart.
-     *
-     * @param request
-     * @param orderItems
-     * @param response
-     */
-    private void updateOrder( HttpServletRequest request, List< OrderItem > orderItems, HttpServletResponse response )
-    {
-        SessionBlob blob = getSessionBlob( request );
-        for ( OrderItem orderItem : orderItems )
-        {
-            if ( request.getParameter( "orderitem_" + orderItem.getProductId( ) ) != null )
-            {
-//                blob = LoadBalancedStoreOperations.updateQuantity( blob, orderItem.getProductId( ),
-//                        Integer.parseInt( request.getParameter( "orderitem_" + orderItem.getProductId( ) ) ) );
-            }
-        }
-        saveSessionBlob( blob, response );
     }
 }
