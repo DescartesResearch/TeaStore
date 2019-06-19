@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import tools.descartes.research.faasteastorelibrary.interfaces.persistence.CartItem;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.CartItemEntity;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.ProductEntity;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.UserEntity;
@@ -37,6 +38,7 @@ import tools.descartes.teastore.registryclient.rest.LoadBalancedStoreOperations;
 import tools.descartes.teastore.entities.OrderItem;
 import tools.descartes.teastore.entities.message.SessionBlob;
 import tools.descartes.teastore.webui.authentication.AuthenticatorSingleton;
+import tools.descartes.teastore.webui.cart.CartManagerSingleton;
 
 /**
  * Servlet for handling all cart actions.
@@ -47,6 +49,7 @@ import tools.descartes.teastore.webui.authentication.AuthenticatorSingleton;
 public class CartActionServlet extends AbstractUIServlet
 {
     private static final long serialVersionUID = 1L;
+
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern( "MM/yyyy" );
 
     /**
@@ -67,11 +70,15 @@ public class CartActionServlet extends AbstractUIServlet
         for ( Object paramo : request.getParameterMap( ).keySet( ) )
         {
             String param = ( String ) paramo;
+
             if ( param.contains( "addToCart" ) )
             {
                 long productID = Long.parseLong( request.getParameter( "productid" ) );
-//                SessionBlob blob = LoadBalancedStoreOperations.addProductToCart( getSessionBlob( request ), productID );
+//                SessionBlob blob = LoadBalancedStoreOperations.addProductToCart( getSessionBlob( request ),
+// productID );
 //                saveSessionBlob( blob, response );
+                addToCart( productID );
+
                 redirect( "/cart", response, MESSAGECOOKIE, String.format( ADDPRODUCT, productID ) );
                 break;
             }
@@ -113,28 +120,32 @@ public class CartActionServlet extends AbstractUIServlet
         }
     }
 
-    private void createNewCartItem( final long productId )
+    private void addToCart( final long productId )
     {
-        UserEntity user = AuthenticatorSingleton.getInstance( ).getUser( ); //if != null
+        CartItem cartItem = createNewCartItem( productId );
 
+        CartManagerSingleton.getInstance( ).addCartItem( cartItem );
+    }
+
+    private CartItem createNewCartItem( final long productId )
+    {
         ProductEntity product = getProductById( productId );
 
-        CartItemEntity cartItem = new CartItemEntity( );
-        cartItem.setUser( user );
+        CartItem cartItem = new CartItem( );
         cartItem.setProduct( product );
         cartItem.setQuantity( 1 );
 
-        new CreateNewCartItemRequest( cartItem ).performRequest( );
+        return cartItem;
     }
 
     private ProductEntity getProductById( final long productId )
     {
-        return new GetProductByIdRequest( productId ).performRequest( ).getParsedResponseBody();
+        return new GetProductByIdRequest( productId ).performRequest( ).getParsedResponseBody( );
     }
 
     private void deleteCartItem( final long cartItemId )
     {
-        CartItemEntity cartItem = new GetCartItemByIdRequest( cartItemId ).performRequest( ).getParsedResponseBody();
+        CartItemEntity cartItem = new GetCartItemByIdRequest( cartItemId ).performRequest( ).getParsedResponseBody( );
 
         new DeleteCartItemRequest( cartItem ).performRequest( );
     }
@@ -155,7 +166,7 @@ public class CartActionServlet extends AbstractUIServlet
         UserEntity user = AuthenticatorSingleton.getInstance( ).getUser( );
 
         return new GetAllCartItemsOfUserByIdRequest( 0, 100, user.getId( ) ).performRequest( )
-                .getParsedResponseBody();
+                .getParsedResponseBody( );
     }
 
     /**

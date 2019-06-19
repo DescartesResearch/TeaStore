@@ -20,30 +20,30 @@
 					</thead>
 					<tbody>
 						<c:set var="count" value="0" scope="page" />
-						<c:forEach items="${OrderItems}" var="orderItem">
+						<c:forEach items="${CartItems}" var="cartItem">
 							<tr>
-								<td>${orderItem.productId}<input type='hidden'
-									name="productid" value="${orderItem.productId}"></td>
-								<td>${Products[orderItem.productId].name}</td>
-								<td>${Products[orderItem.productId].description}</td>
-								<td><input required min="1" name="orderitem_${orderItem.productId}"
-									type="number" class="quantity" value="${orderItem.quantity}"></td>
+								<td>${cartItem.product.id}<input type='hidden' name="productid"
+																value="${cartItem.product.id}"></td>
+								<td>${cartItem.product.name}</td>
+								<td>${cartItem.product.description}</td>
+								<td><input required min="1" name="orderitem_${cartItem.product.id}"
+									type="number" class="quantity" value="${cartItem.quantity}"></td>
 								<td><fmt:formatNumber
-										value="${orderItem.unitPriceInCents/100}" type="currency"
+										value="${cartItem.product.listPriceInCents/100}" type="currency"
 										currencySymbol="$" /></td>
 								<td><fmt:formatNumber
-										value="${orderItem.unitPriceInCents*orderItem.quantity/100}"
+										value="${cartItem.product.listPriceInCents*cartItem.quantity/100}"
 										type="currency" currencySymbol="$" /></td>
 								<c:set var="count"
-									value="${count+(orderItem.unitPriceInCents*orderItem.quantity/100)}"
+									value="${count+(cartItem.product.listPriceInCents*cartItem.quantity/100)}"
 									scope="page" />
 								<td><button type="submit" class="submit-with-icon"
-										name="removeProduct_${orderItem.productId}">
+										name="removeProduct_${cartItem.product.id}">
 										<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
 									</button></td>
 							</tr>
 						</c:forEach>
-						<c:if test="${empty OrderItems}">
+						<c:if test="${empty CartItems}">
 							<tr>
 								<td colspan="7"><b>Your cart is empty.</b></td>
 							</tr>
@@ -55,7 +55,7 @@
 						</tr>
 					</tbody>
 				</table>
-				<c:if test="${!empty OrderItems}">
+				<c:if test="${!empty CartItems}">
 					<input name="proceedtoCheckout" class="btn" value="Proceed to Checkout"
 						type="submit">
 				</c:if>

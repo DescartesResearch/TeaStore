@@ -25,14 +25,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import tools.descartes.research.faasteastorelibrary.interfaces.persistence.CartItem;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.CartItemEntity;
+import tools.descartes.research.faasteastorelibrary.interfaces.persistence.ProductEntity;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.UserEntity;
 import tools.descartes.research.faasteastorelibrary.requests.cartitem.GetAllCartItemsOfUserByIdRequest;
+import tools.descartes.research.faasteastorelibrary.requests.recommender.GetRecommendedProductsRequest;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.teastore.entities.OrderItem;
 import tools.descartes.teastore.entities.Product;
 import tools.descartes.teastore.entities.message.SessionBlob;
 import tools.descartes.teastore.webui.authentication.AuthenticatorSingleton;
+import tools.descartes.teastore.webui.cart.CartManagerSingleton;
+import tools.descartes.teastore.webui.servlet.network.ProductImageHelper;
 
 /**
  * Servlet implementation for the web view of "Cart".
@@ -63,13 +68,13 @@ public class CartServlet extends AbstractUIServlet
         SessionBlob blob = getSessionBlob( request );
 
         List< OrderItem > orderItems = blob.getOrderItems( );
-        ArrayList< Long > ids = new ArrayList<  >( );
+        ArrayList< Long > ids = new ArrayList<>( );
         for ( OrderItem orderItem : orderItems )
         {
             ids.add( orderItem.getProductId( ) );
         }
 
-        HashMap< Long, Product > products = new HashMap< >( );
+        HashMap< Long, Product > products = new HashMap<>( );
         for ( Long id : ids )
         {
 //            Product product = LoadBalancedCRUDOperations.getEntity( Service.PERSISTENCE, "products",
@@ -77,12 +82,12 @@ public class CartServlet extends AbstractUIServlet
 //            products.put( product.getId( ), product );
         }
 
-        request.setAttribute( "storeIcon", getStoreIcon() );
+        request.setAttribute( "storeIcon", getStoreIcon( ) );
         request.setAttribute( "title", "TeaStore Cart" );
-        request.setAttribute( "CategoryList", getAllCategories() );
-        request.setAttribute( "OrderItems", orderItems );
+        request.setAttribute( "CategoryList", getAllCategories( ) );
+        request.setAttribute( "CartItems", getCartItems( ) );
         request.setAttribute( "Products", products );
-        request.setAttribute( "login", isLoggedIn());
+        request.setAttribute( "login", isLoggedIn( ) );
 
 //        List< Long > productIds = LoadBalancedRecommenderOperations
 //                .getRecommendations( blob.getOrderItems( ), blob.getUID( ) );
@@ -97,18 +102,33 @@ public class CartServlet extends AbstractUIServlet
 //        {
 //            ads.subList( 3, ads.size( ) ).clear( );
 //        }
-//        request.setAttribute( "Advertisment", ads );
+        request.setAttribute( "RecommendedProducts", getRecommendedProducts( ) );
+        request.setAttribute( "productImageHelper", new ProductImageHelper( ) );
 //
 //        request.setAttribute( "productImages", LoadBalancedImageOperations.getProductPreviewImages( ads ) );
 
         request.getRequestDispatcher( "WEB-INF/pages/cart.jsp" ).forward( request, response );
     }
 
-    private List< CartItemEntity > getAllCartItemsOfUserById( )
+    private List< CartItem > getCartItems( )
+    {
+        return CartManagerSingleton.getInstance( ).getCartItems( );
+    }
+
+    private List< ProductEntity > getRecommendedProducts( )
     {
         UserEntity user = AuthenticatorSingleton.getInstance( ).getUser( );
 
-        return new GetAllCartItemsOfUserByIdRequest( 0, 100, user.getId( ) ).performRequest( )
-                .getParsedResponseBody();
+        long userId = 0;
+
+        if ( user != null )
+        {
+            userId = user.getId( );
+        }
+
+        List< CartItem > cartItems = CartManagerSingleton.getInstance( ).getCartItems( );
+
+        return new GetRecommendedProductsRequest( userId, 3, cartItems )
+                .performRequest( ).getParsedResponseBody( );
     }
 }

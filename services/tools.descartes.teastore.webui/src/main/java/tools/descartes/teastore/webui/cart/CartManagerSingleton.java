@@ -1,6 +1,6 @@
 package tools.descartes.teastore.webui.cart;
 
-import tools.descartes.research.faasteastorelibrary.interfaces.persistence.CartItemEntity;
+import tools.descartes.research.faasteastorelibrary.interfaces.persistence.CartItem;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -9,7 +9,7 @@ public class CartManagerSingleton
 {
     private static CartManagerSingleton instance;
 
-    private List< CartItemEntity > cartItems;
+    private List< CartItem > cartItems;
 
     private CartManagerSingleton( )
     {
@@ -26,12 +26,12 @@ public class CartManagerSingleton
         return CartManagerSingleton.instance;
     }
 
-    public void addCartItem( final CartItemEntity cartItem )
+    public void addCartItem( final CartItem cartItem )
     {
         this.cartItems.add( cartItem );
     }
 
-    public List< CartItemEntity > getCartItems( )
+    public List< CartItem > getCartItems( )
     {
         return this.cartItems;
     }
