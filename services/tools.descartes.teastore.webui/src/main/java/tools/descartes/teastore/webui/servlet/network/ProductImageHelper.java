@@ -22,8 +22,8 @@ public class ProductImageHelper
         String productImageAsBase64String = new GetProductImageByProductIdRequest( productId,
                 this.imageSize.getWidth( ), this.imageSize.getHeight( ) ).performRequest( ).getParsedResponseBody( );
 
-        this.logger.info( "productId: " + productId );
-        this.logger.info( productImageAsBase64String );
+//        this.logger.info( "productId: " + productId );
+//        this.logger.info( productImageAsBase64String );
 
         return productImageAsBase64String;
     }

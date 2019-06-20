@@ -16,6 +16,7 @@ package tools.descartes.teastore.webui.servlet;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,6 +28,7 @@ import tools.descartes.research.faasteastorelibrary.interfaces.persistence.CartI
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.ProductEntity;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.UserEntity;
 import tools.descartes.research.faasteastorelibrary.requests.recommender.GetRecommendedProductsRequest;
+import tools.descartes.research.faasteastorelibrary.requests.user.GetAllUsersRequest;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.teastore.webui.authentication.AuthenticatorSingleton;
 import tools.descartes.teastore.webui.cart.CartManagerSingleton;
@@ -41,6 +43,8 @@ import tools.descartes.teastore.webui.servlet.network.ProductImageHelper;
 public class CartServlet extends AbstractUIServlet
 {
     private static final long serialVersionUID = 1L;
+
+    private final Logger logger = Logger.getLogger( "CartServlet" );
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -78,18 +82,34 @@ public class CartServlet extends AbstractUIServlet
 
     private List< ProductEntity > getRecommendedProducts( )
     {
-        UserEntity user = AuthenticatorSingleton.getInstance( ).getUser( );
+        UserEntity loggedInUser = AuthenticatorSingleton.getInstance( ).getUser( );
 
-        long userId = 0;
+        long userId;
 
-        if ( user != null )
+        if ( loggedInUser == null )
         {
-            userId = user.getId( );
+//            this.logger.info( "loggedInUser is null" );
+
+            UserEntity firstUser = getFirstUserFromDatabase( );
+            userId = firstUser.getId( );
+        }
+        else
+        {
+//            this.logger.info( "loggedInUser exists" );
+
+            userId = loggedInUser.getId( );
         }
 
         List< CartItem > cartItems = CartManagerSingleton.getInstance( ).getCartItems( );
 
         return new GetRecommendedProductsRequest( userId, 3, cartItems )
                 .performRequest( ).getParsedResponseBody( );
+    }
+
+    private UserEntity getFirstUserFromDatabase( )
+    {
+        List< UserEntity > users = new GetAllUsersRequest( 0, 1 ).performRequest( ).getParsedResponseBody( );
+
+        return users.get( 0 );
     }
 }

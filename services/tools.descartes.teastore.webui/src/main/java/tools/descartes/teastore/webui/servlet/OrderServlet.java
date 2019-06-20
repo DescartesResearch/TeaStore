@@ -14,13 +14,16 @@
 package tools.descartes.teastore.webui.servlet;
 
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import tools.descartes.research.faasteastorelibrary.interfaces.persistence.CartItem;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
+import tools.descartes.teastore.webui.cart.CartManagerSingleton;
 
 /**
  * Servlet implementation for the web view of "Order".
@@ -48,9 +51,11 @@ public class OrderServlet extends AbstractUIServlet
     protected void handleGETRequest( HttpServletRequest request, HttpServletResponse response )
             throws ServletException, IOException, LoadBalancerTimeoutException
     {
-        checkforCookie( request, response );
+//        checkforCookie( request, response );
 
-        if ( getSessionBlob( request ).getOrderItems( ).size( ) == 0 )
+        List<CartItem> cartItems = CartManagerSingleton.getInstance().getCartItems();
+
+        if ( cartItems.size( ) == 0 )
         {
             redirect( "/", response );
         }

@@ -17,6 +17,7 @@ package tools.descartes.teastore.webui.servlet;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,18 +26,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.CartItem;
-import tools.descartes.research.faasteastorelibrary.interfaces.persistence.CartItemEntity;
-import tools.descartes.research.faasteastorelibrary.interfaces.persistence.ProductEntity;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.UserEntity;
-import tools.descartes.research.faasteastorelibrary.requests.cartitem.CreateNewCartItemRequest;
-import tools.descartes.research.faasteastorelibrary.requests.cartitem.DeleteCartItemRequest;
-import tools.descartes.research.faasteastorelibrary.requests.cartitem.GetAllCartItemsOfUserByIdRequest;
-import tools.descartes.research.faasteastorelibrary.requests.cartitem.GetCartItemByIdRequest;
-import tools.descartes.research.faasteastorelibrary.requests.product.GetProductByIdRequest;
+import tools.descartes.research.faasteastorelibrary.requests.order.ConfirmOrderRequest;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
-import tools.descartes.teastore.registryclient.rest.LoadBalancedStoreOperations;
-import tools.descartes.teastore.entities.OrderItem;
-import tools.descartes.teastore.entities.message.SessionBlob;
 import tools.descartes.teastore.webui.authentication.AuthenticatorSingleton;
 import tools.descartes.teastore.webui.cart.CartManagerSingleton;
 
@@ -51,6 +43,8 @@ public class CartActionServlet extends AbstractUIServlet
     private static final long serialVersionUID = 1L;
 
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern( "MM/yyyy" );
+
+    private final Logger logger = Logger.getLogger( "CartActionServlet" );
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -103,18 +97,26 @@ public class CartActionServlet extends AbstractUIServlet
             }
             else if ( param.contains( "proceedtoCheckout" ) )
             {
-                if ( isLoggedIn() )
+                this.logger.info( "isLoggedIn(): " + isLoggedIn( ) );
+
+                if ( isLoggedIn( ) )
                 {
 //                    List< OrderItem > orderItems = getSessionBlob( request ).getOrderItems( );
 
                     List< CartItem > cartItems = CartManagerSingleton.getInstance( ).getCartItems( );
 
+                    this.logger.info( "cartItems.size(): " + cartItems.size( ) );
+
                     updateCartItems( request, cartItems, response );
+
+                    this.logger.info( "move to /order" );
 
                     redirect( "/order", response );
                 }
                 else
                 {
+                    this.logger.info( "move to /login" );
+
                     redirect( "/login", response );
                 }
                 break;
@@ -122,6 +124,7 @@ public class CartActionServlet extends AbstractUIServlet
             else if ( param.contains( "confirm" ) )
             {
                 confirmOrder( request, response );
+
                 break;
             }
         }
@@ -129,25 +132,7 @@ public class CartActionServlet extends AbstractUIServlet
 
     private void addToCart( final long productId )
     {
-        CartItem cartItem = createNewCartItem( productId );
-
-        CartManagerSingleton.getInstance( ).addCartItem( cartItem );
-    }
-
-    private CartItem createNewCartItem( final long productId )
-    {
-        ProductEntity product = getProductById( productId );
-
-        CartItem cartItem = new CartItem( );
-        cartItem.setProduct( product );
-        cartItem.setQuantity( 1 );
-
-        return cartItem;
-    }
-
-    private ProductEntity getProductById( final long productId )
-    {
-        return new GetProductByIdRequest( productId ).performRequest( ).getParsedResponseBody( );
+        CartManagerSingleton.getInstance( ).addCartItem( productId );
     }
 
     private void deleteFromCart( final long productId )
@@ -158,7 +143,7 @@ public class CartActionServlet extends AbstractUIServlet
     private void updateCartItems( HttpServletRequest request, List< CartItem > cartItems, HttpServletResponse
             response )
     {
-        SessionBlob blob = getSessionBlob( request );
+//        SessionBlob blob = getSessionBlob( request );
 
         for ( CartItem cartItem : cartItems )
         {
@@ -168,66 +153,65 @@ public class CartActionServlet extends AbstractUIServlet
                         Integer.parseInt( request.getParameter( "orderitem_" + cartItem.getProduct( ).getId( ) ) );
 
                 cartItem.setQuantity( quantity );
-
-//                blob = LoadBalancedStoreOperations.updateQuantity( blob, orderItem.getProductId( ),
-//                        Integer.parseInt( request.getParameter( "orderitem_" + orderItem.getProductId( ) ) ) );
             }
         }
-        saveSessionBlob( blob, response );
+
+//        saveSessionBlob( blob, response );
     }
 
-//    private void updateCartItems( )
-//    {
-//        //wahrscheinlich updateOrder aufrufen
-//        List< CartItemEntity > cartItems = getAllCartItemsOfUserById( );
-//
-//        for ( CartItemEntity cartItem : cartItems )
-//        {
-//
-//        }
-//    }
-
-    private List< CartItemEntity > getAllCartItemsOfUserById( )
-    {
-        UserEntity user = AuthenticatorSingleton.getInstance( ).getUser( );
-
-        return new GetAllCartItemsOfUserByIdRequest( 0, 100, user.getId( ) ).performRequest( )
-                .getParsedResponseBody( );
-    }
-
-    /**
-     * Handles the confirm order action. Saves the order into the sessionBlob
-     *
-     * @param request
-     * @param response
-     * @throws IOException
-     */
     private void confirmOrder( HttpServletRequest request, HttpServletResponse response ) throws IOException
     {
-
         String[] infos = extractOrderInformation( request );
+
+        this.logger.info( "infos.length = " + infos.length );
+
         if ( infos.length == 0 )
         {
             redirect( "/order", response );
         }
         else
         {
+//            SessionBlob blob = getSessionBlob( request );
 
-            SessionBlob blob = getSessionBlob( request );
-            long price = 0;
-            for ( OrderItem item : blob.getOrderItems( ) )
-            {
-                price += item.getQuantity( ) * item.getUnitPriceInCents( );
-            }
+            List< CartItem > cartItems = CartManagerSingleton.getInstance( ).getCartItems( );
+
+//            long price = 0;
+//
+//            for ( CartItem cartItem : cartItems )
+//            {
+//                price += cartItem.getQuantity( ) * cartItem.getProduct( ).getListPriceInCents();
+//            }
+
+            String addressName = infos[ 0 ] + " " + infos[ 1 ];
+            String address1 = infos[ 2 ];
+            String address2 = infos[ 3 ];
+            String creditCardCompany = infos[ 4 ];
+            String creditCardNumber = infos[ 5 ];
+            String creditCardExpiryDate = infos[ 6 ];
+
+            UserEntity user = AuthenticatorSingleton.getInstance( ).getUser( );
+
+            this.logger.info( "confirmOrder request" );
+
+            new ConfirmOrderRequest(
+                    addressName,
+                    address1,
+                    address2,
+                    creditCardCompany,
+                    creditCardNumber,
+                    creditCardExpiryDate,
+                    cartItems,
+                    user ).performRequest( );
+
 //            blob = LoadBalancedStoreOperations.placeOrder( getSessionBlob( request ), infos[ 0 ] + " " + infos[ 1 ],
 //                    infos[ 2 ],
 //                    infos[ 3 ], infos[ 4 ],
 //                    YearMonth.parse( infos[ 6 ], DTF ).atDay( 1 ).format( DateTimeFormatter.ISO_LOCAL_DATE ), price,
 //                    infos[ 5 ] );
 //            saveSessionBlob( blob, response );
+
             redirect( "/", response, MESSAGECOOKIE, ORDERCONFIRMED );
         }
-
     }
 
     /**
@@ -238,10 +222,11 @@ public class CartActionServlet extends AbstractUIServlet
      */
     private String[] extractOrderInformation( HttpServletRequest request )
     {
-
         String[] parameters = new String[] { "firstname", "lastname", "address1", "address2", "cardtype", "cardnumber",
                 "expirydate" };
+
         String[] infos = new String[ parameters.length ];
+
         for ( int i = 0; i < parameters.length; i++ )
         {
             if ( request.getParameter( parameters[ i ] ) == null )
@@ -253,6 +238,7 @@ public class CartActionServlet extends AbstractUIServlet
                 infos[ i ] = request.getParameter( parameters[ i ] );
             }
         }
+
         return infos;
     }
 }
