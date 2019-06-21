@@ -110,10 +110,13 @@ public class LoginActionServlet extends AbstractUIServlet
     {
         UserEntity user = new BasicAuthRequest( userName, password ).performRequest( ).getParsedResponseBody( );
 
-        //TODO was, wenn null, weil nichts gefunden?
-        LOG.info( "loginUser() -> User.username = " + user.getUserName( ) );
+        if ( user != null )
+        {
+            LOG.info( "loginUser() -> User.username = " + user.getUserName( ) );
 
-        AuthenticatorSingleton.getInstance( ).setUser( user );
+            AuthenticatorSingleton.getInstance( ).setUser( user );
+        }
+
     }
 
     private void logoutUser( )

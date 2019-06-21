@@ -15,7 +15,10 @@
 package tools.descartes.teastore.webui.servlet;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -26,13 +29,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.CartItem;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.ProductEntity;
+import tools.descartes.research.faasteastorelibrary.interfaces.persistence.ProductImageEntity;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.UserEntity;
+import tools.descartes.research.faasteastorelibrary.requests.image.GetProductImagesByProductIdsRequest;
 import tools.descartes.research.faasteastorelibrary.requests.recommender.GetRecommendedProductsRequest;
 import tools.descartes.research.faasteastorelibrary.requests.user.GetAllUsersRequest;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.teastore.webui.authentication.AuthenticatorSingleton;
 import tools.descartes.teastore.webui.cart.CartManagerSingleton;
-import tools.descartes.teastore.webui.servlet.network.ProductImageHelper;
 
 /**
  * Servlet implementation for the web view of "Cart".
@@ -69,8 +73,10 @@ public class CartServlet extends AbstractUIServlet
         request.setAttribute( "CartItems", getCartItems( ) );
         request.setAttribute( "login", isLoggedIn( ) );
 
-        request.setAttribute( "RecommendedProducts", getRecommendedProducts( ) );
-        request.setAttribute( "productImageHelper", new ProductImageHelper( ) );
+        List< ProductEntity > recommendedProducts = getRecommendedProducts( );
+
+        request.setAttribute( "RecommendedProducts", recommendedProducts );
+        request.setAttribute( "productImagesAsMap", getProductImagesAsMap( recommendedProducts ) );
 
         request.getRequestDispatcher( "WEB-INF/pages/cart.jsp" ).forward( request, response );
     }
@@ -105,6 +111,31 @@ public class CartServlet extends AbstractUIServlet
         return new GetRecommendedProductsRequest( userId, 3, cartItems )
                 .performRequest( ).getParsedResponseBody( );
     }
+
+    private Map< Long, String > getProductImagesAsMap( final List< ProductEntity > products )
+    {
+        List< Long > productIds = new LinkedList<>( );
+
+        for ( ProductEntity product : products )
+        {
+            productIds.add( product.getId( ) );
+        }
+
+        List< ProductImageEntity > productImageEntities =
+                new GetProductImagesByProductIdsRequest( productIds ).performRequest( ).getParsedResponseBody( );
+
+        Map< Long, String > productImagesAsMap = new HashMap<>( );
+
+        for ( ProductImageEntity productImageEntity : productImageEntities )
+        {
+            productImagesAsMap.put(
+                    productImageEntity.getProductId( ),
+                    productImageEntity.getProductImageAsBase64String( ) );
+        }
+
+        return productImagesAsMap;
+    }
+
 
     private UserEntity getFirstUserFromDatabase( )
     {
