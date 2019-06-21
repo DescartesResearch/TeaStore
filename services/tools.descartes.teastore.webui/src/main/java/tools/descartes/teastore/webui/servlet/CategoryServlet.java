@@ -15,9 +15,7 @@
 package tools.descartes.teastore.webui.servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -27,12 +25,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.LoggerFactory;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.CategoryEntity;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.ProductEntity;
-import tools.descartes.research.faasteastorelibrary.requests.ResponseObject;
+import tools.descartes.research.faasteastorelibrary.interfaces.persistence.ProductImageEntity;
+import tools.descartes.research.faasteastorelibrary.requests.api.ResponseObject;
 import tools.descartes.research.faasteastorelibrary.requests.category.GetCategoryByIdRequest;
+import tools.descartes.research.faasteastorelibrary.requests.image.GetProductImagesByProductIdsRequest;
 import tools.descartes.research.faasteastorelibrary.requests.product.CountProductsOfCategoryByIdRequest;
 import tools.descartes.research.faasteastorelibrary.requests.product.GetAllProductsOfCategoryByIdRequest;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
-import tools.descartes.teastore.webui.servlet.network.ProductImageHelper;
 
 /**
  * Servlet implementation for the web view of "Category".
@@ -112,10 +111,7 @@ public class CategoryServlet extends AbstractUIServlet
             request.setAttribute( "CategoryList", getAllCategories( ) );
             request.setAttribute( "title", "TeaStore Category " + category.getName( ) );
             request.setAttribute( "productList", productList );
-            //TODO (in product_item.jsp)
-//            request.setAttribute( "productImages", LoadBalancedImageOperations.getProductPreviewImages( productList
-// ) );
-            request.setAttribute( "productImageHelper", new ProductImageHelper( ) );
+            request.setAttribute( "productImagesAsMap", getProductImagesAsMap( productList ) );
             request.setAttribute( "category", category.getName( ) );
             request.setAttribute( "login", isLoggedIn( ) );
             request.setAttribute( "categoryID", categoryID );
@@ -146,6 +142,30 @@ public class CategoryServlet extends AbstractUIServlet
             final long categoryId )
     {
         return new GetAllProductsOfCategoryByIdRequest( startIndex, limit, categoryId ).performRequest( );
+    }
+
+    private Map< Long, String > getProductImagesAsMap( final List< ProductEntity > products )
+    {
+        List< Long > productIds = new LinkedList<>( );
+
+        for ( ProductEntity product : products )
+        {
+            productIds.add( product.getId( ) );
+        }
+
+        List< ProductImageEntity > productImageEntities =
+                new GetProductImagesByProductIdsRequest( productIds ).performRequest( ).getParsedResponseBody();
+
+        Map< Long, String > productImagesAsMap = new HashMap<>( );
+
+        for ( ProductImageEntity productImageEntity : productImageEntities )
+        {
+            productImagesAsMap.put(
+                    productImageEntity.getProductId( ),
+                    productImageEntity.getProductImageAsBase64String( ) );
+        }
+
+        return productImagesAsMap;
     }
 
     /**

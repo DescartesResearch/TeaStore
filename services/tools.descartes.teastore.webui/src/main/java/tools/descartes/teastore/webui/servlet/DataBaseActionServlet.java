@@ -30,6 +30,7 @@ import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeout
 
 /**
  * Servlet implementation for handling the data base action.
+ *
  * @author Andre
  */
 @WebServlet( "/dataBaseAction" )
@@ -88,7 +89,8 @@ public class DataBaseActionServlet extends AbstractUIServlet
 //                // Retrain recommender
 //                List< Response > recResp = ServiceLoadBalancer.multicastRESTOperation( Service.RECOMMENDER, "train",
 //                        String.class,
-//                        client -> client.getEndpointTarget( ).path( "async" ).request( MediaType.TEXT_PLAIN ).get( ) );
+//                        client -> client.getEndpointTarget( ).path( "async" ).request( MediaType.TEXT_PLAIN ).get(
+// ) );
 //                recResp.stream( ).filter( r -> r.getStatus( ) != 200 ).forEach(
 //                        r -> LOG.warn( "A recommender service responded with " + r.getStatus( ) + " when retraining."
 //						) );
@@ -106,7 +108,13 @@ public class DataBaseActionServlet extends AbstractUIServlet
 
     private void generateDatabaseTables( )
     {
-        new GenerateDatabaseTablesRequest( 2, 50, 3, 5, 5 ).performRequest( );
+        new GenerateDatabaseTablesRequest(
+                2,
+                50,
+                3,
+                5,
+                5,
+                10 ).performRequest( );
     }
 
     /**

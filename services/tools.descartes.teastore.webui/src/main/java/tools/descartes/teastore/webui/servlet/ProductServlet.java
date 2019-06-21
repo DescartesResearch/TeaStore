@@ -28,11 +28,8 @@ import tools.descartes.research.faasteastorelibrary.interfaces.image.size.ImageS
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.ProductEntity;
 import tools.descartes.research.faasteastorelibrary.requests.image.GetProductImageByProductIdRequest;
 import tools.descartes.research.faasteastorelibrary.requests.product.GetProductByIdRequest;
-import tools.descartes.teastore.registryclient.Service;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
-import tools.descartes.teastore.registryclient.rest.LoadBalancedCRUDOperations;
 import tools.descartes.teastore.registryclient.rest.LoadBalancedRecommenderOperations;
-import tools.descartes.teastore.webui.servlet.elhelper.ELHelperUtils;
 import tools.descartes.teastore.entities.OrderItem;
 import tools.descartes.teastore.entities.Product;
 import tools.descartes.teastore.entities.message.SessionBlob;
@@ -112,7 +109,7 @@ public class ProductServlet extends AbstractUIServlet
             request.setAttribute( "productImage", getProductImageByProductId( productId ) );
 
             request.setAttribute( "storeIcon", getStoreIcon( ) );
-            request.setAttribute( "helper", ELHelperUtils.UTILS );
+//            request.setAttribute( "helper", ELHelperUtils.UTILS );
             request.setAttribute( "priceFormatter", new PriceFormatter( ) );
 
             request.getRequestDispatcher( "WEB-INF/pages/product.jsp" ).forward( request, response );

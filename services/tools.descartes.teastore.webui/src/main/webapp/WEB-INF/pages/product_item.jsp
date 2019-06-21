@@ -8,7 +8,7 @@
                 <td class="productthumb">
                     <input type='hidden' name="productid" value="${product.id}">
                     <a href="<c:url value="/product?id=${product.id}" />"><img
-                            src="${productImageHelper.getProductImageForProductId(product.id)}"
+                            src="${productImagesAsMap[product.id]}"
                             alt="${product.name}"></a>
                 </td>
                 <%-- <div class="divider col-sm-1"></div> --%>
