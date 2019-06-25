@@ -103,7 +103,10 @@ public class CategoryServlet extends AbstractUIServlet
 
             List< ProductEntity > productList = responseObject.getParsedResponseBody( );
 
-            int totalProducts = Integer.parseInt( responseObject.getResponseHeader( "X-Total-Number-Of-Results" ) );
+            //TODO test
+//            int totalProducts = Integer.parseInt( responseObject.getResponseHeader( "X-Total-Number-Of-Results" ) );
+            int totalProducts =
+                    new CountProductsOfCategoryByIdRequest( categoryID ).performRequest( ).getParsedResponseBody( );
 
             ArrayList< String > navigation = createNavigation( totalProducts, page, productsPerPage );
 
@@ -135,7 +138,7 @@ public class CategoryServlet extends AbstractUIServlet
 
     private int countProductsOfCategory( final long categoryId )
     {
-        return new CountProductsOfCategoryByIdRequest( categoryId ).performRequest( );
+        return new CountProductsOfCategoryByIdRequest( categoryId ).performRequest( ).getParsedResponseBody( );
     }
 
     private ResponseObject< List< ProductEntity > > getAllProductsOfCategoryById( final int startIndex, final int limit,
@@ -154,15 +157,18 @@ public class CategoryServlet extends AbstractUIServlet
         }
 
         List< ProductImageEntity > productImageEntities =
-                new GetProductImagesByProductIdsRequest( productIds ).performRequest( ).getParsedResponseBody();
+                new GetProductImagesByProductIdsRequest( productIds ).performRequest( ).getParsedResponseBody( );
 
         Map< Long, String > productImagesAsMap = new HashMap<>( );
 
-        for ( ProductImageEntity productImageEntity : productImageEntities )
+        if ( productImageEntities != null )
         {
-            productImagesAsMap.put(
-                    productImageEntity.getProductId( ),
-                    productImageEntity.getProductImageAsBase64String( ) );
+            for ( ProductImageEntity productImageEntity : productImageEntities )
+            {
+                productImagesAsMap.put(
+                        productImageEntity.getProductId( ),
+                        productImageEntity.getProductImageAsBase64String( ) );
+            }
         }
 
         return productImagesAsMap;

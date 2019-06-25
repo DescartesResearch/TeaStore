@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import tools.descartes.research.faasteastorelibrary.interfaces.persistence.CartItem;
+import tools.descartes.research.faasteastorelibrary.interfaces.cartitem.CartItem;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 import tools.descartes.teastore.webui.cart.CartManagerSingleton;
 

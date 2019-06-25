@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import tools.descartes.research.faasteastorelibrary.interfaces.persistence.CartItem;
+import tools.descartes.research.faasteastorelibrary.interfaces.cartitem.CartItem;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.ProductEntity;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.ProductImageEntity;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.UserEntity;
@@ -94,22 +94,25 @@ public class CartServlet extends AbstractUIServlet
 
         if ( loggedInUser == null )
         {
-//            this.logger.info( "loggedInUser is null" );
-
             UserEntity firstUser = getFirstUserFromDatabase( );
             userId = firstUser.getId( );
         }
         else
         {
-//            this.logger.info( "loggedInUser exists" );
-
             userId = loggedInUser.getId( );
         }
 
         List< CartItem > cartItems = CartManagerSingleton.getInstance( ).getCartItems( );
 
-        return new GetRecommendedProductsRequest( userId, 3, cartItems )
+        List< ProductEntity > recommendedProducts = new GetRecommendedProductsRequest( userId, 3, cartItems )
                 .performRequest( ).getParsedResponseBody( );
+
+        if ( recommendedProducts == null )
+        {
+            recommendedProducts = new LinkedList<>( );
+        }
+
+        return recommendedProducts;
     }
 
     private Map< Long, String > getProductImagesAsMap( final List< ProductEntity > products )
@@ -121,21 +124,23 @@ public class CartServlet extends AbstractUIServlet
             productIds.add( product.getId( ) );
         }
 
-        List< ProductImageEntity > productImageEntities =
-                new GetProductImagesByProductIdsRequest( productIds ).performRequest( ).getParsedResponseBody( );
-
         Map< Long, String > productImagesAsMap = new HashMap<>( );
 
-        for ( ProductImageEntity productImageEntity : productImageEntities )
+        if ( productIds.size( ) > 0 )
         {
-            productImagesAsMap.put(
-                    productImageEntity.getProductId( ),
-                    productImageEntity.getProductImageAsBase64String( ) );
+            List< ProductImageEntity > productImageEntities =
+                    new GetProductImagesByProductIdsRequest( productIds ).performRequest( ).getParsedResponseBody( );
+
+            for ( ProductImageEntity productImageEntity : productImageEntities )
+            {
+                productImagesAsMap.put(
+                        productImageEntity.getProductId( ),
+                        productImageEntity.getProductImageAsBase64String( ) );
+            }
         }
 
         return productImagesAsMap;
     }
-
 
     private UserEntity getFirstUserFromDatabase( )
     {

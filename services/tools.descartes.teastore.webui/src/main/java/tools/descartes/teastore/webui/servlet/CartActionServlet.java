@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import tools.descartes.research.faasteastorelibrary.interfaces.persistence.CartItem;
+import tools.descartes.research.faasteastorelibrary.interfaces.cartitem.CartItem;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.UserEntity;
 import tools.descartes.research.faasteastorelibrary.requests.order.ConfirmOrderRequest;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
@@ -203,12 +203,7 @@ public class CartActionServlet extends AbstractUIServlet
                     cartItems,
                     user ).performRequest( );
 
-//            blob = LoadBalancedStoreOperations.placeOrder( getSessionBlob( request ), infos[ 0 ] + " " + infos[ 1 ],
-//                    infos[ 2 ],
-//                    infos[ 3 ], infos[ 4 ],
-//                    YearMonth.parse( infos[ 6 ], DTF ).atDay( 1 ).format( DateTimeFormatter.ISO_LOCAL_DATE ), price,
-//                    infos[ 5 ] );
-//            saveSessionBlob( blob, response );
+            CartManagerSingleton.getInstance().deleteCartItems();
 
             redirect( "/", response, MESSAGECOOKIE, ORDERCONFIRMED );
         }

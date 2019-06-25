@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tools.descartes.research.faasteastorelibrary.requests.database.GenerateDatabaseTablesRequest;
+import tools.descartes.research.faasteastorelibrary.requests.database.*;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 
 /**
@@ -55,11 +55,10 @@ public class DataBaseActionServlet extends AbstractUIServlet
     protected void handleGETRequest( HttpServletRequest request, HttpServletResponse response )
             throws ServletException, IOException, LoadBalancerTimeoutException
     {
-
         if ( request.getParameter( "confirm" ) != null )
         {
-
             String[] infos = extractOrderInformation( request );
+
             if ( infos.length == 0 )
             {
                 redirect( "/database", response );
@@ -67,54 +66,28 @@ public class DataBaseActionServlet extends AbstractUIServlet
             else
             {
                 destroySessionBlob( getSessionBlob( request ), response );
-//                Response resp = ServiceLoadBalancer.loadBalanceRESTOperation( Service.PERSISTENCE, "generatedb",
-//                        String.class,
-//                        client -> client.getService( ).path( client.getApplicationURI( ) ).path( client
-//                                .getEndpointURI( ) )
-//                                .queryParam( PARAMETERS[ 0 ], infos[ 0 ] ).queryParam( PARAMETERS[ 1 ], infos[ 1 ] )
-//                                .queryParam( PARAMETERS[ 2 ], infos[ 2 ] ).queryParam( PARAMETERS[ 3 ], infos[ 3 ] )
-//                                .request( MediaType.TEXT_PLAIN ).get( ) );
-                //buffer entity to release connections
-//                resp.bufferEntity( );
-//                if ( resp.getStatus( ) == 200 )
-//                {
-//                    LOG.info( "DB is re-generating." );
-//                }
 
-                // Regenerate images
-//                List< Integer > status = LoadBalancedImageOperations.regenerateImages( );
-//                status.stream( ).filter( r -> r != 200 ).forEach(
-//                        r -> LOG.warn( "An image provider service responded with " + r + " when regenerating images."
-//						) );
-//                // Retrain recommender
-//                List< Response > recResp = ServiceLoadBalancer.multicastRESTOperation( Service.RECOMMENDER, "train",
-//                        String.class,
-//                        client -> client.getEndpointTarget( ).path( "async" ).request( MediaType.TEXT_PLAIN ).get(
-// ) );
-//                recResp.stream( ).filter( r -> r.getStatus( ) != 200 ).forEach(
-//                        r -> LOG.warn( "A recommender service responded with " + r.getStatus( ) + " when retraining."
-//						) );
-//                //buffer entity to release connections
-//                recResp.stream( ).forEach( r -> r.bufferEntity( ) );
+                int numberOfCategories = Integer.parseInt( infos[ 0 ] );
+                int productsPerCategory = Integer.parseInt( infos[ 1 ] );
+                int numberOfUsers = Integer.parseInt( infos[ 2 ] );
+                int maxOrdersPerUser = Integer.parseInt( infos[ 3 ] );
+
+                new DropTablesRequest( ).performRequest( );
+
+                new GenerateCategoriesRequest( numberOfCategories ).performRequest( );
+                new GenerateProductsRequest( productsPerCategory ).performRequest( );
+                new GenerateUsersRequest( numberOfUsers ).performRequest( );
+                new GenerateOrdersRequest( maxOrdersPerUser ).performRequest( );
+                new GenerateOrderItemsRequest( 10 ).performRequest( );
+                new GenerateProductImagesRequest( 10 ).performRequest( );
+
                 redirect( "/status", response );
             }
-
         }
         else
         {
             redirect( "/", response );
         }
-    }
-
-    private void generateDatabaseTables( )
-    {
-        new GenerateDatabaseTablesRequest(
-                2,
-                50,
-                3,
-                5,
-                5,
-                10 ).performRequest( );
     }
 
     /**
@@ -125,8 +98,8 @@ public class DataBaseActionServlet extends AbstractUIServlet
      */
     private String[] extractOrderInformation( HttpServletRequest request )
     {
-
         String[] infos = new String[ PARAMETERS.length ];
+
         for ( int i = 0; i < PARAMETERS.length; i++ )
         {
             if ( request.getParameter( PARAMETERS[ i ] ) == null )
@@ -138,7 +111,7 @@ public class DataBaseActionServlet extends AbstractUIServlet
                 infos[ i ] = request.getParameter( PARAMETERS[ i ] );
             }
         }
+
         return infos;
     }
-
 }

@@ -1,6 +1,6 @@
 package tools.descartes.teastore.webui.cart;
 
-import tools.descartes.research.faasteastorelibrary.interfaces.persistence.CartItem;
+import tools.descartes.research.faasteastorelibrary.interfaces.cartitem.CartItem;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.ProductEntity;
 import tools.descartes.research.faasteastorelibrary.requests.product.GetProductByIdRequest;
 

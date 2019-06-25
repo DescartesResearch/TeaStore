@@ -25,8 +25,8 @@
 						class="col-sm-6 col-form-label col-form-label-lg">Number of new users</label>
 					<div class="col-sm-3">
 						<input type="number" class="form-control form-control-lg"
-							name="users" id="users" placeholder="100"
-							value="100" min="1" required>
+							name="users" id="users" placeholder="5"
+							value="5" min="1" required>
 					</div>
 				</div>
 				<div class="form-group row">
