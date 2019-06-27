@@ -5,7 +5,6 @@ The TeaStore is a micro-service reference and test application to be used in ben
 The TeaStore is a distributed micro-service application featuring five distinct services plus a registry. Each service may be replicated without limit and deployed on separate devices as desired. Services communicate using REST and using the Netflix [Ribbon](https://github.com/Netflix/ribbon) client side load balancer. Each service also comes in a pre-instrumented variant that uses [Kieker](http://kieker-monitoring.net) to provide detailed information about the TeaStore's actions and behavior.
 
 Check out our **[wiki](https://github.com/DescartesResearch/TeaStore/wiki)** with information on how to [get started using/developing the TeaStore](https://github.com/DescartesResearch/TeaStore/wiki/Getting-Started), more information on the architecture and services of the Tea Store, guides on how to [run the TeaStore for benchmarking/testing](https://github.com/DescartesResearch/TeaStore/wiki/Testing-and-Benchmarking), and common [troubleshooting tips](https://github.com/DescartesResearch/TeaStore/wiki/Troubleshooting).
-
 You can also watch a short demonstration of the TeaStore running in Kubernetes with its monitoring environment enabled on **[YouTube](https://www.youtube.com/watch?v=6OcSNrErzGE&feature=youtu.be)**.
 
 ## Cite Us
