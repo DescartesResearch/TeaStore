@@ -9,7 +9,7 @@ You can also watch a short demonstration of the TeaStore running in Kubernetes w
 
 ## Cite Us
 
-The TeaStore was first published in "Proceedings of the 26th IEEE International Symposium on the Modelling, Analysis, and Simulation of Computer and Telecommunication Systems (MASCOTS2018)". If you use the TeaStore please cite the following publication:
+The TeaStore was first published in *Proceedings of the 26th IEEE International Symposium on the Modelling, Analysis, and Simulation of Computer and Telecommunication Systems (MASCOTS2018)*. If you use the TeaStore please cite the following publication:
 
     Jóakim von Kistowski, Simon Eismann, Norbert Schmitt, André Bauer, Johannes Grohmann, and Samuel Kounev.
     TeaStore: A Micro-Service Reference Application for Benchmarking, Modeling and Resource Management Research.
