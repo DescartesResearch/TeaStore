@@ -16,8 +16,6 @@ The TeaStore was first published in *Proceedings of the 26th IEEE International 
     In Proceedings of the 26th IEEE International Symposium on the Modelling, Analysis, and Simulation of
     Computer and Telecommunication Systems, Milwaukee, WI, USA, September 2018, MASCOTS '18.
 
-**Bibtex**:
-
     @inproceedings{KiEiScBaGrKo2018-MASCOTS-TeaStore,
       author = {J{\'o}akim von Kistowski and Simon Eismann and Norbert Schmitt and Andr{\'e} Bauer and Johannes Grohmann and Samuel Kounev},
       title = {{TeaStore: A Micro-Service Reference Application for Benchmarking, Modeling and Resource Management Research}},
