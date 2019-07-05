@@ -2,8 +2,8 @@ package tools.descartes.teastore.registryclient.rest;
 
 import javax.ws.rs.core.Response;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -12,7 +12,7 @@ import kieker.monitoring.core.registry.SessionRegistry;
 
 /**
  * Wrapper for http responses.
- * 
+ *
  * @author Simon
  *
  */
@@ -22,7 +22,7 @@ public final class ResponseWrapper {
   private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
   private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
   private static final String HEADER_FIELD = "KiekerTracingInfo";
-  private static final Log LOG = LogFactory.getLog(ResponseWrapper.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ResponseWrapper.class);
   private static final String SESSION_ID_ASYNC_TRACE = "NOSESSION-ASYNCIN";
 
   /**
@@ -34,7 +34,7 @@ public final class ResponseWrapper {
 
   /**
    * Hook for monitoring.
-   * 
+   *
    * @param response
    *          response
    * @return response response

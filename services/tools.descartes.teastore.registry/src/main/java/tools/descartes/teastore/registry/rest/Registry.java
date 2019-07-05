@@ -134,13 +134,13 @@ public final class Registry {
   public boolean register(String name, String location) {
     updateHeartbeatMap(name, location);
 
-    List<String> locations = getLocations(name);
-    if (locations.contains(location)) {
-      return false;
-    }
-
     writeLock.lock();
     try {
+      List<String> locations = getLocations(name);
+      if (locations.contains(location)) {
+        return false;
+      }
+    
       serviceLocationMap.get(name).add(location);
       LOG.info("Registered " + name + "@" + location);
       return true;

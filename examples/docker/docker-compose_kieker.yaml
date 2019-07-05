@@ -1,0 +1,62 @@
+version: '3'
+services:
+  rabbitmq:
+    image: descartesresearch/teastore-rabbitmq
+    expose:
+      - "5672"
+    ports:
+      - "8081:8080"
+      - "5672:5672"
+      - "15672:15672"
+  registry:
+    image: descartesresearch/teastore-registry
+    expose:
+      - "8080"
+  db:
+    image: descartesresearch/teastore-db
+    expose:
+      - "3306"
+    ports:
+      - "3306:3306"
+  persistence:
+    image: descartesresearch/teastore-persistence
+    expose:
+      - "8080"
+    environment:
+      HOST_NAME: "persistence"
+      REGISTRY_HOST: "registry"
+      DB_HOST: "db"
+      DB_PORT: "3306"
+      RABBITMQ_HOST: "rabbitmq"
+  auth:
+    image: descartesresearch/teastore-auth
+    expose:
+      - "8080"
+    environment:
+      HOST_NAME: "auth"
+      REGISTRY_HOST: "registry"
+      RABBITMQ_HOST: "rabbitmq"
+  image:
+    image: descartesresearch/teastore-image
+    expose:
+      - "8080"
+    environment:
+      HOST_NAME: "image"
+      REGISTRY_HOST: "registry"
+      RABBITMQ_HOST: "rabbitmq"
+  recommender:
+    image: descartesresearch/teastore-recommender
+    expose:
+      - "8080"
+    environment:
+      HOST_NAME: "recommender"
+      REGISTRY_HOST: "registry"
+      RABBITMQ_HOST: "rabbitmq"
+  webui:
+    image: descartesresearch/teastore-webui
+    environment:
+      HOST_NAME: "webui"
+      REGISTRY_HOST: "registry"
+      RABBITMQ_HOST: "rabbitmq"
+    ports:
+      - "8080:8080"
