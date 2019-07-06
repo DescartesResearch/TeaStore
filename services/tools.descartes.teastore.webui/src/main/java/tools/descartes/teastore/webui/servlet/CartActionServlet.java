@@ -14,23 +14,22 @@
 
 package tools.descartes.teastore.webui.servlet;
 
-import java.io.IOException;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.logging.Logger;
+import tools.descartes.research.faasteastorelibrary.interfaces.cartitem.CartItem;
+import tools.descartes.research.faasteastorelibrary.interfaces.persistence.ProductEntity;
+import tools.descartes.research.faasteastorelibrary.interfaces.persistence.UserEntity;
+import tools.descartes.research.faasteastorelibrary.requests.order.ConfirmOrderRequest;
+import tools.descartes.research.faasteastorelibrary.requests.product.GetProductByIdRequest;
+import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import tools.descartes.research.faasteastorelibrary.interfaces.cartitem.CartItem;
-import tools.descartes.research.faasteastorelibrary.interfaces.persistence.UserEntity;
-import tools.descartes.research.faasteastorelibrary.requests.order.ConfirmOrderRequest;
-import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
-import tools.descartes.teastore.webui.authentication.AuthenticatorSingleton;
-import tools.descartes.teastore.webui.cart.CartManagerSingleton;
+import java.io.IOException;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Servlet for handling all cart actions.
@@ -69,7 +68,7 @@ public class CartActionServlet extends AbstractUIServlet
             {
                 long productID = Long.parseLong( request.getParameter( "productid" ) );
 
-                addToCart( productID );
+                addToCart( productID, request );
 
                 redirect( "/cart", response, MESSAGECOOKIE, String.format( ADDPRODUCT, productID ) );
 
@@ -79,7 +78,7 @@ public class CartActionServlet extends AbstractUIServlet
             {
                 long productID = Long.parseLong( param.substring( "removeProduct_".length( ) ) );
 
-                deleteFromCart( productID );
+                deleteFromCart( productID, request );
 
                 redirect( "/cart", response, MESSAGECOOKIE, String.format( REMOVEPRODUCT, productID ) );
 
@@ -87,9 +86,7 @@ public class CartActionServlet extends AbstractUIServlet
             }
             else if ( param.contains( "updateCartQuantities" ) )
             {
-                List< CartItem > cartItems = CartManagerSingleton.getInstance( ).getCartItems( );
-
-                updateCartItems( request, cartItems, response );
+                updateCartItems( request, response );
 
                 redirect( "/cart", response, MESSAGECOOKIE, CARTUPDATED );
 
@@ -97,25 +94,19 @@ public class CartActionServlet extends AbstractUIServlet
             }
             else if ( param.contains( "proceedtoCheckout" ) )
             {
-                this.logger.info( "isLoggedIn(): " + isLoggedIn( ) );
+                this.logger.info( "isLoggedIn(): " + isLoggedIn( request ) );
 
-                if ( isLoggedIn( ) )
+                if ( isLoggedIn( request ) )
                 {
-//                    List< OrderItem > orderItems = getSessionBlob( request ).getOrderItems( );
+                    updateCartItems( request, response );
 
-                    List< CartItem > cartItems = CartManagerSingleton.getInstance( ).getCartItems( );
-
-                    this.logger.info( "cartItems.size(): " + cartItems.size( ) );
-
-                    updateCartItems( request, cartItems, response );
-
-                    this.logger.info( "move to /order" );
+                    this.logger.info( "navigate to /order" );
 
                     redirect( "/order", response );
                 }
                 else
                 {
-                    this.logger.info( "move to /login" );
+                    this.logger.info( "navigate to /login" );
 
                     redirect( "/login", response );
                 }
@@ -130,20 +121,72 @@ public class CartActionServlet extends AbstractUIServlet
         }
     }
 
-    private void addToCart( final long productId )
+    private void addToCart( final long productId, final HttpServletRequest request )
     {
-        CartManagerSingleton.getInstance( ).addCartItem( productId );
+        List< CartItem > cartItems = getCartItems( request );
+
+        boolean isProductAlreadyInCart = false;
+
+        for ( CartItem cartItem : cartItems )
+        {
+            if ( cartItem.getProduct( ).getId( ) == productId )
+            {
+                isProductAlreadyInCart = true;
+
+                cartItem.setQuantity( cartItem.getQuantity( ) + 1 );
+
+                break;
+            }
+        }
+
+        if ( !isProductAlreadyInCart )
+        {
+            CartItem cartItem = createNewCartItem( productId );
+
+            cartItems.add( cartItem );
+        }
+
+        request.getSession( ).setAttribute( "cartItems", cartItems );
     }
 
-    private void deleteFromCart( final long productId )
+    private CartItem createNewCartItem( final long productId )
     {
-        CartManagerSingleton.getInstance( ).deleteCartItem( productId );
+        ProductEntity product = getProductById( productId );
+
+        CartItem cartItem = new CartItem( );
+        cartItem.setProduct( product );
+        cartItem.setQuantity( 1 );
+
+        return cartItem;
     }
 
-    private void updateCartItems( HttpServletRequest request, List< CartItem > cartItems, HttpServletResponse
-            response )
+    private ProductEntity getProductById( final long productId )
+    {
+        return new GetProductByIdRequest( productId ).performRequest( ).getParsedResponseBody( );
+    }
+
+    private void deleteFromCart( final long productId, final HttpServletRequest request )
+    {
+        List< CartItem > cartItems = getCartItems( request );
+
+        for ( CartItem cartItem : cartItems )
+        {
+            if ( cartItem.getProduct( ).getId( ) == productId )
+            {
+                cartItems.remove( cartItem );
+
+                break;
+            }
+        }
+
+        request.getSession( ).setAttribute( "cartItems", cartItems );
+    }
+
+    private void updateCartItems( HttpServletRequest request, HttpServletResponse response )
     {
 //        SessionBlob blob = getSessionBlob( request );
+
+        List< CartItem > cartItems = getCartItems( request );
 
         for ( CartItem cartItem : cartItems )
         {
@@ -155,6 +198,8 @@ public class CartActionServlet extends AbstractUIServlet
                 cartItem.setQuantity( quantity );
             }
         }
+
+        request.getSession( ).setAttribute( "cartItems", cartItems );
 
 //        saveSessionBlob( blob, response );
     }
@@ -173,14 +218,7 @@ public class CartActionServlet extends AbstractUIServlet
         {
 //            SessionBlob blob = getSessionBlob( request );
 
-            List< CartItem > cartItems = CartManagerSingleton.getInstance( ).getCartItems( );
-
-//            long price = 0;
-//
-//            for ( CartItem cartItem : cartItems )
-//            {
-//                price += cartItem.getQuantity( ) * cartItem.getProduct( ).getListPriceInCents();
-//            }
+            List< CartItem > cartItems = getCartItems( request );
 
             String addressName = infos[ 0 ] + " " + infos[ 1 ];
             String address1 = infos[ 2 ];
@@ -189,7 +227,7 @@ public class CartActionServlet extends AbstractUIServlet
             String creditCardNumber = infos[ 5 ];
             String creditCardExpiryDate = infos[ 6 ];
 
-            UserEntity user = AuthenticatorSingleton.getInstance( ).getUser( );
+            UserEntity user = getLoggedInUser( request );
 
             this.logger.info( "confirmOrder request" );
 
@@ -203,7 +241,7 @@ public class CartActionServlet extends AbstractUIServlet
                     cartItems,
                     user ).performRequest( );
 
-            CartManagerSingleton.getInstance().deleteCartItems();
+            request.getSession( ).removeAttribute( "cartItems" );
 
             redirect( "/", response, MESSAGECOOKIE, ORDERCONFIRMED );
         }

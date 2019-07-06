@@ -14,14 +14,6 @@
 
 package tools.descartes.teastore.webui.servlet;
 
-import java.io.IOException;
-import java.util.*;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.LoggerFactory;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.CategoryEntity;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.ProductEntity;
@@ -32,6 +24,14 @@ import tools.descartes.research.faasteastorelibrary.requests.image.GetProductIma
 import tools.descartes.research.faasteastorelibrary.requests.product.CountProductsOfCategoryByIdRequest;
 import tools.descartes.research.faasteastorelibrary.requests.product.GetAllProductsOfCategoryByIdRequest;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Servlet implementation for the web view of "Category".
@@ -68,6 +68,8 @@ public class CategoryServlet extends AbstractUIServlet
         {
             checkforCookie( request, response );
 
+            LOG.info( "USER GET CATEGORY: sessionID = " + request.getSession().getId() );
+
             long categoryID = Long.parseLong( request.getParameter( "category" ) );
 
             CategoryEntity category = getCategoryById( categoryID );
@@ -103,8 +105,6 @@ public class CategoryServlet extends AbstractUIServlet
 
             List< ProductEntity > productList = responseObject.getParsedResponseBody( );
 
-            //TODO test
-//            int totalProducts = Integer.parseInt( responseObject.getResponseHeader( "X-Total-Number-Of-Results" ) );
             int totalProducts =
                     new CountProductsOfCategoryByIdRequest( categoryID ).performRequest( ).getParsedResponseBody( );
 
@@ -116,7 +116,7 @@ public class CategoryServlet extends AbstractUIServlet
             request.setAttribute( "productList", productList );
             request.setAttribute( "productImagesAsMap", getProductImagesAsMap( productList ) );
             request.setAttribute( "category", category.getName( ) );
-            request.setAttribute( "login", isLoggedIn( ) );
+            request.setAttribute( "login", isLoggedIn( request ) );
             request.setAttribute( "categoryID", categoryID );
             request.setAttribute( "currentnumber", productsPerPage );
             request.setAttribute( "pagination", navigation );

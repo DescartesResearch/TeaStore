@@ -13,17 +13,16 @@
  */
 package tools.descartes.teastore.webui.servlet;
 
-import java.io.IOException;
-import java.util.List;
+import tools.descartes.research.faasteastorelibrary.interfaces.cartitem.CartItem;
+import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import tools.descartes.research.faasteastorelibrary.interfaces.cartitem.CartItem;
-import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
-import tools.descartes.teastore.webui.cart.CartManagerSingleton;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Servlet implementation for the web view of "Order".
@@ -53,7 +52,7 @@ public class OrderServlet extends AbstractUIServlet
     {
 //        checkforCookie( request, response );
 
-        List<CartItem> cartItems = CartManagerSingleton.getInstance().getCartItems();
+        List< CartItem > cartItems = getCartItems( request );
 
         if ( cartItems.size( ) == 0 )
         {
@@ -75,7 +74,7 @@ public class OrderServlet extends AbstractUIServlet
         request.setAttribute( "CategoryList", getAllCategories( ) );
         request.setAttribute( "storeIcon", getStoreIcon( ) );
         request.setAttribute( "title", "TeaStore Order" );
-        request.setAttribute( "login", isLoggedIn( ) );
+        request.setAttribute( "login", isLoggedIn( request ) );
 
         request.getRequestDispatcher( "WEB-INF/pages/order.jsp" ).forward( request, response );
     }

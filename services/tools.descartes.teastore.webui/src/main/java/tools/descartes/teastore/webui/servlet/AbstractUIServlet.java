@@ -13,6 +13,27 @@
  */
 package tools.descartes.teastore.webui.servlet;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.descartes.research.faasteastorelibrary.interfaces.cartitem.CartItem;
+import tools.descartes.research.faasteastorelibrary.interfaces.image.ExistingImage;
+import tools.descartes.research.faasteastorelibrary.interfaces.image.size.ImageSize;
+import tools.descartes.research.faasteastorelibrary.interfaces.image.size.ImageSizePreset;
+import tools.descartes.research.faasteastorelibrary.interfaces.persistence.CategoryEntity;
+import tools.descartes.research.faasteastorelibrary.interfaces.persistence.UserEntity;
+import tools.descartes.research.faasteastorelibrary.requests.category.GetAllCategoriesRequest;
+import tools.descartes.research.faasteastorelibrary.requests.image.GetWebImageRequest;
+import tools.descartes.teastore.entities.Category;
+import tools.descartes.teastore.entities.message.SessionBlob;
+import tools.descartes.teastore.registryclient.Service;
+import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
+import tools.descartes.teastore.registryclient.util.NotFoundException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -20,29 +41,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import tools.descartes.research.faasteastorelibrary.interfaces.image.ExistingImage;
-import tools.descartes.research.faasteastorelibrary.interfaces.image.size.ImageSize;
-import tools.descartes.research.faasteastorelibrary.interfaces.image.size.ImageSizePreset;
-import tools.descartes.research.faasteastorelibrary.interfaces.persistence.CategoryEntity;
-import tools.descartes.research.faasteastorelibrary.requests.category.GetAllCategoriesRequest;
-import tools.descartes.research.faasteastorelibrary.requests.image.GetWebImageRequest;
-import tools.descartes.teastore.registryclient.Service;
-import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
-import tools.descartes.teastore.registryclient.util.NotFoundException;
-import tools.descartes.teastore.entities.Category;
-import tools.descartes.teastore.entities.message.SessionBlob;
-import tools.descartes.teastore.webui.authentication.AuthenticatorSingleton;
 
 /**
  * Abstract servlet for the webUI.
@@ -52,7 +52,6 @@ import tools.descartes.teastore.webui.authentication.AuthenticatorSingleton;
  */
 public abstract class AbstractUIServlet extends HttpServlet
 {
-
     private static final long serialVersionUID = 1L;
     /**
      * Text for message cookie.
@@ -111,14 +110,46 @@ public abstract class AbstractUIServlet extends HttpServlet
                 iconSize.getHeight( ) ).performRequest( ).getParsedResponseBody( );
     }
 
-    protected boolean isLoggedIn( )
+    protected boolean isLoggedIn( final HttpServletRequest request )
     {
-        return AuthenticatorSingleton.getInstance( ).isUserLoggedIn( );
+        boolean isLoggedIn = false;
+
+        UserEntity userEntity = getLoggedInUser( request );
+
+        if ( userEntity != null )
+        {
+            isLoggedIn = true;
+        }
+
+        return isLoggedIn;
+    }
+
+    /**
+     * returns null if the user is not logged in
+     *
+     * @param request
+     * @return
+     */
+    protected UserEntity getLoggedInUser( final HttpServletRequest request )
+    {
+        return ( UserEntity ) request.getSession( ).getAttribute( "user" );
     }
 
     protected List< CategoryEntity > getAllCategories( )
     {
         return new GetAllCategoriesRequest( 0, 10 ).performRequest( ).getParsedResponseBody( );
+    }
+
+    protected List< CartItem > getCartItems( final HttpServletRequest request )
+    {
+        List< CartItem > cartItems = ( List< CartItem > ) request.getSession( ).getAttribute( "cartItems" );
+
+        if ( cartItems == null )
+        {
+            cartItems = new LinkedList<>( );
+        }
+
+        return cartItems;
     }
 
     /**

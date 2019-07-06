@@ -14,22 +14,18 @@
 
 package tools.descartes.teastore.webui.servlet;
 
-import java.io.IOException;
-import java.util.List;
+import tools.descartes.research.faasteastorelibrary.interfaces.image.ExistingImage;
+import tools.descartes.research.faasteastorelibrary.interfaces.image.size.ImageSize;
+import tools.descartes.research.faasteastorelibrary.interfaces.image.size.ImageSizePreset;
+import tools.descartes.research.faasteastorelibrary.requests.image.GetWebImageRequest;
+import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import tools.descartes.research.faasteastorelibrary.interfaces.image.ExistingImage;
-import tools.descartes.research.faasteastorelibrary.interfaces.image.size.ImageSize;
-import tools.descartes.research.faasteastorelibrary.interfaces.image.size.ImageSizePreset;
-import tools.descartes.research.faasteastorelibrary.interfaces.persistence.CategoryEntity;
-import tools.descartes.research.faasteastorelibrary.requests.category.GetAllCategoriesRequest;
-import tools.descartes.research.faasteastorelibrary.requests.image.GetWebImageRequest;
-import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
-import tools.descartes.teastore.webui.authentication.AuthenticatorSingleton;
+import java.io.IOException;
 
 /**
  * Servlet implementation for the web view of "Error page".
@@ -68,7 +64,7 @@ public class ErrorServlet extends AbstractUIServlet
             request.setAttribute( "storeIcon", getStoreIcon( ) );
             request.setAttribute( "errorImage", getErrorImage( ) );
             request.setAttribute( "title", "TeaStore Error" );
-            request.setAttribute( "login", isLoggedIn( ) );
+            request.setAttribute( "login", isLoggedIn( request ) );
 
             request.getRequestDispatcher( "WEB-INF/pages/error.jsp" ).forward( request, response );
         }

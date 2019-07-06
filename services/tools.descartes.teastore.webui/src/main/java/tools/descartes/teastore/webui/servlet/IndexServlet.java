@@ -13,14 +13,14 @@
  */
 package tools.descartes.teastore.webui.servlet;
 
-import java.io.IOException;
+import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
+import java.io.IOException;
 
 /**
  * Servlet implementation for the web view of "Index".
@@ -51,7 +51,7 @@ public class IndexServlet extends AbstractUIServlet
 
         request.setAttribute( "CategoryList", getAllCategories( ) );
         request.setAttribute( "title", "TeaStore Home" );
-        request.setAttribute( "login", isLoggedIn( ) );
+        request.setAttribute( "login", isLoggedIn( request ) );
         request.setAttribute( "storeIcon", getStoreIcon( ) );
 
         request.getRequestDispatcher( "WEB-INF/pages/index.jsp" ).forward( request, response );

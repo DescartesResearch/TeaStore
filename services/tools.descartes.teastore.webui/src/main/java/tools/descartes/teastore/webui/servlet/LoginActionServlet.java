@@ -13,19 +13,18 @@
  */
 package tools.descartes.teastore.webui.servlet;
 
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.UserEntity;
 import tools.descartes.research.faasteastorelibrary.requests.authentication.BasicAuthRequest;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
-import tools.descartes.teastore.webui.authentication.AuthenticatorSingleton;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * Servlet for handling the login actions.
@@ -64,16 +63,26 @@ public class LoginActionServlet extends AbstractUIServlet
     protected void handlePOSTRequest( HttpServletRequest request, HttpServletResponse response )
             throws ServletException, IOException, LoadBalancerTimeoutException
     {
-        boolean login = false;
-
         if ( request.getParameter( "username" ) != null && request.getParameter( "password" ) != null )
         {
 //            SessionBlob blob = LoadBalancedStoreOperations.login( getSessionBlob( request ),
 //                    request.getParameter( "username" ), request.getParameter( "password" ) );
 
-            loginUser( request.getParameter( "username" ), request.getParameter( "password" ) );
+            LOG.info( "USER TRIES TO LOG IN: sessionID = " + request.getSession( ).getId( ) );
 
-            if ( isLoggedIn( ) )
+            String username = request.getParameter( "username" );
+            String password = request.getParameter( "password" );
+
+            loginUser( username, password, request );
+
+            if ( request.getSession( ).getAttribute( "user" ) != null )
+            {
+                UserEntity userFromSession = ( UserEntity ) request.getSession( ).getAttribute( "user" );
+
+                LOG.info( "USER AFTER LOG IN: sessionID.getUserId = " + userFromSession.getId( ) );
+            }
+
+            if ( isLoggedIn( request ) )
             {
 //                saveSessionBlob( blob, response );
 
@@ -94,10 +103,12 @@ public class LoginActionServlet extends AbstractUIServlet
         }
         else if ( request.getParameter( "logout" ) != null )
         {
-            logoutUser( );
+            logoutUser( request );
+
 //            SessionBlob blob = LoadBalancedStoreOperations.logout( getSessionBlob( request ) );
 //            saveSessionBlob( blob, response );
 //            destroySessionBlob( blob, response );
+
             redirect( "/", response, MESSAGECOOKIE, SUCESSLOGOUT );
         }
         else
@@ -106,7 +117,7 @@ public class LoginActionServlet extends AbstractUIServlet
         }
     }
 
-    private void loginUser( final String userName, final String password )
+    private void loginUser( final String userName, final String password, final HttpServletRequest request )
     {
         UserEntity user = new BasicAuthRequest( userName, password ).performRequest( ).getParsedResponseBody( );
 
@@ -114,13 +125,12 @@ public class LoginActionServlet extends AbstractUIServlet
         {
             LOG.info( "loginUser() -> User.username = " + user.getUserName( ) );
 
-            AuthenticatorSingleton.getInstance( ).setUser( user );
+            request.getSession( ).setAttribute( "user", user );
         }
-
     }
 
-    private void logoutUser( )
+    private void logoutUser( final HttpServletRequest request )
     {
-        AuthenticatorSingleton.getInstance( ).logOutUser( );
+        request.getSession( ).removeAttribute( "user" );
     }
 }

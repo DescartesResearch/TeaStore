@@ -14,19 +14,6 @@
 
 package tools.descartes.teastore.webui.servlet;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import tools.descartes.research.faasteastorelibrary.interfaces.cartitem.CartItem;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.ProductEntity;
 import tools.descartes.research.faasteastorelibrary.interfaces.persistence.ProductImageEntity;
@@ -35,8 +22,18 @@ import tools.descartes.research.faasteastorelibrary.requests.image.GetProductIma
 import tools.descartes.research.faasteastorelibrary.requests.recommender.GetRecommendedProductsRequest;
 import tools.descartes.research.faasteastorelibrary.requests.user.GetAllUsersRequest;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
-import tools.descartes.teastore.webui.authentication.AuthenticatorSingleton;
-import tools.descartes.teastore.webui.cart.CartManagerSingleton;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * Servlet implementation for the web view of "Cart".
@@ -70,10 +67,10 @@ public class CartServlet extends AbstractUIServlet
         request.setAttribute( "storeIcon", getStoreIcon( ) );
         request.setAttribute( "title", "TeaStore Cart" );
         request.setAttribute( "CategoryList", getAllCategories( ) );
-        request.setAttribute( "CartItems", getCartItems( ) );
-        request.setAttribute( "login", isLoggedIn( ) );
+        request.setAttribute( "CartItems", getCartItems( request ) );
+        request.setAttribute( "login", isLoggedIn( request ) );
 
-        List< ProductEntity > recommendedProducts = getRecommendedProducts( );
+        List< ProductEntity > recommendedProducts = getRecommendedProducts( request );
 
         request.setAttribute( "RecommendedProducts", recommendedProducts );
         request.setAttribute( "productImagesAsMap", getProductImagesAsMap( recommendedProducts ) );
@@ -81,14 +78,9 @@ public class CartServlet extends AbstractUIServlet
         request.getRequestDispatcher( "WEB-INF/pages/cart.jsp" ).forward( request, response );
     }
 
-    private List< CartItem > getCartItems( )
+    private List< ProductEntity > getRecommendedProducts( final HttpServletRequest request )
     {
-        return CartManagerSingleton.getInstance( ).getCartItems( );
-    }
-
-    private List< ProductEntity > getRecommendedProducts( )
-    {
-        UserEntity loggedInUser = AuthenticatorSingleton.getInstance( ).getUser( );
+        UserEntity loggedInUser = getLoggedInUser( request );
 
         long userId;
 
@@ -102,7 +94,7 @@ public class CartServlet extends AbstractUIServlet
             userId = loggedInUser.getId( );
         }
 
-        List< CartItem > cartItems = CartManagerSingleton.getInstance( ).getCartItems( );
+        List< CartItem > cartItems = getCartItems( request );
 
         List< ProductEntity > recommendedProducts = new GetRecommendedProductsRequest( userId, 3, cartItems )
                 .performRequest( ).getParsedResponseBody( );

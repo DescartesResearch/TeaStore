@@ -13,27 +13,26 @@
  */
 package tools.descartes.teastore.webui.servlet;
 
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
+import tools.descartes.research.faasteastorelibrary.interfaces.image.size.ImageSize;
+import tools.descartes.research.faasteastorelibrary.interfaces.image.size.ImageSizePreset;
+import tools.descartes.research.faasteastorelibrary.interfaces.persistence.ProductEntity;
+import tools.descartes.research.faasteastorelibrary.requests.image.GetProductImageByProductIdRequest;
+import tools.descartes.research.faasteastorelibrary.requests.product.GetProductByIdRequest;
+import tools.descartes.teastore.entities.OrderItem;
+import tools.descartes.teastore.entities.Product;
+import tools.descartes.teastore.entities.message.SessionBlob;
+import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
+import tools.descartes.teastore.registryclient.rest.LoadBalancedRecommenderOperations;
+import tools.descartes.teastore.webui.servlet.formatter.PriceFormatter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import tools.descartes.research.faasteastorelibrary.interfaces.image.size.ImageSize;
-import tools.descartes.research.faasteastorelibrary.interfaces.image.size.ImageSizePreset;
-import tools.descartes.research.faasteastorelibrary.interfaces.persistence.ProductEntity;
-import tools.descartes.research.faasteastorelibrary.requests.image.GetProductImageByProductIdRequest;
-import tools.descartes.research.faasteastorelibrary.requests.product.GetProductByIdRequest;
-import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
-import tools.descartes.teastore.registryclient.rest.LoadBalancedRecommenderOperations;
-import tools.descartes.teastore.entities.OrderItem;
-import tools.descartes.teastore.entities.Product;
-import tools.descartes.teastore.entities.message.SessionBlob;
-import tools.descartes.teastore.webui.servlet.formatter.PriceFormatter;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Servlet implementation for the web view of "Product".
@@ -71,7 +70,7 @@ public class ProductServlet extends AbstractUIServlet
 
             SessionBlob blob = getSessionBlob( request );
 
-            request.setAttribute( "login", isLoggedIn( ) );
+            request.setAttribute( "login", isLoggedIn( request ) );
 
 //            Product p = LoadBalancedCRUDOperations.getEntity( Service.PERSISTENCE, "products",
 //                    Product.class, id );

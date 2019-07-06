@@ -13,23 +13,21 @@
  */
 package tools.descartes.teastore.webui.servlet;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.logging.Logger;
+import tools.descartes.research.faasteastorelibrary.interfaces.persistence.OrderEntity;
+import tools.descartes.research.faasteastorelibrary.interfaces.persistence.UserEntity;
+import tools.descartes.research.faasteastorelibrary.requests.order.GetAllOrdersOfUserByIdRequest;
+import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
+import tools.descartes.teastore.webui.servlet.formatter.DateTimeFormatter;
+import tools.descartes.teastore.webui.servlet.formatter.PriceFormatter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import tools.descartes.research.faasteastorelibrary.interfaces.persistence.OrderEntity;
-import tools.descartes.research.faasteastorelibrary.interfaces.persistence.UserEntity;
-import tools.descartes.research.faasteastorelibrary.requests.order.GetAllOrdersOfUserByIdRequest;
-import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
-import tools.descartes.teastore.webui.authentication.AuthenticatorSingleton;
-import tools.descartes.teastore.webui.servlet.formatter.DateTimeFormatter;
-import tools.descartes.teastore.webui.servlet.formatter.PriceFormatter;
+import java.io.IOException;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Servlet implementation for the web view of "Profile".
@@ -60,33 +58,26 @@ public class ProfileServlet extends AbstractUIServlet
     {
         checkforCookie( request, response );
 
-        if ( !isLoggedIn( ) )
+        if ( !isLoggedIn( request ) )
         {
             redirect( "/", response );
         }
         else
         {
-            UserEntity user = getUser( );
+            UserEntity user = getLoggedInUser( request );
 
             request.setAttribute( "storeIcon", getStoreIcon( ) );
             request.setAttribute( "CategoryList", getAllCategories( ) );
             request.setAttribute( "title", "TeaStore Home" );
-            request.setAttribute( "User", getUser( ) );
+            request.setAttribute( "User", user );
             request.setAttribute( "Orders", getAllOrdersOfUserById( user.getId( ) ) );
-            request.setAttribute( "login", isLoggedIn( ) );
+            request.setAttribute( "login", isLoggedIn( request ) );
 
             request.setAttribute( "dateTimeFormatter", new DateTimeFormatter( ) );
             request.setAttribute( "priceFormatter", new PriceFormatter( ) );
 
             request.getRequestDispatcher( "WEB-INF/pages/profile.jsp" ).forward( request, response );
         }
-    }
-
-    private UserEntity getUser( )
-    {
-        LOG.info( "getUser() -> " + AuthenticatorSingleton.getInstance( ).getUser( ).getId( ) );
-
-        return AuthenticatorSingleton.getInstance( ).getUser( );
     }
 
     private List< OrderEntity > getAllOrdersOfUserById( final long userId )

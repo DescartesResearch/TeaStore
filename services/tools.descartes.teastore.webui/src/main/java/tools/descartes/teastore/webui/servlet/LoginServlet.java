@@ -13,16 +13,16 @@
  */
 package tools.descartes.teastore.webui.servlet;
 
-import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
+import java.io.IOException;
 
 /**
  * Servlet implementation for the web view of "Login".
@@ -55,7 +55,7 @@ public class LoginServlet extends AbstractUIServlet
         request.setAttribute( "CategoryList", getAllCategories( ) );
         request.setAttribute( "storeIcon", getStoreIcon( ) );
         request.setAttribute( "title", "TeaStore Login" );
-        request.setAttribute( "login", isLoggedIn( ) );
+        request.setAttribute( "login", isLoggedIn( request ) );
         request.setAttribute( "referer", request.getHeader( "Referer" ) );
 
         request.getRequestDispatcher( "WEB-INF/pages/login.jsp" ).forward( request, response );
