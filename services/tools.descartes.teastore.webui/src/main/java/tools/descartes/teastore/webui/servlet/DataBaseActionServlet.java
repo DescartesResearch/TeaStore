@@ -16,13 +16,13 @@ package tools.descartes.teastore.webui.servlet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tools.descartes.research.faasteastorelibrary.functions.database.image.generator.ProductImageGenerator;
-import tools.descartes.research.faasteastorelibrary.functions.image.util.Base64Encoder;
-import tools.descartes.research.faasteastorelibrary.functions.image.util.PrependMediaTypeToBase64String;
-import tools.descartes.research.faasteastorelibrary.interfaces.persistence.ProductImageEntity;
+import tools.descartes.research.faasteastorelibrary.functions.database.category.generator.MultipleCategoryGenerator;
+import tools.descartes.research.faasteastorelibrary.functions.database.image.generator.MultipleProductImageGenerator;
+import tools.descartes.research.faasteastorelibrary.functions.database.order.generator.MultipleOrderGenerator;
+import tools.descartes.research.faasteastorelibrary.functions.database.orderitem.generator.MultipleOrderItemGenerator;
+import tools.descartes.research.faasteastorelibrary.functions.database.product.generator.MultipleProductGenerator;
+import tools.descartes.research.faasteastorelibrary.functions.database.user.generator.MultipleUserGenerator;
 import tools.descartes.research.faasteastorelibrary.requests.database.*;
-import tools.descartes.research.faasteastorelibrary.requests.image.CreateNewProductImageRequest;
-import tools.descartes.research.faasteastorelibrary.requests.product.GetAllProductIdsRequest;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;
 
 import javax.servlet.ServletException;
@@ -30,9 +30,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Servlet implementation for handling the data base action.
@@ -77,16 +75,17 @@ public class DataBaseActionServlet extends AbstractUIServlet
                 int productsPerCategory = Integer.parseInt( infos[ 1 ] );
                 int numberOfUsers = Integer.parseInt( infos[ 2 ] );
                 int maxOrdersPerUser = Integer.parseInt( infos[ 3 ] );
+                int maxItemsPerOrder = 5;
+                int numberOfShapes = 6;
 
-                new DropTablesRequest( ).performRequest( );
+                dropTables( );
 
-                new GenerateCategoriesRequest( numberOfCategories ).performRequest( );
-                new GenerateProductsRequest( productsPerCategory ).performRequest( );
-                new GenerateUsersRequest( numberOfUsers ).performRequest( );
-                new GenerateOrdersRequest( maxOrdersPerUser ).performRequest( );
-                new GenerateOrderItemsRequest( 10 ).performRequest( );
-//                new GenerateProductImagesRequest( 10 ).performRequest( );
-                generateProductImages( 10 );
+                generateCategories( numberOfCategories );
+                generateProducts( productsPerCategory );
+                generateUsers( numberOfUsers );
+                generateOrders( maxOrdersPerUser );
+                generateOrderItems( maxItemsPerOrder );
+                generateProductImages( numberOfShapes );
 
                 redirect( "/status", response );
             }
@@ -122,44 +121,38 @@ public class DataBaseActionServlet extends AbstractUIServlet
         return infos;
     }
 
+    private void dropTables( )
+    {
+        new DropTablesRequest( ).performRequest( );
+    }
+
+    private void generateCategories( final int numberOfCategories )
+    {
+        new MultipleCategoryGenerator( numberOfCategories ).generate( );
+    }
+
+    private void generateProducts( final int productsPerCategory )
+    {
+        new MultipleProductGenerator( productsPerCategory ).generate( );
+    }
+
+    private void generateUsers( final int numberOfUsers )
+    {
+        new MultipleUserGenerator( numberOfUsers ).generate( );
+    }
+
+    private void generateOrders( final int maxOrdersPerUser )
+    {
+        new MultipleOrderGenerator( maxOrdersPerUser ).generate( );
+    }
+
+    private void generateOrderItems( final int maxItemsPerOrder )
+    {
+        new MultipleOrderItemGenerator( maxItemsPerOrder ).generate( );
+    }
+
     private void generateProductImages( final int numberOfShapes )
     {
-        List< Long > listOfProductIds = getAllProductIds( );
-
-        for ( Long productId : listOfProductIds )
-        {
-            BufferedImage productImage = generateNewProductImage( productId, numberOfShapes );
-
-            String base64String = convertBufferedImageToBase64String( productImage );
-
-            base64String = prependMediaType( base64String );
-
-            postProductImage( new ProductImageEntity( productId, base64String ) );
-        }
-    }
-
-    private List< Long > getAllProductIds( )
-    {
-        return new GetAllProductIdsRequest( 0, 0 ).performRequest( ).getParsedResponseBody( );
-    }
-
-    private BufferedImage generateNewProductImage( final long productId, final int numberOfShapes )
-    {
-        return new ProductImageGenerator( ).generateNewProductImage( productId, numberOfShapes );
-    }
-
-    private String convertBufferedImageToBase64String( final BufferedImage productImage )
-    {
-        return Base64Encoder.encode( productImage, "png" );
-    }
-
-    private String prependMediaType( final String base64String )
-    {
-        return PrependMediaTypeToBase64String.prependMediaType( base64String );
-    }
-
-    private void postProductImage( final ProductImageEntity productImageEntity )
-    {
-        new CreateNewProductImageRequest( productImageEntity ).performRequest( );
+        new MultipleProductImageGenerator( numberOfShapes ).generate( );
     }
 }
