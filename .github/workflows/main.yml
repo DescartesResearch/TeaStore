@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - run: mvn clean test
+      - run: mvn clean install
   
   
   build:
@@ -30,3 +30,5 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: descartesresearch/teastore-base
           file: utilities/tools.descartes.teastore.dockerbase/Dockerfile
+          path: utilities/tools.descartes.teastore.dockerbase
+          tags: development
