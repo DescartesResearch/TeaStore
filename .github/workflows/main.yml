@@ -3,7 +3,7 @@ name: DockerHub
 on:
   push:
     branches:
-      - develop
+      - development
 
 jobs:
   build:
