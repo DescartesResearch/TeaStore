@@ -23,7 +23,7 @@ jobs:
           repository: descartesresearch/teastore-base
           file: utilities/tools.descartes.teastore.dockerbase/Dockerfile
           path: utilities/tools.descartes.teastore.dockerbase
-          tags: $GIT_TAG_NAME, latest
+          tags: ${{ steps.tagName.outputs.tag }}, latest
           
       - uses: jerray/publish-docker-action@master
         with:
@@ -32,7 +32,7 @@ jobs:
           repository: descartesresearch/teastore-recommender
           file: services/tools.descartes.teastore.recommender/Dockerfile
           path: services/tools.descartes.teastore.recommender
-          tags: $GIT_TAG_NAME, latest
+          tags: ${{ steps.tagName.outputs.tag }}, latest
           
       - uses: jerray/publish-docker-action@master
         with:
@@ -41,7 +41,7 @@ jobs:
           repository: descartesresearch/teastore-webui
           file: services/tools.descartes.teastore.webui/Dockerfile
           path: services/tools.descartes.teastore.webui
-          tags: $GIT_TAG_NAME, latest
+          tags: ${{ steps.tagName.outputs.tag }}, latest
           
       - uses: jerray/publish-docker-action@master
         with:
@@ -50,7 +50,7 @@ jobs:
           repository: descartesresearch/teastore-image
           file: services/tools.descartes.teastore.image/Dockerfile
           path: services/tools.descartes.teastore.image
-          tags: $GIT_TAG_NAME, latest
+          tags: ${{ steps.tagName.outputs.tag }}, latest
               
       - uses: jerray/publish-docker-action@master
         with:
@@ -59,7 +59,7 @@ jobs:
           repository: descartesresearch/teastore-auth
           file: services/tools.descartes.teastore.auth/Dockerfile
           path: services/tools.descartes.teastore.auth
-          tags: $GIT_TAG_NAME, latest
+          tags: ${{ steps.tagName.outputs.tag }}, latest
           
       - uses: jerray/publish-docker-action@master
         with:
@@ -68,7 +68,7 @@ jobs:
           repository: descartesresearch/teastore-persistence
           file: services/tools.descartes.teastore.persistence/Dockerfile
           path: services/tools.descartes.teastore.persistence
-          tags: $GIT_TAG_NAME, latest
+          tags: ${{ steps.tagName.outputs.tag }}, latest
           
       - uses: jerray/publish-docker-action@master
         with:
@@ -77,7 +77,7 @@ jobs:
           repository: descartesresearch/teastore-registry
           file: services/tools.descartes.teastore.registry/Dockerfile
           path: services/tools.descartes.teastore.registry
-          tags: $GIT_TAG_NAME, latest
+          tags: ${{ steps.tagName.outputs.tag }}, latest
           
       - uses: jerray/publish-docker-action@master
         with:
@@ -86,7 +86,7 @@ jobs:
           repository: descartesresearch/teastore-db
           file: utilities/tools.descartes.teastore.database/Dockerfile
           path: utilities/tools.descartes.teastore.database
-          tags: $GIT_TAG_NAME, latest
+          tags: ${{ steps.tagName.outputs.tag }}, latest
           
       - uses: jerray/publish-docker-action@master
         with:
@@ -95,4 +95,4 @@ jobs:
           repository: descartesresearch/teastore-kieker-rabbitmq
           file: utilities/tools.descartes.teastore.kieker.rabbitmq/Dockerfile
           path: utilities/tools.descartes.teastore.kieker.rabbitmq
-          tags: $GIT_TAG_NAME, latest
+          tags: ${{ steps.tagName.outputs.tag }}, latest
