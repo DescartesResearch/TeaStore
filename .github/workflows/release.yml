@@ -22,7 +22,7 @@ jobs:
           repository: descartesresearch/teastore-base
           file: utilities/tools.descartes.teastore.dockerbase/Dockerfile
           path: utilities/tools.descartes.teastore.dockerbase
-          tags: ${GITHUB_REF/refs\/tags\//}
+          tags: ${GITHUB_REF/refs\/tags\//}, latest
           
       - uses: jerray/publish-docker-action@master
         with:
@@ -31,7 +31,7 @@ jobs:
           repository: descartesresearch/teastore-recommender
           file: services/tools.descartes.teastore.recommender/Dockerfile
           path: services/tools.descartes.teastore.recommender
-          tags: ${GITHUB_REF/refs\/tags\//}
+          tags: ${GITHUB_REF/refs\/tags\//}, latest
           
       - uses: jerray/publish-docker-action@master
         with:
@@ -40,7 +40,7 @@ jobs:
           repository: descartesresearch/teastore-webui
           file: services/tools.descartes.teastore.webui/Dockerfile
           path: services/tools.descartes.teastore.webui
-          tags: ${GITHUB_REF/refs\/tags\//}
+          tags: ${GITHUB_REF/refs\/tags\//}, latest
           
       - uses: jerray/publish-docker-action@master
         with:
@@ -49,7 +49,7 @@ jobs:
           repository: descartesresearch/teastore-image
           file: services/tools.descartes.teastore.image/Dockerfile
           path: services/tools.descartes.teastore.image
-          tags: ${GITHUB_REF/refs\/tags\//}
+          tags: ${GITHUB_REF/refs\/tags\//}, latest
               
       - uses: jerray/publish-docker-action@master
         with:
@@ -58,7 +58,7 @@ jobs:
           repository: descartesresearch/teastore-auth
           file: services/tools.descartes.teastore.auth/Dockerfile
           path: services/tools.descartes.teastore.auth
-          tags: ${GITHUB_REF/refs\/tags\//}
+          tags: ${GITHUB_REF/refs\/tags\//}, latest
           
       - uses: jerray/publish-docker-action@master
         with:
@@ -67,7 +67,7 @@ jobs:
           repository: descartesresearch/teastore-persistence
           file: services/tools.descartes.teastore.persistence/Dockerfile
           path: services/tools.descartes.teastore.persistence
-          tags: ${GITHUB_REF/refs\/tags\//}
+          tags: ${GITHUB_REF/refs\/tags\//}, latest
           
       - uses: jerray/publish-docker-action@master
         with:
@@ -76,7 +76,7 @@ jobs:
           repository: descartesresearch/teastore-registry
           file: services/tools.descartes.teastore.registry/Dockerfile
           path: services/tools.descartes.teastore.registry
-          tags: ${GITHUB_REF/refs\/tags\//}
+          tags: ${GITHUB_REF/refs\/tags\//}, latest
           
       - uses: jerray/publish-docker-action@master
         with:
@@ -85,7 +85,7 @@ jobs:
           repository: descartesresearch/teastore-db
           file: utilities/tools.descartes.teastore.database/Dockerfile
           path: utilities/tools.descartes.teastore.database
-          tags: ${GITHUB_REF/refs\/tags\//}
+          tags: ${GITHUB_REF/refs\/tags\//}, latest
           
       - uses: jerray/publish-docker-action@master
         with:
@@ -94,5 +94,4 @@ jobs:
           repository: descartesresearch/teastore-kieker-rabbitmq
           file: utilities/tools.descartes.teastore.kieker.rabbitmq/Dockerfile
           path: utilities/tools.descartes.teastore.kieker.rabbitmq
-          tags: ${GITHUB_REF/refs\/tags\//}
-          
+          tags: ${GITHUB_REF/refs\/tags\//}, latest
