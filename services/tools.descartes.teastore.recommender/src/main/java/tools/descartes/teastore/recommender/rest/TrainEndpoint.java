@@ -40,7 +40,7 @@ public class TrainEndpoint {
 	 * This method must be called before the {@link RecommendEndpoint} is usable, as
 	 * the {@link IRecommender} will throw an
 	 * {@link UnsupportedOperationException}.<br>
-	 * Calling this method twice will trigger a retraining.
+	 * Calling this method a second time initiates a new training process from scratch.
 	 *
 	 * @return Returns a {@link Response} with
 	 *         {@link javax.servlet.http.HttpServletResponse#SC_OK} or with
@@ -87,7 +87,7 @@ public class TrainEndpoint {
 
 	/**
 	 * This methods checks, if the service is ready to serve recommendation
-	 * requests, i.e., if the algorithm is finish training and no retraining process
+	 * requests, i.e., if the algorithm has finished training and no retraining process
 	 * is running. However, this does not imply that issuing a recommendation will
 	 * fail, if this method returns false. For example, if a retraining is issued,
 	 * the old trained instance might still answer issued requests until the new

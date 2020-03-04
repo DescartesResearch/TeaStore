@@ -1,4 +1,4 @@
-# TeaStore #
+# TeaStore #  
 
 The TeaStore is a micro-service reference and test application to be used in benchmarks and tests. The TeaStore emulates a basic web store for automatically generated, tea and tea supplies. As it is primarily a test application, it features UI elements for database generation and service resetting in addition to the store itself. 
 

@@ -1,0 +1,108 @@
+name: Development
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - run: mvn clean install
+  
+  
+  build:
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - run: mvn clean install -DskipTests
+        
+      - uses: jerray/publish-docker-action@master
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: descartesresearch/teastore-base
+          file: utilities/tools.descartes.teastore.dockerbase/Dockerfile
+          path: utilities/tools.descartes.teastore.dockerbase
+          tags: development
+          
+      - uses: jerray/publish-docker-action@master
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: descartesresearch/teastore-recommender
+          file: services/tools.descartes.teastore.recommender/Dockerfile
+          path: services/tools.descartes.teastore.recommender
+          tags: development
+          
+      - uses: jerray/publish-docker-action@master
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: descartesresearch/teastore-webui
+          file: services/tools.descartes.teastore.webui/Dockerfile
+          path: services/tools.descartes.teastore.webui
+          tags: development
+          
+      - uses: jerray/publish-docker-action@master
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: descartesresearch/teastore-image
+          file: services/tools.descartes.teastore.image/Dockerfile
+          path: services/tools.descartes.teastore.image
+          tags: development
+              
+      - uses: jerray/publish-docker-action@master
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: descartesresearch/teastore-auth
+          file: services/tools.descartes.teastore.auth/Dockerfile
+          path: services/tools.descartes.teastore.auth
+          tags: development
+          
+      - uses: jerray/publish-docker-action@master
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: descartesresearch/teastore-persistence
+          file: services/tools.descartes.teastore.persistence/Dockerfile
+          path: services/tools.descartes.teastore.persistence
+          tags: development
+          
+      - uses: jerray/publish-docker-action@master
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: descartesresearch/teastore-registry
+          file: services/tools.descartes.teastore.registry/Dockerfile
+          path: services/tools.descartes.teastore.registry
+          tags: development
+          
+      - uses: jerray/publish-docker-action@master
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: descartesresearch/teastore-db
+          file: utilities/tools.descartes.teastore.database/Dockerfile
+          path: utilities/tools.descartes.teastore.database
+          tags: development
+          
+      - uses: jerray/publish-docker-action@master
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: descartesresearch/teastore-kieker-rabbitmq
+          file: utilities/tools.descartes.teastore.kieker.rabbitmq/Dockerfile
+          path: utilities/tools.descartes.teastore.kieker.rabbitmq
+          tags: development
+          

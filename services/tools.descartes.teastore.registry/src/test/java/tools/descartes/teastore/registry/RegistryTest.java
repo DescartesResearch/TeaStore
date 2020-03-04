@@ -99,11 +99,11 @@ public class RegistryTest {
 		 Response response1 = ClientBuilder.newBuilder().build().target("http://localhost:" 
 				 + getTomcatPort() + "/test/rest/services/service1/abbaasd")
 				 .request(MediaType.APPLICATION_JSON).put(Entity.text(""));
-		 Assert.assertTrue(response1.getStatus() == Response.Status.OK.getStatusCode());
+		 Assert.assertTrue(response1.getStatus() == Response.Status.CREATED.getStatusCode());
 		 Response response2 = ClientBuilder.newBuilder().build().target("http://localhost:" 
 				 + getTomcatPort() + "/test/rest/services/service1/abbaasd2")
 				 .request(MediaType.APPLICATION_JSON).put(Entity.text(""));
-		 Assert.assertTrue(response2.getStatus() == Response.Status.OK.getStatusCode());
+		 Assert.assertTrue(response2.getStatus() == Response.Status.CREATED.getStatusCode());
 		 Response response = ClientBuilder.newBuilder().build().target("http://localhost:" 
 				 + getTomcatPort() + "/test/rest/services/service1").request(MediaType.APPLICATION_JSON).get();
 		 Assert.assertTrue(response.getStatus() == Response.Status.OK.getStatusCode());
@@ -122,7 +122,7 @@ public class RegistryTest {
 		 Response response1 = ClientBuilder.newBuilder().build().target("http://localhost:" 
 				 + getTomcatPort() + "/test/rest/services/service2/abbaasd")
 				 .request(MediaType.APPLICATION_JSON).put(Entity.text(""));
-		 Assert.assertTrue(response1.getStatus() == Response.Status.OK.getStatusCode());
+		 Assert.assertTrue(response1.getStatus() == Response.Status.CREATED.getStatusCode());
 		 Response response2 = ClientBuilder.newBuilder().build().target("http://localhost:" 
 				 + getTomcatPort() + "/test/rest/services/service2/abbaasd")
 				 .request(MediaType.APPLICATION_JSON).delete();
@@ -154,11 +154,11 @@ public class RegistryTest {
 		 Response response1 = ClientBuilder.newBuilder().build().target("http://localhost:" 
 				 + getTomcatPort() + "/test/rest/services/service4/abbaasda")
 				 .request(MediaType.APPLICATION_JSON).put(Entity.text(""));
-		 Assert.assertTrue(response1.getStatus() == Response.Status.OK.getStatusCode());
+		 Assert.assertTrue(response1.getStatus() == Response.Status.CREATED.getStatusCode());
 		 Response response2 = ClientBuilder.newBuilder().build().target("http://localhost:" 
 				 + getTomcatPort() + "/test/rest/services/service4/abbaasda")
 				 .request(MediaType.APPLICATION_JSON).put(Entity.text(""));
-	     Assert.assertTrue(response2.getStatus() == Response.Status.CONFLICT.getStatusCode());
+	     Assert.assertTrue(response2.getStatus() == Response.Status.OK.getStatusCode());
 	}
 	
 	/**
