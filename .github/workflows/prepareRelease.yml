@@ -22,6 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [bumpVersion]
     steps: 
+      - uses: actions/checkout@v2
       - run: echo ::set-env name=VERSION::$(grep -o ".\..\.." <<< "${{ github.event.milestone.title }}")
       - name: Push changes
         uses: ad-m/github-push-action@master
