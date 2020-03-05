@@ -32,7 +32,7 @@ jobs:
       - run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git merge origin/development --allow-unrelated-histories
+          git merge origin development
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
