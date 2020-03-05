@@ -22,14 +22,11 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: development
-      - name: Create Pull Request
-        id: cpr
-        uses: peter-evans/create-pull-request@v2
+      - name: pull-request
+        uses: repo-sync/pull-request@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: Release v${{ env.VERSION }}
-          committer: GitHub Action <action@github.com>
-          author: GitHub Action <action@github.com>
-          title: 'Release v${{ env.VERSION }}'
-          body: 'Auto-generated pull request for release'
-          branch: development
+          source_branch: "development"                     # If blank, default: triggered branch
+          destination_branch: "master"          # If blank, default: master
+          pr_title: "Release v${{ env.VERSION }}"
+          pr_body: "Auto-generated pull request for release"  # Full markdown support, requires pr_title to be set
+          github_token: ${{ secrets.GITHUB_TOKEN }}
