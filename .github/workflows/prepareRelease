@@ -1,0 +1,13 @@
+on:
+  milestone:
+    types: [closed]
+    
+jobs:
+  bumpversion:
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: actions/checkout@v2
+      - run: sed -i 's/<teastoreversion>.*</teastoreversion>/<teastoreversion>TODO</teastoreversion>/g' pom.xml
+      - run: cat pom.xml
+      - run: echo $GITHUB_REF
+      - run: echo $milestone
