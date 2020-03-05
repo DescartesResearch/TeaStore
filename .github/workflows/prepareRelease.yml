@@ -20,6 +20,7 @@ jobs:
   
   pullRequest:
     runs-on: ubuntu-latest
+    needs: [bumpVersion]
     steps: 
       - run: echo ::set-env name=VERSION::$(grep -o ".\..\.." <<< "${{ github.event.milestone.title }}")
       - name: Push changes
