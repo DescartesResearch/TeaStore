@@ -9,6 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
       - uses: actions/checkout@v2
-      - run: grep -o ".\..\.." <<< "${{ github.event.milestone.title }}"
-      - run: sed -i 's/<teastoreversion>.*<\/teastoreversion>/<teastoreversion>${{grep -o ".\..\.." <<< "${{ github.event.milestone.title }}"}}<\/teastoreversion>/' pom.xml
+      - run: echo ::set-env name=VERSION::$(grep -o ".\..\.." <<< "${{ github.event.milestone.title }}")
+      - run: sed -i 's/<teastoreversion>.*<\/teastoreversion>/<teastoreversion>$VERSION<\/teastoreversion>/' pom.xml
       - run: cat pom.xml
