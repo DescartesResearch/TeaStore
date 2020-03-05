@@ -10,5 +10,5 @@ jobs:
     steps: 
       - uses: actions/checkout@v2
       - run: echo ::set-env name=VERSION::$(grep -o ".\..\.." <<< "${{ github.event.milestone.title }}")
-      - run: sed -i 's/<teastoreversion>.*<\/teastoreversion>/<teastoreversion>$VERSION<\/teastoreversion>/' pom.xml
+      - run: sed -i 's/<teastoreversion>.*<\/teastoreversion>/<teastoreversion>${{ env.VERSION }}<\/teastoreversion>/' pom.xml
       - run: cat pom.xml
