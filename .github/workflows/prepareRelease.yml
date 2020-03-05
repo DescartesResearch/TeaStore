@@ -32,7 +32,7 @@ jobs:
           git fetch origin
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git merge development
+          git merge origin/development
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
