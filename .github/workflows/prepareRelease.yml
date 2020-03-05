@@ -27,13 +27,31 @@ jobs:
     runs-on: ubuntu-latest
     needs: [bumpVersion]
     steps: 
-      - uses: actions/checkout@v1
-      - run: echo ::set-env name=VERSION::$(grep -o ".\..\.." <<< "${{ github.event.milestone.title }}")
-      - name: pull-request
-        uses: repo-sync/pull-request@v2
+      - uses: actions/checkout@v2
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v2
         with:
-          source_branch: "development"                     # If blank, default: triggered branch
-          destination_branch: "master"          # If blank, default: master
-          pr_title: "Release v${{ env.VERSION }}"
-          pr_body: "Auto-generated pull request for release"  # Full markdown support, requires pr_title to be set
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: Release v${{ env.VERSION }}
+          committer: GitHub Action <action@github.com>
+          author: GitHub Action <action@github.com>
+          title: 'Release v${{ env.VERSION }}'
+          body: "Auto-generated pull request for release"
+          branch: development
+      - name: Check outputs
+        run: |
+          echo "Pull Request Number - ${{ env.PULL_REQUEST_NUMBER }}"
+          echo "Pull Request Number - ${{ steps.cpr.outputs.pr_number }}"
+
+  mergeRequest:
+    runs-on: ubuntu-latest
+    needs: [bumpVersion]
+    steps: 
+      - uses: actions/github-script@0.8.0
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.pulls.merge({
+            'DescartesResearch',
+            'TeaStore',
+            ${{ env.PULL_REQUEST_NUMBER }}})
