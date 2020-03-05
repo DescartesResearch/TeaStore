@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
       - uses: actions/checkout@v2
-      - run: version=$(grep -o ".\..\.." <<< "${{ github.event.milestone.title }}")
-      - run: echo ${{version}}
-        with:
-           version: grep -o ".\..\.." <<< "test 1.2.2"
+      - run: grep -o ".\..\.." <<< "${{ github.event.milestone.title }}"
+      - run: sed -i 's/<teastoreversion>.*<\/teastoreversion>/<teastoreversion>$(grep -o ".\..\.." <<< "${{ github.event.milestone.title }}")<\/teastoreversion>/' pom.xml
+      - run: cat pom.xml
