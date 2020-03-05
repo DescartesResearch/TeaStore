@@ -29,9 +29,10 @@ jobs:
     steps: 
       - run: |
           git clone https://github.com/DescartesResearch/TeaStore.git
+          git remote add origin https://action:${{ secrets.GITHUB_TOKEN }}@github.com/DescartesResearch/TeaStore.git
           cd TeaStore
           git fetch origin
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git merge origin/development
-          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/DescartesResearch/TeaStore.git
+          git push
