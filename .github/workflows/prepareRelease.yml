@@ -10,4 +10,6 @@ jobs:
     steps: 
       - uses: actions/checkout@v2
       - run: echo $GITHUB_REF
-      - run: echo  ${{ github.event.milestone.title }}
+      - run: ${version}
+        env: 
+          version: grep -o ".\..\.." <<< ${{ github.event.milestone.title }}
