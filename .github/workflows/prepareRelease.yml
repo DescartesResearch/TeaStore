@@ -10,4 +10,6 @@ jobs:
     steps: 
       - uses: actions/checkout@v2
       - run: version=$(grep -o ".\..\.." <<< "${{ github.event.milestone.title }}")
-      - run: echo $version
+      - run: echo ${{version}}
+        with:
+           version: grep -o ".\..\.." <<< "test 1.2.2"
