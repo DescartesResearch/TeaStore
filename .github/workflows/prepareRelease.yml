@@ -28,12 +28,11 @@ jobs:
     needs: [bumpVersion]
     steps: 
       - uses: actions/checkout@v2
-      - run: git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
       - run: |
-          git remote set-url --push origin https://action:$GITHUB_TOKEN@github.com/DescartesResearch/TeaStore/
+          git fetch origin
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git merge origin development
+          git merge development
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
