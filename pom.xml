@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<properties>
-		<teastoreversion>1.3.6</teastoreversion>
+		<teastoreversion>1.3.7</teastoreversion>
 	</properties>
 
 	<prerequisites>
