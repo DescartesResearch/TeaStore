@@ -5,7 +5,7 @@ on:
     types: [closed]
     
 jobs:
-  bumpversion:
+  bumpVersion:
     runs-on: ubuntu-latest
     steps: 
       - uses: actions/checkout@v2
@@ -21,4 +21,15 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: development
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: Release v${{ env.VERSION }}
+          committer: GitHub Action <action@github.com>
+          author: GitHub Action <action@github.com>
+          title: 'Release v${{ env.VERSION }}'
+          body: 'Auto-generated pull request for release'
           branch: development
