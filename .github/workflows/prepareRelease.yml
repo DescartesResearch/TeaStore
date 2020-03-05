@@ -28,7 +28,7 @@ jobs:
     needs: [bumpVersion]
     steps: 
       - uses: actions/checkout@v2
-      - run: git fetch origin development && git merge development
+      - run: git fetch origin/development && git merge development
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
