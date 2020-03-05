@@ -1,4 +1,4 @@
-FROM mariadb:10.4
+FROM mariadb:10.4.6
 MAINTAINER Chair of Software Engineering <se2-it@informatik.uni-wuerzburg.de>
 
 # The setup.sql must be run before the data sql file. The container will execute the files in alphabetical order
