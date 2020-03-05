@@ -17,18 +17,18 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git commit -m "Automated version number bump" -a
-  
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: development
+          
   pullRequest:
     runs-on: ubuntu-latest
     needs: [bumpVersion]
     steps: 
       - uses: actions/checkout@v2
       - run: echo ::set-env name=VERSION::$(grep -o ".\..\.." <<< "${{ github.event.milestone.title }}")
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: development
       - name: pull-request
         uses: repo-sync/pull-request@v2
         with:
