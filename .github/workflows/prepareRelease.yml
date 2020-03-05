@@ -26,7 +26,7 @@ jobs:
         uses: repo-sync/pull-request@v2
         with:
           source_branch: "development"                     # If blank, default: triggered branch
-          destination_branch: "master"          # If blank, default: master
+          destination_branch: "Sven_config"          # If blank, default: master
           pr_title: "Release v${{ env.VERSION }}"
           pr_body: "Auto-generated pull request for release"  # Full markdown support, requires pr_title to be set
           github_token: ${{ secrets.GITHUB_TOKEN }}
