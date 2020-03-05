@@ -8,7 +8,7 @@ jobs:
   bumpVersion:
     runs-on: ubuntu-latest
     steps: 
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
         with:
           ref: 'development'
       - run: echo ::set-env name=VERSION::$(grep -o ".\..\.." <<< "${{ github.event.milestone.title }}")
@@ -25,8 +25,8 @@ jobs:
       - name: pull-request
         uses: repo-sync/pull-request@v2
         with:
-          source_branch: "development"                     # If blank, default: triggered branch
-          destination_branch: "Sven_config"          # If blank, default: master
+          source_branch: "master"                     # If blank, default: triggered branch
+          destination_branch: "development"          # If blank, default: master
           pr_title: "Release v${{ env.VERSION }}"
           pr_body: "Auto-generated pull request for release"  # Full markdown support, requires pr_title to be set
           github_token: ${{ secrets.GITHUB_TOKEN }}
