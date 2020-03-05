@@ -23,7 +23,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: development
           
-  merge:
+  mergeDevelop:
     runs-on: ubuntu-latest
     needs: [bumpVersion]
     steps: 
@@ -34,5 +34,20 @@ jobs:
           git fetch origin
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git merge origin/development
+          git merge origin/development -m "Automated merge in preparation of release"
           git push
+          
+  createRelease:
+    runs-on: ubuntu-latest
+    needs: [mergeDevelop]
+    steps:
+      - run: echo ::set-env name=VERSION::$(grep -o ".\..\.." <<< "${{ github.event.milestone.title }}")
+      - run: echo ::set-env name=DESCRIPTION::$(grep -o ".\..\.." <<< "${{ github.event.milestone.description }}")
+      - uses: actions/checkout@master
+      - uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: v${{ env.VERSION }}
+          release_name: Release v${{ env.VERSION }}
+          body: ${{ env.DESCRIPTION }}
