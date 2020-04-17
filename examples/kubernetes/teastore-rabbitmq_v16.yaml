@@ -1,12 +1,8 @@
-apiVersion: apps/v1
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: teastore-kieker-rabbitmq
 spec:
-  selector:
-    matchLabels:
-      app: teastore
-      run: teastore-rabbitmq
   template:
     metadata:
       labels:
@@ -40,3 +36,4 @@ spec:
     name: rabbitmq-port
   selector:
     run: teastore-kieker-rabbitmq
+    

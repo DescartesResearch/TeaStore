@@ -1,12 +1,8 @@
-apiVersion: apps/v1
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: teastore-db
 spec:
-  selector:
-    matchLabels:
-      app: teastore
-      run: teastore-db
   template:
     metadata:
       labels:
@@ -33,15 +29,11 @@ spec:
   selector:
     run: teastore-db
 ---
-apiVersion: apps/v1
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: teastore-registry
 spec:
-  selector:
-    matchLabels:
-      app: teastore
-      run: teastore-registry
   template:
     metadata:
       labels:
@@ -71,15 +63,11 @@ spec:
   selector:
     run: teastore-registry
 ---
-apiVersion: apps/v1
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: teastore-persistence
 spec:
-  selector:
-    matchLabels:
-      app: teastore
-      run: teastore-persistence
   template:
     metadata:
       labels:
@@ -100,16 +88,14 @@ spec:
           value: "teastore-db"
         - name: DB_PORT
           value: "3306"
+        - name: RABBITMQ_HOST
+          value: "teastore-kieker-rabbitmq"
 ---
-apiVersion: apps/v1
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: teastore-auth
 spec:
-  selector:
-    matchLabels:
-      app: teastore
-      run: teastore-auth
   template:
     metadata:
       labels:
@@ -126,16 +112,14 @@ spec:
           value: "true"
         - name: REGISTRY_HOST
           value: "teastore-registry"
+        - name: RABBITMQ_HOST
+          value: "teastore-kieker-rabbitmq"
 ---
-apiVersion: apps/v1
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: teastore-image
 spec:
-  selector:
-    matchLabels:
-      app: teastore
-      run: teastore-image
   template:
     metadata:
       labels:
@@ -152,16 +136,14 @@ spec:
           value: "true"
         - name: REGISTRY_HOST
           value: "teastore-registry"
+        - name: RABBITMQ_HOST
+          value: "teastore-kieker-rabbitmq"
 ---
-apiVersion: apps/v1
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: teastore-recommender
 spec:
-  selector:
-    matchLabels:
-      app: teastore
-      run: teastore-recommender
   template:
     metadata:
       labels:
@@ -178,16 +160,14 @@ spec:
           value: "true"
         - name: REGISTRY_HOST
           value: "teastore-registry"
+        - name: RABBITMQ_HOST
+          value: "teastore-kieker-rabbitmq"
 ---
-apiVersion: apps/v1
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: teastore-webui
 spec:
-  selector:
-    matchLabels:
-      app: teastore
-      run: teastore-webui
   template:
     metadata:
       labels:
@@ -204,6 +184,8 @@ spec:
           value: "true"
         - name: REGISTRY_HOST
           value: "teastore-registry"
+        - name: RABBITMQ_HOST
+          value: "teastore-kieker-rabbitmq"
 ---
 apiVersion: v1
 kind: Service
