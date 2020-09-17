@@ -1,7 +1,7 @@
 version: '3'
 services:
   rabbitmq:
-    image: descartesresearch/teastore-rabbitmq
+    image: descartesresearch/teastore-kieker-rabbitmq
     expose:
       - "5672"
     ports:
