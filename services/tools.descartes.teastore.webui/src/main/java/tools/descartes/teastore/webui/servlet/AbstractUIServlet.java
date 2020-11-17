@@ -128,6 +128,7 @@ public abstract class AbstractUIServlet extends HttpServlet {
 		ObjectMapper o = new ObjectMapper();
 		try {
 			Cookie cookie = new Cookie(BLOB, URLEncoder.encode(o.writeValueAsString(blob), "UTF-8"));
+			cookie.setSecure(true);
 			response.addCookie(cookie);
 		} catch (JsonProcessingException | UnsupportedEncodingException e) {
 			throw new IllegalStateException("Could not save blob!");
@@ -146,6 +147,7 @@ public abstract class AbstractUIServlet extends HttpServlet {
 		try {
 			Cookie cookie = new Cookie(BLOB, URLEncoder.encode(o.writeValueAsString(blob), "UTF-8"));
 			cookie.setMaxAge(0);
+			cookie.setSecure(true);
 			response.addCookie(cookie);
 		} catch (JsonProcessingException | UnsupportedEncodingException e) {
 			throw new IllegalStateException("Could not destroy blob!");
@@ -165,6 +167,7 @@ public abstract class AbstractUIServlet extends HttpServlet {
 			throws IOException {
 		if (!cookiename.equals("")) {
 			Cookie cookie = new Cookie(cookiename, value.replace(" ", "_"));
+			cookie.setSecure(true);
 			response.addCookie(cookie);
 		}
 
@@ -198,12 +201,14 @@ public abstract class AbstractUIServlet extends HttpServlet {
 				if (cook.getName().equals(MESSAGECOOKIE)) {
 					request.setAttribute("message", cook.getValue().replaceAll("_", " "));
 					cook.setMaxAge(0);
+					cook.setSecure(true);
 					response.addCookie(cook);
 				} else if (cook.getName().equals(PRODUCTCOOKIE)) {
 					request.setAttribute("numberProducts", cook.getValue());
 				} else if (cook.getName().equals(ERRORMESSAGECOOKIE)) {
 					request.setAttribute("errormessage", cook.getValue().replaceAll("_", " "));
 					cook.setMaxAge(0);
+					cook.setSecure(true);
 					response.addCookie(cook);
 				}
 			}
