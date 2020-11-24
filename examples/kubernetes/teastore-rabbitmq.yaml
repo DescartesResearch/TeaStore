@@ -4,7 +4,7 @@ metadata:
   name: teastore-kieker-rabbitmq
 spec:
   selector:	
-  matchLabels:	
+    matchLabels:	
       app: teastore	
       run: teastore-kieker-rabbitmq
   template:
