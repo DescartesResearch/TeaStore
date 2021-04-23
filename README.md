@@ -34,6 +34,7 @@ For an example of a large-scale TeaStore setup we refer to [Microservices: A Per
     
  ## The TeaStore in Action
  The TeaStore has been used as a case study in a number of scientific publications:
+ * J. Grohmann, M. Straesser, A. Chalbani, S. Eismann, Y. Arian, N. Herbst, N Peretz, and S. Kounev. 2021. SuanMing: Explainable Prediction of Performance Degradations in Microservice Applications. In Proceedings of the ACM/SPEC International Conference on Performance Engineering, pp. 165-176. 2021. https://doi.org/10.1145/3427921.3450248
  * S. Eismann, C. Bezemer, W. Shang, D. Okanović, and A. van Hoorn. 2020. Microservices: A Performance Tester's Dream or Nightmare? In Proceedings of the ACM/SPEC International Conference on Performance Engineering (ICPE '20). Association for Computing Machinery, New York, NY, USA, 138–149. https://doi.org/10.1145/3358960.3379124
  * J. Grohmann, P. Nicholson, J. Iglesias, S. Kounev, and D. Lugones. 2019. Monitorless: Predicting Performance Degradation in Cloud Applications with Machine Learning. In Proceedings of the 20th International Middleware Conference (Middleware '19). Association for Computing Machinery, New York, NY, USA, 149–162. https://doi.org/10.1145/3361525.3361543
  * M. Mazkatli, D. Monschein, J. Grohmann and A. Koziolek, "Incremental Calibration of Architectural Performance Models with Parametric Dependencies," 2020 IEEE International Conference on Software Architecture (ICSA '2020), Salvador, Brazil, 2020, pp. 23-34, https://doi.org/10.1109/ICSA47634.2020.00011.
