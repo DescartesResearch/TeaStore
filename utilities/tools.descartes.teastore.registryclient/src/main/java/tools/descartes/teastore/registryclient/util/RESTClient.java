@@ -27,6 +27,9 @@ import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.grizzly.connector.GrizzlyConnectorProvider;
 
+import javax.net.ssl.SSLContext;
+import org.glassfish.jersey.SslConfigurator;
+
 /**
  * Default Client that transfers Entities to/from a service that has a standard conforming REST-API.
  * @author Joakim von Kistowski
@@ -77,7 +80,7 @@ public class RESTClient<T> {
 			hostURL += "/";
 		}
 		if (!hostURL.contains("://")) {
-			hostURL = "http://" + hostURL;
+			hostURL = "https://" + hostURL;
 		}
 		ClientConfig config = new ClientConfig();
 		config.property(ClientProperties.CONNECT_TIMEOUT, connectTimeout);
@@ -87,7 +90,14 @@ public class RESTClient<T> {
 	    //connectionManager.setDefaultMaxPerRoute(DEFAULT_POOL_SIZE);
 	    //config.property(ApacheClientProperties.CONNECTION_MANAGER, connectionManager);
 		config.connectorProvider(new GrizzlyConnectorProvider());
-		client = ClientBuilder.newClient(config);
+
+		/*ssl context*/
+		SSLContext sslContext = SslConfigurator.newInstance().createSSLContext();
+		ClientBuilder builder = ClientBuilder.newBuilder().withConfig(config);
+    	builder.sslContext(sslContext);
+		client = builder.build();
+
+		//client = ClientBuilder.newClient(config);
 		service = client.target(UriBuilder.fromUri(hostURL).build());
 		applicationURI = application;
 		endpointURI = endpoint;

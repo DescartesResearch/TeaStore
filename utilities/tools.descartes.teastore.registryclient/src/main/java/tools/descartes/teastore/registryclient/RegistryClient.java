@@ -104,7 +104,7 @@ public class RegistryClient {
     } catch (NamingException e) {
       LOG.warn("registryURL not set. Falling back to default registry URL (localhost, port " + port
           + ").");
-      registryRESTURL = "http://localhost:" + port
+      registryRESTURL = "https://aida.bxmina.com:" + port
           + "/tools.descartes.teastore.registry/rest/services/";
     }
   }
