@@ -1,0 +1,87 @@
+version: '3'
+services:
+  registry:
+    image: descartesresearch/teastore-registry
+    container_name: teastore-registry
+    expose:
+      - "8443"
+    ports:
+      - "8442:8443"
+    environment:
+      HOST_NAME: "teastore-registry"
+      USE_HTTPS: "true"
+      SERVICE_PORT: "8443"
+  db:
+    image: descartesresearch/teastore-db
+    container_name: teastore-db
+    expose:
+      - "3306"
+    ports:
+      - "3306:3306"
+  persistence:
+    image: descartesresearch/teastore-persistence
+    container_name: teastore-persistence
+    expose:
+      - "8443"
+    ports:
+      - "8444:8443"
+    environment:
+      HOST_NAME: "teastore-persistence"
+      REGISTRY_HOST: "teastore-registry"
+      REGISTRY_PORT: "8443"
+      DB_HOST: "teastore-db"
+      DB_PORT: "3306"
+      SERVICE_PORT: "8443"
+      USE_HTTPS: "true"
+  auth:
+    image: descartesresearch/teastore-auth
+    container_name: teastore-auth
+    expose:
+      - "8443"
+    ports:
+      - "8441:8443"
+    environment:
+      HOST_NAME: "teastore-auth"
+      REGISTRY_HOST: "teastore-registry"
+      REGISTRY_PORT: "8443"
+      SERVICE_PORT: "8443"
+      USE_HTTPS: "true"
+  image:
+    image: descartesresearch/teastore-image
+    container_name: teastore-image
+    expose:
+      - "8443"
+    ports:
+      - "8445:8443"
+    environment:
+      HOST_NAME: "teastore-image"
+      REGISTRY_HOST: "teastore-registry"
+      REGISTRY_PORT: "8443"
+      SERVICE_PORT: "8443"
+      USE_HTTPS: "true"
+  recommender:
+    image: descartesresearch/teastore-recommender
+    container_name: teastore-recommender
+    expose:
+      - "8443"
+    ports:
+      - "8446:8443"
+    environment:
+      HOST_NAME: "teastore-recommender"
+      REGISTRY_HOST: "teastore-registry"
+      REGISTRY_PORT: "8443"
+      SERVICE_PORT: "8443"
+      USE_HTTPS: "true"
+  webui:
+    image: descartesresearch/teastore-webui
+    container_name: teastore-webui
+    expose:
+      - "8443"
+    environment:
+      HOST_NAME: "teastore-webui"
+      REGISTRY_HOST: "teastore-registry"
+      REGISTRY_PORT: "8443"
+      SERVICE_PORT: "8443"
+      USE_HTTPS: "true"
+    ports:
+      - "8443:8443"
