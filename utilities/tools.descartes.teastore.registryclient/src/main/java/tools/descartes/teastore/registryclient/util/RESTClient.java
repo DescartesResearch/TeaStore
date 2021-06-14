@@ -13,22 +13,25 @@
  */
 package tools.descartes.teastore.registryclient.util;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.List;
-
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.UriBuilder;
-
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.grizzly.connector.GrizzlyConnectorProvider;
 
 import javax.net.ssl.SSLContext;
-import org.glassfish.jersey.SslConfigurator;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.HostnameVerifier;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.UriBuilder;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 /**
  * Default Client that transfers Entities to/from a service that has a standard conforming REST-API.
@@ -36,32 +39,29 @@ import org.glassfish.jersey.SslConfigurator;
  * @param <T> Entity type for the client to handle.
  */
 public class RESTClient<T> {
-	
+
 	/**
 	 * Default and max size for connection pools. We estimate a good size by using the available processor count.
 	 */
 
-//	private static final int DEFAULT_POOL_SIZE = 500;
-//	private static final int MAX_POOL_SIZE = 100000;
-	
 	private static final int DEFAULT_CONNECT_TIMEOUT = 400;
 	private static final int DEFAULT_READ_TIMEOUT = 3000;
-	
+
 	/**
 	 * Default REST application path.
 	 */
 	public static final String DEFAULT_REST_APPLICATION = "rest";
-	
+
 	private static int readTimeout = DEFAULT_READ_TIMEOUT;
 	private static int connectTimeout = DEFAULT_CONNECT_TIMEOUT;
-	
+
 	private String applicationURI;
 	private String endpointURI;
-	
+
 	private Client client;
 	private WebTarget service;
 	private Class<T> entityClass;
-	
+
 	private ParameterizedType parameterizedGenericType;
 	private GenericType<List<T>> genericListType;
 
@@ -76,33 +76,60 @@ public class RESTClient<T> {
 	 * 			open for interpretation by the inheriting REST clients.
 	 */
 	public RESTClient(String hostURL, String application, String endpoint, final Class<T> entityClass) {
+		boolean useHTTPS = "true".equals(System.getenv("USE_HTTPS"));
+
 		if (!hostURL.endsWith("/")) {
 			hostURL += "/";
 		}
 		if (!hostURL.contains("://")) {
-			hostURL = "https://" + hostURL;
+			if (useHTTPS) {
+				hostURL = "https://" + hostURL;
+			} else {
+				hostURL = "http://" + hostURL;
+			}
 		}
 		ClientConfig config = new ClientConfig();
 		config.property(ClientProperties.CONNECT_TIMEOUT, connectTimeout);
 		config.property(ClientProperties.READ_TIMEOUT, readTimeout);
-		//PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
-	    //connectionManager.setMaxTotal(MAX_POOL_SIZE);
-	    //connectionManager.setDefaultMaxPerRoute(DEFAULT_POOL_SIZE);
-	    //config.property(ApacheClientProperties.CONNECTION_MANAGER, connectionManager);
 		config.connectorProvider(new GrizzlyConnectorProvider());
 
-		/*ssl context*/
-		SSLContext sslContext = SslConfigurator.newInstance().createSSLContext();
-		ClientBuilder builder = ClientBuilder.newBuilder().withConfig(config);
-    	builder.sslContext(sslContext);
-		client = builder.build();
+		if (useHTTPS) {
+			try {
+				TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+					@Override
+					public void checkClientTrusted(java.security.cert.X509Certificate[] x509Certificates, String s) {
+					}
 
-		//client = ClientBuilder.newClient(config);
+					@Override
+					public void checkServerTrusted(java.security.cert.X509Certificate[] x509Certificates, String s) {
+					}
+
+					public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+						return null;
+					}
+				}
+				};
+				SSLContext sslContext = SSLContext.getInstance("SSL");
+				sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+				HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
+				HostnameVerifier allHostsValid = (hostname, session) -> true;
+				HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+
+				ClientBuilder builder = ClientBuilder.newBuilder().withConfig(config);
+				builder.sslContext(sslContext);
+				client = builder.build();
+			} catch (NoSuchAlgorithmException | KeyManagementException e) {
+				e.printStackTrace();
+			}
+		} else {
+			client = ClientBuilder.newClient(config);
+		}
+
 		service = client.target(UriBuilder.fromUri(hostURL).build());
 		applicationURI = application;
 		endpointURI = endpoint;
 		this.entityClass = entityClass;
-		
+
 		parameterizedGenericType = new ParameterizedType() {
 		        public Type[] getActualTypeArguments() {
 		            return new Type[] { entityClass };
@@ -126,7 +153,7 @@ public class RESTClient<T> {
 	public static void setGlobalReadTimeout(int readTimeout) {
 		RESTClient.readTimeout = readTimeout;
 	}
-	
+
 	/**
 	 * Sets the global connect timeout for all REST clients of this service.
 	 * @param connectTimeout The read timeout in ms.
@@ -134,7 +161,7 @@ public class RESTClient<T> {
 	public static void setGlobalConnectTimeout(int connectTimeout) {
 		RESTClient.connectTimeout = connectTimeout;
 	}
-	
+
 	/**
 	 * Generic type of return lists.
 	 * @return Generic List type.
@@ -150,7 +177,7 @@ public class RESTClient<T> {
 	public Class<T> getEntityClass() {
 		return entityClass;
 	}
-	
+
 	/**
 	 * The service to use.
 	 * @return The web service.
@@ -158,7 +185,7 @@ public class RESTClient<T> {
 	public WebTarget getService() {
 		return service;
 	}
-	
+
 	/**
 	 * Get the web target for sending requests directly to the endpoint.
 	 * @return The web target for the endpoint.
@@ -174,7 +201,7 @@ public class RESTClient<T> {
 	public String getEndpointURI() {
 		return endpointURI;
 	}
-	
+
 	/**
 	 * URI of the rest application (usually "rest").
 	 * @return The application URI.
@@ -182,5 +209,5 @@ public class RESTClient<T> {
 	public String getApplicationURI() {
 		return applicationURI;
 	}
-	
+
 }

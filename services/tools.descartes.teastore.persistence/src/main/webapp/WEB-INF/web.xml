@@ -23,12 +23,12 @@
 	<env-entry>
 		<env-entry-name>servicePort</env-entry-name>
 		<env-entry-type>java.lang.String</env-entry-type>
-		<env-entry-value>8443</env-entry-value>
+		<env-entry-value>8080</env-entry-value>
 	</env-entry>
 	<env-entry>
 		<env-entry-name>registryURL</env-entry-name>
 		<env-entry-type>java.lang.String</env-entry-type>
-		<env-entry-value>https://aida.bxmina.com:8443/tools.descartes.teastore.registry/rest/services/</env-entry-value>
+		<env-entry-value>http://localhost:8080/tools.descartes.teastore.registry/rest/services/</env-entry-value>
 	</env-entry>
 	<filter>
 		<filter-name>TrackingFilter</filter-name>

@@ -42,7 +42,7 @@ import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerUpdater
 
 /**
  * Client with common functionality for registering with the registry.
- * 
+ *
  * @author Simon Eismann
  *
  */
@@ -104,14 +104,14 @@ public class RegistryClient {
     } catch (NamingException e) {
       LOG.warn("registryURL not set. Falling back to default registry URL (localhost, port " + port
           + ").");
-      registryRESTURL = "https://aida.bxmina.com:" + port
+      registryRESTURL = "http://localhost:" + port
           + "/tools.descartes.teastore.registry/rest/services/";
     }
   }
 
   /**
    * Getter.
-   * 
+   *
    * @return registry client
    */
   public static RegistryClient getClient() {
@@ -120,7 +120,7 @@ public class RegistryClient {
 
   /**
    * Handles full registration.
-   * 
+   *
    * @param contextPath
    *          contextPath private String getContextPath(ServletContextEvent event)
    *          { return event.getServletContext().getContextPath(); }
@@ -148,7 +148,7 @@ public class RegistryClient {
 
   /**
    * Handles full unregistration.
-   * 
+   *
    * @param contextPath
    *          contextPath private String getContextPath(ServletContextEvent event)
    *          { return event.getServletContext().getContextPath(); }
@@ -164,7 +164,7 @@ public class RegistryClient {
 
   /**
    * Calls the StartupCallback after the service is available.
-   * 
+   *
    * @param requestedService
    *          service to check for
    * @param myService
@@ -181,7 +181,7 @@ public class RegistryClient {
 
   /**
    * Get all servers for a service in the {@link Service} enum from the registry.
-   * 
+   *
    * @param targetService
    *          The service for which to get the servers.
    * @return List of servers.
@@ -211,7 +211,7 @@ public class RegistryClient {
   /**
    * Get the server for this service. Returns null if the service is not
    * registered yet.
-   * 
+   *
    * @return The server for this service. Null, if not registered.
    */
   public Server getMyServiceInstanceServer() {
@@ -221,7 +221,7 @@ public class RegistryClient {
   /**
    * Get the service of this application. Returns null if the service is not
    * registered yet.
-   * 
+   *
    * @return The service for this application. Null, if not registered.
    */
   public Service getMyService() {
@@ -230,7 +230,7 @@ public class RegistryClient {
 
   /**
    * Register a new server for a service in the registry.
-   * 
+   *
    * @param service
    *          The service for which to register.
    * @param server
@@ -245,13 +245,14 @@ public class RegistryClient {
           .path(server.toString()).request(MediaType.APPLICATION_JSON).put(Entity.text(""));
       return (response.getStatus() == Response.Status.OK.getStatusCode());
     } catch (ProcessingException e) {
+      e.printStackTrace();
       return false;
     }
   }
 
   /**
    * Unregister a server for a service in the registry.
-   * 
+   *
    * @param service
    *          The service for which to unregister.
    * @param server
@@ -311,7 +312,7 @@ public class RegistryClient {
 
   /**
    * Protected for testing.
-   * 
+   *
    * @param serviceName
    *          name of service
    * @return cleaned service name
@@ -322,7 +323,7 @@ public class RegistryClient {
 
   /**
    * Protected for test.
-   * 
+   *
    * @return scheduler
    */
   protected ScheduledExecutorService getHeartbeatScheduler() {
@@ -331,7 +332,7 @@ public class RegistryClient {
 
   /**
    * Protected for test.
-   * 
+   *
    * @return scheduler
    */
   protected ScheduledExecutorService getLoadBalancerUpdateScheduler() {

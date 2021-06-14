@@ -8,3 +8,5 @@ Servers/
 services/tools.descartes.petstore.image/test/
 limbo_checkstyle.out.xml
 interfaces/tools.descartes.teastore.entities/.classpath
+*.iml
+.idea/
