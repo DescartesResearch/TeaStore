@@ -16,10 +16,8 @@ COPY mysql-connector-java-5.1.44-bin.jar /usr/local/tomcat/lib/mysql-connector-j
 COPY target/jars/dockermemoryconfigurator* /usr/local/tomcat/bin/dockermemoryconfigurator.jar
 RUN rm /usr/local/tomcat/conf/server.xml
 COPY server.xml /usr/local/tomcat/conf/
+COPY ssl/ /usr/local/tomcat/ssl
 
-# Copy script to replace placeholders in context.xml with the environment variables
-COPY start.sh /usr/local/tomcat/bin/start.sh
-RUN chmod +x /usr/local/tomcat/bin/start.sh
 
 # Service configuration. SERVICE_PORT is the host port, mapped to the exposed docker port. HOST_NAME
 # is the IP address or hostname of the host running the docker container
@@ -37,12 +35,19 @@ ENV PROXY_PORT unset
 ENV TOMCAT_HEAP_MEM_PERCENTAGE 50
 ENV LOG_TO_FILE false
 ENV RABBITMQ_HOST unset
+ENV USE_HTTPS false
+
+# Copy script to replace placeholders in context.xml with the environment variables
+COPY start.sh /usr/local/tomcat/bin/start.sh
+RUN chmod +x /usr/local/tomcat/bin/start.sh
 
 # Setting secure random number generation to urandom. This increases the startup speed.
 # Environment variable no longer needed. Replaced by sed in start.sh
 # ENV JAVA_OPTS $JAVA_OPTS -Dsecurerandom.source=file 837:/dev/urandom
 
 RUN mkdir -p /kieker/logs
+# Import self-signed certificate for HTTPS teastore into keystore. NOTE: to adapt certificate hostnames, configure and run ssl/generate_cert.sh and rebuild the container!
+RUN keytool -import -noprompt -trustcacerts -alias teastoressl -file /usr/local/tomcat/ssl/cert.pem -keystore "/docker-java-home/jre/lib/security/cacerts" -storepass changeit
 
 COPY kieker.monitoring.properties 							/kieker/config/kieker.monitoring.properties
 COPY aop.xml 												/usr/local/tomcat/lib/aop.xml

@@ -111,18 +111,6 @@ public class OperationExecutionWithParametersRecord extends OperationExecutionRe
 
   /**
    * {@inheritDoc}
-   *
-   * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an
-   *             array serializer instead.
-   */
-  @Override
-  @Deprecated
-  public Object[] toArray() {
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   * {@inheritDoc}
    */
   @Override
   public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
@@ -166,19 +154,6 @@ public class OperationExecutionWithParametersRecord extends OperationExecutionRe
   @Override
   public int getSize() {
     return SIZE;
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @deprecated This record uses the
-   *             {@link kieker.common.record.IMonitoringRecord.Factory} mechanism.
-   *             Hence, this method is not implemented.
-   */
-  @Deprecated
-  @Override
-  public void initFromArray(final Object[] values) {
-    throw new UnsupportedOperationException();
   }
 
   /**
