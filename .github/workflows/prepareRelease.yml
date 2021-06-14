@@ -12,6 +12,7 @@ jobs:
         with:
           ref: 'development'
       - run: echo "{versionname}=$(grep -o ".\..\.." <<< "${{ github.event.milestone.title }}")" >> $GITHUB_ENV
+      - run: echo ${{ env.versionname }}
       - run: sed -i 's/<teastoreversion>.*<\/teastoreversion>/<teastoreversion>${{ env.versionname }}<\/teastoreversion>/' pom.xml
       - run: |
           git config --local user.email "action@github.com"
