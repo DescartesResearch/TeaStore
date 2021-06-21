@@ -44,8 +44,8 @@ public class RESTClient<T> {
 	 * Default and max size for connection pools. We estimate a good size by using the available processor count.
 	 */
 
-	private static final int DEFAULT_CONNECT_TIMEOUT = 400;
-	private static final int DEFAULT_READ_TIMEOUT = 3000;
+	private static final int DEFAULT_CONNECT_TIMEOUT = 600;
+	private static final int DEFAULT_READ_TIMEOUT = 6000;
 
 	/**
 	 * Default REST application path.
