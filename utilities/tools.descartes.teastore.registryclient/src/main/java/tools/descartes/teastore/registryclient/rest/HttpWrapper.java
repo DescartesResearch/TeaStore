@@ -1,7 +1,7 @@
 package tools.descartes.teastore.registryclient.rest;
 
-import javax.ws.rs.client.Invocation.Builder;
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.client.Invocation.Builder;
+import jakarta.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +11,7 @@ import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import tools.descartes.teastore.registryclient.tracing.Tracing;
 
-import javax.ws.rs.client.WebTarget;
+import jakarta.ws.rs.client.WebTarget;
 
 /**
  * Wrapper for http calls.

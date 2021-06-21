@@ -7,7 +7,7 @@
 	</properties>
 
 	<prerequisites>
-		<maven>3.0</maven>
+		<maven>3.6</maven>
 	</prerequisites>
 
 	<groupId>tools.descartes.teastore</groupId>

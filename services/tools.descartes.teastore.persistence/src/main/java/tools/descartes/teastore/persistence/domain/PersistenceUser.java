@@ -16,14 +16,14 @@ package tools.descartes.teastore.persistence.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.EntityManager;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.PostRemove;
-import javax.persistence.PreRemove;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PostRemove;
+import jakarta.persistence.PreRemove;
 
 import tools.descartes.teastore.persistence.repository.CacheManager;
 import tools.descartes.teastore.entities.User;

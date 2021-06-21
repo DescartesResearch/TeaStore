@@ -1,8 +1,8 @@
 package tools.descartes.teastore.webui.servlet;
 
 import java.io.IOException;
-import javax.servlet.Servlet;
-import javax.servlet.ServletException;
+import jakarta.servlet.Servlet;
+import jakarta.servlet.ServletException;
 
 import org.junit.Assert;
 import org.junit.Test;

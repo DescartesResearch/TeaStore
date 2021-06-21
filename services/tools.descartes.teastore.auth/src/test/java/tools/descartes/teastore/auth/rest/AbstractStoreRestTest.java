@@ -13,8 +13,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleState;

@@ -7,8 +7,8 @@
 	<url>http://descartes.tools</url>
 
 	<properties>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
@@ -28,9 +28,9 @@
 
 		<!-- Dependencies only needed for compilation -->
 		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-api</artifactId>
-			<version>7.0</version>
+			<groupId>jakarta.platform</groupId>
+			<artifactId>jakarta.jakartaee-api</artifactId>
+			<version>9.0.0</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -61,13 +61,13 @@
 		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>
 			<artifactId>tomcat-embed-core</artifactId>
-			<version>8.5.61</version>
+			<version>10.0.7</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>
 			<artifactId>tomcat-embed-jasper</artifactId>
-			<version>8.5.35</version>
+			<version>10.0.7</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -94,7 +94,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.1</version>
+				<version>2.22.2</version>
 				<configuration>
 					<reuseForks>false</reuseForks>
 					<forkCount>1</forkCount>

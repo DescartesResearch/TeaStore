@@ -3,7 +3,7 @@ package tools.descartes.teastore.auth.rest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sun.mail.iap.Response;
 
-import javax.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.Response.Status;
 
 import org.junit.Assert;
 import org.junit.Test;

@@ -1,7 +1,7 @@
 package tools.descartes.teastore.auth.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 
 import org.junit.Assert;
 import org.junit.Test;

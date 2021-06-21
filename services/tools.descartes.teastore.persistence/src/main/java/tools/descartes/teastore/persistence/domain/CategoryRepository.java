@@ -13,7 +13,7 @@
  */
 package tools.descartes.teastore.persistence.domain;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 
 import tools.descartes.teastore.persistence.repository.AbstractPersistenceRepository;
 import tools.descartes.teastore.entities.Category;

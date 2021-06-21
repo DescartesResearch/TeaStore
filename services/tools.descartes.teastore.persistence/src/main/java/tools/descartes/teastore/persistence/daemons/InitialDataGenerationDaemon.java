@@ -13,10 +13,10 @@
  */
 package tools.descartes.teastore.persistence.daemons;
 
-import javax.persistence.PersistenceException;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
+import jakarta.persistence.PersistenceException;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.annotation.WebListener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

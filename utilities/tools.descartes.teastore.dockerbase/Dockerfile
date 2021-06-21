@@ -1,4 +1,4 @@
-FROM tomcat:8.5-jre8
+FROM tomcat:10.0.7-jdk11
 MAINTAINER Chair of Software Engineering <se2-it@informatik.uni-wuerzburg.de>
 
 # Delete all example webapps from base container

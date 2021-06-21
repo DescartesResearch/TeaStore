@@ -37,8 +37,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
