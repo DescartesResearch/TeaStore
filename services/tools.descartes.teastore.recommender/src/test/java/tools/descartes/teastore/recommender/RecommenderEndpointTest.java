@@ -221,8 +221,6 @@ public class RecommenderEndpointTest extends AbstractRecommenderRestTest {
 				.request(MediaType.APPLICATION_JSON).post(Entity.entity(list, MediaType.APPLICATION_JSON));
 		Assert.assertEquals(org.apache.catalina.connector.Response.SC_BAD_REQUEST, response.getStatus());
 
-		list = new ArrayList<OrderItem>();
-
 		// TEST ISREADY ENDPOINT
 		// Assert PUT Method is not allowed
 		response = ClientBuilder.newBuilder().build().target(ISREADY_TARGET).request(MediaType.TEXT_PLAIN)
