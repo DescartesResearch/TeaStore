@@ -1,12 +1,6 @@
 FROM tomcat:10.0.7-jdk11
 MAINTAINER Chair of Software Engineering <se2-it@informatik.uni-wuerzburg.de>
 
-# Delete all example webapps from base container
-RUN rm -r /usr/local/tomcat/webapps/examples
-RUN rm -r /usr/local/tomcat/webapps/docs
-RUN rm -r /usr/local/tomcat/webapps/host-manager
-RUN rm -r /usr/local/tomcat/webapps/manager
-
 RUN rm /usr/local/tomcat/lib/websocket-api.jar
 RUN rm /usr/local/tomcat/lib/tomcat-websocket.jar
 
@@ -47,7 +41,7 @@ RUN chmod +x /usr/local/tomcat/bin/start.sh
 
 RUN mkdir -p /kieker/logs
 # Import self-signed certificate for HTTPS teastore into keystore. NOTE: to adapt certificate hostnames, configure and run ssl/generate_cert.sh and rebuild the container!
-RUN keytool -import -noprompt -trustcacerts -alias teastoressl -file /usr/local/tomcat/ssl/cert.pem -keystore "/docker-java-home/jre/lib/security/cacerts" -storepass changeit
+RUN keytool -import -noprompt -trustcacerts -alias teastoressl -file /usr/local/tomcat/ssl/cert.pem -keystore "/usr/local/openjdk-11/lib/security/cacerts" -storepass changeit
 
 COPY kieker.monitoring.properties 							/kieker/config/kieker.monitoring.properties
 COPY aop.xml 												/usr/local/tomcat/lib/aop.xml
