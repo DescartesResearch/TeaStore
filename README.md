@@ -1,6 +1,6 @@
 # TeaStore #  
 
-The TeaStore is a micro-service reference and test application to be used in benchmarks and tests. The TeaStore emulates a basic web store for automatically generated, tea and tea supplies. As it is primarily a test application, it features UI elements for database generation and service resetting in addition to the store itself. 
+The TeaStore is a micro-service reference and test application to be used in benchmarks and tests. The TeaStore emulates a basic web store for automatically generated, tea and tea supplies. As it is primarily a test application, it features UI elements for database generation and service resetting in addition to the store itself.
 
 The TeaStore is a distributed micro-service application featuring five distinct services plus a registry. Each service may be replicated without limit and deployed on separate devices as desired. Services communicate using REST and using the Netflix [Ribbon](https://github.com/Netflix/ribbon) client side load balancer. Each service also comes in a pre-instrumented variant that uses [Kieker](http://kieker-monitoring.net) to provide detailed information about the TeaStore's actions and behavior.
 
@@ -31,10 +31,12 @@ For an example of a large-scale TeaStore setup we refer to [Microservices: A Per
       pages = {138–149},
       series = {ICPE '20},
     }
-    
+
  ## The TeaStore in Action
  The TeaStore has been used as a case study in a number of scientific publications:
  * J. Grohmann, M. Straesser, A. Chalbani, S. Eismann, Y. Arian, N. Herbst, N Peretz, and S. Kounev. 2021. SuanMing: Explainable Prediction of Performance Degradations in Microservice Applications. In Proceedings of the ACM/SPEC International Conference on Performance Engineering, pp. 165-176. 2021. https://doi.org/10.1145/3427921.3450248
+ * V. Rao, V. Singh, K. S. Goutham, B. U. Kempaiah, R. J. Mampilli, S. Kalambur, and D. Sitaram. 2021. Scheduling Microservice Containers on Large Core Machines through Placement and Coalescing. https://jsspp.org/papers21/vishal-rao.pdf
+ * D. Monschein, M. Mazkatli, R. Heinrich, and A. Koziolek. 2021. Enabling Consistency between Software Artefacts for Software Adaption and Evolution. In 2021 IEEE 18th International Conference on Software Architecture (ICSA) (pp. 1-12). https://sdqweb.ipd.kit.edu/publications/pdfs/monschein2021a.pdf
  * S. Eismann, C. Bezemer, W. Shang, D. Okanović, and A. van Hoorn. 2020. Microservices: A Performance Tester's Dream or Nightmare? In Proceedings of the ACM/SPEC International Conference on Performance Engineering (ICPE '20). Association for Computing Machinery, New York, NY, USA, 138–149. https://doi.org/10.1145/3358960.3379124
  * J. Grohmann, P. Nicholson, J. Iglesias, S. Kounev, and D. Lugones. 2019. Monitorless: Predicting Performance Degradation in Cloud Applications with Machine Learning. In Proceedings of the 20th International Middleware Conference (Middleware '19). Association for Computing Machinery, New York, NY, USA, 149–162. https://doi.org/10.1145/3361525.3361543
  * M. Mazkatli, D. Monschein, J. Grohmann and A. Koziolek, "Incremental Calibration of Architectural Performance Models with Parametric Dependencies," 2020 IEEE International Conference on Software Architecture (ICSA '2020), Salvador, Brazil, 2020, pp. 23-34, https://doi.org/10.1109/ICSA47634.2020.00011.
