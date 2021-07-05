@@ -30,6 +30,11 @@
 			<artifactId>jakarta.persistence-api</artifactId>
 			<version>3.0.0</version>
 		</dependency>
+		<dependency>
+			<groupId>jakarta.activation</groupId>
+			<artifactId>jakarta.activation-api</artifactId>
+			<version>2.0.1</version>
+		</dependency>
 
 		<!-- Dependencies only needed for compilation -->
 		<dependency>
