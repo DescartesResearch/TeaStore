@@ -7,7 +7,7 @@ print_usage() {
   printf "Usage: docker_build.sh [-p] [-r REGISTRY_NAME] [-v VERSION]\n"
 }
 
-while getopts 'pr:' flag; do
+while getopts 'prv:' flag; do
   case "${flag}" in
     p) push_flag='true' ;;
     r) registry="${OPTARG}" ;;
