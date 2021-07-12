@@ -26,7 +26,7 @@ public class Reset extends HttpServlet {
 		LogReaderStartup.stopFileWriter();
 
 		MemoryLogStorage.clearMemoryStorage();
-		deleteFolder(new File("apache-tomcat-8.5.24/webapps/logs"), "kieker");
+		deleteFolder(new File("apache-tomcat-10.0.7/webapps/logs"), "kieker");
 
 		LogReaderStartup.startFileWriter();
 	}

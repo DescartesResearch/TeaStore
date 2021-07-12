@@ -42,11 +42,11 @@
 						<id>install-external</id>
 						<phase>clean</phase>
 						<configuration>
-							<file>${basedir}/kieker-1.14.jar</file>
+							<file>${basedir}/kieker-1.15.jar</file>
 							<repositoryLayout>default</repositoryLayout>
 							<groupId>net.kieker-monitoring</groupId>
 							<artifactId>kieker</artifactId>
-							<version>1.14</version>
+							<version>1.15</version>
 							<packaging>jar</packaging>
 							<generatePom>true</generatePom>
 						</configuration>

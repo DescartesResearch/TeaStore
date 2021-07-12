@@ -30,9 +30,9 @@
 		<dependency>
 			<groupId>net.kieker-monitoring</groupId>
 			<artifactId>kieker</artifactId>
-			<version>1.14</version>
+			<version>1.15</version>
 			<scope>system</scope>
-			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/kieker-1.14-SNAPSHOT-aspectj.jar</systemPath>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/kieker-1.15-SNAPSHOT-aspectj.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
