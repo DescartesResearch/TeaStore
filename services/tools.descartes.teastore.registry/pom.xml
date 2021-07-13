@@ -45,6 +45,12 @@
 			<version>${teastoreversion}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>jakarta.activation</groupId>
+			<artifactId>jakarta.activation-api</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+
 		<dependency> <!-- Logging framework also used by ribbon -->
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
