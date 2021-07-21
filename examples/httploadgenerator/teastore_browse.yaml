@@ -1,0 +1,90 @@
+services:
+  - service_name: webui
+    protocol: http
+    response_content_type: ignore   # TODO: needs some form of HTML parsing
+    hosts:
+      - 10.1.1.1:8080       # change as needed!
+
+user_requests:
+  - service_name: webui     # 1: open the start page
+    method: GET
+    uri:
+      text: '/tools.descartes.teastore.webui/'
+  - service_name: webui     # 2: open the login page
+    method: GET
+    uri:
+      text: '/tools.descartes.teastore.webui/login'
+  - service_name: webui     # 3: login action
+    method: POST
+    uri:
+      type: COMPOSITE
+      children:
+        - text: '/tools.descartes.teastore.webui/loginAction?username=user'
+        - type: RANDOMINT
+          text: 1,91
+          store_as: userid
+        - text: '&password=password'
+  - service_name: webui     # 4: get products of a category
+    method: POST
+    uri:
+      type: COMPOSITE
+      children:
+        - text: '/tools.descartes.teastore.webui/category?page=1&category='
+        - type: RANDOMINT
+          text: 1,91    # TODO: category ids should be regex parsed from HTML when opening the start page (step 1) and randomly selected
+          store_as: categoryid
+        - text: '&number=30'
+  - service_name: webui     # 5: open a product page
+    method: GET
+    uri:
+      type: COMPOSITE
+      children:
+        - text: '/tools.descartes.teastore.webui/product?id='
+        - type: RANDOMINT
+          text: 1,10    # TODO: product ids bounds should be regex parsed from HTML when opening the category page (step 4) and randomly selected
+          store_as: productid
+  - service_name: webui     # 6: add to cart
+    method: POST
+    uri:
+      type: COMPOSITE
+      children:
+        - text: '/tools.descartes.teastore.webui/cartAction?addToCart=&productid='
+        - type: VARIABLE
+          text: productid
+  - service_name: webui     # 7: open a category page
+    method: GET
+    uri:
+      type: COMPOSITE
+      children:
+        - text: '/tools.descartes.teastore.webui/category?page=1&category='
+        - type: VARIABLE
+          text: categoryid
+  - service_name: webui     # 8: open another category page
+    method: GET
+    uri:
+      type: COMPOSITE
+      children:
+        - text: '/tools.descartes.teastore.webui/category?page='
+        - type: RANDOMINT
+          text: 1,10    # TODO: page count should be regex parsed from HTML when opening the category page (step 4) and used as bound
+          store_as: page
+        - text: '&category='
+        - type: VARIABLE
+          text: categoryid
+  - service_name: webui     # 9: another add to cart
+    method: POST
+    uri:
+      type: COMPOSITE
+      children:
+        - text: '/tools.descartes.teastore.webui/cartAction?addToCart=&productid='
+        - type: RANDOMINT
+          text: 1,10    # TODO: product ids should be regex parsed from HTML when opening another category page (step 8) and randomly selected
+          store_as: productid
+  - service_name: webui     # 10: open the profile page
+    method: GET
+    uri:
+      text: '/tools.descartes.teastore.webui/profile'
+  - service_name: webui     # 11: logout
+    method: POST
+    uri:
+      text: '/tools.descartes.teastore.webui/loginAction?logout='
