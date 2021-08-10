@@ -13,10 +13,10 @@
  */
 package tools.descartes.teastore.recommender.rest;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Response;
 
 import tools.descartes.teastore.recommender.algorithm.IRecommender;
 import tools.descartes.teastore.recommender.servlet.TrainingSynchronizer;
@@ -43,8 +43,8 @@ public class TrainEndpoint {
 	 * Calling this method a second time initiates a new training process from scratch.
 	 *
 	 * @return Returns a {@link Response} with
-	 *         {@link javax.servlet.http.HttpServletResponse#SC_OK} or with
-	 *         {@link javax.servlet.http.HttpServletResponse#SC_INTERNAL_SERVER_ERROR},
+	 *         {@link jakarta.servlet.http.HttpServletResponse#SC_OK} or with
+	 *         {@link jakarta.servlet.http.HttpServletResponse#SC_INTERNAL_SERVER_ERROR},
 	 *         if the operation failed.
 	 */
 	@GET
@@ -70,9 +70,9 @@ public class TrainEndpoint {
 	 * instance.
 	 *
 	 * @return Returns a {@link Response} with
-	 *         {@link javax.servlet.http.HttpServletResponse#SC_OK} containing the
+	 *         {@link jakarta.servlet.http.HttpServletResponse#SC_OK} containing the
 	 *         maximum considered time as String or with
-	 *         {@link javax.servlet.http.HttpServletResponse#SC_INTERNAL_SERVER_ERROR},
+	 *         {@link jakarta.servlet.http.HttpServletResponse#SC_INTERNAL_SERVER_ERROR},
 	 *         if the operation failed.
 	 */
 	@GET

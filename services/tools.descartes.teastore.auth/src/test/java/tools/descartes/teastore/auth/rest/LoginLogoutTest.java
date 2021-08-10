@@ -1,9 +1,9 @@
 package tools.descartes.teastore.auth.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.sun.mail.iap.Response;
+import jakarta.ws.rs.core.Response;
 
-import javax.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.Response.Status;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -68,7 +68,7 @@ public class LoginLogoutTest extends AbstractStoreRestTest {
   }
 
   private void mockCreateOrderItems() {
-    mockValidPostRestCall(Response.OK, "/tools.descartes.teastore.persistence/rest/orderitems");
+    mockValidPostRestCall(Response.Status.OK, "/tools.descartes.teastore.persistence/rest/orderitems");
   }
 
   private void mockCreateOrder() {

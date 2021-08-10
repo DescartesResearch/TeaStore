@@ -17,8 +17,8 @@ import java.util.HashMap;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,13 +35,13 @@ final class EMFManager {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(EMFManager.class);
 	
-	private static final String DRIVER_PROPERTY = "javax.persistence.jdbc.driver";
+	private static final String DRIVER_PROPERTY = "jakarta.persistence.jdbc.driver";
 	private static final String IN_MEMORY_DRIVER_VALUE = "org.hsqldb.jdbcDriver";
-	private static final String JDBC_URL_PROPERTY = "javax.persistence.jdbc.url";
+	private static final String JDBC_URL_PROPERTY = "jakarta.persistence.jdbc.url";
 	private static final String IN_MEMORY_JDBC_URL_VALUE = "jdbc:hsqldb:mem:test";
-	private static final String USER_PROPERTY = "javax.persistence.jdbc.user";
+	private static final String USER_PROPERTY = "jakarta.persistence.jdbc.user";
 	private static final String IN_MEMORY_USER_VALUE = "sa";
-	private static final String PASSWORD_PROPERTY = "javax.persistence.jdbc.password";
+	private static final String PASSWORD_PROPERTY = "jakarta.persistence.jdbc.password";
 	private static final String IN_MEMORY_PASSWORD_VALUE = "";
 	
 	private static final String MYSQL_URL_PREFIX = "jdbc:mysql://";
@@ -132,7 +132,7 @@ final class EMFManager {
 				}
 				url += MYSQL_URL_POSTFIX;
 				LOG.info("Setting jdbc url to \"" + url + "\".");
-				persistenceProperties.put("javax.persistence.jdbc.url", url);
+				persistenceProperties.put("jakarta.persistence.jdbc.url", url);
 			}
 		} else {
 			persistenceProperties = createPersistencePropertieForInMemoryDB();

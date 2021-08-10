@@ -16,7 +16,7 @@ package tools.descartes.teastore.persistence;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.servlet.ServletException;
+import jakarta.servlet.ServletException;
 
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;

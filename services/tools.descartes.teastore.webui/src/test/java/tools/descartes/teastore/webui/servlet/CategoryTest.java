@@ -3,7 +3,7 @@ package tools.descartes.teastore.webui.servlet;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.servlet.Servlet;
+import jakarta.servlet.Servlet;
 import org.junit.Assert;
 import org.junit.Test;
 

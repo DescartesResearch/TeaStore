@@ -16,7 +16,7 @@ package tools.descartes.teastore.persistence.rest;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.Path;
+import jakarta.ws.rs.Path;
 
 import tools.descartes.teastore.persistence.domain.CategoryRepository;
 import tools.descartes.teastore.persistence.repository.DataGenerator;

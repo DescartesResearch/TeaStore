@@ -22,11 +22,11 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.HostnameVerifier;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.UriBuilder;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.UriBuilder;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.security.KeyManagementException;
@@ -44,8 +44,8 @@ public class RESTClient<T> {
 	 * Default and max size for connection pools. We estimate a good size by using the available processor count.
 	 */
 
-	private static final int DEFAULT_CONNECT_TIMEOUT = 400;
-	private static final int DEFAULT_READ_TIMEOUT = 3000;
+	private static final int DEFAULT_CONNECT_TIMEOUT = 600;
+	private static final int DEFAULT_READ_TIMEOUT = 6000;
 
 	/**
 	 * Default REST application path.

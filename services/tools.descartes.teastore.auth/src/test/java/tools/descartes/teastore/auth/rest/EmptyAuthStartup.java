@@ -14,9 +14,9 @@
 
 package tools.descartes.teastore.auth.rest;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.annotation.WebListener;
 import tools.descartes.teastore.registryclient.Service;
 import tools.descartes.teastore.registryclient.loadbalancers.ServiceLoadBalancer;
 import tools.descartes.teastore.registryclient.util.RESTClient;

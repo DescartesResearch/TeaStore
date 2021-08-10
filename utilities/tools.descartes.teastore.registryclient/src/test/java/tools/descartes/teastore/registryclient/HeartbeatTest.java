@@ -16,11 +16,11 @@ package tools.descartes.teastore.registryclient;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.servlet.ServletException;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.servlet.ServletException;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;

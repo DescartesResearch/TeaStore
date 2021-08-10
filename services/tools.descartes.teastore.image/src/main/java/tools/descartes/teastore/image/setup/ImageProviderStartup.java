@@ -13,9 +13,9 @@
  */
 package tools.descartes.teastore.image.setup;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.annotation.WebListener;
 
 import io.opentracing.util.GlobalTracer;
 import tools.descartes.teastore.registryclient.RegistryClient;

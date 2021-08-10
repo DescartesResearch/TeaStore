@@ -13,8 +13,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleState;
@@ -65,8 +65,7 @@ public abstract class AbstractStoreRestTest {
     registryUrl3.setOverride(false);
     registryUrl3.setType("java.lang.String");
     registryUrl3.setName("registryURL");
-    registryUrl3
-        .setValue("http://localhost:18080/tools.descartes.teastore.registry/rest/services/");
+    registryUrl3.setValue("http://localhost:18080/tools.descartes.teastore.registry/rest/services/");
     Context context3 = storeTomcat.addWebapp("/tools.descartes.teastore.auth", testWorkingDir);
     context3.getNamingResources().addEnvironment(registryUrl3);
     ContextEnvironment servicePort3 = new ContextEnvironment();

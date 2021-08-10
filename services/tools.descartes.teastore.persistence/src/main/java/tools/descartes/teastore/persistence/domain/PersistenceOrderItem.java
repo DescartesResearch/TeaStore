@@ -13,11 +13,11 @@
  */
 package tools.descartes.teastore.persistence.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.PostRemove;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PostRemove;
 
 import tools.descartes.teastore.persistence.repository.CacheManager;
 import tools.descartes.teastore.entities.OrderItem;

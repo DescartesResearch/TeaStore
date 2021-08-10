@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<properties>
-		<teastoreversion>1.3.9</teastoreversion>
+		<teastoreversion>java11</teastoreversion>
 	</properties>
 
 	<prerequisites>
-		<maven>3.0</maven>
+		<maven>3.6</maven>
 	</prerequisites>
 
 	<groupId>tools.descartes.teastore</groupId>

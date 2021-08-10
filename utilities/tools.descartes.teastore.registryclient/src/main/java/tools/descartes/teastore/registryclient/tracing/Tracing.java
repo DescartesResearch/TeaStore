@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.core.HttpHeaders;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.ws.rs.client.Invocation;
+import jakarta.ws.rs.core.HttpHeaders;
 
 import io.jaegertracing.internal.JaegerTracer;
 import io.jaegertracing.internal.propagation.B3TextMapCodec;

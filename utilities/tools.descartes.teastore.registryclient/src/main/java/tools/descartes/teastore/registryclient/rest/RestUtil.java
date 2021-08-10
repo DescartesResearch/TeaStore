@@ -3,9 +3,9 @@ package tools.descartes.teastore.registryclient.rest;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 
 import tools.descartes.teastore.registryclient.Service;
 import tools.descartes.teastore.registryclient.loadbalancers.LoadBalancerTimeoutException;

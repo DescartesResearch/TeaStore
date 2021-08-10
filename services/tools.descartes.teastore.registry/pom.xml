@@ -33,8 +33,8 @@
 		</repository>
 	</repositories>
 	<properties>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
@@ -43,6 +43,12 @@
 			<groupId>tools.descartes.teastore</groupId>
 			<artifactId>entities</artifactId>
 			<version>${teastoreversion}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jakarta.activation</groupId>
+			<artifactId>jakarta.activation-api</artifactId>
+			<version>2.0.1</version>
 		</dependency>
 
 		<dependency> <!-- Logging framework also used by ribbon -->
@@ -60,24 +66,29 @@
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-servlet</artifactId>
-			<version>2.25.1</version>
+			<version>3.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.media</groupId>
 			<artifactId>jersey-media-json-jackson</artifactId>
-			<version>2.25.1</version>
+			<version>3.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.core</groupId>
 			<artifactId>jersey-server</artifactId>
-			<version>2.25.1</version>
+			<version>3.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.inject</groupId>
+			<artifactId>jersey-hk2</artifactId>
+			<version>3.0.2</version>
 		</dependency>
 
 		<!-- Dependencies only needed for compilation -->
 		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-api</artifactId>
-			<version>7.0</version>
+			<groupId>jakarta.platform</groupId>
+			<artifactId>jakarta.jakartaee-api</artifactId>
+			<version>9.0.0</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -91,13 +102,13 @@
 		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>
 			<artifactId>tomcat-embed-core</artifactId>
-			<version>8.5.61</version>
+			<version>10.0.7</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>
 			<artifactId>tomcat-embed-jasper</artifactId>
-			<version>8.5.24</version>
+			<version>10.0.7</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -117,7 +128,7 @@
 			<plugin>
 				<!-- Attach classes so that registryclient can import registry for testing. -->
 				<artifactId>maven-war-plugin</artifactId>
-				<version>3.1.0</version>
+				<version>3.3.1</version>
 				<configuration>
 					<attachClasses>true</attachClasses>
 					<classesClassifier>classes</classesClassifier>
@@ -197,7 +208,7 @@
 												<include>libsigar-amd64-linux.so</include>
 												<include>libsigar-x86-linux.so</include>
 												<include>sigar-1.6.4.LICENSE</include>
-												<include>kieker-1.14-SNAPSHOT-aspectj.jar</include>
+												<include>kieker-1.15-SNAPSHOT-aspectj.jar</include>
 											</includes>
 										</resource>
 									</resources>

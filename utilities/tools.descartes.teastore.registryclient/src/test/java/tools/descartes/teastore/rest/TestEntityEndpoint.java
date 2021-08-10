@@ -18,7 +18,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.ws.rs.Path;
+import jakarta.ws.rs.Path;
 
 import tools.descartes.teastore.registryclient.util.AbstractCRUDEndpoint;
 

@@ -5,8 +5,8 @@
 	<name>TeaStore Kieker Instrumentation</name>
 	<url>http://descartes.tools</url>
 	<properties>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -17,13 +17,15 @@
 		<dependency>
 			<groupId>net.kieker-monitoring</groupId>
 			<artifactId>kieker</artifactId>
-			<version>1.14</version>
+			<version>1.15</version>
+			<scope>system</scope>
+			<systemPath>${pom.basedir}/kieker-1.15.jar</systemPath>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.aspectj/aspectjrt -->
 		<dependency>
 		    <groupId>org.aspectj</groupId>
 		    <artifactId>aspectjrt</artifactId>
-		    <version>1.9.1</version>
+		    <version>1.9.7</version>
 		</dependency>
 		<dependency>
 			<groupId>tools.descartes.teastore</groupId>
