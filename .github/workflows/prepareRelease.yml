@@ -78,7 +78,6 @@ jobs:
           file: services/tools.descartes.teastore.recommender/Dockerfile
           path: services/tools.descartes.teastore.recommender
           tags: ${{ env.versionname }},latest
-          build_args: VERSION=${{ env.versionname }}
           
       - uses: jerray/publish-docker-action@master
         with:
@@ -88,7 +87,6 @@ jobs:
           file: services/tools.descartes.teastore.webui/Dockerfile
           path: services/tools.descartes.teastore.webui
           tags: ${{ env.versionname }},latest
-          build_args: VERSION=${{ env.versionname }}
           
       - uses: jerray/publish-docker-action@master
         with:
@@ -98,7 +96,6 @@ jobs:
           file: services/tools.descartes.teastore.image/Dockerfile
           path: services/tools.descartes.teastore.image
           tags: ${{ env.versionname }},latest
-          build_args: VERSION=${{ env.versionname }}
               
       - uses: jerray/publish-docker-action@master
         with:
@@ -108,7 +105,6 @@ jobs:
           file: services/tools.descartes.teastore.auth/Dockerfile
           path: services/tools.descartes.teastore.auth
           tags: ${{ env.versionname }},latest
-          build_args: VERSION=${{ env.versionname }}
           
       - uses: jerray/publish-docker-action@master
         with:
@@ -118,7 +114,6 @@ jobs:
           file: services/tools.descartes.teastore.persistence/Dockerfile
           path: services/tools.descartes.teastore.persistence
           tags: ${{ env.versionname }},latest
-          build_args: VERSION=${{ env.versionname }}
           
       - uses: jerray/publish-docker-action@master
         with:
