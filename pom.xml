@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<properties>
-		<teastoreversion>java11</teastoreversion>
+		<teastoreversion>test</teastoreversion>
 	</properties>
 
 	<prerequisites>

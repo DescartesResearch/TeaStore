@@ -21,12 +21,7 @@
 			<scope>system</scope>
 			<systemPath>${pom.basedir}/kieker-1.15.jar</systemPath>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.aspectj/aspectjrt -->
-		<dependency>
-		    <groupId>org.aspectj</groupId>
-		    <artifactId>aspectjrt</artifactId>
-		    <version>1.9.7</version>
-		</dependency>
+
 		<dependency>
 			<groupId>tools.descartes.teastore</groupId>
 			<artifactId>entities</artifactId>

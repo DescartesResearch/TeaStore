@@ -100,32 +100,6 @@
 			<version>9.0.0</version>
 			<scope>provided</scope>
 		</dependency>
-		<!-- Test Dependencies -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.13.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.tomcat.embed</groupId>
-			<artifactId>tomcat-embed-core</artifactId>
-			<version>10.0.7</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.tomcat.embed</groupId>
-			<artifactId>tomcat-embed-jasper</artifactId>
-			<version>10.0.7</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>tools.descartes.teastore</groupId>
-			<artifactId>registry</artifactId>
-			<version>${teastoreversion}</version>
-			<classifier>classes</classifier>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 	<build>
 		<finalName>tools.descartes.teastore.registryclient</finalName>
