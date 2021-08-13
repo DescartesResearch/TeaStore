@@ -14,7 +14,7 @@ while getopts 'pr:' flag; do
        exit 1 ;;
   esac
 done
-# TODO: also build and upload rabbitmq and db?
+
 docker build --no-cache=true -t "${registry}teastore-base" ../utilities/tools.descartes.teastore.dockerbase/
 perl -i -pe's|.*FROM descartesresearch/|FROM '"${registry}"'|g' ../services/tools.descartes.teastore.*/Dockerfile
 docker build -t "${registry}teastore-registry" ../services/tools.descartes.teastore.registry/

@@ -1,13 +1,5 @@
 version: '3'
 services:
-  rabbitmq:
-    image: descartesresearch/teastore-kieker-rabbitmq
-    expose:
-      - "5672"
-    ports:
-      - "8081:8080"
-      - "5672:5672"
-      - "15672:15672"
   registry:
     image: descartesresearch/teastore-registry
     expose:
@@ -60,3 +52,8 @@ services:
       RABBITMQ_HOST: "rabbitmq"
     ports:
       - "8080:8080"
+
+networks:
+  default:
+    external: true
+    name: teastore-network
