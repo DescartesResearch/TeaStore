@@ -15,33 +15,38 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '11'
-      - run: mvn clean install
-      - run: cd tools/ && ./build_docker.sh && cd .. # build docker images locally
+      # build docker images locally
+      - run: |
+          mvn clean install
+          cd tools/ && ./build_docker.sh && cd ..
       # test default (HTTP + no Kieker)
-      - run: sed -i 's/descartesresearch\///g' examples/docker/docker-compose_default.yaml
-      - run: sed -i 's/teastore-db/descartesresearch\/teastore-db/g' examples/docker/docker-compose_default.yaml
-      - run: docker-compose -f examples/docker/docker-compose_default.yaml up -d
-      - run: echo "Waiting 2 minutes for TeaStore to start." ; sleep 120
-      - run: ./tools/test_webui.sh localhost http 8080
-      - run: docker-compose -f examples/docker/docker-compose_default.yaml down
+      - run: |
+          sed -i 's/descartesresearch\///g' examples/docker/docker-compose_default.yaml
+          sed -i 's/teastore-db/descartesresearch\/teastore-db/g' examples/docker/docker-compose_default.yaml
+          docker-compose -f examples/docker/docker-compose_default.yaml up -d
+          echo "Waiting 2 minutes for TeaStore to start." ; sleep 120
+          ./tools/test_webui.sh localhost http 8080
+          docker-compose -f examples/docker/docker-compose_default.yaml down
       # test HTTPS
-      - run: sed -i 's/descartesresearch\///g' examples/docker/docker-compose_https.yaml
-      - run: sed -i 's/image: teastore-db/image: descartesresearch\/teastore-db/g' examples/docker/docker-compose_https.yaml
-      - run: docker-compose -f examples/docker/docker-compose_https.yaml up -d
-      - run: echo "Waiting 2 minutes for TeaStore to start." ; sleep 120
-      - run: ./tools/test_webui.sh localhost https 8443
-      - run: docker-compose -f examples/docker/docker-compose_https.yaml down
+      - run: |
+          sed -i 's/descartesresearch\///g' examples/docker/docker-compose_https.yaml
+          sed -i 's/image: teastore-db/image: descartesresearch\/teastore-db/g' examples/docker/docker-compose_https.yaml
+          docker-compose -f examples/docker/docker-compose_https.yaml up -d
+          echo "Waiting 2 minutes for TeaStore to start." ; sleep 120
+          ./tools/test_webui.sh localhost https 8443
+          docker-compose -f examples/docker/docker-compose_https.yaml down
       # test Kieker
-      - run: sed -i 's/descartesresearch\///g' examples/docker/docker-compose_kieker.yaml
-      - run: sed -i 's/teastore-db/descartesresearch\/teastore-db/g' examples/docker/docker-compose_kieker.yaml
-      - run: docker-compose -f examples/docker/docker-compose_rabbitmq.yaml up -d
-      - run: echo "Waiting 2 minutes for RabbitMQ to start." ; sleep 120
-      - run: docker-compose -f examples/docker/docker-compose_kieker.yaml up -d
-      - run: echo "Waiting 2 minutes for TeaStore to start." ; sleep 120
-      - run: ./tools/test_webui.sh localhost http 8080
-      - run: ./tools/test_kieker.sh localhost 8081
-      - run: docker-compose -f examples/docker/docker-compose_kieker.yaml down
-      - run: docker-compose -f examples/docker/docker-compose_rabbitmq.yaml down
+      - run: |
+          sed -i 's/descartesresearch\///g' examples/docker/docker-compose_kieker.yaml
+          sed -i 's/teastore-db/descartesresearch\/teastore-db/g' examples/docker/docker-compose_kieker.yaml
+          docker-compose -f examples/docker/docker-compose_rabbitmq.yaml up -d
+          echo "Waiting 2 minutes for RabbitMQ to start." ; sleep 120
+          docker-compose -f examples/docker/docker-compose_kieker.yaml up -d
+          echo "Waiting 2 minutes for TeaStore to start." ; sleep 120
+          ./tools/test_webui.sh localhost http 8080
+          ./tools/test_kieker.sh localhost 8081
+          docker-compose -f examples/docker/docker-compose_kieker.yaml down
+          docker-compose -f examples/docker/docker-compose_rabbitmq.yaml down
 
   build:
     name: Build and publish Docker images of TeaStore
