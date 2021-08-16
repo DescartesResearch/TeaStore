@@ -2,11 +2,11 @@
 
 # Checks the teastore-rabbitmq for traces (works only in 'kieker mode'!)
 
-HOST=$1 # usually 'localhost'
-PORT=$2 # usually '5672', accesses the tomcat web interface of rabbitmq for the kieker logs
+HOST=${1} # usually 'localhost'
+PORT=${2} # usually '8081', accesses the tomcat web interface of rabbitmq for the kieker logs
 URL="http://${HOST}:${PORT}/logs/"
 
-LOG_NAME=$(curl -s "${URL}" | grep -Eo -m 1 'kieker-.{,30}-UTC--/')
+LOG_NAME=$(curl -s "${URL}" | grep -Eo -m 1 'kieker-.{,30}-UTC--/' | head -n 1)
 
 if [ -z "${LOG_NAME}" ]
 then
@@ -15,7 +15,8 @@ then
 else
   if curl -s "${URL}${LOG_NAME}kieker.map" | grep -i 'record'
   then
-    if curl -s "${URL}${LOG_NAME}kieker.dat" | grep -E -i 'webui|auth|image|persistence|recommender|registry'
+    DATA_NAME=$(curl -s "${URL}${LOG_NAME}" | grep -Eo -m 1 'kieker-.{,30}-UTC-001.dat' | head -n 1)
+    if curl -s "${URL}${LOG_NAME}${DATA_NAME}" | grep -E -i 'webui|auth|image|persistence|recommender|registry'
     then
       echo 'Kieker Test finished successfully!'
       exit 0

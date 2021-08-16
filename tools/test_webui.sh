@@ -9,7 +9,7 @@ WEBUI_PORT=${3}     # 8080 for http, 8443 for https
 # Checks HTML GET response for failure/error for given HTTP URL endpoint
 function send_request () {
   URL="${PROTO}://${HOST}:${WEBUI_PORT}/tools.descartes.teastore.webui/${1}"
-  RES="$(curl -s "${URL}")"
+  RES="$(curl -ks "${URL}")"
   if echo "${RES}" | grep -E -i 'error|fail|exception'
   then
     echo "Request for URL '${URL}' failed."
@@ -21,7 +21,7 @@ function send_request () {
 # Checks HTML POST response for failure/error for given HTTP URL endpoint
 function send_request_post () {
   URL="${PROTO}://${HOST}:${WEBUI_PORT}/tools.descartes.teastore.webui/${1}"
-  RES=$(curl -X POST -s "${URL}")
+  RES=$(curl -X POST -ks "${URL}")
   if echo "${RES}" | grep -E -i 'error|fail|exception'
   then
     echo "Request for URL '${URL}' failed."
@@ -30,7 +30,18 @@ function send_request_post () {
   fi
 }
 
+function check_status () {
+  if (( $(curl -ks "${PROTO}://${HOST}:${WEBUI_PORT}/tools.descartes.teastore.webui/status" | grep -c OK) != 5  ));
+  then
+    echo "Status was not OK!"
+    exit 1
+  fi
+}
+
+check_status
 send_request
 send_request login
 send_request_post "loginAction?username=user30&password=password"
 send_request profile
+echo "WebUI test finished successully!"
+

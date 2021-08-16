@@ -13,4 +13,5 @@ services:
 
 networks:
   teastore-network:
+    name: teastore-network
     driver: bridge
