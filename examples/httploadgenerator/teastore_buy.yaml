@@ -1,7 +1,7 @@
 services:
   - service_name: webui
     protocol: http
-    response_content_type: ignore   # TODO: needs some form of HTML parsing
+    response_content_type: ignore
     hosts:
       - 10.1.1.1:8080       # change as needed!
 
@@ -13,7 +13,12 @@ user_requests:
   - service_name: webui     # 2: open the login page
     method: GET
     uri:
-      text: '/tools.descartes.teastore.webui/login'
+      type: COMPOSITE
+      children:
+        - text: '/tools.descartes.teastore.webui/login'
+        - type: REGEX_RANDOM_MATCH_SILENT
+          text: 'href=.*category.*?category=(\\d+)&page=1.'
+          store_as: categoryid
   - service_name: webui     # 3: login action
     method: POST
     uri:
@@ -30,9 +35,8 @@ user_requests:
       type: COMPOSITE
       children:
         - text: '/tools.descartes.teastore.webui/category?page=1&category='
-        - type: RANDOMINT
-          text: 1,91    # TODO: category ids should be regex parsed from HTML when opening the start page (step 1) and randomly selected
-          store_as: categoryid
+        - type: VARIABLE
+          text: categoryid
         - text: '&number=30'
   - service_name: webui     # 5: open a product page
     method: GET
@@ -40,9 +44,12 @@ user_requests:
       type: COMPOSITE
       children:
         - text: '/tools.descartes.teastore.webui/product?id='
-        - type: RANDOMINT
-          text: 1,10    # TODO: product ids bounds should be regex parsed from HTML when opening the category page (step 4) and randomly selected
+        - type: REGEX_RANDOM_MATCH
+          text: 'href=.*product.*?id=(\\d+). ><img'
           store_as: productid
+        - type: REGEX_RANDOM_MATCH_SILENT
+          text: 'href=.*category.*?category=\\d+&page=\\d+.>(\\d+)</a></li>'
+          store_as: page
   - service_name: webui     # 6: add to cart
     method: POST
     uri:
@@ -65,9 +72,8 @@ user_requests:
       type: COMPOSITE
       children:
         - text: '/tools.descartes.teastore.webui/category?page='
-        - type: RANDOMINT
-          text: 1,10    # TODO: page count should be regex parsed from HTML when opening the category page (step 4) and used as bound
-          store_as: page
+        - type: VARIABLE
+          text: page
         - text: '&category='
         - type: VARIABLE
           text: categoryid
@@ -77,8 +83,8 @@ user_requests:
       type: COMPOSITE
       children:
         - text: '/tools.descartes.teastore.webui/cartAction?addToCart=&productid='
-        - type: RANDOMINT
-          text: 1,10    # TODO: product ids should be regex parsed from HTML when opening another category page (step 8) and randomly selected
+        - type: REGEX_RANDOM_MATCH
+          text: 'href=.*product.*?id=(\\d+). ><img'
           store_as: productid
   - service_name: webui     # 10: open the order page
     method: GET
