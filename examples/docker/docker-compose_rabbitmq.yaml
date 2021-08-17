@@ -1,0 +1,17 @@
+version: '3'
+services:
+  rabbitmq:
+    image: descartesresearch/teastore-kieker-rabbitmq
+    expose:
+      - "5672"
+    ports:
+      - "8081:8080"
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - teastore-network
+
+networks:
+  teastore-network:
+    name: teastore-network
+    driver: bridge

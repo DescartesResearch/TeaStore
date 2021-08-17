@@ -7,24 +7,58 @@ on:
 
 jobs:
   test:
+    name: Test all TeaStore variants
     runs-on: ubuntu-latest
     steps: 
       - uses: actions/checkout@v2
-      - uses: actions/setup-java@v1
+      - uses: actions/setup-java@v2
         with:
-          java-version: 1.11
-      - run: mvn clean install
-  
-  
+          distribution: 'zulu'
+          java-version: '11'
+      # build docker images locally
+      - run: |
+          mvn clean install
+          cd tools/ && ./build_docker.sh && cd ..
+      # test default (HTTP + no Kieker)
+      - run: |
+          sed -i 's/descartesresearch\///g' examples/docker/docker-compose_default.yaml
+          sed -i 's/teastore-db/descartesresearch\/teastore-db/g' examples/docker/docker-compose_default.yaml
+          docker-compose -f examples/docker/docker-compose_default.yaml up -d
+          echo "Waiting 2 minutes for TeaStore to start." ; sleep 120
+          ./tools/test_webui.sh localhost http 8080
+          docker-compose -f examples/docker/docker-compose_default.yaml down
+      # test HTTPS
+      - run: |
+          sed -i 's/descartesresearch\///g' examples/docker/docker-compose_https.yaml
+          sed -i 's/image: teastore-db/image: descartesresearch\/teastore-db/g' examples/docker/docker-compose_https.yaml
+          docker-compose -f examples/docker/docker-compose_https.yaml up -d
+          echo "Waiting 2 minutes for TeaStore to start." ; sleep 120
+          ./tools/test_webui.sh localhost https 8443
+          docker-compose -f examples/docker/docker-compose_https.yaml down
+      # test Kieker
+      - run: |
+          sed -i 's/descartesresearch\///g' examples/docker/docker-compose_kieker.yaml
+          sed -i 's/teastore-db/descartesresearch\/teastore-db/g' examples/docker/docker-compose_kieker.yaml
+          docker-compose -f examples/docker/docker-compose_rabbitmq.yaml up -d
+          echo "Waiting 2 minutes for RabbitMQ to start." ; sleep 120
+          docker-compose -f examples/docker/docker-compose_kieker.yaml up -d
+          echo "Waiting 2 minutes for TeaStore to start." ; sleep 120
+          ./tools/test_webui.sh localhost http 8080
+          ./tools/test_kieker.sh localhost 8081
+          docker-compose -f examples/docker/docker-compose_kieker.yaml down
+          docker-compose -f examples/docker/docker-compose_rabbitmq.yaml down
+
   build:
+    name: Build and publish Docker images of TeaStore
     runs-on: ubuntu-latest
+    needs: [test]
     steps: 
       - uses: actions/checkout@v2
-      - uses: actions/setup-java@v1
+      - uses: actions/setup-java@v2
         with:
-          java-version: 1.11
+          distribution: 'zulu'
+          java-version: '11'
       - run: mvn clean install -DskipTests
-        
       - uses: jerray/publish-docker-action@master
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -33,7 +67,6 @@ jobs:
           file: utilities/tools.descartes.teastore.dockerbase/Dockerfile
           path: utilities/tools.descartes.teastore.dockerbase
           tags: development
-          
       - uses: jerray/publish-docker-action@master
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -42,8 +75,6 @@ jobs:
           file: services/tools.descartes.teastore.recommender/Dockerfile
           path: services/tools.descartes.teastore.recommender
           tags: development
-          build_args: VERSION=development
-          
       - uses: jerray/publish-docker-action@master
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -52,8 +83,6 @@ jobs:
           file: services/tools.descartes.teastore.webui/Dockerfile
           path: services/tools.descartes.teastore.webui
           tags: development
-          build_args: VERSION=development
-          
       - uses: jerray/publish-docker-action@master
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -62,8 +91,6 @@ jobs:
           file: services/tools.descartes.teastore.image/Dockerfile
           path: services/tools.descartes.teastore.image
           tags: development
-          build_args: VERSION=development
-              
       - uses: jerray/publish-docker-action@master
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -72,8 +99,6 @@ jobs:
           file: services/tools.descartes.teastore.auth/Dockerfile
           path: services/tools.descartes.teastore.auth
           tags: development
-          build_args: VERSION=development
-          
       - uses: jerray/publish-docker-action@master
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -82,8 +107,6 @@ jobs:
           file: services/tools.descartes.teastore.persistence/Dockerfile
           path: services/tools.descartes.teastore.persistence
           tags: development
-          build_args: VERSION=development
-          
       - uses: jerray/publish-docker-action@master
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -92,7 +115,6 @@ jobs:
           file: services/tools.descartes.teastore.registry/Dockerfile
           path: services/tools.descartes.teastore.registry
           tags: development
-          
       - uses: jerray/publish-docker-action@master
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -101,7 +123,6 @@ jobs:
           file: utilities/tools.descartes.teastore.database/Dockerfile
           path: utilities/tools.descartes.teastore.database
           tags: development
-          
       - uses: jerray/publish-docker-action@master
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -110,4 +131,3 @@ jobs:
           file: utilities/tools.descartes.teastore.kieker.rabbitmq/Dockerfile
           path: utilities/tools.descartes.teastore.kieker.rabbitmq
           tags: development
-          
