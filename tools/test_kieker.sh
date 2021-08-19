@@ -16,7 +16,8 @@ else
   if curl -s "${URL}${LOG_NAME}kieker.map" | grep -i 'record'
   then
     DATA_NAME=$(curl -s "${URL}${LOG_NAME}" | grep -Eo -m 1 'kieker-.{,30}-UTC-001.dat' | head -n 1)
-    if curl -s "${URL}${LOG_NAME}${DATA_NAME}" | grep -E -i 'webui|auth|image|persistence|recommender|registry'
+    DATA=$(curl -s "${URL}${LOG_NAME}${DATA_NAME}")
+    if echo "${DATA}" | grep -E -i 'webui|auth|image|persistence|recommender|registry'
     then
       echo 'Kieker Test finished successfully!'
       exit 0
