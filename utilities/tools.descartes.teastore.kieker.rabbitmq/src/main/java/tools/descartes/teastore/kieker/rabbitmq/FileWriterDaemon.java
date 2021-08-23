@@ -1,14 +1,13 @@
 package tools.descartes.teastore.kieker.rabbitmq;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.writer.filesystem.FileWriter;
+import kieker.monitoring.writer.filesystem.AsciiFileWriter;
 
 /**
  * Daemon that writes the logs to HDD.
@@ -21,31 +20,28 @@ public class FileWriterDaemon implements Runnable {
 	public void run() {
 		Logger logger = Logger.getLogger("FileWriterDaemon");
 		logger.setLevel(Level.INFO);
-		new File("apache-tomcat-10.0.7/webapps/logs").mkdir();
-		new File("apache-tomcat-10.0.7/webapps/logs").mkdirs();
+		new File("apache-tomcat-8.5.24/webapps/logs").mkdir();
+		new File("apache-tomcat-8.5.24/webapps/logs").mkdirs();
 		Configuration configuration = new Configuration();
 
-		configuration.setProperty(FileWriter.CONFIG_PATH, "apache-tomcat-10.0.7/webapps/logs");
-		configuration.setProperty(FileWriter.CONFIG_MAXENTRIESINFILE, "-1");
-		configuration.setProperty(FileWriter.CONFIG_MAXLOGSIZE, "-1");
-		configuration.setProperty(FileWriter.CONFIG_MAXLOGFILES, "-1");
-		configuration.setProperty(FileWriter.CONFIG_FLUSH, "true");
+		configuration.setProperty(AsciiFileWriter.CONFIG_PATH, "apache-tomcat-8.5.24/webapps/logs");
+		configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "-1");
+		configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGSIZE, "-1");
+		configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGFILES, "-1");
+		configuration.setProperty(AsciiFileWriter.CONFIG_FLUSH, "true");
+		configuration.setProperty(AsciiFileWriter.CONFIG_FLUSH_MAPFILE, "true");
 
-		try {
-			FileWriter writer = new FileWriter(configuration);
-			while (true) {
-				for (IMonitoringRecord record : MemoryLogStorage.getRecords()) {
-					writer.writeMonitoringRecord(record);
-				}
-				MemoryLogStorage.clearMemoryStorage();
-				try {
-					Thread.sleep(5000);
-				} catch (InterruptedException e) {
-					break;
-				}
+		AsciiFileWriter writer = new AsciiFileWriter(configuration);
+		while (true) {
+			for (IMonitoringRecord record : MemoryLogStorage.getRecords()) {
+				writer.writeMonitoringRecord(record);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+			MemoryLogStorage.clearMemoryStorage();
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				break;
+			}
 		}
 	}
 }

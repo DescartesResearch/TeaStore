@@ -2,10 +2,10 @@ package tools.descartes.teastore.kieker.rabbitmq;
 
 import java.io.File;
 import java.io.IOException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Servlet to reset the logs.
@@ -26,7 +26,7 @@ public class Reset extends HttpServlet {
 		LogReaderStartup.stopFileWriter();
 
 		MemoryLogStorage.clearMemoryStorage();
-		deleteFolder(new File("apache-tomcat-10.0.7/webapps/logs"), "kieker");
+		deleteFolder(new File("apache-tomcat-8.5.24/webapps/logs"), "kieker");
 
 		LogReaderStartup.startFileWriter();
 	}
