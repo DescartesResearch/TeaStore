@@ -22,13 +22,7 @@ user_requests:
   - service_name: webui     # 3: login action
     method: POST
     uri:
-      type: COMPOSITE
-      children:
-        - text: '/tools.descartes.teastore.webui/loginAction?username=user'
-        - type: RANDOMINT
-          text: 1,91
-          store_as: userid
-        - text: '&password=password'
+      text: '/tools.descartes.teastore.webui/loginAction?username=user2&password=password'
   - service_name: webui     # 4: get products of a category
     method: POST
     uri:
