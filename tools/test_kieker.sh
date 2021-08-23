@@ -13,11 +13,11 @@ then
   echo 'No logs available!'
   exit 1
 else
-  if curl -s "${URL}${LOG_NAME}kieker.map" | grep -i 'record'
+  if (( $(curl -s "${URL}${LOG_NAME}kieker.map" | grep -ci 'record') > 0 ));
   then
     DATA_NAME=$(curl -s "${URL}${LOG_NAME}" | grep -Eo -m 1 'kieker-.{,30}-UTC-001.dat' | head -n 1)
     DATA=$(curl -s "${URL}${LOG_NAME}${DATA_NAME}")
-    if echo "${DATA}" | grep -E -i 'webui|auth|image|persistence|recommender|registry'
+    if (( $(echo "${DATA}" | grep -cEi 'webui|auth|image|persistence|recommender|registry') > 0 ));
     then
       echo 'Kieker Test finished successfully!'
       exit 0
