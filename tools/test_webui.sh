@@ -35,10 +35,26 @@ function check_login () {
 }
 
 # adds a product to cart and checks if it is present
-function check_add_to_cart() {
+function check_add_to_cart () {
   if (( $(curl -kLs -c - -X POST "${PROTO}://${HOST}:${WEBUI_PORT}/tools.descartes.teastore.webui/cartAction?addToCart=&productid=${1}" | grep -c "name=\"productid\" value=\"${1}\"") < 1 ));
   then
     echo "Couldn't add product ${1} to cart!"
+    exit 1
+  fi
+}
+
+function check_ads () {
+  if (( $(curl -ks "${PROTO}://${HOST}:${WEBUI_PORT}/tools.descartes.teastore.webui/product?id=${1}" | grep -c 'Are you interested in') == 0 ));
+  then
+    echo "No ads available! Check recommender service!"
+    exit 1
+  fi
+}
+
+function check_images () {
+  if (( $(curl -ks "${PROTO}://${HOST}:${WEBUI_PORT}/tools.descartes.teastore.webui/product?id=${1}" | tr '\n' ' ' | grep -cEo 'class="productpicture"\s+src=""') > 0 ));
+  then
+    echo "No product image available! Check image service!"
     exit 1
   fi
 }
@@ -66,8 +82,12 @@ function check_products () {
       if (( ${COUNTER} > 0 ))
       then
         check_add_to_cart "${prod}"
-        sleep 1
         COUNTER=$(( COUNTER - 1 ))
+      else
+        # at last, check if images and ads are available
+        check_ads ${prod}
+        check_images ${prod}
+        return 0
       fi
     done
   done
