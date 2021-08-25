@@ -11,8 +11,8 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: 'development'
-      - run: sed -i "s/<teastoreversion>.*<\/teastoreversion>/<teastoreversion>$(grep -o ".\..\.." <<< "${{ github.event.milestone.title }}")<\/teastoreversion>/" pom.xml
       - run: |
+          sed -i "s/<teastoreversion>.*<\/teastoreversion>/<teastoreversion>$(grep -o ".\..\.." <<< "${{ github.event.milestone.title }}")<\/teastoreversion>/" pom.xml
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git commit -m "Automated version number bump" -a
@@ -41,27 +41,30 @@ jobs:
     needs: [mergeDevelop]
     steps:
       - run: echo "versionname=$(grep -o ".\..\.." <<< "${{ github.event.milestone.title }}")" >> $GITHUB_ENV
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v2
       - uses: actions/create-release@latest
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: v${{ env.versionname }}
           release_name: ${{ github.event.milestone.title }}
           body: ${{ github.event.milestone.description }}
-          
-  publishDocker:
+
+  build:
+    name: Build and publish Docker images of TeaStore
     runs-on: ubuntu-latest
-    needs: [createRelease]
-    steps: 
+    needs: [ createRelease ]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: 'master'
       - uses: actions/setup-java@v2
         with:
           distribution: 'zulu'
           java-version: '11'
-      - uses: actions/checkout@v2
-      - run: git pull
-      - run: mvn clean install
-      - run: echo "versionname=$(grep -o ".\..\.." <<< "${{ github.event.milestone.title }}")" >> $GITHUB_ENV
+      - run: |
+          mvn clean install -DskipTests
+          echo "VERSION=$(grep -o ".\..\.." <<< "${{ github.event.milestone.title }}")" >> ${GITHUB_ENV}
       - uses: jerray/publish-docker-action@master
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -69,8 +72,7 @@ jobs:
           repository: descartesresearch/teastore-base
           file: utilities/tools.descartes.teastore.dockerbase/Dockerfile
           path: utilities/tools.descartes.teastore.dockerbase
-          tags: ${{ env.versionname }},latest
-          
+          tags: ${{ env.VERSION }} , latest
       - uses: jerray/publish-docker-action@master
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -78,8 +80,7 @@ jobs:
           repository: descartesresearch/teastore-recommender
           file: services/tools.descartes.teastore.recommender/Dockerfile
           path: services/tools.descartes.teastore.recommender
-          tags: ${{ env.versionname }},latest
-          
+          tags: ${{ env.VERSION }} , latest
       - uses: jerray/publish-docker-action@master
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -87,8 +88,7 @@ jobs:
           repository: descartesresearch/teastore-webui
           file: services/tools.descartes.teastore.webui/Dockerfile
           path: services/tools.descartes.teastore.webui
-          tags: ${{ env.versionname }},latest
-          
+          tags: ${{ env.VERSION }} , latest
       - uses: jerray/publish-docker-action@master
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -96,8 +96,7 @@ jobs:
           repository: descartesresearch/teastore-image
           file: services/tools.descartes.teastore.image/Dockerfile
           path: services/tools.descartes.teastore.image
-          tags: ${{ env.versionname }},latest
-              
+          tags: ${{ env.VERSION }} , latest
       - uses: jerray/publish-docker-action@master
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -105,8 +104,7 @@ jobs:
           repository: descartesresearch/teastore-auth
           file: services/tools.descartes.teastore.auth/Dockerfile
           path: services/tools.descartes.teastore.auth
-          tags: ${{ env.versionname }},latest
-          
+          tags: ${{ env.VERSION }} , latest
       - uses: jerray/publish-docker-action@master
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -114,8 +112,7 @@ jobs:
           repository: descartesresearch/teastore-persistence
           file: services/tools.descartes.teastore.persistence/Dockerfile
           path: services/tools.descartes.teastore.persistence
-          tags: ${{ env.versionname }},latest
-          
+          tags: ${{ env.VERSION }} , latest
       - uses: jerray/publish-docker-action@master
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -123,8 +120,7 @@ jobs:
           repository: descartesresearch/teastore-registry
           file: services/tools.descartes.teastore.registry/Dockerfile
           path: services/tools.descartes.teastore.registry
-          tags: ${{ env.versionname }},latest
-          
+          tags: ${{ env.VERSION }} , latest
       - uses: jerray/publish-docker-action@master
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -132,8 +128,7 @@ jobs:
           repository: descartesresearch/teastore-db
           file: utilities/tools.descartes.teastore.database/Dockerfile
           path: utilities/tools.descartes.teastore.database
-          tags: ${{ env.versionname }},latest
-          
+          tags: ${{ env.VERSION }} , latest
       - uses: jerray/publish-docker-action@master
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -141,4 +136,4 @@ jobs:
           repository: descartesresearch/teastore-kieker-rabbitmq
           file: utilities/tools.descartes.teastore.kieker.rabbitmq/Dockerfile
           path: utilities/tools.descartes.teastore.kieker.rabbitmq
-          tags: ${{ env.versionname }},latest
+          tags: ${{ env.VERSION }} , latest
