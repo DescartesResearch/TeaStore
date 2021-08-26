@@ -10,3 +10,6 @@ limbo_checkstyle.out.xml
 interfaces/tools.descartes.teastore.entities/.classpath
 *.iml
 .idea/
+/e2e-tests/node_modules/
+/e2e-tests/cypress/videos
+/e2e-tests/cypress/screenshots
