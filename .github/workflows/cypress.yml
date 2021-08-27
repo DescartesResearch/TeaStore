@@ -7,7 +7,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - run: |
+          mvn clean install
+          cd tools/ && ./build_docker.sh && cd ..
+          sed -i 's/descartesresearch\///g' examples/docker/docker-compose_default.yaml
+          docker-compose -f examples/docker/docker-compose_default.yaml up -d
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          project: ./e2e-tests
+          working-directory: e2e-tests
+          wait-on: http://localhost:8080
+          wait-on-timeout: 120
+      - name: Cleanup docker
+        run: docker-compose -f examples/docker/docker-compose_default.yaml down --volumes --remove-orphans
+        if: ${{ always() }}
