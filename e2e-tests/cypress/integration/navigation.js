@@ -38,5 +38,13 @@ describe("Navigation", () => {
         cy.contains("Database").click()
         cy.contains("Setup the Database")
     })
+
+
+    it('should navigate to user profile', () => {
+        cy.login()
+        cy.get(".glyphicon-user").click()
+        cy.contains("User Information")
+        cy.contains("Orders")
+    })
     
   })
