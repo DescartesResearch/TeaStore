@@ -1,0 +1,14 @@
+{
+  "name": "teastore-e2e",
+  "version": "1.0.0",
+  "description": "End to End tests for TeaStore",
+  "scripts": {
+    "cy:run": "cypress run",
+    "cy:run:headed": "cypress run --headed",
+    "cy:open": "cypress open",
+    "cy:record": "cypress run --record"
+  },
+  "dependencies": {
+    "cypress": "^8.3.0"
+  }
+}
