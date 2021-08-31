@@ -34,6 +34,7 @@ For an example of a large-scale TeaStore setup we refer to [Microservices: A Per
 
  ## The TeaStore in Action
  The TeaStore has been used as a case study in a number of scientific publications:
+ * J. Keim, S. Schulz, D. Fuchß, C. Kocher, J. Speit, and A. Koziolek. "Trace Link Recovery for Software Architecture Documentation." In European Conference on Software Architecture, pp. 101-116. 2021. https://doi.org/10.1007/978-3-030-86044-8_7
  * J. Grohmann, M. Straesser, A. Chalbani, S. Eismann, Y. Arian, N. Herbst, N Peretz, and S. Kounev. 2021. SuanMing: Explainable Prediction of Performance Degradations in Microservice Applications. In Proceedings of the ACM/SPEC International Conference on Performance Engineering, pp. 165-176. 2021. https://doi.org/10.1145/3427921.3450248
  * V. Rao, V. Singh, K. S. Goutham, B. U. Kempaiah, R. J. Mampilli, S. Kalambur, and D. Sitaram. 2021. Scheduling Microservice Containers on Large Core Machines through Placement and Coalescing. https://jsspp.org/papers21/vishal-rao.pdf
  * D. Monschein, M. Mazkatli, R. Heinrich, and A. Koziolek. 2021. Enabling Consistency between Software Artefacts for Software Adaption and Evolution. In 2021 IEEE 18th International Conference on Software Architecture (ICSA) (pp. 1-12). https://sdqweb.ipd.kit.edu/publications/pdfs/monschein2021a.pdf
