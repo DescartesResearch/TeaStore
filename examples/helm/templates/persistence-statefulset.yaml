@@ -1,0 +1,72 @@
+{{- if .Values.persistence.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "teastore.persistence.fullname" . }}
+  labels:
+    {{- include "teastore.labels" . | nindent 4 }}
+spec:
+  serviceName: {{ .Values.persistence.svc_name }}
+  {{- if not .Values.persistence.autoscaling.enabled }}
+  replicas: {{ .Values.persistence.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "teastore.persistence.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        {{- with .Values.persistence.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "teastore.persistence.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.persistence.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.persistence.podSecurityContext | nindent 8 }}
+      terminationGracePeriodSeconds: 5
+      containers:
+        - name: {{ include "teastore.persistence.microservice" . }}
+          securityContext:
+            {{- toYaml .Values.persistence.securityContext | nindent 12 }}
+          image: "{{ .Values.persistence.image.repository }}:{{ .Values.persistence.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.persistence.image.pullPolicy }}
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: SERVICE_PORT
+              value: {{ .Values.persistence.service.port | quote }}
+            - name: HOST_NAME
+              value: {{ template "teastore.persistence.hostname" . }}
+            - name: REGISTRY_HOST
+              value: {{ template "teastore.registry.url" . }}
+            - name: REGISTRY_PORT
+              value: {{ .Values.registry.service.port | quote }}
+            - name: DB_HOST
+              value: {{ template "teastore.db.url" . }}
+            - name: DB_PORT
+              value: {{ .Values.db.service.port | quote }}
+          resources:
+            {{- toYaml .Values.persistence.resources | nindent 12 }}
+      {{- with .Values.persistence.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.persistence.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.persistence.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

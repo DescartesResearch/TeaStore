@@ -1,0 +1,55 @@
+{{- if .Values.registry.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "teastore.registry.fullname" . }}
+  labels:
+    {{- include "teastore.labels" . | nindent 4 }}
+spec:
+  serviceName: {{ .Values.registry.svc_name }}
+  {{- if not .Values.registry.autoscaling.enabled }}
+  replicas: 1
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "teastore.registry.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        {{- with .Values.registry.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "teastore.registry.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.registry.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.registry.podSecurityContext | nindent 8 }}
+      terminationGracePeriodSeconds: 5
+      containers:
+        - name: {{ include "teastore.registry.microservice" . }}
+          securityContext:
+            {{- toYaml .Values.registry.securityContext | nindent 12 }}
+          image: "{{ .Values.registry.image.repository }}:{{ .Values.registry.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.registry.image.pullPolicy }}
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.registry.resources | nindent 12 }}
+      {{- with .Values.registry.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.registry.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.registry.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}
