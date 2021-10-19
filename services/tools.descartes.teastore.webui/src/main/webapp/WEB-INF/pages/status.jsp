@@ -8,7 +8,7 @@
 				<h2 class="minipage-title">TeaStore Service Status</h2>
 				<br/>
 				<c:if test = "${noregistry == true}"> <h2>Load Balancer does not work. Is Registry offline?</h2> <br/></c:if>
-				<p><b>This page does not auto refresh!</b> Refresh manually when checking the current status (e.g. to see if database generation has finished).</p>
+				<p><b>This page does not auto refresh!</b> Refresh manually or start an auto refresh for checking the current status (e.g. to see if database generation has finished).</p>
 				<p>
 					<b>Note:</b> Database and image generation may take a while.
 					Leave the TeaStore in a stable and unused state while the database is generating.
@@ -16,6 +16,12 @@
 					Please wait for the image provider to finish as well before running any performance tests.
 				</p>
 				<br/>
+				<form id="refreshForm">
+					<label for="refreshDurationField">Refresh Duration(s)</label>
+					<input style="border: 1px solid black;" id="refreshDurationField" type="number" min="0" max="120" class="btn" name="duration">
+					<input type="submit" class="btn" value="Start Auto Refresh">
+				</form>
+                <br/>
 				<table class="table">
 					<tr>
 						<td><b>Service</b></td>
@@ -129,6 +135,7 @@
 <script src="<c:url value="bootstrap/js/jquery.min.js"/>"></script>
 <script src="<c:url value="bootstrap/js/bootstrap.min.js"/>"></script>
 <script src="<c:url value="/resizingscript.js"/>"></script>
+<script src="<c:url value="/autoRefreshScript.js"/>"></script>
 
 </body>
 </html>
