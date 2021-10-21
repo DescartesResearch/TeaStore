@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.image.svc_name }}
+  labels:
+    {{- include "teastore.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.image.service.annotations }}
+    {{- toYaml . | nindent 8 }}
+    {{- end }}
+spec:
+  {{- if .Values.clientside_loadbalancer }}
+  clusterIP: None
+  {{- else }}
+  type: {{ .Values.image.service.type }}
+  {{- end }}
+  ports:
+    - port: {{ .Values.image.service.port }}
+      name: http-image
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    {{- include "teastore.image.selectorLabels" . | nindent 4 }}

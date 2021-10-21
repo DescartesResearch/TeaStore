@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.webui.svc_name }}
+  labels:
+    {{- include "teastore.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.webui.service.annotations }}
+    {{- toYaml . | nindent 8 }}
+    {{- end }}
+spec:
+  {{- if and (.Values.clientside_loadbalancer) (eq ( .Values.webui.replicaCount | int ) 1) }}
+  clusterIP: None
+  {{- else }}
+  type: {{ .Values.webui.service.type }}
+  {{- end }}
+  ports:
+    - port: {{ .Values.webui.service.port }}
+      name: http-webui
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    {{- include "teastore.webui.selectorLabels" . | nindent 4 }}
