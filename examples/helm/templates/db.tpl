@@ -11,7 +11,7 @@ Selector labels
 */}}
 {{- define "teastore.db.selectorLabels" -}}
 {{ include "teastore.selectorLabels" . }}
-app.kubernetes.io/name: {{- include "teastore.db.microservice" . -}}
+app.kubernetes.io/name: {{ include "teastore.db.microservice" . }}
 app.kubernetes.io/component: database
 {{- end }}
 

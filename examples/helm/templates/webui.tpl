@@ -11,7 +11,7 @@ Selector labels
 */}}
 {{- define "teastore.webui.selectorLabels" -}}
 {{ include "teastore.selectorLabels" . }}
-app.kubernetes.io/name: {{- include "teastore.webui.microservice" . -}}
+app.kubernetes.io/name: {{ include "teastore.webui.microservice" . }}
 app.kubernetes.io/component: webserver
 {{- end }}
 

@@ -11,7 +11,7 @@ Selector labels
 */}}
 {{- define "teastore.persistence.selectorLabels" -}}
 {{ include "teastore.selectorLabels" . }}
-app.kubernetes.io/name: {{- include "teastore.persistence.microservice" . -}}
+app.kubernetes.io/name: {{ include "teastore.persistence.microservice" . }}
 app.kubernetes.io/component: cache
 {{- end }}
 

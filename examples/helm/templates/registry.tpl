@@ -11,7 +11,7 @@ Selector labels
 */}}
 {{- define "teastore.registry.selectorLabels" -}}
 {{ include "teastore.selectorLabels" . }}
-app.kubernetes.io/name: {{- include "teastore.registry.microservice" . -}}
+app.kubernetes.io/name: {{ include "teastore.registry.microservice" . }}
 app.kubernetes.io/component: registry
 {{- end }}
 

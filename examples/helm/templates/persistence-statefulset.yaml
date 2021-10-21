@@ -30,7 +30,7 @@ spec:
         {{- toYaml .Values.persistence.podSecurityContext | nindent 8 }}
       terminationGracePeriodSeconds: 5
       containers:
-        - name: {{- include "teastore.persistence.microservice" . -}}
+        - name: {{ include "teastore.persistence.microservice" . }}
           securityContext:
             {{- toYaml .Values.persistence.securityContext | nindent 12 }}
           image: "{{ .Values.persistence.image.repository }}:{{ .Values.persistence.image.tag | default .Chart.AppVersion }}"

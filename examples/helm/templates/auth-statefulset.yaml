@@ -30,7 +30,7 @@ spec:
         {{- toYaml .Values.auth.podSecurityContext | nindent 8 }}
       terminationGracePeriodSeconds: 5
       containers:
-        - name: {{- include "teastore.auth.microservice" . -}}
+        - name: {{ include "teastore.auth.microservice" . }}
           securityContext:
             {{- toYaml .Values.auth.securityContext | nindent 12 }}
           image: "{{ .Values.auth.image.repository }}:{{ .Values.auth.image.tag | default .Chart.AppVersion }}"

@@ -30,7 +30,7 @@ spec:
         {{- toYaml .Values.webui.podSecurityContext | nindent 8 }}
       terminationGracePeriodSeconds: 5
       containers:
-        - name: {{- include "teastore.webui.microservice" . -}}
+        - name: {{ include "teastore.webui.microservice" . }}
           securityContext:
             {{- toYaml .Values.webui.securityContext | nindent 12 }}
           image: "{{ .Values.webui.image.repository }}:{{ .Values.webui.image.tag | default .Chart.AppVersion }}"

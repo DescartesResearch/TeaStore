@@ -30,7 +30,7 @@ spec:
         {{- toYaml .Values.recommender.podSecurityContext | nindent 8 }}
       terminationGracePeriodSeconds: 5
       containers:
-        - name: {{- include "teastore.recommender.microservice" . -}}
+        - name: {{ include "teastore.recommender.microservice" . }}
           securityContext:
             {{- toYaml .Values.recommender.securityContext | nindent 12 }}
           image: "{{ .Values.recommender.image.repository }}:{{ .Values.recommender.image.tag | default .Chart.AppVersion }}"
