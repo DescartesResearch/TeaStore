@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.persistence.svc_name }}
+  labels:
+    {{- include "teastore.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.persistence.service.annotations }}
+    {{- toYaml . | nindent 8 }}
+    {{- end }}
+spec:
+  {{- if .Values.clientside_loadbalancer }}
+  clusterIP: None
+  {{- else }}
+  type: {{ .Values.persistence.service.type }}
+  {{- end }}
+  ports:
+    - port: {{ .Values.persistence.service.port }}
+      name: http-persistence
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    {{- include "teastore.persistence.selectorLabels" . | nindent 4 }}
