@@ -1,4 +1,4 @@
-# The TeaStore Architecture
+# The TeaStore
 
 The TeaStore is a micro-service reference and test application developed by the Descartes Research Group at the University of Würzburg. The TeaStore emulates a basic web store for automatically generated, fictitious teas, tea accessories and supplies. As it is primarily a test application, it features UI elements for database generation and service resetting in addition to the store itself.
 
@@ -9,7 +9,7 @@ The TeaStore is a distributed micro-service application featuring five distinct 
 * _tools.descartes.teastore.persistence_: Persistence Provider Service
 * _tools.descartes.teastore.image_: Image Provider Service
 
-Service register at a separate simple registry, which is provided with the TeaStore. Any service registering with the registry is automatically called by all other services which require it.
+Services register at a separate simple registry, which is provided with the TeaStore. Any service registering with the registry is automatically called by all other services which require it.
 
 The TeaStore is designed to be a reference / test application to be used in benchmarks and tests. Some of its envisioned use-cases are:
 * Testing performance model extractors and predictors for distributed applications
@@ -18,7 +18,33 @@ The TeaStore is designed to be a reference / test application to be used in benc
 
 Note that the TeaStore does not feature a front-end load balancer for the WebUI. If you want to use multiple WebUI instances, you must configure a front-end load balancer yourself or configure your load driver to use all available WebUI instances.
 
-## Deploying the TeaStore
+Contents:
+
+1. [Deploying the TeaStore](#1-deploying-the-teastore)
+   1. [Run as Multiple Single Service Containers](#11-run-as-multiple-single-service-containers)
+   2. [Run the TeaStore using Docker Compose](#12-run-the-teastore-using-docker-compose)
+   3. [Run the TeaStore on a Kubernetes Cluster](#13-run-the-teastore-on-a-kubernetes-cluster)
+   4. [Run the TeaStore with helm templates](#14-run-the-teastore-with-helm-templates)
+2. [Using the TeaStore for Testing and Benchmarking](#2-using-the-teastore-for-testing-and-benchmarking)
+   1. [Generating Load](#21-generating-load)
+      1. [LIMBO HTTP Load Generator](#211-limbo-http-load-generator)
+         1. [Deploying and starting the Load Generator](#2111-deploying-and-starting-the-load-generator)
+         2. [Create/Download a Load Intensity Profile](#2112-createdownload-a-load-intensity-profile)
+         3. [Create/Download a Request Definition Script](#2113-createdownload-a-request-definition-script)
+         4. [Run the load generator](#2114-run-the-load-generator)
+      2. [JMeter™](#212-jmeter)
+         1. [Run JMeter™ with GUI](#2121-run-jmeter-with-gui)
+         2. [Run JMeter™ with Command-Line](#2122-run-jmeter-with-command-line)
+   2. [Instrumenting the TeaStore](#22-instrumenting-the-teastore)
+      1. [Docker containers with Kieker](#221-docker-containers-with-kieker)
+         1. [AMQP Logging](#2211-amqp-logging)
+         2. [AMQP Logging in Kubernetes](#2212-amqp-logging-in-kubernetes)
+         3. [Local Logging](#2213-local-logging)
+         4. [Parameter Logging](#2214-parameter-logging)
+      2. [OpenTracing with Kubernetes and Istio](#222-opentracing-with-kubernetes-and-istio)
+3. [Building and Customizing the TeaStore](#3-building-and-customizing-the-teastore)
+
+## 1. Deploying the TeaStore
 
 We currently offer multiple options to deploy the TeaStore:
 - Docker with manual setup (recommended)
@@ -28,9 +54,9 @@ We currently offer multiple options to deploy the TeaStore:
 
 Other outdated methods are mentioned in the GitHub Wiki.
 
-### Run as Multiple Single Service Containers
+### 1.1. Run as Multiple Single Service Containers
 
-Running the TeaStore as single use containers is the recommended way for benchmarking, testing and modelling. The store consists of the registry image, five service images and a pre-configured database image running MariaDB. All images to run the containers are shown below. All containers except `teastore-db` support different environment variables that can be set on container start. Instead of running each service with a seperate `docker run`, we also provide sample docker-compose files in the next section.
+Running the TeaStore as single use containers is the recommended way for benchmarking, testing and modelling. The store consists of the registry image, five service images and a pre-configured database image running MariaDB. All images to run the containers are shown below. All containers except `teastore-db` support different environment variables that can be set on container start. Instead of running each service with a separate `docker run`, we also provide sample docker-compose files in the next section.
 
 * _REGISTRY\_HOST_ : The host name or IP of the machine running the registry container.
 * _REGISTRY\_PORT_ : The port of the machine running the registry container.
@@ -95,7 +121,7 @@ In the following example we assume the registry is running on server 10.1.2.3 on
 
 Note that this example does not configure the _PROXY\_NAME_ and _PROXY\_PORT_ variables for the WebUI, as it assumes that no front-end load balancer is used. If one is used, both of these variables may be configured for the WebUI.
 
-### Run the TeaStore using Docker Compose
+### 1.2. Run the TeaStore using Docker Compose
 
 The multiple single container setup is suitable for to be used with Docker Compose as well.
 One advantage of using docker-compose is the easy setup of internal networks. This allows the services to communicate with each other using hostnames defined as the service name in the docker-compose file.
@@ -110,7 +136,7 @@ Both variants by default expose the TeaStore WebUI on port `8080` allowing acces
 
 Of course, the same environment variables described in the previous section can be used in the docker-compose file as well.
 
-### Run the TeaStore on a Kubernetes Cluster
+### 1.3. Run the TeaStore on a Kubernetes Cluster
 
 The TeaStore Docker containers can be used in a Kubernetes Setup. In general, we see two ways of configuring TeaStore on Kubernetes:
 
@@ -131,7 +157,7 @@ Note that both variants label all deployments, pods and services with the `app=t
 
 We also provide yamls to run an instrumented variant of the TeaStore in Kubernetes using [Kieker](http://kieker-monitoring.net).
 
-### Run the TeaStore with helm templates
+### 1.4. Run the TeaStore with helm templates
 
 1. Install minikube or any kind of kubernetes cluster and configure it with `kubectl`.
 2. Install `helm`.
@@ -143,11 +169,11 @@ The only special feature of this helm chart is the `clientside_loadbalancer` var
 Of course you can also use regular helm command line overwrites instead of the yaml file(`--set clientside_loadbalancer=true`).
 If you need custom service URLs you can specify them in the format servicename.url (e. g. `db.url=mydb.servicemesh`).
 
-## Using the TeaStore for Testing and Benchmarking
+## 2. Using the TeaStore for Testing and Benchmarking
 
 To use the TeaStore for benchmarking and/or testing, one usually needs at least a load generator. More commonly, a testing harness with integrated load generation is employed. In addition, some instrumentation may be required or useful.
 
-### Generating Load
+### 2.1. Generating Load
 
 Generate load by sending HTTP requests either to the WebUI service instances or to a self-configured front-end load balancer. You can send requests using your browser. For more controlled testing and for testing at higher loads, you may want to use a load generator. Any HTTP load generator capable of sending POST and GET requests and supporting Cookies should work with the Tea Store.
 
@@ -156,7 +182,7 @@ We recommend using one of our tested load generators:
 1. LIMBO HTTP Load Generator: High-performance load generator for dynamically varying loads. Scripts requests using LUA scripts and supports power measurements.
 2. JMeter™: Established web application testing tool with test definition UI and many available plug-ins.
 
-#### LIMBO HTTP Load Generator
+#### 2.1.1. LIMBO HTTP Load Generator
 
 The [LIMBO HTTP Load Generator](https://github.com/joakimkistowski/HTTP-Load-Generator) (download the binary [here](https://gitlab2.informatik.uni-wuerzburg.de/descartes/httploadgenerator/raw/master/httploadgenerator.jar)) is a load generator designed to generate HTTP loads with varying load intensities. It uses load intensity specifications as specified by [LIMBO](http://descartes.tools/limbo) to generate loads that vary in intensity (number of requests per second) over time. The load generator logs application level data and supports connecting to external power measurement daemons. It specifies the HTTP requests themselves using LUA scripts, which are read at run-time. You can get an overview of the HTTP Load Generator by reading its [online documentation](https://github.com/joakimkistowski/HTTP-Load-Generator/blob/master/README.md).
 
@@ -169,13 +195,13 @@ To run the TeaStore with the LIMBO HTTP Load Generator, you must do the followin
 3. Create/download a request definition script
 4. Run the load generator
 
-##### Deploying and starting the Load Generator
+##### 2.1.1.1. Deploying and starting the Load Generator
 
 First choose a load generator machine. Deploy the HTTP Load Generator Jar on the load generator machine and start it in load generator mode with the _loadgenerator_ command:
 
     $ java -jar httploadgenerator.jar loadgenerator
 
-##### Create/Download a Load Intensity Profile
+##### 2.1.1.2. Create/Download a Load Intensity Profile
 
 Next, download or create a load intensity profile for your test. To create your own, we recommend using the [LIMBO tool](http://descartes.tools/limbo). You can also simply write your own CSV file. The format and use of LIMBO for load profile creation is documented [here](https://github.com/joakimkistowski/HTTP-Load-Generator#31-creating-a-custom-load-intensity-arrival-rate-profile).
 
@@ -187,7 +213,7 @@ We provide these example load intensity profiles:
 
 Place your load intensity profile on the director machine. For simplicity, the following instructions will assume that you have placed it in the same directory as the _httploadgenerator.jar_.
 
-##### Create/Download a Request Definition Script
+##### 2.1.1.3. Create/Download a Request Definition Script
 
 The request definition script defines which requests to send. It can create context-sensitive requests based on the responses and is defined in the LUA scripting language. The library functions to be used in the script are documented [here](https://github.com/joakimkistowski/HTTP-Load-Generator#32-scripting-the-requests-themselves).
 
@@ -198,7 +224,7 @@ We provide these two request scripts:
 * [RECOMMENDED: Browse Profile](https://github.com/DescartesResearch/teastore/blob/master/examples/httploadgenerator/teastore_browse.lua): A profile that emulates users browsing the store, adding items to their shopping carts and then discarding the carts. Users place no orders and the database remains unchanged. Use this one as your go-to profile.
 * [Buy Profile](https://github.com/DescartesResearch/TeaStore/blob/master/examples/httploadgenerator/teastore_buy.lua): A profile that emulates users browsing the store and purchasing items. This profile changes the database over time and may thus lead to less stable behavior.
 
-##### Run the load generator
+##### 2.1.1.4. Run the load generator
 
 To run the load generator, place the request definition script, load intensity profile, and _httploadgenerator.jar_ on your director machine and start the _httploadgenerator.jar_ in load generation mode (using the _loadgenerator_ command) on the load generator machine.
 
@@ -215,13 +241,13 @@ The example uses the following command-line switches (feel free to use the _dire
 * _-o_ : specifies the name of the **o**utput result csv file.
 * _-t_ : specifies the number of load generation **t**hreads.
 
-#### JMeter™
+#### 2.1.2. JMeter™
 
 The Apache JMeter™ (download the binary [here](https://jmeter.apache.org/download_jmeter.cgi)) application is open source software, a 100% pure Java application designed to load test functional behavior and measure performance.
 
 For stressing the TeaStore we uploaded two scipts: (i) [Browse Profile](https://github.com/DescartesResearch/TeaStore/blob/master/examples/jmeter/teastore_browse.jmx) for the usage of the GUI and (ii) [Browse Profile](https://github.com/DescartesResearch/TeaStore/blob/master/examples/jmeter/teastore_browse_nogui.jmx) for the usage of a command-line.
 
-##### Run JMeter™ with GUI
+##### 2.1.2.1. Run JMeter™ with GUI
 First, download the [script](https://github.com/DescartesResearch/TeaStore/blob/master/examples/jmeter/teastore_browse.jmx). Then, open JMeter™ and open teastore_browse.jmx. Afterwards, click on the testplan called TeaStore. Here, 4 variables need to be set:
 
 * _hostname_ : specifies the address of the WebUI or the front load balancer, which handles multiple WebUIs (required).
@@ -233,7 +259,7 @@ After the setting of the variables, click the _Start_-button. To stop the run, c
 
 The testplan offers a summary report, in which statistics of each request is reported, and a result tree, in which each request is reported.
 
-##### Run JMeter™ with Command-Line
+##### 2.1.2.2. Run JMeter™ with Command-Line
 We support also using JMeter™ with a command line. First, download the [script](https://github.com/DescartesResearch/TeaStore/blob/master/examples/jmeter/teastore_browse_nogui.jmx). Then, type the following command, which contains examplary values, into the command-line:
 
     $ java -jar ApacheJMeter.jar -t teastore_browse_nogui.jmx -Jhostname 10.1.1.1 -Jport 8080 -JnumUser 10 -JrampUp 1 -l mylogfile.log -n
@@ -250,16 +276,16 @@ For the command-line, the following switches are used:
 
 If the switch _-l_ is set, the results of the run are stored in the specified file. The default option is the script loops forever. However, a number of loops can be set. Thus, open the script with the JMeter™ GUI, set _Loop Count_, and save. If a finit number of loops is set, the scipt terminates automatically after the last loop.
 
-### Instrumenting the TeaStore
+### 2.2. Instrumenting the TeaStore
 
 The following section discusses the options to take measurements from the TeaStore using Kieker in Docker/Kubernetes or OpenTracing.
 
-#### Docker containers with Kieker
+#### 2.2.1. Docker containers with Kieker
 
 The docker containers we provide for all services are already instrumented using [Kieker](http://kieker-monitoring.net/).
 They can either log to an AMQP server or locally to a File. Both options are discussed in the following.
 
-##### AMQP Logging
+##### 2.2.1.1. AMQP Logging
 
 Collecting the Kieker logs via AMQP is currently the preferred setup. To set up the TeaStore with log collection via AMQP, the regular setup described here is extended by a "RABBITMQ_HOST=X.X.X.X" flag and a preconfigred RabbitMQ container [descartesresearch/teastore-kieker-rabbitmq](https://hub.docker.com/r/descartesresearch/teastore-kieker-rabbitmq/). The RABBITMQ_HOST parameter is only required for services that support Kieker monitoring, i.e. WebUI, ImageProvider, Auth, Recommender, and Persistence. To set up an instrumented TeaStore version, first you start a standard registry and database:
 
@@ -288,7 +314,7 @@ Next, start all other services with their respective `docker run` command. We as
 
 The Kieker traces can now be downloaded at [http://10.1.2.21:8081/logs/](http://10.1.2.21:8081/logs/) as a single file containing the monitoring traces for all service instances. To run analysis on the generated Kieker traces, follow the documentation [here](http://eprints.uni-kiel.de/16537/67/kieker-1.12-userguide.pdf).
 
-##### AMQP Logging in Kubernetes
+##### 2.2.1.2. AMQP Logging in Kubernetes
 
 The TeaStore can be deployed with Kieker Monitoring and AMQP Logging in Kubernetes. We provide two Kubernetes yamls to do so. First, the AMQP server must be deployed. It must be online and ready to receive messages when the instrumented TeaStore services are started.
 
@@ -303,7 +329,7 @@ Again, all deployments, pods and services of the instrumentation infrastructure 
 
 You can watch a short demonstration of the TeaStore running in Kubernetes AMQP Logging on **[YouTube](https://www.youtube.com/watch?v=6OcSNrErzGE&feature=youtu.be)**.
 
-##### Local Logging
+##### 2.2.1.3. Local Logging
 
 In scenarios where no AMQP server is available, logging to a local file can be enabled. To set up service with local logging, the regular setup is extended by a "LOG_TO_FILE=true" flag. Additionally, we recommend mounting the log directory inside the container as a volume to make the logs accessible outside the container. This parameter is only required for services that support Kieker monitoring, i.e. WebUI, ImageProvider, Auth, Recommender, and Persistence. Therefore, to set up an instrumented TeaStore version, first you start a standard registry and database:
 
@@ -326,16 +352,16 @@ Next, start all other services with their respective `docker run` command. We as
 
 The log files are available in the folder of the mounted volume (here /home/myUserName/myFolder) on the host machines. To run analysis on the generated Kieker traces, follow the documentation [here](http://eprints.uni-kiel.de/16537/67/kieker-1.12-userguide.pdf).
 
-##### Parameter Logging
+##### 2.2.1.4. Parameter Logging
 
 Teastore offers the possibility to log the values of method call parameters as well as return values using custom kieker probes. As this feature is disabled by default, pass the LOG_PARAMETERS=true flag on container startup in order to enable it. For example:
    `docker run -v /home/myUserName/myFolder:/kieker/logs/ -e "LOG_PARAMETERS=true" -e "LOG_TO_FILE=true" -e "REGISTRY_HOST=10.1.2.3" -e "REGISTRY_PORT=10000" -e "HOST_NAME=10.1.2.30" -e "SERVICE_PORT=4444" -e "DB_HOST=10.1.2.20" -e "DB_PORT=3306" -p 4444:8080 -d descartesresearch/teastore-persistence`
 
-#### OpenTracing with Kubernetes and Istio
+#### 2.2.2. OpenTracing with Kubernetes and Istio
 
 The TeaStore supports OpenTracing when used in a Kubernetes Cluster that uses Istio as service mesh.
 
-## Building and Customizing the TeaStore
+## 3. Building and Customizing the TeaStore
 
 1. If not already done, use the following command to clone the repository:
 
