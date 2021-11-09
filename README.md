@@ -4,7 +4,31 @@ The TeaStore is a micro-service reference and test application to be used in ben
 
 The TeaStore is a distributed micro-service application featuring five distinct services plus a registry. Each service may be replicated without limit and deployed on separate devices as desired. Services communicate using REST and using the Netflix [Ribbon](https://github.com/Netflix/ribbon) client side load balancer. Each service also comes in a pre-instrumented variant that uses [Kieker](http://kieker-monitoring.net) to provide detailed information about the TeaStore's actions and behavior.
 
-Check out our [Getting Started Guide](GET_STARTED.md) for information on how to use the TeaStore. You can also watch a short demonstration of the TeaStore running in Kubernetes with its monitoring environment enabled on **[YouTube](https://www.youtube.com/watch?v=6OcSNrErzGE&feature=youtu.be)**.
+Check out our [Getting Started Guide](GET_STARTED.md) for information on how to use the TeaStore:
+
+1. [Deploying the TeaStore](#1-deploying-the-teastore)
+   1. [Run as Multiple Single Service Containers](#11-run-as-multiple-single-service-containers)
+   2. [Run the TeaStore using Docker Compose](#12-run-the-teastore-using-docker-compose)
+   3. [Run the TeaStore on a Kubernetes Cluster](#13-run-the-teastore-on-a-kubernetes-cluster)
+   4. [Run the TeaStore with helm templates](#14-run-the-teastore-with-helm-templates)
+2. [Using the TeaStore for Testing and Benchmarking](#2-using-the-teastore-for-testing-and-benchmarking)
+   1. [Generating Load](#21-generating-load)
+      1. [LIMBO HTTP Load Generator](#211-limbo-http-load-generator)
+         1. [Deploying and starting the Load Generator](#2111-deploying-and-starting-the-load-generator)
+         2. [Create/Download a Load Intensity Profile](#2112-createdownload-a-load-intensity-profile)
+         3. [Create/Download a Request Definition Script](#2113-createdownload-a-request-definition-script)
+         4. [Run the load generator](#2114-run-the-load-generator)
+      2. [JMeter™](#212-jmeter)
+         1. [Run JMeter™ with GUI](#2121-run-jmeter-with-gui)
+         2. [Run JMeter™ with Command-Line](#2122-run-jmeter-with-command-line)
+   2. [Instrumenting the TeaStore](#22-instrumenting-the-teastore)
+      1. [Docker containers with Kieker](#221-docker-containers-with-kieker)
+         1. [AMQP Logging](#2211-amqp-logging)
+         2. [AMQP Logging in Kubernetes](#2212-amqp-logging-in-kubernetes)
+         3. [Local Logging](#2213-local-logging)
+         4. [Parameter Logging](#2214-parameter-logging)
+      2. [OpenTracing with Kubernetes and Istio](#222-opentracing-with-kubernetes-and-istio)
+3. [Building and Customizing the TeaStore](#3-building-and-customizing-the-teastore)
 
 ## Cite Us
 
