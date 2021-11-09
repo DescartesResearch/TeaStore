@@ -1,25 +1,5 @@
 # The TeaStore
 
-The TeaStore is a micro-service reference and test application developed by the Descartes Research Group at the University of Würzburg. The TeaStore emulates a basic web store for automatically generated, fictitious teas, tea accessories and supplies. As it is primarily a test application, it features UI elements for database generation and service resetting in addition to the store itself.
-
-The TeaStore is a distributed micro-service application featuring five distinct services plus a registry. Each service may be replicated without limit and deployed on separate devices as desired. Services communicate using REST and using the Netflix "[Ribbon](https://github.com/Netflix/ribbon)" client side load balancer. The five services are as follows:
-* _tools.descartes.teastore.webui_: WebUI Service
-* _tools.descartes.teastore.auth_: Authentication Service
-* _tools.descartes.teastore.recommender_: Recommender Service
-* _tools.descartes.teastore.persistence_: Persistence Provider Service
-* _tools.descartes.teastore.image_: Image Provider Service
-
-Services register at a separate simple registry, which is provided with the TeaStore. Any service registering with the registry is automatically called by all other services which require it.
-
-The TeaStore is designed to be a reference / test application to be used in benchmarks and tests. Some of its envisioned use-cases are:
-* Testing performance model extractors and predictors for distributed applications
-* Testing micro-service and cloud management mechanisms, such as multi-tier auto-scalers
-* Testing energy efficiency and power prediction and management mechanisms
-
-Note that the TeaStore does not feature a front-end load balancer for the WebUI. If you want to use multiple WebUI instances, you must configure a front-end load balancer yourself or configure your load driver to use all available WebUI instances.
-
-Contents:
-
 1. [Deploying the TeaStore](#1-deploying-the-teastore)
    1. [Run as Multiple Single Service Containers](#11-run-as-multiple-single-service-containers)
    2. [Run the TeaStore using Docker Compose](#12-run-the-teastore-using-docker-compose)
@@ -43,6 +23,24 @@ Contents:
          4. [Parameter Logging](#2214-parameter-logging)
       2. [OpenTracing with Kubernetes and Istio](#222-opentracing-with-kubernetes-and-istio)
 3. [Building and Customizing the TeaStore](#3-building-and-customizing-the-teastore)
+4. 
+The TeaStore is a micro-service reference and test application developed by the Descartes Research Group at the University of Würzburg. The TeaStore emulates a basic web store for automatically generated, fictitious teas, tea accessories and supplies. As it is primarily a test application, it features UI elements for database generation and service resetting in addition to the store itself.
+
+The TeaStore is a distributed micro-service application featuring five distinct services plus a registry. Each service may be replicated without limit and deployed on separate devices as desired. Services communicate using REST and using the Netflix "[Ribbon](https://github.com/Netflix/ribbon)" client side load balancer. The five services are as follows:
+* _tools.descartes.teastore.webui_: WebUI Service
+* _tools.descartes.teastore.auth_: Authentication Service
+* _tools.descartes.teastore.recommender_: Recommender Service
+* _tools.descartes.teastore.persistence_: Persistence Provider Service
+* _tools.descartes.teastore.image_: Image Provider Service
+
+Services register at a separate simple registry, which is provided with the TeaStore. Any service registering with the registry is automatically called by all other services which require it.
+
+The TeaStore is designed to be a reference / test application to be used in benchmarks and tests. Some of its envisioned use-cases are:
+* Testing performance model extractors and predictors for distributed applications
+* Testing micro-service and cloud management mechanisms, such as multi-tier auto-scalers
+* Testing energy efficiency and power prediction and management mechanisms
+
+Note that the TeaStore does not feature a front-end load balancer for the WebUI. If you want to use multiple WebUI instances, you must configure a front-end load balancer yourself or configure your load driver to use all available WebUI instances.
 
 ## 1. Deploying the TeaStore
 
