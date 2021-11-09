@@ -13,7 +13,7 @@ Check out our [Getting Started Guide](GET_STARTED.md) for information on how to 
    4. [Run the TeaStore with helm templates](GET_STARTED.md#14-run-the-teastore-with-helm-templates)
 2. [Using the TeaStore for Testing and Benchmarking](GET_STARTED.md#2-using-the-teastore-for-testing-and-benchmarking)
    1. [Generating Load](GET_STARTED.md#21-generating-load)
-      1. [LIMBO HTTP Load Generator](GET_STARTED.mdGET_STARTED.md#211-limbo-http-load-generator)
+      1. [LIMBO HTTP Load Generator](GET_STARTED.md#211-limbo-http-load-generator)
       2. [JMeter™](GET_STARTED.md#212-jmeter)
    2. [Instrumenting the TeaStore](GET_STARTED.md#22-instrumenting-the-teastore)
       1. [Docker containers with Kieker](#221-docker-containers-with-kieker)
