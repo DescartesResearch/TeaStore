@@ -23,7 +23,7 @@
          4. [Parameter Logging](#2214-parameter-logging)
       2. [OpenTracing with Kubernetes and Istio](#222-opentracing-with-kubernetes-and-istio)
 3. [Building and Customizing the TeaStore](#3-building-and-customizing-the-teastore)
-4. 
+
 The TeaStore is a micro-service reference and test application developed by the Descartes Research Group at the University of Würzburg. The TeaStore emulates a basic web store for automatically generated, fictitious teas, tea accessories and supplies. As it is primarily a test application, it features UI elements for database generation and service resetting in addition to the store itself.
 
 The TeaStore is a distributed micro-service application featuring five distinct services plus a registry. Each service may be replicated without limit and deployed on separate devices as desired. Services communicate using REST and using the Netflix "[Ribbon](https://github.com/Netflix/ribbon)" client side load balancer. The five services are as follows:
