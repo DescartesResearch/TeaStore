@@ -6,7 +6,7 @@ The TeaStore is a distributed micro-service application featuring five distinct 
 
 Check out our [Getting Started Guide](GET_STARTED.md) for information on how to use the TeaStore:
 
-1. [Deploying the TeaStore](#1-deploying-the-teastore)
+1. [Deploying the TeaStore](GET_STARTED.md#1-deploying-the-teastore)
    1. [Run as Multiple Single Service Containers](#11-run-as-multiple-single-service-containers)
    2. [Run the TeaStore using Docker Compose](#12-run-the-teastore-using-docker-compose)
    3. [Run the TeaStore on a Kubernetes Cluster](#13-run-the-teastore-on-a-kubernetes-cluster)
