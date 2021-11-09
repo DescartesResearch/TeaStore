@@ -86,7 +86,8 @@ jobs:
   build:
     name: Build and publish Docker images of TeaStore
     runs-on: ubuntu-latest
-    needs: [test_default, test_https, test_kieker,cypress-run]
+    needs: [test_default, test_https, test_kieker, cypress-run]
+    if: success() && github.ref == 'refs/heads/development'
     steps: 
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v2
@@ -104,75 +105,72 @@ jobs:
           sed -i "s/teastore-base:latest/teastore-base:${GIT_BRANCH}/g" services/tools.descartes.teastore.recommender/Dockerfile
           sed -i "s/teastore-base:latest/teastore-base:${GIT_BRANCH}/g" services/tools.descartes.teastore.registry/Dockerfile
           sed -i "s/teastore-base:latest/teastore-base:${GIT_BRANCH}/g" services/tools.descartes.teastore.webui/Dockerfile
-      - uses: jerray/publish-docker-action@master
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: descartesresearch/teastore-base
-          file: utilities/tools.descartes.teastore.dockerbase/Dockerfile
-          path: utilities/tools.descartes.teastore.dockerbase
-          tags: ${{ env.GIT_BRANCH }}
-      - uses: jerray/publish-docker-action@master
+
+      - name: Build and push teastore-base
+        uses: docker/build-push-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: descartesresearch/teastore-recommender
-          file: services/tools.descartes.teastore.recommender/Dockerfile
-          path: services/tools.descartes.teastore.recommender
-          tags: ${{ env.GIT_BRANCH }}
-      - uses: jerray/publish-docker-action@master
+          context: ./utilities/tools.descartes.teastore.dockerbase
+          push: true
+          tags: descartesresearch/teastore-base:${{env.GIT_BRANCH}}
+
+      - name: Build and push teastore-recommender
+        uses: docker/build-push-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: descartesresearch/teastore-webui
-          file: services/tools.descartes.teastore.webui/Dockerfile
-          path: services/tools.descartes.teastore.webui
-          tags: ${{ env.GIT_BRANCH }}
-      - uses: jerray/publish-docker-action@master
+          context: ./services/tools.descartes.teastore.recommender
+          push: true
+          tags: descartesresearch/teastore-recommender:${{env.GIT_BRANCH}}
+
+      - name: Build and push teastore-webui
+        uses: docker/build-push-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: descartesresearch/teastore-image
-          file: services/tools.descartes.teastore.image/Dockerfile
-          path: services/tools.descartes.teastore.image
-          tags: ${{ env.GIT_BRANCH }}
-      - uses: jerray/publish-docker-action@master
+          context: ./services/tools.descartes.teastore.webui
+          push: true
+          tags: descartesresearch/teastore-webui:${{env.GIT_BRANCH}}
+
+      - name: Build and push teastore-image
+        uses: docker/build-push-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: descartesresearch/teastore-auth
-          file: services/tools.descartes.teastore.auth/Dockerfile
-          path: services/tools.descartes.teastore.auth
-          tags: ${{ env.GIT_BRANCH }}
-      - uses: jerray/publish-docker-action@master
+          context: ./services/tools.descartes.teastore.image
+          push: true
+          tags: descartesresearch/teastore-image:${{env.GIT_BRANCH}}
+
+      - name: Build and push teastore-auth
+        uses: docker/build-push-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: descartesresearch/teastore-persistence
-          file: services/tools.descartes.teastore.persistence/Dockerfile
-          path: services/tools.descartes.teastore.persistence
-          tags: ${{ env.GIT_BRANCH }}
-      - uses: jerray/publish-docker-action@master
+          context: ./services/tools.descartes.teastore.auth
+          push: true
+          tags: descartesresearch/teastore-auth:${{env.GIT_BRANCH}}
+
+      - name: Build and push teastore-persistence
+        uses: docker/build-push-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: descartesresearch/teastore-registry
-          file: services/tools.descartes.teastore.registry/Dockerfile
-          path: services/tools.descartes.teastore.registry
-          tags: ${{ env.GIT_BRANCH }}
-      - uses: jerray/publish-docker-action@master
+          context: ./services/tools.descartes.teastore.persistence
+          push: true
+          tags: descartesresearch/teastore-persistence:${{env.GIT_BRANCH}}
+
+      - name: Build and push teastore-registry
+        uses: docker/build-push-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: descartesresearch/teastore-db
-          file: utilities/tools.descartes.teastore.database/Dockerfile
-          path: utilities/tools.descartes.teastore.database
-          tags: ${{ env.GIT_BRANCH }}
-      - uses: jerray/publish-docker-action@master
+          context: ./services/tools.descartes.teastore.registry
+          push: true
+          tags: descartesresearch/teastore-registry:${{env.GIT_BRANCH}}
+
+      - name: Build and push teastore-db
+        uses: docker/build-push-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: descartesresearch/teastore-kieker-rabbitmq
-          file: utilities/tools.descartes.teastore.kieker.rabbitmq/Dockerfile
-          path: utilities/tools.descartes.teastore.kieker.rabbitmq
-          tags: ${{ env.GIT_BRANCH }}
+          context: ./utilities/tools.descartes.teastore.database
+          push: true
+          tags: descartesresearch/teastore-db:${{env.GIT_BRANCH}}
+
+      - name: Build and push teastore-kieker-rabbitmq
+        uses: docker/build-push-action@v2
+        with:
+          context: ./utilities/tools.descartes.teastore.kieker.rabbitmq
+          push: true
+          tags: descartesresearch/teastore-kieker-rabbitmq:${{env.GIT_BRANCH}}

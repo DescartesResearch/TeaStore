@@ -85,76 +85,75 @@ jobs:
           java-version: '11'
       - run: |
           mvn clean install -DskipTests
-          echo "VERSION=$(grep -o ".\..\.." <<< "${{ github.event.milestone.title }}")" >> ${GITHUB_ENV}
-      - uses: jerray/publish-docker-action@master
+          VERSION=$(grep -o ".\..\.." <<< "${{ github.event.milestone.title }}")
+          echo "VERSION=${VERSION}" >> ${GITHUB_ENV}
+          echo "Version:_${VERSION}_"
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: descartesresearch/teastore-base
-          file: utilities/tools.descartes.teastore.dockerbase/Dockerfile
-          path: utilities/tools.descartes.teastore.dockerbase
-          tags: ${{ env.VERSION }} , latest
-      - uses: jerray/publish-docker-action@master
+
+      - name: Build and push teastore-base
+        uses: docker/build-push-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: descartesresearch/teastore-recommender
-          file: services/tools.descartes.teastore.recommender/Dockerfile
-          path: services/tools.descartes.teastore.recommender
-          tags: ${{ env.VERSION }} , latest
-      - uses: jerray/publish-docker-action@master
+          context: ./utilities/tools.descartes.teastore.dockerbase
+          push: true
+          tags: descartesresearch/teastore-base:latest,descartesresearch/teastore-base:${{env.VERSION}}
+
+      - name: Build and push teastore-recommender
+        uses: docker/build-push-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: descartesresearch/teastore-webui
-          file: services/tools.descartes.teastore.webui/Dockerfile
-          path: services/tools.descartes.teastore.webui
-          tags: ${{ env.VERSION }} , latest
-      - uses: jerray/publish-docker-action@master
+          context: ./services/tools.descartes.teastore.recommender
+          push: true
+          tags: descartesresearch/teastore-recommender:latest,descartesresearch/teastore-recommender:${{env.VERSION}}
+
+      - name: Build and push teastore-webui
+        uses: docker/build-push-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: descartesresearch/teastore-image
-          file: services/tools.descartes.teastore.image/Dockerfile
-          path: services/tools.descartes.teastore.image
-          tags: ${{ env.VERSION }} , latest
-      - uses: jerray/publish-docker-action@master
+          context: ./services/tools.descartes.teastore.webui
+          push: true
+          tags: descartesresearch/teastore-webui:latest,descartesresearch/teastore-webui:${{env.VERSION}}
+
+      - name: Build and push teastore-image
+        uses: docker/build-push-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: descartesresearch/teastore-auth
-          file: services/tools.descartes.teastore.auth/Dockerfile
-          path: services/tools.descartes.teastore.auth
-          tags: ${{ env.VERSION }} , latest
-      - uses: jerray/publish-docker-action@master
+          context: ./services/tools.descartes.teastore.image
+          push: true
+          tags: descartesresearch/teastore-image:latest,descartesresearch/teastore-image:${{env.VERSION}}
+
+      - name: Build and push teastore-auth
+        uses: docker/build-push-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: descartesresearch/teastore-persistence
-          file: services/tools.descartes.teastore.persistence/Dockerfile
-          path: services/tools.descartes.teastore.persistence
-          tags: ${{ env.VERSION }} , latest
-      - uses: jerray/publish-docker-action@master
+          context: ./services/tools.descartes.teastore.auth
+          push: true
+          tags: descartesresearch/teastore-auth:latest,descartesresearch/teastore-auth:${{env.VERSION}}
+
+      - name: Build and push teastore-persistence
+        uses: docker/build-push-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: descartesresearch/teastore-registry
-          file: services/tools.descartes.teastore.registry/Dockerfile
-          path: services/tools.descartes.teastore.registry
-          tags: ${{ env.VERSION }} , latest
-      - uses: jerray/publish-docker-action@master
+          context: ./services/tools.descartes.teastore.persistence
+          push: true
+          tags: descartesresearch/teastore-persistence:latest,descartesresearch/teastore-persistence:${{env.VERSION}}
+
+      - name: Build and push teastore-registry
+        uses: docker/build-push-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: descartesresearch/teastore-db
-          file: utilities/tools.descartes.teastore.database/Dockerfile
-          path: utilities/tools.descartes.teastore.database
-          tags: ${{ env.VERSION }} , latest
-      - uses: jerray/publish-docker-action@master
+          context: ./services/tools.descartes.teastore.registry
+          push: true
+          tags: descartesresearch/teastore-registry:latest,descartesresearch/teastore-registry:${{env.VERSION}}
+
+      - name: Build and push teastore-db
+        uses: docker/build-push-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: descartesresearch/teastore-kieker-rabbitmq
-          file: utilities/tools.descartes.teastore.kieker.rabbitmq/Dockerfile
-          path: utilities/tools.descartes.teastore.kieker.rabbitmq
-          tags: ${{ env.VERSION }} , latest
+          context: ./utilities/tools.descartes.teastore.database
+          push: true
+          tags: descartesresearch/teastore-db:latest,descartesresearch/teastore-db:${{env.VERSION}}
+
+      - name: Build and push teastore-kieker-rabbitmq
+        uses: docker/build-push-action@v2
+        with:
+          context: ./utilities/tools.descartes.teastore.kieker.rabbitmq
+          push: true
+          tags: descartesresearch/teastore-kieker-rabbitmq:latest,descartesresearch/teastore-kieker-rabbitmq:${{env.VERSION}}
