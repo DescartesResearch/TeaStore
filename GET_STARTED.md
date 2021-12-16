@@ -12,6 +12,8 @@
          2. [Create/Download a Load Intensity Profile](#2112-createdownload-a-load-intensity-profile)
          3. [Create/Download a Request Definition Script](#2113-createdownload-a-request-definition-script)
          4. [Run the load generator](#2114-run-the-load-generator)
+            1. [Simple Configuration](#21141-simple-configuration)
+            2. [Measure the CPU utilization of containers over the Docker API](#21142-measure-the-cpu-utilization-of-containers-over-the-docker-api)
       2. [JMeter™](#212-jmeter)
          1. [Run JMeter™ with GUI](#2121-run-jmeter-with-gui)
          2. [Run JMeter™ with Command-Line](#2122-run-jmeter-with-command-line)
@@ -224,6 +226,10 @@ We provide these two request scripts:
 
 ##### 2.1.1.4. Run the load generator
 
+We provide two options to run the load generator: The simple (original) configuration and one that allows measuring the CPU utilization of docker containers over the docker API.
+
+###### 2.1.1.4.1 Simple Configuration
+
 To run the load generator, place the request definition script, load intensity profile, and _httploadgenerator.jar_ on your director machine and start the _httploadgenerator.jar_ in load generation mode (using the _loadgenerator_ command) on the load generator machine.
 
 You can run the test from your director machine by starting the _httploadgenerator.jar_ in director mode (using the _-director_ command). A typical start command looks like this:
@@ -238,6 +244,23 @@ The example uses the following command-line switches (feel free to use the _dire
 * _-l_ : specifies the **l**ua user profile script.
 * _-o_ : specifies the name of the **o**utput result csv file.
 * _-t_ : specifies the number of load generation **t**hreads.
+
+###### 2.1.1.4.2 Measure the CPU utilization of containers over the Docker API
+
+For this functionality, a [modified binary](https://github.com/DescartesResearch/TeaStore/blob/master/examples/httploadgenerator/httploadgenerator.jar) is needed. This binary can be used just like the version from the simple configuration, but two additional parameters have to be specified:
+
+- The `-c` option in `director` mode must be set to `docker`.
+- In `-p` must be comma-separated values `<IP>:<PORT>:<CONTAINER_ID>,<IP>:<PORT>:<CONTAINER_ID>`. `<IP>` and `<PORT>` specify the IP and port of the server providing access to the docker API. The `<CONTAINER_ID>` is the ID of the desired container in `docker ps` to get the cpu utilization of.
+
+Additionally, the Docker API must be available over TCP on the server. Therefore, use `socat` to create a unix socket "proxy":
+
+```shell
+# make the docker API available over TCP on port 12345. may require 'sudo' to work. 
+# USE WITH CAUTION, because this exposes docker functionality to the entire network!
+socat TCP-LISTEN:12345,reuseaddr,fork UNIX-CLIENT:/var/run/docker.sock
+```
+
+The utilization data for each container is appended to the output `.csv` file of the load generator director.
 
 #### 2.1.2. JMeter™
 
