@@ -50,7 +50,7 @@ class UserBehavior(HttpUser):
             logging.info("Loaded login page.")
         else:
             logging.error(f"Could not load login page: {res.status_code}")
-        # login
+        # login random user
         user = randint(1, 99)
         login_request = self.client.post("/loginAction", params={"username": user, "password": "password"})
         if login_request.ok:
@@ -64,13 +64,15 @@ class UserBehavior(HttpUser):
         Simulates random browsing behaviour.
         :return: None
         """
-        # execute browsing action randomly between 2 and 5 times
+        # execute browsing action randomly up to 5 times
         for i in range(1, randint(2, 5)):
+            # browses random category and page
             category_id = randint(2, 6)
             page = randint(1, 5)
             category_request = self.client.get("/category", params={"page": page, "category": category_id})
             if category_request.ok:
                 logging.info(f"Visited category {category_id} on page 1")
+                # browses random product
                 product_id = randint(7, 506)
                 product_request = self.client.get("/product", params={"id": product_id})
                 if product_request.ok:
