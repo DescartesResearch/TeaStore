@@ -47,7 +47,7 @@ For an example of a large-scale TeaStore setup we refer to [Microservices: A Per
 
  ## The TeaStore in Action
  The TeaStore is used as the demo application in the [Cisco Full Stack Observability Workshop](https://www.fsolabs.net/) and as a case study in a number of scientific publications:
- * A. Horn, H.M. Fard, F. Wolf. *Multi-objective Hybrid Autoscaling of Microservices in Kubernetes Clusters*. In Euro-Par 2022: Parallel Processing, vol 13440. 2022. https://doi.org/10.1007/978-3-031-12597-3_15
+ * A. Horn, H.M. Fard, F. Wolf. *Multi-objective Hybrid Autoscaling of Microservices in Kubernetes Clusters*. In Euro-Par 2022: Parallel Processing, pp 233–250. 2022. https://doi.org/10.1007/978-3-031-12597-3_15
  * M. Elsaadawy, A. Lohner, R. Wang, J. Wang, and B. Kemme. *DyMonD: dynamic application monitoring and service detection framework*. In Proceedings of the 22nd International Middleware Conference: Demos and Posters, pp- 8-9. 2021. https://doi.org/10.1145/3491086.3492471
  * D. Sokolowski, P. Weisenburger, and G. Salvaneschi. *Automating serverless deployments for DevOps organizations.* In ESEC/FSE 2021: Proceedings of the 29th ACM Joint Meeting on European Software Engineering Conference and Symposium on the Foundations of Software Engineering, pp. 57-69. 2021. https://doi.org/10.1145/3468264.3468575
 * L. Liao, J. Chen,  H. Li, Y. Zeng, W. Shang, C. Sporea, A. Toma, and S. Sajedi. *Locating Performance Regression Root Causes in the Field Operations of Web-based Systems: An Experience Report.* In IEEE Transactions on Software Engineering. 2021. https://doi.org/10.1109/TSE.2021.3131529
