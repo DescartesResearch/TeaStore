@@ -50,4 +50,4 @@ COPY slf4j-simple-1.7.21.jar                    /usr/local/tomcat/lib/slf4j-simp
 
 EXPOSE 8080
 
-CMD java -jar /usr/local/tomcat/bin/dockermemoryconfigurator.jar ${TOMCAT_HEAP_MEM_PERCENTAGE}; echo "test"; /usr/local/tomcat/bin/start.sh && /usr/local/tomcat/bin/catalina.sh run
+CMD java -jar /usr/local/tomcat/bin/dockermemoryconfigurator.jar ${TOMCAT_HEAP_MEM_PERCENTAGE}; /usr/local/tomcat/bin/start.sh && echo "test"; /usr/local/tomcat/bin/catalina.sh run
