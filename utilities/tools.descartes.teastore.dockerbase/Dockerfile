@@ -46,7 +46,7 @@ RUN keytool -import -noprompt -trustcacerts -alias teastoressl -file /usr/local/
 COPY kieker.monitoring.properties 							/kieker/config/kieker.monitoring.properties
 COPY aop.xml 												            /usr/local/tomcat/lib/aop.xml
 COPY kieker-1.15-SNAPSHOT-aspectj.jar 					/kieker/agent/agent.jar
-COPY slf4j-simple-1.7.21.jar                    /usr/local/tomcat/lib/slf4j-simple-1.7.21.jar
+COPY slf4j-simple-1.7.21.jar                    /usr/local/slf4j-simple-1.7.21.jar
 
 EXPOSE 8080
 
