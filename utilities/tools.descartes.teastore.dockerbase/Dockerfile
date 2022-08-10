@@ -50,4 +50,7 @@ COPY slf4j-simple-1.7.21.jar                    /usr/local/tomcat/lib/slf4j-simp
 
 EXPOSE 8080
 
+# Fix for tomcat + java 10+ (see: https://jira.atlassian.com/browse/BAM-20428)
+RUN sed -i "/JDK_JAVA_OPTIONS.*/d" /usr/local/tomcat/bin/catalina.sh
+
 CMD java -jar /usr/local/tomcat/bin/dockermemoryconfigurator.jar ${TOMCAT_HEAP_MEM_PERCENTAGE}; /usr/local/tomcat/bin/start.sh && /usr/local/tomcat/bin/catalina.sh run
