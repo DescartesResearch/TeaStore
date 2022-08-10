@@ -17,6 +17,7 @@
       2. [JMeter™](#212-jmeter)
          1. [Run JMeter™ with GUI](#2121-run-jmeter-with-gui)
          2. [Run JMeter™ with Command-Line](#2122-run-jmeter-with-command-line)
+      3. [Locust](#213-locust)
    2. [Instrumenting the TeaStore](#22-instrumenting-the-teastore)
       1. [Docker containers with Kieker](#221-docker-containers-with-kieker)
          1. [AMQP Logging](#2211-amqp-logging)
@@ -181,6 +182,7 @@ We recommend using one of our tested load generators:
 
 1. LIMBO HTTP Load Generator: High-performance load generator for dynamically varying loads. Scripts requests using LUA scripts and supports power measurements.
 2. JMeter™: Established web application testing tool with test definition UI and many available plug-ins.
+3. Locust: Scalable user load testing tool written in Python
 
 #### 2.1.1. LIMBO HTTP Load Generator
 
@@ -296,6 +298,19 @@ For the command-line, the following switches are used:
 * _-n_ : starts the scipt without the gui (required).
 
 If the switch _-l_ is set, the results of the run are stored in the specified file. The default option is the script loops forever. However, a number of loops can be set. Thus, open the script with the JMeter™ GUI, set _Loop Count_, and save. If a finit number of loops is set, the scipt terminates automatically after the last loop.
+
+#### 2.1.3. Locust
+
+[Locust](https://github.com/locustio/locust) is an easy to use, scriptable and scalable performance testing tool written in Python.
+
+To use it with the Teastore, it has to be installed via Python pip:
+
+`pip install locust`
+
+Go to the directory `example/locust` and start the GUI by executing the command `locust` in the shell. After that the GUI is available under http://localhost:8089.
+There you need to configure the host url of the Teastore webui, the number of simulated users and their spawn rate.
+
+Further instructions and information on e.g. customization and scripting are available in the [documentation](https://docs.locust.io/en/stable/index.html).
 
 ### 2.2. Instrumenting the TeaStore
 
