@@ -18,6 +18,7 @@
 			<groupId>net.kieker-monitoring</groupId>
 			<artifactId>kieker</artifactId>
 			<version>1.15</version>
+			<classifier>aspectj</classifier>
 		</dependency>
 
 		<dependency>
