@@ -20,8 +20,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import tools.descartes.teastore.image.ImageDBKey;
-
 public class TestImageDBKey {
 
   private static final long TEST_PRODUCT_KEY = 120;

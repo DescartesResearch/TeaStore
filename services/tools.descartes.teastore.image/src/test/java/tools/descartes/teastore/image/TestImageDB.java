@@ -27,8 +27,6 @@ import org.mockito.MockitoAnnotations;
 
 import tools.descartes.teastore.entities.ImageSize;
 import tools.descartes.teastore.entities.ImageSizePreset;
-import tools.descartes.teastore.image.ImageDB;
-import tools.descartes.teastore.image.ImageDBKey;
 
 public class TestImageDB {
 
@@ -48,7 +46,7 @@ public class TestImageDB {
 
   @Before
   public void initialize() {
-    MockitoAnnotations.initMocks(this);
+    MockitoAnnotations.openMocks(this);
     when(mockedProductKey.isProductKey()).thenReturn(true);
     when(mockedProductKey.getProductID()).thenReturn(PRODUCT_ID);
     when(mockedProductKey.getWebUIName()).thenReturn(null);

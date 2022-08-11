@@ -5,7 +5,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import tools.descartes.teastore.image.cache.LeastFrequentlyUsed;
 
 public class TestLeastFrequentlyUsed extends AbstractCacheTestInit {
 

@@ -21,7 +21,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import tools.descartes.teastore.image.StoreImage;
-import tools.descartes.teastore.image.storage.rules.StoreAll;
 
 public class TestStoreAll {
 
@@ -30,7 +29,7 @@ public class TestStoreAll {
 
   @Before
   public void initialize() {
-    MockitoAnnotations.initMocks(this);
+    MockitoAnnotations.openMocks(this);
   }
 
   @Test
