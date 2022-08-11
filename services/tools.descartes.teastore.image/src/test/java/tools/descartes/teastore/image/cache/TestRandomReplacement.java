@@ -8,7 +8,6 @@ import java.util.Random;
 
 import org.junit.Test;
 
-import tools.descartes.teastore.image.cache.RandomReplacement;
 
 public class TestRandomReplacement extends AbstractCacheTestInit {
 

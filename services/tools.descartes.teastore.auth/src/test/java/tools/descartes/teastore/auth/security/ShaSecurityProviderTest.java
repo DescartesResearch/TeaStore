@@ -3,7 +3,6 @@ package tools.descartes.teastore.auth.security;
 import org.junit.Assert;
 import org.junit.Test;
 
-import tools.descartes.teastore.auth.security.ShaSecurityProvider;
 import tools.descartes.teastore.entities.message.SessionBlob;
 
 /**

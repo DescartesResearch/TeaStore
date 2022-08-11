@@ -21,7 +21,7 @@ public class AbstractCacheTestInit {
 
   @Before
   public void initialize() {
-    MockitoAnnotations.initMocks(this);
+    MockitoAnnotations.openMocks(this);
     // when(c0.getId()).thenReturn(0L);
     // when(c0.getByteSize()).thenReturn(1000L);
     // when(c0.equals(any())).thenReturn(false);

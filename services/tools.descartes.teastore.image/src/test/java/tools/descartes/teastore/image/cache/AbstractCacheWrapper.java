@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.function.Predicate;
 
 import tools.descartes.teastore.image.StoreImage;
-import tools.descartes.teastore.image.cache.AbstractCache;
 import tools.descartes.teastore.image.cache.entry.ICacheEntry;
 import tools.descartes.teastore.image.storage.IDataStorage;
 

@@ -21,7 +21,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import tools.descartes.teastore.image.StoreImage;
-import tools.descartes.teastore.image.cache.rules.CacheAll;
 
 public class TestCacheAll {
 
@@ -30,7 +29,7 @@ public class TestCacheAll {
 
   @Before
   public void initialize() {
-    MockitoAnnotations.initMocks(this);
+    MockitoAnnotations.openMocks(this);
   }
 
   @Test

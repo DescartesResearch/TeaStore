@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import tools.descartes.teastore.image.StoreImage;
-import tools.descartes.teastore.image.cache.entry.AbstractEntry;
 
 public class TestAbstractEntry {
 
@@ -27,7 +26,7 @@ public class TestAbstractEntry {
 
   @Before
   public void initialize() {
-    MockitoAnnotations.initMocks(this);
+    MockitoAnnotations.openMocks(this);
     when(mockedImg.getByteSize()).thenReturn(MOCKED_BYTE_SIZE);
     when(mockedImg.getId()).thenReturn(MOCKED_ID);
     when(mockedImgNotEqual.getByteSize()).thenReturn(300L);

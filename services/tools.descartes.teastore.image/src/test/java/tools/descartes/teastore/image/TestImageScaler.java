@@ -27,7 +27,6 @@ import org.junit.Test;
 
 import tools.descartes.teastore.entities.ImageSize;
 import tools.descartes.teastore.entities.ImageSizePreset;
-import tools.descartes.teastore.image.ImageScaler;
 
 public class TestImageScaler {
 
