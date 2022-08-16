@@ -15,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import tools.descartes.teastore.image.StoreImage;
-import tools.descartes.teastore.image.cache.IDataCache;
 import tools.descartes.teastore.image.cache.entry.ICacheEntry;
 import tools.descartes.teastore.image.storage.IDataStorage;
 
@@ -40,7 +39,7 @@ public class TestAbstractCache {
 
   @Before
   public void initialize() {
-    MockitoAnnotations.initMocks(this);
+    MockitoAnnotations.openMocks(this);
     when(c0.getId()).thenReturn(0L);
     when(c0.getByteSize()).thenReturn(1000L);
     when(c1.getId()).thenReturn(1L);

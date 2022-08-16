@@ -24,7 +24,6 @@ import org.mockito.MockitoAnnotations;
 
 import tools.descartes.teastore.entities.ImageSizePreset;
 import tools.descartes.teastore.image.StoreImage;
-import tools.descartes.teastore.image.storage.rules.StoreLargeImages;
 
 public class TestStoreLargeImages {
 
@@ -39,7 +38,7 @@ public class TestStoreLargeImages {
 
   @Before
   public void initialize() {
-    MockitoAnnotations.initMocks(this);
+    MockitoAnnotations.openMocks(this);
     when(mockedLargeImg.getSize()).thenReturn(ImageSizePreset.FULL.getSize());
     when(mockedIconImg.getSize()).thenReturn(ImageSizePreset.ICON.getSize());
     when(mockedMainImg.getSize()).thenReturn(ImageSizePreset.MAIN_IMAGE.getSize());

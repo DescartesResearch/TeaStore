@@ -44,9 +44,12 @@ RUN mkdir -p /kieker/logs
 RUN keytool -import -noprompt -trustcacerts -alias teastoressl -file /usr/local/tomcat/ssl/cert.pem -keystore "/usr/local/openjdk-11/lib/security/cacerts" -storepass changeit
 
 COPY kieker.monitoring.properties 							/kieker/config/kieker.monitoring.properties
-COPY aop.xml 												/usr/local/tomcat/lib/aop.xml
-COPY kieker-1.15-SNAPSHOT-aspectj.jar 						/kieker/agent/agent.jar
+COPY aop.xml 												            /usr/local/tomcat/lib/aop.xml
+COPY kieker-1.15-SNAPSHOT-aspectj.jar 					/kieker/agent/agent.jar
 
 EXPOSE 8080
+
+# Fix for tomcat + java 10+ (see: https://jira.atlassian.com/browse/BAM-20428)
+RUN sed -i "/JDK_JAVA_OPTIONS.*/d" /usr/local/tomcat/bin/catalina.sh
 
 CMD java -jar /usr/local/tomcat/bin/dockermemoryconfigurator.jar ${TOMCAT_HEAP_MEM_PERCENTAGE}; /usr/local/tomcat/bin/start.sh && /usr/local/tomcat/bin/catalina.sh run

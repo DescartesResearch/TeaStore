@@ -5,8 +5,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import tools.descartes.teastore.image.cache.LastInFirstOut;
-
 public class TestLastInFirstOut extends AbstractCacheTestInit {
 
   @Test

@@ -33,7 +33,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import tools.descartes.teastore.entities.ImageSizePreset;
-import tools.descartes.teastore.image.StoreImage;
 
 public class TestStoreImage {
 
@@ -67,7 +66,7 @@ public class TestStoreImage {
 
   @Before
   public void initialize() {
-    MockitoAnnotations.initMocks(this);
+    MockitoAnnotations.openMocks(this);
     when(mockedImg0.getByteSize()).thenReturn((long) IMG_DATA.getBytes().length);
     when(mockedImg0.getByteArray()).thenReturn(IMG_DATA.getBytes());
     when(mockedImg0.getId()).thenReturn(IMG_ID0);

@@ -5,8 +5,8 @@
 	<name>TeaStore Kieker RabbitMQ</name>
 	<url>http://descartes.tools</url>
 	<properties>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -41,8 +41,6 @@
 			<groupId>net.kieker-monitoring</groupId>
 			<artifactId>kieker</artifactId>
 			<version>1.14</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/kieker-1.14-SNAPSHOT-aspectj.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>

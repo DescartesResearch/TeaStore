@@ -18,8 +18,7 @@
 			<groupId>net.kieker-monitoring</groupId>
 			<artifactId>kieker</artifactId>
 			<version>1.15</version>
-			<scope>system</scope>
-			<systemPath>${pom.basedir}/kieker-1.15.jar</systemPath>
+			<classifier>aspectj</classifier>
 		</dependency>
 
 		<dependency>

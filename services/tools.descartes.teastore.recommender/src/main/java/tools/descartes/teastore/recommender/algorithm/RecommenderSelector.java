@@ -13,6 +13,7 @@
  */
 package tools.descartes.teastore.recommender.algorithm;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,11 +76,31 @@ public final class RecommenderSelector implements IRecommender {
 			String recommendername = (String) new InitialContext().lookup("java:comp/env/recommenderAlgorithm");
 			// if a specific algorithm is set, we can use that algorithm
 			if (recommenders.containsKey(recommendername)) {
-				recommender = recommenders.get(recommendername).newInstance();
+				try {
+					recommender = recommenders.get(recommendername).getDeclaredConstructor().newInstance();
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				} catch (NoSuchMethodException e) {
+					e.printStackTrace();
+				} catch (SecurityException e) {
+					e.printStackTrace();
+				}
 			} else {
 				LOG.warn("Recommendername: " + recommendername
 						+ " was not found. Using default recommender (SlopeOneRecommeder).");
-				recommender = DEFAULT_RECOMMENDER.newInstance();
+				try {
+					recommender = DEFAULT_RECOMMENDER.getDeclaredConstructor().newInstance();
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				} catch (NoSuchMethodException e) {
+					e.printStackTrace();
+				} catch (SecurityException e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (InstantiationException | IllegalAccessException e) {
 			// if creating a new instance fails
@@ -90,7 +111,17 @@ public final class RecommenderSelector implements IRecommender {
 			// if nothing was set
 			LOG.info("Recommender not set. Using default recommender (SlopeOneRecommeder).");
 			try {
-				recommender = DEFAULT_RECOMMENDER.newInstance();
+				try {
+					recommender = DEFAULT_RECOMMENDER.getDeclaredConstructor().newInstance();
+				} catch (IllegalArgumentException e1) {
+					e1.printStackTrace();
+				} catch (InvocationTargetException e1) {
+					e1.printStackTrace();
+				} catch (NoSuchMethodException e1) {
+					e1.printStackTrace();
+				} catch (SecurityException e1) {
+					e1.printStackTrace();
+				}
 			} catch (InstantiationException | IllegalAccessException e1) {
 				// also the default algorithm could fail
 				e1.printStackTrace();

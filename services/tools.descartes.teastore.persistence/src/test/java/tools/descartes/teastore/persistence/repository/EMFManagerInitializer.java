@@ -2,8 +2,6 @@ package tools.descartes.teastore.persistence.repository;
 
 import java.util.HashMap;
 
-import tools.descartes.teastore.persistence.repository.EMFManager;
-
 /**
  * Class for managing the testing EMF singleton.
  * Replaces the {@link EMFManager} in tests.
