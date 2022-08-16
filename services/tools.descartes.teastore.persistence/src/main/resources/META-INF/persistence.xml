@@ -22,6 +22,7 @@
 		    <property name="eclipselink.logging.level" value="INFO"/> 
 		    <property name="eclipselink.ddl-generation" value="create-tables"/>
       		<property name="eclipselink.ddl-generation.output-mode" value="database" />
+           <property name="eclipselink.logging.level" value="OFF"/>
      	</properties>
 	</persistence-unit>
 </persistence>

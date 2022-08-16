@@ -84,6 +84,7 @@ public class InitialDataGenerationDaemon implements ServletContextListener {
         DataGenerator.GENERATOR.isDatabaseEmpty();
         databaseOffline = false;
       } catch (PersistenceException e) {
+        System.out.println("TEST");
         LOG.warn("Exception connecting to database. Is database offline? Wating for "
             + DATABASE_OFFLINE_WAIT_MS + " ms.");
         try {
