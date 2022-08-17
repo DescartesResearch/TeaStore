@@ -13,6 +13,7 @@
  */
 package tools.descartes.teastore.persistence.repository;
 
+import jakarta.persistence.Cacheable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -23,6 +24,7 @@ import jakarta.persistence.Id;
  *
  */
 @Entity
+@Cacheable(false)
 public class DatabaseManagementEntity {
 
 	@Id

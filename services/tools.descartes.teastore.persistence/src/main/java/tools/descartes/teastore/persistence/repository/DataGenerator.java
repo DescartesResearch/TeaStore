@@ -382,9 +382,6 @@ public final class DataGenerator {
 				System.out.println("SELECT u FROM "
 				+ DatabaseManagementEntity.class.getName()
 				+ " u");
-				System.out.println(entities.size());
-				System.out.println(entities.get(0).getId());
-				System.out.println(entities.get(0).isFinishedGenerating());
 				finishedGenerating = entities.get(0).isFinishedGenerating();
 			}
 		} finally {
