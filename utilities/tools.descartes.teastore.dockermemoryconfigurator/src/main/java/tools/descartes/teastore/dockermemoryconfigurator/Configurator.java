@@ -35,8 +35,6 @@ public final class Configurator {
     long totalkb = readTotalMemoryInKB();
     long cgroupkb = readCGroupMemoryInKB();
 
-    // System.out.println("Total Host Memory = " + totalkb + " KiB");
-    // System.out.println("Container CGroup Limit = " + cgroupkb + " KiB");
 
     if (cgroupkb != 0 && totalkb != 0 && cgroupkb < totalkb) {
       long heapkb = (cgroupkb * percentage) / 100L;
