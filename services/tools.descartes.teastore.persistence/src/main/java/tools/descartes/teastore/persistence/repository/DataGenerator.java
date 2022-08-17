@@ -379,9 +379,6 @@ public final class DataGenerator {
 							+ " u", DatabaseManagementEntity.class)
 					.getResultList();
 			if (entities != null && !entities.isEmpty()) {
-				System.out.println("SELECT u FROM "
-				+ DatabaseManagementEntity.class.getName()
-				+ " u");
 				finishedGenerating = entities.get(0).isFinishedGenerating();
 			}
 		} finally {
