@@ -19,10 +19,9 @@
         	<property name="jakarta.persistence.jdbc.user" value="teauser"/>
         	<property name="jakarta.persistence.jdbc.password" value="teapassword"/>
  
-		    <property name="eclipselink.logging.level" value="INFO"/> 
 		    <property name="eclipselink.ddl-generation" value="create-tables"/>
       		<property name="eclipselink.ddl-generation.output-mode" value="database" />
-           <property name="eclipselink.logging.level" value="OFF"/>
+            <property name="eclipselink.logging.level" value="FINE"/>
      	</properties>
 	</persistence-unit>
 </persistence>
