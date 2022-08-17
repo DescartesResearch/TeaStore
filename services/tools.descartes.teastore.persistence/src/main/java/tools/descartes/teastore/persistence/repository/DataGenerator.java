@@ -373,17 +373,26 @@ public final class DataGenerator {
 		boolean finishedGenerating = false;
 		EntityManager em = CategoryRepository.REPOSITORY.getEM();
 		try {
+			System.out.println("1");
 			List<DatabaseManagementEntity> entities =
 					em.createQuery("SELECT u FROM "
 							+ DatabaseManagementEntity.class.getName()
 							+ " u", DatabaseManagementEntity.class)
 					.getResultList();
+			System.out.println("2");
 			if (entities != null && !entities.isEmpty()) {
+				System.out.println("3");
 				finishedGenerating = entities.get(0).isFinishedGenerating();
+				System.out.println("3");
 			}
-		} finally {
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		 finally {
+			System.out.println(5);
 			em.close();
 		}
+		System.out.println(6);
 		return finishedGenerating;
 	}
 
