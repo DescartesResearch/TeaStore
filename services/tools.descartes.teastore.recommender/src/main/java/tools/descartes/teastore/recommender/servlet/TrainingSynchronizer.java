@@ -179,27 +179,23 @@ public final class TrainingSynchronizer {
 
 		List<OrderItem> items = null;
 		List<Order> orders = null;
+
 		// retrieve
-		try {
-			items = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "orderitems", OrderItem.class, -1, -1);
-			long noItems = items.size();
-			LOG.trace("Retrieved " + noItems + " orderItems, starting retrieving of orders now.");
-		} catch (NotFoundException | LoadBalancerTimeoutException e) {
-			// set ready anyway to avoid deadlocks
-			setReady(true);
-			LOG.error("Database retrieving failed.");
-			return -1;
+		boolean retrievalUnfinished = true;
+		while (retrievalUnfinished) {
+			try {
+				items = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "orderitems", OrderItem.class, -1, -1);
+				long noItems = items.size();
+				LOG.trace("Retrieved " + noItems + " orderItems, starting retrieving of orders now.");
+				orders = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "orders", Order.class, -1, -1);
+				long noOrders = orders.size();
+				LOG.trace("Retrieved " + noOrders + " orders, starting training now.");
+				retrievalUnfinished = false;
+			} catch (NotFoundException | LoadBalancerTimeoutException | NullPointerException e) {
+				LOG.error("Database retrieval failed, trying again...");
+			}	
 		}
-		try {
-			orders = LoadBalancedCRUDOperations.getEntities(Service.PERSISTENCE, "orders", Order.class, -1, -1);
-			long noOrders = orders.size();
-			LOG.trace("Retrieved " + noOrders + " orders, starting training now.");
-		} catch (NotFoundException | LoadBalancerTimeoutException e) {
-			// set ready anyway to avoid deadlocks
-			setReady(true);
-			LOG.error("Database retrieving failed.");
-			return -1;
-		}
+		
 		// filter lists
 		filterLists(items, orders);
 		// train instance
