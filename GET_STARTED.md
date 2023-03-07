@@ -151,7 +151,7 @@ We provide yamls to quickly deploy setups for both variants:
 1. To deploy TeaStore using the client side load Balancer Ribbon use:  
    `kubectl create -f https://raw.githubusercontent.com/DescartesResearch/TeaStore/master/examples/kubernetes/teastore-ribbon.yaml`
 2. To deploy TeaStore using the Kubernetes _ClusterIP_ feature use:  
-   `kubectl create -f https://github.com/DescartesResearch/TeaStore/blob/master/examples/kubernetes/teastore-clusterip.yaml`
+   `kubectl create -f https://raw.githubusercontent.com/DescartesResearch/TeaStore/master/examples/kubernetes/teastore-clusterip.yaml`
 
 Both variants expose the TeaStore WebUI using _NodeIP_ on Port `30080`, you can access the UI using `http://K8S_NODE_IP:30080/tools.descartes.teastore.webui/`. You can change the way the TeaStore is exposed starting in line 188 in `teastore-ribbon.yaml` and line 241 in `teastore-clusterip.yaml`.
 Note that both variants label all deployments, pods and services with the `app=teastore` label, making it easy to shutdown the entire teastore using `kubectl delete pods,deployments,services -l app=teastore`. Also note that our yamls do not define resource requests. You will have to add these if you want to enable utilization based autoscaling.
