@@ -2,6 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: teastore-kieker-rabbitmq
+  labels:
+    app: teastore
+    run: teastore-kieker-rabbitmq
 spec:
   selector:	
     matchLabels:	
