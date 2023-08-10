@@ -5,7 +5,8 @@ on:
     branches-ignore:
       - master
       - main
-
+env:
+  PLATFORMS: linux/amd64,linux/arm64
 jobs:
   test_default:
     name: Test default TeaStore
@@ -16,6 +17,12 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '11'
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
       - run: |
           mvn clean install
           cd tools/ && ./build_docker.sh && cd ..
@@ -33,6 +40,11 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '11'
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
       - run: |
           mvn clean install
           cd tools/ && ./build_docker.sh && cd ..
@@ -50,6 +62,11 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '11'
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
       - run: |
           mvn clean install
           cd tools/ && ./build_docker.sh && cd ..
@@ -69,6 +86,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
       - run: |
           mvn clean install
           cd tools/ && ./build_docker.sh && cd ..
@@ -105,6 +127,18 @@ jobs:
           sed -i "s/teastore-base:latest/teastore-base:${GIT_BRANCH}/g" services/tools.descartes.teastore.registry/Dockerfile
           sed -i "s/teastore-base:latest/teastore-base:${GIT_BRANCH}/g" services/tools.descartes.teastore.webui/Dockerfile
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Inspect builder
+        run: |
+          echo "Name:      ${{ steps.buildx.outputs.name }}"
+          echo "Endpoint:  ${{ steps.buildx.outputs.endpoint }}"
+          echo "Status:    ${{ steps.buildx.outputs.status }}"
+          echo "Flags:     ${{ steps.buildx.outputs.flags }}"
+          echo "Platforms: ${{ steps.buildx.outputs.platforms }}"
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
@@ -115,6 +149,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./utilities/tools.descartes.teastore.dockerbase
+          platforms: ${{env.PLATFORMS}}
           push: true
           tags: descartesresearch/teastore-base:${{env.GIT_BRANCH}}
 
@@ -122,6 +157,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./services/tools.descartes.teastore.recommender
+          platforms: ${{env.PLATFORMS}}
           push: true
           tags: descartesresearch/teastore-recommender:${{env.GIT_BRANCH}}
 
@@ -129,6 +165,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./services/tools.descartes.teastore.webui
+          platforms: ${{env.PLATFORMS}}
           push: true
           tags: descartesresearch/teastore-webui:${{env.GIT_BRANCH}}
 
@@ -136,6 +173,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./services/tools.descartes.teastore.image
+          platforms: ${{env.PLATFORMS}}
           push: true
           tags: descartesresearch/teastore-image:${{env.GIT_BRANCH}}
 
@@ -143,6 +181,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./services/tools.descartes.teastore.auth
+          platforms: ${{env.PLATFORMS}}
           push: true
           tags: descartesresearch/teastore-auth:${{env.GIT_BRANCH}}
 
@@ -150,6 +189,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./services/tools.descartes.teastore.persistence
+          platforms: ${{env.PLATFORMS}}
           push: true
           tags: descartesresearch/teastore-persistence:${{env.GIT_BRANCH}}
 
@@ -157,6 +197,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./services/tools.descartes.teastore.registry
+          platforms: ${{env.PLATFORMS}}
           push: true
           tags: descartesresearch/teastore-registry:${{env.GIT_BRANCH}}
 
@@ -164,6 +205,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./utilities/tools.descartes.teastore.database
+          platforms: ${{env.PLATFORMS}}
           push: true
           tags: descartesresearch/teastore-db:${{env.GIT_BRANCH}}
 
@@ -171,5 +213,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./utilities/tools.descartes.teastore.kieker.rabbitmq
+          platforms: ${{env.PLATFORMS}}
           push: true
           tags: descartesresearch/teastore-kieker-rabbitmq:${{env.GIT_BRANCH}}
