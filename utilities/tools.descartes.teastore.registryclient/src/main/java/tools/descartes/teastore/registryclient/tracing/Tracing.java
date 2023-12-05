@@ -72,7 +72,7 @@ public final class Tracing {
     for (String headerName : Collections.list(request.getHeaderNames())) {
       headers.put(headerName, request.getHeader(headerName));
     }
-    return buildSpanFromHeaders(headers);
+    return buildSpanFromHeaders(headers, request.getRequestURI());
   }
 
   /**
@@ -89,7 +89,7 @@ public final class Tracing {
     for (String headerName : httpHeaders.getRequestHeaders().keySet()) {
       headers.put(headerName, httpHeaders.getRequestHeader(headerName).get(0));
     }
-    return buildSpanFromHeaders(headers);
+    return buildSpanFromHeaders(headers, "op");
   }
 
   /**
@@ -97,14 +97,15 @@ public final class Tracing {
    * processed headers.
    *
    * @param headers is the Map of the processed headers
+   * @param operationName is the operation name of the span (can be either URL or URI)
    * @return Scope containing the extracted span marked as active. Can be used
    *         with try-with-resource construct
    */
-  private static Scope buildSpanFromHeaders(Map<String, String> headers) {
-    Tracer.SpanBuilder spanBuilder = GlobalTracer.get().buildSpan("op");
+  private static Scope buildSpanFromHeaders(Map<String, String> headers, String operationName) {
+    Tracer.SpanBuilder spanBuilder = GlobalTracer.get().buildSpan(operationName);
     try {
       SpanContext parentSpanCtx = GlobalTracer.get().extract(Format.Builtin.HTTP_HEADERS,
-          new TextMapExtractAdapter(headers));
+              new TextMapExtractAdapter(headers));
       if (parentSpanCtx != null) {
         spanBuilder = spanBuilder.asChildOf(parentSpanCtx);
       }
