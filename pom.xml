@@ -4,6 +4,7 @@
 
 	<properties>
 		<teastoreversion>1.4.2</teastoreversion>
+		<slf4j.version>1.7.36</slf4j.version>
 	</properties>
 
 	<prerequisites>
