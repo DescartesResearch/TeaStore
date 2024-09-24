@@ -1,7 +1,7 @@
-/.project
-/.classpath
+.project
+.classpath
 /.metadata/
-/.settings/
+.settings/
 RemoteSystemsTempFiles/
 Servers/
 /.recommenders
