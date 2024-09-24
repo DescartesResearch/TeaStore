@@ -4,6 +4,7 @@
 
 	<properties>
 		<teastoreversion>1.4.2</teastoreversion>
+		<slf4j.version>1.7.36</slf4j.version>
 	</properties>
 
 	<prerequisites>
@@ -55,6 +56,11 @@
 							</goals>
 						</execution>
 					</executions>
+				</plugin>
+				<plugin>
+				    <groupId>org.apache.maven.plugins</groupId>
+				    <artifactId>maven-war-plugin</artifactId>
+				    <version>3.4.0</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
