@@ -29,27 +29,27 @@
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-servlet</artifactId>
-			<version>3.0.2</version>
+			<version>3.1.8</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.media</groupId>
 			<artifactId>jersey-media-json-jackson</artifactId>
-			<version>3.0.2</version>
+			<version>3.1.8</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.core</groupId>
 			<artifactId>jersey-server</artifactId>
-			<version>3.0.2</version>
+			<version>3.1.8</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.connectors</groupId>
 			<artifactId>jersey-grizzly-connector</artifactId>
-			<version>3.0.2</version>
+			<version>3.1.8</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.inject</groupId>
 			<artifactId>jersey-hk2</artifactId>
-			<version>3.0.2</version>
+			<version>3.1.8</version>
 		</dependency>
 		<!-- WebApp Dependencies -->
 		<!-- jackson, slf4j, and rx must be included before ribbon to avoid version
@@ -57,7 +57,7 @@
 		<dependency>
 			<groupId>org.glassfish.jersey.media</groupId>
 			<artifactId>jersey-media-json-jackson</artifactId>
-			<version>3.0.2</version>
+			<version>3.1.8</version>
 		</dependency>
 		<dependency>
 			<!-- Logging framework also used by ribbon -->
