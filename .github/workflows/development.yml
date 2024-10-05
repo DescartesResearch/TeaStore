@@ -17,7 +17,7 @@ jobs:
           distribution: 'zulu'
           java-version: '11'
       - run: |
-          mvn clean install
+          ./mvnw clean install
           cd tools/ && ./build_docker.sh && cd ..
           sed -i 's/descartesresearch\///g' examples/docker/docker-compose_default.yaml
           docker-compose -f examples/docker/docker-compose_default.yaml up -d
@@ -34,7 +34,7 @@ jobs:
           distribution: 'zulu'
           java-version: '11'
       - run: |
-          mvn clean install
+          ./mvnw clean install
           cd tools/ && ./build_docker.sh && cd ..
           sed -i 's/descartesresearch\///g' examples/docker/docker-compose_https.yaml
           docker-compose -f examples/docker/docker-compose_https.yaml up -d
@@ -51,7 +51,7 @@ jobs:
           distribution: 'zulu'
           java-version: '11'
       - run: |
-          mvn clean install
+          ./mvnw clean install
           cd tools/ && ./build_docker.sh && cd ..
           sed -i 's/descartesresearch\///g' examples/docker/docker-compose_kieker.yaml
           sed -i 's/descartesresearch\///g' examples/docker/docker-compose_rabbitmq.yaml
@@ -70,7 +70,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - run: |
-          mvn clean install
+          ./mvnw clean install
           cd tools/ && ./build_docker.sh && cd ..
           sed -i 's/descartesresearch\///g' examples/docker/docker-compose_default.yaml
           docker-compose -f examples/docker/docker-compose_default.yaml up -d
@@ -94,7 +94,7 @@ jobs:
           distribution: 'zulu'
           java-version: '11'
       - run: |
-          mvn clean install -DskipTests
+          ./mvnw clean install -DskipTests
           GIT_BRANCH=${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}
           echo "GIT_BRANCH=${GIT_BRANCH}"
           echo "GIT_BRANCH=${GIT_BRANCH}" >> ${GITHUB_ENV}
