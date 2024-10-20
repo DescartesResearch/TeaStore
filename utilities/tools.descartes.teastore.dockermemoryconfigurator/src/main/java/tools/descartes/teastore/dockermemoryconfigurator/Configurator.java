@@ -43,6 +43,8 @@ public final class Configurator {
       System.out.println("Setting heap space to " + heapkb + " KiB");
       writeSetEnvFile(heapkb);
 
+    } else {
+      System.out.println("Unable to set heap space, cgroupkb: " + cgroupkb + " totalkb: " + totalkb);
     }
   }
 
@@ -99,8 +101,19 @@ public final class Configurator {
    * @return 0 on error.
    */
   private static long readCGroupMemoryInKB() {
-    File cgroupbytes = new File("/sys/fs/cgroup/memory/memory.limit_in_bytes");
+    File cgroupbytes1 = new File("/sys/fs/cgroup/memory/memory.limit_in_bytes");
+    File cgroupbytes2 = new File("/sys/fs/cgroup/memory.max");
+    File cgroupbytes = null;
+    System.out.println("cgroup memory max file " + cgroupbytes1.getAbsolutePath() + " exists: " + cgroupbytes1.exists());
+    if (cgroupbytes1.exists()) {
+    	cgroupbytes = cgroupbytes1;
+    }
+    System.out.println("cgroup memory max file " + cgroupbytes2.getAbsolutePath() + " exists: " + cgroupbytes2.exists());
+    if (cgroupbytes2.exists()) {
+    	cgroupbytes = cgroupbytes2;
+    }
     if (!cgroupbytes.exists()) {
+      System.out.println("cgroup memory limit files not existing");
       return 0;
     }
 
