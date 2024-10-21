@@ -409,13 +409,13 @@ $ git clone https://github.com/DescartesResearch/TeaStore.git
 3. After you are finished with your changes, build the whole project using the following command:
 
 ```bash
-$ mvn clean install
+$ ./mvnw clean install
 ```
 
 Alternatively, if you want to skip the tests to shorten build time use the following:
 
 ```bash
-$ mvn clean install -DskipTests
+$ ./mvnw clean install -DskipTests
 ```
 
 4. To build all docker images in one go we provide a simple script. The script can be used as follows:
