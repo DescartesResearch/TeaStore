@@ -32,6 +32,7 @@ The TeaStore was first published in [Proceedings of the 26th IEEE International 
   series = {MASCOTS '18},
   year = {2018},
   month = {September},
+  doi = {10.1145/3358960.3379124},
   location = {Milwaukee, WI, USA},
 }
 ```
@@ -46,6 +47,7 @@ For an example of a large-scale TeaStore setup we refer to [Microservices: A Per
   booktitle = {Proceedings of the ACM/SPEC International Conference on Performance Engineering},
   pages = {138–149},
   series = {ICPE '20},
+  doi = {10.1109/mascots.2018.00030},
 }
 ```
 
