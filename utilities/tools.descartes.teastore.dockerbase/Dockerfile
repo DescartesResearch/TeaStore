@@ -1,4 +1,4 @@
-FROM tomcat:10.0.27-jdk11-temurin
+FROM tomcat:10.1.43-jre21-temurin
 MAINTAINER Chair of Software Engineering <se2-it@informatik.uni-wuerzburg.de>
 
 RUN rm /usr/local/tomcat/lib/websocket-api.jar
