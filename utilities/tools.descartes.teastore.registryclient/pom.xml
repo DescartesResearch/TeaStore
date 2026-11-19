@@ -55,11 +55,6 @@
 		<!-- jackson, slf4j, and rx must be included before ribbon to avoid version
 			conflicts. -->
 		<dependency>
-			<groupId>org.glassfish.jersey.media</groupId>
-			<artifactId>jersey-media-json-jackson</artifactId>
-			<version>3.1.8</version>
-		</dependency>
-		<dependency>
 			<!-- Logging framework also used by ribbon -->
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
